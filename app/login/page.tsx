@@ -131,11 +131,15 @@ export default function LoginPage() {
               </div>
               <div className="p-2 bg-gray-50 dark:bg-gray-900 rounded-lg">
                 <p className="font-medium text-gray-700 dark:text-gray-300">Asesor:</p>
-                <p className="text-gray-600 dark:text-gray-400">ana@arkin.mx / arkin2025</p>
+                <p className="text-gray-600 dark:text-gray-400">ana@arkin.mx / ana_arkin2025</p>
               </div>
               <div className="p-2 bg-gray-50 dark:bg-gray-900 rounded-lg">
                 <p className="font-medium text-gray-700 dark:text-gray-300">Propietario:</p>
-                <p className="text-gray-600 dark:text-gray-400">eduardo@propietario.com / arkin2025</p>
+                <p className="text-gray-600 dark:text-gray-400">eduardo@propietario.com / eduardo_arkin2025</p>
+              </div>
+              <div className="p-2 bg-gray-50 dark:bg-gray-900 rounded-lg">
+                <p className="font-medium text-gray-700 dark:text-gray-300">Fotógrafo:</p>
+                <p className="text-gray-600 dark:text-gray-400">santiago@arkin.mx / santiago_arkin2025</p>
               </div>
             </div>
           </div>
