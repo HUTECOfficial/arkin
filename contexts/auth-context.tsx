@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase/client'
+import { users as mockUsers } from '@/data/internal-users'
 
 interface User {
   id: string
@@ -103,7 +104,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = async (email: string, password: string): Promise<User | null> => {
     try {
-      // Autenticar con Supabase Auth
+      // Primero intentar con usuarios mock (para desarrollo/pruebas)
+      const mockUser = mockUsers.find(u => u.email === email)
+      
+      if (mockUser) {
+        // Verificar contraseña mock
+        const expectedPassword = mockUser.password || 
+          (mockUser.role === 'admin' ? 'arkin2025' : `${email.split('@')[0]}_arkin2025`)
+        
+        if (password === expectedPassword) {
+          const userData: User = {
+            id: mockUser.id,
+            email: mockUser.email,
+            nombre: mockUser.nombre,
+            role: mockUser.role as User['role'],
+            telefono: mockUser.telefono,
+            avatar: mockUser.avatar,
+          }
+          setUser(userData)
+          return userData
+        }
+      }
+
+      // Si no hay usuario mock o la contraseña no coincide, intentar con Supabase
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -118,7 +141,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         throw new Error('No se pudo iniciar sesión')
       }
 
-      // Cargar perfil del usuario
+      // Cargar perfil del usuario desde Supabase
       await loadUserProfile(data.user.id)
       
       return user
