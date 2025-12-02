@@ -226,7 +226,7 @@ function DesarrolloCard({ desarrollo, tipo }: { desarrollo: any, tipo: string })
 
 export default function DesarrollosPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-100 to-gray-50">
+    <div className="min-h-screen bg-gray-100">
       {/* Hero Section */}
       <section className="relative py-20 bg-gradient-to-r from-arkin-dark to-gray-900 text-white overflow-hidden">
         <div className="absolute inset-0 opacity-10">
@@ -259,7 +259,7 @@ export default function DesarrollosPage() {
       </section>
 
       {/* Stats */}
-      <section className="py-12 bg-gray-100 border-b border-gray-200">
+      <section className="py-12 bg-gray-200/50 border-b border-gray-200">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             <div className="text-center">
