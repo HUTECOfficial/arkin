@@ -100,7 +100,7 @@ export default function BrokersPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-gray-100 to-gray-50">
       {/* Hero Section */}
       <section className="relative py-20 bg-gradient-to-r from-arkin-dark to-gray-900 text-white overflow-hidden">
         <div className="absolute inset-0 opacity-10">
