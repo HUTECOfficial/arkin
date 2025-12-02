@@ -30,6 +30,12 @@ export class PropertiesStorage {
     }
   }
 
+  // Validar si un string es un UUID válido
+  private static isValidUUID(str: string): boolean {
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+    return uuidRegex.test(str)
+  }
+
   // Convertir de formato App a formato DB
   private static appToDb(appProp: Omit<Propiedad, 'id'>, usuarioId?: string): Database['public']['Tables']['propiedades']['Insert'] {
     const dbData: any = {
@@ -50,7 +56,11 @@ export class PropertiesStorage {
       fecha_publicacion: appProp.fechaPublicacion,
       tour_virtual: appProp.tourVirtual,
       galeria: appProp.galeria,
-      usuario_id: usuarioId, // ID del usuario que publica
+    }
+
+    // Solo incluir usuario_id si es un UUID válido
+    if (usuarioId && this.isValidUUID(usuarioId)) {
+      dbData.usuario_id = usuarioId
     }
 
     // Asegurar que no se incluya el id
@@ -115,8 +125,21 @@ export class PropertiesStorage {
   }
 
   // Verificar si una imagen ya existe en alguna propiedad
+  // Nota: Solo verifica URLs, no imágenes base64 (son muy largas para consultas)
   static async checkDuplicateImage(imageUrl: string): Promise<boolean> {
     try {
+      // No verificar imágenes base64 - son demasiado largas para consultas HTTP
+      // y cada imagen base64 es única por naturaleza
+      if (imageUrl.startsWith('data:')) {
+        return false
+      }
+
+      // Solo verificar URLs normales (no base64)
+      if (imageUrl.length > 2000) {
+        console.warn('Image URL too long for duplicate check, skipping')
+        return false
+      }
+
       // Buscar en imagen principal
       const { data: mainImage, error: mainError } = await supabaseOptimized
         .from('propiedades')
@@ -127,7 +150,7 @@ export class PropertiesStorage {
       if (mainError) throw mainError
       if ((mainImage?.length || 0) > 0) return true
 
-      // Buscar en galería
+      // Buscar en galería - solo si la URL es corta
       const { data: gallery, error: galleryError } = await supabaseOptimized
         .from('propiedades')
         .select('id, galeria')
