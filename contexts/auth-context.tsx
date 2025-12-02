@@ -11,6 +11,7 @@ interface User {
   role: 'admin' | 'propietario' | 'asesor' | 'fotografo' | 'cliente'
   telefono?: string
   avatar?: string
+  propiedadId?: number
 }
 
 interface AuthContextType {
@@ -120,6 +121,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             role: mockUser.role as User['role'],
             telefono: mockUser.telefono,
             avatar: mockUser.avatar,
+            propiedadId: mockUser.propiedadId,
           }
           setUser(userData)
           return userData

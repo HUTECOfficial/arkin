@@ -213,6 +213,7 @@ export const propertyProgress: PropertyProgress[] = [
 
 // Leads recientes
 export const leads: Lead[] = [
+  // Leads para propiedad 1 (Eduardo Sánchez)
   {
     id: 'lead-1',
     propiedadId: 1,
@@ -225,6 +226,40 @@ export const leads: Lead[] = [
     asesorId: 'asesor-1'
   },
   {
+    id: 'lead-6',
+    propiedadId: 1,
+    nombre: 'Andrea López',
+    email: 'andrea.lopez@email.com',
+    telefono: '+52 477 666 7777',
+    mensaje: 'Busco casa para mi familia, me interesa mucho esta propiedad',
+    fecha: '2025-01-20T14:00:00',
+    status: 'contactado',
+    asesorId: 'asesor-1'
+  },
+  {
+    id: 'lead-7',
+    propiedadId: 1,
+    nombre: 'Roberto Díaz',
+    email: 'roberto.diaz@email.com',
+    telefono: '+52 477 777 8888',
+    mensaje: '¿Cuál es el precio final? Estoy listo para hacer oferta',
+    fecha: '2025-01-19T11:30:00',
+    status: 'calificado',
+    asesorId: 'asesor-1'
+  },
+  {
+    id: 'lead-8',
+    propiedadId: 1,
+    nombre: 'Carmen Ruiz',
+    email: 'carmen.r@email.com',
+    telefono: '+52 477 888 9999',
+    mensaje: 'Me gustaría conocer las amenidades del fraccionamiento',
+    fecha: '2025-01-18T16:45:00',
+    status: 'descartado',
+    asesorId: 'asesor-1'
+  },
+  // Leads para propiedad 2 (Sofía Hernández)
+  {
     id: 'lead-2',
     propiedadId: 2,
     nombre: 'Laura Martínez',
@@ -236,16 +271,28 @@ export const leads: Lead[] = [
     asesorId: 'asesor-1'
   },
   {
-    id: 'lead-3',
-    propiedadId: 3,
-    nombre: 'Carlos Ramírez',
-    email: 'carlos.r@email.com',
-    telefono: '+52 477 333 4444',
-    mensaje: 'Quiero hacer una oferta',
-    fecha: '2025-01-21T09:15:00',
-    status: 'calificado',
-    asesorId: 'asesor-2'
+    id: 'lead-9',
+    propiedadId: 2,
+    nombre: 'Fernando García',
+    email: 'fernando.g@email.com',
+    telefono: '+52 477 999 0000',
+    mensaje: 'Excelente ubicación, quiero agendar visita',
+    fecha: '2025-01-21T09:00:00',
+    status: 'nuevo',
+    asesorId: 'asesor-1'
   },
+  {
+    id: 'lead-10',
+    propiedadId: 2,
+    nombre: 'Mariana Vega',
+    email: 'mariana.v@email.com',
+    telefono: '+52 477 000 1111',
+    mensaje: '¿Tiene estacionamiento techado?',
+    fecha: '2025-01-19T13:20:00',
+    status: 'contactado',
+    asesorId: 'asesor-1'
+  },
+  // Leads para propiedad 4 (Ricardo Morales)
   {
     id: 'lead-4',
     propiedadId: 4,
@@ -255,6 +302,51 @@ export const leads: Lead[] = [
     mensaje: 'Necesito más información sobre el financiamiento',
     fecha: '2025-01-21T14:20:00',
     status: 'nuevo',
+    asesorId: 'asesor-2'
+  },
+  {
+    id: 'lead-11',
+    propiedadId: 4,
+    nombre: 'Alejandro Mendoza',
+    email: 'alejandro.m@email.com',
+    telefono: '+52 477 111 0001',
+    mensaje: 'Quiero hacer una oferta formal',
+    fecha: '2025-01-20T10:00:00',
+    status: 'calificado',
+    asesorId: 'asesor-2'
+  },
+  {
+    id: 'lead-12',
+    propiedadId: 4,
+    nombre: 'Gabriela Soto',
+    email: 'gabriela.s@email.com',
+    telefono: '+52 477 222 0002',
+    mensaje: '¿Acepta crédito Infonavit?',
+    fecha: '2025-01-19T15:30:00',
+    status: 'contactado',
+    asesorId: 'asesor-2'
+  },
+  {
+    id: 'lead-13',
+    propiedadId: 4,
+    nombre: 'Luis Hernández',
+    email: 'luis.h@email.com',
+    telefono: '+52 477 333 0003',
+    mensaje: 'Me interesa para inversión, ¿cuál es el ROI esperado?',
+    fecha: '2025-01-18T09:15:00',
+    status: 'calificado',
+    asesorId: 'asesor-2'
+  },
+  // Otros leads
+  {
+    id: 'lead-3',
+    propiedadId: 3,
+    nombre: 'Carlos Ramírez',
+    email: 'carlos.r@email.com',
+    telefono: '+52 477 333 4444',
+    mensaje: 'Quiero hacer una oferta',
+    fecha: '2025-01-21T09:15:00',
+    status: 'calificado',
     asesorId: 'asesor-2'
   },
   {
@@ -272,6 +364,7 @@ export const leads: Lead[] = [
 
 // Actividad reciente
 export const activities: Activity[] = [
+  // Actividades para propiedad 1 (Eduardo Sánchez)
   {
     id: 'act-1',
     tipo: 'lead',
@@ -281,6 +374,64 @@ export const activities: Activity[] = [
     fecha: '2025-01-21T10:30:00'
   },
   {
+    id: 'act-5',
+    tipo: 'visita',
+    propiedadId: 1,
+    asesorId: 'asesor-1',
+    descripcion: 'Visita realizada con Andrea López - muy interesada',
+    fecha: '2025-01-20T16:00:00'
+  },
+  {
+    id: 'act-6',
+    tipo: 'oferta',
+    propiedadId: 1,
+    asesorId: 'asesor-1',
+    descripcion: 'Oferta recibida de Roberto Díaz: $4,300,000',
+    fecha: '2025-01-19T14:00:00'
+  },
+  {
+    id: 'act-7',
+    tipo: 'nota',
+    propiedadId: 1,
+    asesorId: 'asesor-1',
+    descripcion: 'Propietario acepta negociar precio, mínimo $4,200,000',
+    fecha: '2025-01-18T10:00:00'
+  },
+  {
+    id: 'act-8',
+    tipo: 'lead',
+    propiedadId: 1,
+    asesorId: 'asesor-1',
+    descripcion: 'Lead descartado: Carmen Ruiz - busca otra zona',
+    fecha: '2025-01-17T15:30:00'
+  },
+  // Actividades para propiedad 2 (Sofía Hernández)
+  {
+    id: 'act-4',
+    tipo: 'nota',
+    propiedadId: 2,
+    asesorId: 'asesor-1',
+    descripcion: 'Cliente solicita información adicional sobre amenidades',
+    fecha: '2025-01-20T15:45:00'
+  },
+  {
+    id: 'act-9',
+    tipo: 'lead',
+    propiedadId: 2,
+    asesorId: 'asesor-1',
+    descripcion: 'Nuevo lead: Fernando García interesado en visita',
+    fecha: '2025-01-21T09:00:00'
+  },
+  {
+    id: 'act-10',
+    tipo: 'visita',
+    propiedadId: 2,
+    asesorId: 'asesor-1',
+    descripcion: 'Visita programada con Laura Martínez para el 23 de enero',
+    fecha: '2025-01-19T11:00:00'
+  },
+  // Actividades para propiedad 4 (Ricardo Morales)
+  {
     id: 'act-2',
     tipo: 'visita',
     propiedadId: 4,
@@ -289,20 +440,37 @@ export const activities: Activity[] = [
     fecha: '2025-01-21T14:20:00'
   },
   {
+    id: 'act-11',
+    tipo: 'oferta',
+    propiedadId: 4,
+    asesorId: 'asesor-2',
+    descripcion: 'Oferta formal de Alejandro Mendoza: $5,800,000',
+    fecha: '2025-01-20T12:00:00'
+  },
+  {
+    id: 'act-12',
+    tipo: 'lead',
+    propiedadId: 4,
+    asesorId: 'asesor-2',
+    descripcion: 'Lead calificado: Luis Hernández - inversionista serio',
+    fecha: '2025-01-18T10:30:00'
+  },
+  {
+    id: 'act-13',
+    tipo: 'nota',
+    propiedadId: 4,
+    asesorId: 'asesor-2',
+    descripcion: 'Documentación lista para cierre, pendiente firma',
+    fecha: '2025-01-17T16:00:00'
+  },
+  // Otras actividades
+  {
     id: 'act-3',
     tipo: 'oferta',
     propiedadId: 3,
     asesorId: 'asesor-2',
     descripcion: 'Nueva oferta recibida: $8,200,000',
     fecha: '2025-01-21T09:15:00'
-  },
-  {
-    id: 'act-4',
-    tipo: 'nota',
-    propiedadId: 2,
-    asesorId: 'asesor-1',
-    descripcion: 'Cliente solicita información adicional sobre amenidades',
-    fecha: '2025-01-20T15:45:00'
   }
 ]
 
