@@ -9,6 +9,7 @@ import {
   Home,
   Building,
   User,
+  Users,
   Search,
   Heart,
   MapPin,
@@ -234,6 +235,19 @@ export function DynamicHeader() {
                           </button>
                         </Link>
                         <div className="border-t border-arkin-accent/20 my-2"></div>
+                        <Link href="/desarrollos" onClick={() => setIsOtrosMenuOpen(false)}>
+                          <button className="w-full px-4 py-2.5 text-left text-sm text-arkin-accent hover:bg-arkin-primary/10 transition-colors flex items-center gap-2">
+                            <Building className="h-4 w-4 text-arkin-primary" />
+                            <span>Desarrollos</span>
+                          </button>
+                        </Link>
+                        <Link href="/brokers" onClick={() => setIsOtrosMenuOpen(false)}>
+                          <button className="w-full px-4 py-2.5 text-left text-sm text-arkin-accent hover:bg-arkin-primary/10 transition-colors flex items-center gap-2">
+                            <Users className="h-4 w-4 text-arkin-primary" />
+                            <span>Brokers y Notarías</span>
+                          </button>
+                        </Link>
+                        <div className="border-t border-arkin-accent/20 my-2"></div>
                         <Link href="/ficha-marca" onClick={() => setIsOtrosMenuOpen(false)}>
                           <button className="w-full px-4 py-2.5 text-left text-sm text-arkin-accent hover:bg-arkin-primary/10 transition-colors flex items-center gap-2">
                             <Palette className="h-4 w-4 text-arkin-gold" />
@@ -428,6 +442,18 @@ export function DynamicHeader() {
                       <button className="flex flex-col items-center space-y-1.5 px-3 py-3 rounded-xl bg-arkin-accent/5 hover:bg-arkin-primary/10 transition-all duration-300 hover:scale-105 active:scale-95">
                         <Shield className="h-5 w-5 text-arkin-primary" />
                         <span className="text-xs font-medium text-arkin-accent">Exclusivos</span>
+                      </button>
+                    </Link>
+                    <Link href="/desarrollos" onClick={() => setIsMobileMenuOpen(false)}>
+                      <button className="flex flex-col items-center space-y-1.5 px-3 py-3 rounded-xl bg-arkin-accent/5 hover:bg-blue-500/10 transition-all duration-300 hover:scale-105 active:scale-95">
+                        <Building className="h-5 w-5 text-blue-600" />
+                        <span className="text-xs font-medium text-arkin-accent">Desarrollos</span>
+                      </button>
+                    </Link>
+                    <Link href="/brokers" onClick={() => setIsMobileMenuOpen(false)}>
+                      <button className="flex flex-col items-center space-y-1.5 px-3 py-3 rounded-xl bg-arkin-accent/5 hover:bg-teal-500/10 transition-all duration-300 hover:scale-105 active:scale-95">
+                        <Users className="h-5 w-5 text-teal-600" />
+                        <span className="text-xs font-medium text-arkin-accent">Brokers</span>
                       </button>
                     </Link>
                     <Link href="/ficha-marca" onClick={() => setIsMobileMenuOpen(false)}>
