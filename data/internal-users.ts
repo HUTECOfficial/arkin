@@ -100,6 +100,16 @@ export const users: User[] = [
     avatar: '/avatars/elizabeth.jpg',
     password: 'elizabeth_arkin2025'
   },
+  // Fotógrafo
+  {
+    id: 'fotografo-1',
+    nombre: 'Santiago Canales',
+    email: 'santiago@arkin.mx',
+    role: 'fotografo',
+    telefono: '+52 477 555 1234',
+    avatar: '/avatars/santiago.jpg',
+    password: 'santiago_arkin2025'
+  },
   // Propietarios
   {
     id: 'propietario-1',

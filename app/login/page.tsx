@@ -27,6 +27,8 @@ export default function LoginPage() {
         router.push('/panel-admin')
       } else if (userData?.role === 'propietario') {
         router.push('/panel-propietario')
+      } else if (userData?.role === 'fotografo') {
+        router.push('/panel-fotografo')
       } else if (userData?.role === 'asesor') {
         router.push('/panel-asesor')
       } else {

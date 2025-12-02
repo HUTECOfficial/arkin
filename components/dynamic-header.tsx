@@ -20,7 +20,8 @@ import {
   Key,
   Sparkles,
   Percent,
-  Palette
+  Palette,
+  Camera
 } from "lucide-react"
 import { WishlistCounter } from "./wishlist-button"
 import Link from "next/link"
@@ -269,7 +270,8 @@ export function DynamicHeader() {
                   href={
                     user.role === 'admin' ? '/panel-admin' :
                       user.role === 'propietario' ? '/panel-propietario' :
-                        '/panel-asesor'
+                        user.role === 'fotografo' ? '/panel-fotografo' :
+                          '/panel-asesor'
                   }
                 >
                   <Button
@@ -285,6 +287,11 @@ export function DynamicHeader() {
                       <>
                         <Building className="h-2.5 w-2.5" />
                         <span>Mi Propiedad</span>
+                      </>
+                    ) : user.role === 'fotografo' ? (
+                      <>
+                        <Camera className="h-2.5 w-2.5" />
+                        <span>Mi Panel</span>
                       </>
                     ) : (
                       <>
