@@ -3,12 +3,12 @@
 import { useMemo } from "react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { MapPin, Bed, Bath, Square, Eye, Calendar, Zap } from "lucide-react"
+import { MapPin, Bed, Bath, Square, Eye, Calendar, Tag, Percent } from "lucide-react"
 import Link from "next/link"
 import { WishlistButton } from "@/components/wishlist-button"
 import { usePropertiesStatic } from "@/hooks/use-properties-static"
 
-export default function RematesPage() {
+export default function OfertasPage() {
   // Hook optimizado - carga instantánea desde JSON + realtime
   const { properties } = usePropertiesStatic()
   const propiedades = useMemo(() => 
@@ -20,7 +20,7 @@ export default function RematesPage() {
     <div className="min-h-screen bg-arkin-secondary transition-colors duration-500">
       {/* Hero Section */}
       <section className="relative pt-0 pb-12 sm:pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden min-h-[400px] sm:min-h-[500px] flex items-center">
-        <div className="absolute inset-0 bg-gradient-to-r from-orange-900/80 via-orange-800/60 to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-red-900/80 via-red-800/60 to-transparent"></div>
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40"
           style={{
@@ -29,18 +29,18 @@ export default function RematesPage() {
         ></div>
 
         <div className="relative max-w-7xl mx-auto text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-orange-500 rounded-full mb-6">
-            <Zap className="h-8 w-8 text-white" />
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-red-500 rounded-full mb-6">
+            <Percent className="h-8 w-8 text-white" />
           </div>
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-serif font-bold text-white mb-4 sm:mb-6 text-balance px-4">
             Propiedades en
-            <span className="block text-orange-400">Remate</span>
+            <span className="block text-red-400">Oferta</span>
           </h1>
           <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 mb-6 sm:mb-8 max-w-3xl mx-auto text-pretty px-4">
-            Oportunidades únicas con precios especiales y condiciones excepcionales
+            Aprovecha descuentos exclusivos y precios especiales por tiempo limitado
           </p>
-          <Badge className="bg-orange-500/20 text-orange-300 border-orange-400/30 px-4 py-2 text-sm">
-            {propiedades.length} Oportunidades Disponibles
+          <Badge className="bg-red-500/20 text-red-300 border-red-400/30 px-4 py-2 text-sm">
+            {propiedades.length} Ofertas Disponibles
           </Badge>
         </div>
       </section>
@@ -52,7 +52,7 @@ export default function RematesPage() {
             {propiedades.map((propiedad) => (
               <div
                 key={propiedad.id}
-                className="group bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100 hover:border-orange-500/30"
+                className="group bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100 hover:border-red-500/30"
               >
                 {/* Image */}
                 <div className="relative h-56 overflow-hidden">
@@ -62,8 +62,8 @@ export default function RematesPage() {
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   />
                   <div className="absolute top-4 left-4">
-                    <Badge className="bg-orange-500/90 text-white backdrop-blur-sm text-xs">
-                      Remate
+                    <Badge className="bg-red-500/90 text-white backdrop-blur-sm text-xs">
+                      Oferta
                     </Badge>
                   </div>
                   <div className="absolute top-4 right-4 flex space-x-2">
@@ -90,7 +90,7 @@ export default function RematesPage() {
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-3">
                     <Badge className="bg-gray-100 text-gray-700 text-xs">{propiedad.tipo}</Badge>
-                    <span className="text-2xl font-bold text-orange-600">{propiedad.precioTexto}</span>
+                    <span className="text-2xl font-bold text-red-600">{propiedad.precioTexto}</span>
                   </div>
 
                   <h3 className="text-xl font-serif font-bold text-gray-900 mb-2 line-clamp-2">{propiedad.titulo}</h3>
@@ -122,14 +122,14 @@ export default function RematesPage() {
 
                   {/* Actions */}
                   <div className="flex space-x-3">
-                    <Button className="flex-1 bg-orange-600 hover:bg-orange-700 text-white rounded-xl">
+                    <Button className="flex-1 bg-red-600 hover:bg-red-700 text-white rounded-xl">
                       <Calendar className="h-4 w-4 mr-2" />
                       Agendar Visita
                     </Button>
                     <Link href={`/propiedades/${propiedad.id}`}>
                       <Button
                         variant="outline"
-                        className="border-gray-200 hover:border-orange-600 hover:text-orange-600 rounded-xl"
+                        className="border-gray-200 hover:border-red-600 hover:text-red-600 rounded-xl"
                       >
                         Ver Detalles
                       </Button>
@@ -142,9 +142,9 @@ export default function RematesPage() {
 
           {propiedades.length === 0 && (
             <div className="text-center py-16">
-              <Zap className="h-16 w-16 mx-auto mb-4 text-gray-400" />
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">No hay propiedades en remate disponibles</h3>
-              <p className="text-gray-600 mb-6">Vuelve pronto para ver nuevas oportunidades</p>
+              <Percent className="h-16 w-16 mx-auto mb-4 text-gray-400" />
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">No hay propiedades en oferta disponibles</h3>
+              <p className="text-gray-600 mb-6">Vuelve pronto para ver nuevas ofertas</p>
             </div>
           )}
         </div>

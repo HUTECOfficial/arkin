@@ -18,7 +18,7 @@ import {
   Tag,
   Key,
   Sparkles,
-  Zap,
+  Percent,
   Palette
 } from "lucide-react"
 import { WishlistCounter } from "./wishlist-button"
@@ -221,10 +221,10 @@ export function DynamicHeader() {
                             <span>Especiales</span>
                           </button>
                         </Link>
-                        <Link href="/remates" onClick={() => setIsOtrosMenuOpen(false)}>
+                        <Link href="/ofertas" onClick={() => setIsOtrosMenuOpen(false)}>
                           <button className="w-full px-4 py-2.5 text-left text-sm text-arkin-accent hover:bg-arkin-primary/10 transition-colors flex items-center gap-2">
-                            <Zap className="h-4 w-4 text-arkin-primary" />
-                            <span>Remates</span>
+                            <Percent className="h-4 w-4 text-arkin-primary" />
+                            <span>Ofertas</span>
                           </button>
                         </Link>
                         <Link href="/exclusivos" onClick={() => setIsOtrosMenuOpen(false)}>
@@ -418,10 +418,10 @@ export function DynamicHeader() {
                         <span className="text-xs font-medium text-arkin-accent">Especiales</span>
                       </button>
                     </Link>
-                    <Link href="/remates" onClick={() => setIsMobileMenuOpen(false)}>
-                      <button className="flex flex-col items-center space-y-1.5 px-3 py-3 rounded-xl bg-arkin-accent/5 hover:bg-orange-500/10 transition-all duration-300 hover:scale-105 active:scale-95">
-                        <Zap className="h-5 w-5 text-orange-600" />
-                        <span className="text-xs font-medium text-arkin-accent">Remates</span>
+                    <Link href="/ofertas" onClick={() => setIsMobileMenuOpen(false)}>
+                      <button className="flex flex-col items-center space-y-1.5 px-3 py-3 rounded-xl bg-arkin-accent/5 hover:bg-red-500/10 transition-all duration-300 hover:scale-105 active:scale-95">
+                        <Percent className="h-5 w-5 text-red-600" />
+                        <span className="text-xs font-medium text-arkin-accent">Ofertas</span>
                       </button>
                     </Link>
                     <Link href="/exclusivos" onClick={() => setIsMobileMenuOpen(false)}>
