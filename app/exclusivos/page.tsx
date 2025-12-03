@@ -47,7 +47,7 @@ export default function ExclusivosPage() {
             <Badge className="bg-arkin-primary/20 text-arkin-primary border-arkin-primary/30 px-4 py-2 text-sm">
               {propiedades.length} Propiedades Disponibles
             </Badge>
-            <Badge className="bg-white/20 text-white border-white/30 px-4 py-2 text-sm flex items-center gap-2">
+            <Badge className="bg-arkin-secondary/50/20 text-white border-white/30 px-4 py-2 text-sm flex items-center gap-2">
               <Lock className="h-3 w-3" />
               Información Protegida
             </Badge>
@@ -85,7 +85,7 @@ export default function ExclusivosPage() {
             {propiedades.map((propiedad) => (
               <div
                 key={propiedad.id}
-                className="group bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-arkin-primary/20"
+                className="group bg-arkin-secondary/50 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-arkin-primary/20"
               >
                 {/* Blurred Image with Lock */}
                 <div className="relative h-56 overflow-hidden bg-gradient-to-br from-arkin-accent/10 to-arkin-accent/5">

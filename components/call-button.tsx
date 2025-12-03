@@ -34,14 +34,14 @@ export function CallButton() {
       {isCallWidgetOpen && (
         <div className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm">
           <div className="fixed bottom-24 left-6 z-50">
-            <div className="bg-white rounded-2xl shadow-2xl p-4 border border-gray-200 w-80">
+            <div className="bg-arkin-secondary/50 rounded-2xl shadow-2xl p-4 border border-gray-200 w-80">
               <div className="flex items-center justify-between mb-3">
                 <h3 className="font-semibold text-gray-900">Llamada con IA</h3>
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => setIsCallWidgetOpen(false)}
-                  className="w-8 h-8 p-0 hover:bg-gray-100"
+                  className="w-8 h-8 p-0 hover:bg-arkin-secondary"
                 >
                   <X className="h-4 w-4" />
                 </Button>

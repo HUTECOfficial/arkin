@@ -218,7 +218,7 @@ export function AIAgent() {
 
       {/* Chat Interface */}
       {isOpen && (
-        <Card className="fixed bottom-0 right-0 sm:bottom-8 sm:right-8 w-full sm:w-[420px] h-[100dvh] sm:h-[650px] sm:max-h-[90vh] shadow-2xl border-0 z-50 flex flex-col overflow-hidden sm:rounded-3xl backdrop-blur-md bg-white/95">
+        <Card className="fixed bottom-0 right-0 sm:bottom-8 sm:right-8 w-full sm:w-[420px] h-[100dvh] sm:h-[650px] sm:max-h-[90vh] shadow-2xl border-0 z-50 flex flex-col overflow-hidden sm:rounded-3xl backdrop-blur-md bg-arkin-secondary/50/95">
           {/* Header */}
           <div className="bg-gradient-to-r from-arkin-graphite to-gray-900 text-white p-4 sm:p-6 flex items-center justify-between sm:rounded-t-3xl">
             <div className="flex items-center space-x-3 sm:space-x-4">
@@ -234,7 +234,7 @@ export function AIAgent() {
               variant="ghost"
               size="sm"
               onClick={() => setIsOpen(false)}
-              className="text-white hover:bg-white/10 rounded-full w-9 h-9 sm:w-10 sm:h-10 transition-all duration-300 hover:scale-110"
+              className="text-white hover:bg-arkin-secondary/50/10 rounded-full w-9 h-9 sm:w-10 sm:h-10 transition-all duration-300 hover:scale-110"
             >
               <X className="h-4 w-4 sm:h-5 sm:w-5" />
             </Button>
@@ -248,7 +248,7 @@ export function AIAgent() {
                   className={`max-w-[85%] p-3 sm:p-4 rounded-2xl transition-all duration-300 ${
                     message.type === "user"
                       ? "bg-gradient-to-r from-arkin-gold to-yellow-400 text-arkin-graphite shadow-lg"
-                      : "bg-white text-gray-800 shadow-md border border-gray-100"
+                      : "bg-arkin-secondary/50 text-gray-800 shadow-md border border-gray-100"
                   }`}
                 >
                   <p className="text-xs sm:text-sm leading-relaxed whitespace-pre-line">{message.content}</p>
@@ -258,7 +258,7 @@ export function AIAgent() {
 
             {isTyping && (
               <div className="flex justify-start">
-                <div className="bg-white p-4 rounded-2xl shadow-md border border-gray-100">
+                <div className="bg-arkin-secondary/50 p-4 rounded-2xl shadow-md border border-gray-100">
                   <div className="flex space-x-1">
                     <div className="w-2 h-2 bg-arkin-gold rounded-full animate-bounce"></div>
                     <div
@@ -276,7 +276,7 @@ export function AIAgent() {
           </div>
 
           {/* Input Area */}
-          <div className="p-3 sm:p-6 bg-white border-t border-gray-100">
+          <div className="p-3 sm:p-6 bg-arkin-secondary/50 border-t border-gray-100">
             {!isTyping && (
               <div className="space-y-3 sm:space-y-4">
                 {/* Language Selector */}

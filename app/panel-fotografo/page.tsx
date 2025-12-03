@@ -100,7 +100,7 @@ function calcularComision(precioVenta: number) {
 
 function getEstadoBadge(estado: string, tipo: "foto" | "video" | "venta") {
   const colores = {
-    pendiente: "bg-gray-100 text-gray-700",
+    pendiente: "bg-arkin-secondary text-gray-700",
     en_proceso: "bg-yellow-100 text-yellow-700",
     completado: "bg-green-100 text-green-700",
     disponible: "bg-blue-100 text-blue-700",
@@ -232,7 +232,7 @@ export default function PanelFotografoPage() {
           </CardHeader>
           <CardContent>
             <div className="grid md:grid-cols-3 gap-6">
-              <div className="text-center p-4 bg-gray-50 rounded-xl">
+              <div className="text-center p-4 bg-arkin-secondary/70 rounded-xl">
                 <p className="text-sm text-gray-500 mb-1">Comisión ARKIN</p>
                 <p className="text-3xl font-bold text-gray-900">2%</p>
                 <p className="text-xs text-gray-400">del precio de venta</p>
@@ -284,7 +284,7 @@ export default function PanelFotografoPage() {
                     className={`p-4 rounded-xl border ${
                       propiedad.estadoVenta === "vendida" 
                         ? "bg-green-50 border-green-200" 
-                        : "bg-white border-gray-200"
+                        : "bg-arkin-secondary/50 border-gray-200"
                     }`}
                   >
                     <div className="flex flex-col md:flex-row gap-4">

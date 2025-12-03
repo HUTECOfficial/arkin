@@ -52,7 +52,7 @@ export default function VentaPage() {
             {propiedades.map((propiedad) => (
               <div
                 key={propiedad.id}
-                className="group bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100 hover:border-green-500/30"
+                className="group bg-arkin-secondary/50 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100 hover:border-green-500/30"
               >
                 {/* Image */}
                 <div className="relative h-56 overflow-hidden">
@@ -80,7 +80,7 @@ export default function VentaPage() {
                       }}
                       size="sm"
                     />
-                    <Button size="sm" className="w-8 h-8 p-0 bg-white/90 hover:bg-white text-gray-700 rounded-full">
+                    <Button size="sm" className="w-8 h-8 p-0 bg-arkin-secondary/50/90 hover:bg-arkin-secondary/50 text-gray-700 rounded-full">
                       <Eye className="h-4 w-4" />
                     </Button>
                   </div>
@@ -89,7 +89,7 @@ export default function VentaPage() {
                 {/* Content */}
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-3">
-                    <Badge className="bg-gray-100 text-gray-700 text-xs">{propiedad.tipo}</Badge>
+                    <Badge className="bg-arkin-secondary text-gray-700 text-xs">{propiedad.tipo}</Badge>
                     <span className="text-2xl font-bold text-green-600">{propiedad.precioTexto}</span>
                   </div>
 

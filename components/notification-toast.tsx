@@ -60,7 +60,7 @@ export function NotificationToast({
       {/* Toast Container */}
       <div className="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
         <Card className={`
-          max-w-md w-full bg-white/95 backdrop-blur-xl border-0 shadow-2xl rounded-3xl overflow-hidden
+          max-w-md w-full bg-arkin-secondary/50/95 backdrop-blur-xl border-0 shadow-2xl rounded-3xl overflow-hidden
           pointer-events-auto transform transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]
           ${isVisible 
             ? 'translate-y-0 opacity-100 scale-100' 
@@ -71,7 +71,7 @@ export function NotificationToast({
           <div className="bg-gradient-to-r from-green-500 to-emerald-600 p-4 relative">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                <div className="w-10 h-10 bg-arkin-secondary/50/20 rounded-full flex items-center justify-center">
                   {type === "wishlist" ? (
                     <Heart className="h-5 w-5 text-white fill-current" />
                   ) : (
@@ -91,7 +91,7 @@ export function NotificationToast({
                 variant="ghost"
                 size="sm"
                 onClick={handleClose}
-                className="text-white hover:bg-white/10 rounded-full w-8 h-8 p-0"
+                className="text-white hover:bg-arkin-secondary/50/10 rounded-full w-8 h-8 p-0"
               >
                 <X className="h-4 w-4" />
               </Button>
@@ -122,7 +122,7 @@ export function NotificationToast({
               <Button
                 variant="outline"
                 onClick={handleClose}
-                className="px-6 rounded-2xl font-medium py-3 border-gray-200 hover:bg-gray-50 transition-all duration-300"
+                className="px-6 rounded-2xl font-medium py-3 border-gray-200 hover:bg-arkin-secondary/70 transition-all duration-300"
               >
                 Ahora no
               </Button>
@@ -130,7 +130,7 @@ export function NotificationToast({
           </div>
 
           {/* Progress Bar */}
-          <div className="h-1 bg-gray-100">
+          <div className="h-1 bg-arkin-secondary">
             <div 
               className="h-full bg-gradient-to-r from-green-500 to-emerald-600 transition-all duration-[8000ms] ease-linear"
               style={{

@@ -104,7 +104,7 @@ export default function PanelAsesorPage() {
       case 'en_negociacion': return 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'
       case 'vendida': return 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
       case 'rentada': return 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400'
-      default: return 'bg-gray-100 text-gray-700 dark:bg-gray-900/30 dark:text-gray-400'
+      default: return 'bg-arkin-secondary text-gray-700 dark:bg-gray-900/30 dark:text-gray-400'
     }
   }
 
@@ -113,8 +113,8 @@ export default function PanelAsesorPage() {
       case 'nuevo': return 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
       case 'contactado': return 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'
       case 'calificado': return 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
-      case 'descartado': return 'bg-gray-100 text-gray-700 dark:bg-gray-900/30 dark:text-gray-400'
-      default: return 'bg-gray-100 text-gray-700 dark:bg-gray-900/30 dark:text-gray-400'
+      case 'descartado': return 'bg-arkin-secondary text-gray-700 dark:bg-gray-900/30 dark:text-gray-400'
+      default: return 'bg-arkin-secondary text-gray-700 dark:bg-gray-900/30 dark:text-gray-400'
     }
   }
 
@@ -131,7 +131,7 @@ export default function PanelAsesorPage() {
   return (
     <div className="min-h-screen bg-arkin-secondary dark:bg-gray-900">
       {/* Header */}
-      <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-10">
+      <header className="bg-arkin-secondary/50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -152,7 +152,7 @@ export default function PanelAsesorPage() {
                 logout()
                 router.push('/login')
               }}
-              className="flex items-center gap-2 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-all"
+              className="flex items-center gap-2 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-arkin-secondary dark:hover:bg-gray-700 rounded-xl transition-all"
             >
               <LogOut className="w-4 h-4" />
               <span className="hidden sm:inline">Cerrar Sesión</span>
@@ -190,7 +190,7 @@ export default function PanelAsesorPage() {
         </div>
 
         {/* Sistema de Bonos */}
-        <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-6 mb-8 border-2 border-gray-300 dark:border-gray-700">
+        <div className="bg-arkin-secondary dark:bg-gray-800 rounded-2xl p-6 mb-8 border-2 border-gray-300 dark:border-gray-700">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 bg-arkin-gold rounded-xl flex items-center justify-center">
@@ -273,7 +273,7 @@ export default function PanelAsesorPage() {
                   ? 'bg-green-50 dark:bg-green-900/20 border-green-500'
                   : b.meta === bonoActual.meta
                     ? 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-500 ring-2 ring-yellow-500/50'
-                    : 'bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600'
+                    : 'bg-arkin-secondary/50 dark:bg-gray-800 border-gray-300 dark:border-gray-600'
                   }`}
               >
                 <div className="text-center">
@@ -294,7 +294,7 @@ export default function PanelAsesorPage() {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-200 dark:border-gray-700">
+          <div className="bg-arkin-secondary/50 dark:bg-gray-800 rounded-2xl p-6 border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between mb-2">
               <span className="text-gray-600 dark:text-gray-400 text-sm">Propiedades</span>
               <Building2 className="w-5 h-5 text-arkin-gold" />
@@ -302,7 +302,7 @@ export default function PanelAsesorPage() {
             <p className="text-3xl font-bold text-gray-900 dark:text-white">{progress.length}</p>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-200 dark:border-gray-700">
+          <div className="bg-arkin-secondary/50 dark:bg-gray-800 rounded-2xl p-6 border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between mb-2">
               <span className="text-gray-600 dark:text-gray-400 text-sm">Leads</span>
               <Users className="w-5 h-5 text-blue-500" />
@@ -310,7 +310,7 @@ export default function PanelAsesorPage() {
             <p className="text-3xl font-bold text-gray-900 dark:text-white">{totalLeads}</p>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-200 dark:border-gray-700">
+          <div className="bg-arkin-secondary/50 dark:bg-gray-800 rounded-2xl p-6 border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between mb-2">
               <span className="text-gray-600 dark:text-gray-400 text-sm">Visitas</span>
               <Eye className="w-5 h-5 text-green-500" />
@@ -318,7 +318,7 @@ export default function PanelAsesorPage() {
             <p className="text-3xl font-bold text-gray-900 dark:text-white">{totalVisitas}</p>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-200 dark:border-gray-700">
+          <div className="bg-arkin-secondary/50 dark:bg-gray-800 rounded-2xl p-6 border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between mb-2">
               <span className="text-gray-600 dark:text-gray-400 text-sm">Ofertas</span>
               <DollarSign className="w-5 h-5 text-purple-500" />
@@ -330,7 +330,7 @@ export default function PanelAsesorPage() {
         {/* Gráficas de Análisis */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
           {/* Gráfica de Leads por Propiedad */}
-          <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <div className="bg-arkin-secondary/50 dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
             <div className="p-6 border-b border-gray-200 dark:border-gray-700">
               <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
                 <TrendingUp className="w-5 h-5 text-arkin-gold" />
@@ -361,7 +361,7 @@ export default function PanelAsesorPage() {
           </div>
 
           {/* Gráfica de Leads por Estatus */}
-          <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <div className="bg-arkin-secondary/50 dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
             <div className="p-6 border-b border-gray-200 dark:border-gray-700">
               <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
                 <Users className="w-5 h-5 text-arkin-gold" />
@@ -410,7 +410,7 @@ export default function PanelAsesorPage() {
         </div>
 
         {/* Gráfica de Actividad Semanal */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden mb-8">
+        <div className="bg-arkin-secondary/50 dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden mb-8">
           <div className="p-6 border-b border-gray-200 dark:border-gray-700">
             <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
               <TrendingUp className="w-5 h-5 text-arkin-gold" />
@@ -455,7 +455,7 @@ export default function PanelAsesorPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Mis Propiedades */}
-          <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <div className="bg-arkin-secondary/50 dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
             <div className="p-6 border-b border-gray-200 dark:border-gray-700">
               <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
                 <Building2 className="w-5 h-5 text-arkin-gold" />
@@ -468,7 +468,7 @@ export default function PanelAsesorPage() {
                 if (!propiedad) return null
 
                 return (
-                  <div key={prog.propiedadId} className="p-4 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700">
+                  <div key={prog.propiedadId} className="p-4 bg-arkin-secondary/70 dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700">
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex-1">
                         <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
@@ -517,7 +517,7 @@ export default function PanelAsesorPage() {
           </div>
 
           {/* Leads Recientes */}
-          <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <div className="bg-arkin-secondary/50 dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
             <div className="p-6 border-b border-gray-200 dark:border-gray-700">
               <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
                 <Users className="w-5 h-5 text-arkin-gold" />
@@ -530,7 +530,7 @@ export default function PanelAsesorPage() {
                 if (!propiedad) return null
 
                 return (
-                  <div key={lead.id} className="p-4 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700">
+                  <div key={lead.id} className="p-4 bg-arkin-secondary/70 dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700">
                     <div className="flex items-start justify-between mb-3">
                       <div>
                         <h3 className="font-semibold text-gray-900 dark:text-white">
@@ -545,7 +545,7 @@ export default function PanelAsesorPage() {
                       </span>
                     </div>
 
-                    <p className="text-sm text-gray-700 dark:text-gray-300 mb-3 p-3 bg-white dark:bg-gray-800 rounded-lg">
+                    <p className="text-sm text-gray-700 dark:text-gray-300 mb-3 p-3 bg-arkin-secondary/50 dark:bg-gray-800 rounded-lg">
                       "{lead.mensaje}"
                     </p>
 
@@ -576,7 +576,7 @@ export default function PanelAsesorPage() {
         </div>
 
         {/* Actividad Reciente */}
-        <div className="mt-8 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+        <div className="mt-8 bg-arkin-secondary/50 dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
           <div className="p-6 border-b border-gray-200 dark:border-gray-700">
             <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
               <TrendingUp className="w-5 h-5 text-arkin-gold" />
@@ -600,8 +600,8 @@ export default function PanelAsesorPage() {
                 }
 
                 return (
-                  <div key={activity.id} className="flex items-start gap-4 p-4 bg-gray-50 dark:bg-gray-900 rounded-xl">
-                    <div className="w-10 h-10 bg-white dark:bg-gray-800 rounded-xl flex items-center justify-center flex-shrink-0 border border-gray-200 dark:border-gray-700">
+                  <div key={activity.id} className="flex items-start gap-4 p-4 bg-arkin-secondary/70 dark:bg-gray-900 rounded-xl">
+                    <div className="w-10 h-10 bg-arkin-secondary/50 dark:bg-gray-800 rounded-xl flex items-center justify-center flex-shrink-0 border border-gray-200 dark:border-gray-700">
                       {getActivityIcon()}
                     </div>
                     <div className="flex-1 min-w-0">

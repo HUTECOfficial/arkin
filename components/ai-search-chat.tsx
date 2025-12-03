@@ -282,7 +282,7 @@ export function AISearchChat({ isOpen, onClose, properties }: AISearchChatProps)
 
   return (
     <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm">
-      <div className="fixed right-4 top-4 bottom-4 w-96 bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+      <div className="fixed right-4 top-4 bottom-4 w-96 bg-arkin-secondary/50 rounded-2xl shadow-2xl flex flex-col overflow-hidden">
         {/* Header */}
         <CardHeader className="bg-gradient-to-r from-arkin-gold to-yellow-400 text-black p-4">
           <div className="flex items-center justify-between">
@@ -315,14 +315,14 @@ export function AISearchChat({ isOpen, onClose, properties }: AISearchChatProps)
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
                     message.type === 'user' 
                       ? 'bg-arkin-gold text-black' 
-                      : 'bg-gray-100 text-arkin-gold'
+                      : 'bg-arkin-secondary text-arkin-gold'
                   }`}>
                     {message.type === 'user' ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
                   </div>
                   <div className={`rounded-2xl px-4 py-2 ${
                     message.type === 'user'
                       ? 'bg-arkin-gold text-black'
-                      : 'bg-gray-100 text-gray-900'
+                      : 'bg-arkin-secondary text-gray-900'
                   }`}>
                     <p className="text-sm whitespace-pre-wrap">{message.content}</p>
                     <p className="text-xs opacity-70 mt-1">
@@ -414,10 +414,10 @@ export function AISearchChat({ isOpen, onClose, properties }: AISearchChatProps)
           {isTyping && (
             <div className="flex justify-start">
               <div className="flex items-start space-x-2">
-                <div className="w-8 h-8 rounded-full bg-gray-100 text-arkin-gold flex items-center justify-center">
+                <div className="w-8 h-8 rounded-full bg-arkin-secondary text-arkin-gold flex items-center justify-center">
                   <Bot className="h-4 w-4" />
                 </div>
-                <div className="bg-gray-100 rounded-2xl px-4 py-2">
+                <div className="bg-arkin-secondary rounded-2xl px-4 py-2">
                   <div className="flex space-x-1">
                     <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
                     <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>

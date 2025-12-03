@@ -5,7 +5,7 @@ import Image from 'next/image'
 
 export default function FichaMarcaPage() {
   return (
-    <div className="min-h-screen bg-gray-100 py-8 sm:py-16 md:py-20 px-4">
+    <div className="min-h-screen bg-arkin-secondary py-8 sm:py-16 md:py-20 px-4">
       {/* Contenedor de la ficha */}
       <div className="max-w-5xl mx-auto">
         <div className="bg-arkin-secondary rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden">
@@ -43,7 +43,7 @@ export default function FichaMarcaPage() {
               <h2 className="text-2xl sm:text-3xl font-bold text-arkin-graphite mb-6 sm:mb-8 text-center">🚀 Nuestros Factores Diferenciadores</h2>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-                <div className="bg-white p-4 sm:p-6 rounded-xl sm:rounded-2xl shadow-lg border-t-4 border-arkin-gold hover:shadow-xl transition-shadow">
+                <div className="bg-arkin-secondary/50 p-4 sm:p-6 rounded-xl sm:rounded-2xl shadow-lg border-t-4 border-arkin-gold hover:shadow-xl transition-shadow">
                   <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
                     <div className="w-10 sm:w-12 h-10 sm:h-12 bg-arkin-gold/20 rounded-full flex items-center justify-center flex-shrink-0">
                       <TrendingUp className="w-5 sm:w-6 h-5 sm:h-6 text-arkin-gold" />
@@ -55,7 +55,7 @@ export default function FichaMarcaPage() {
                   </p>
                 </div>
 
-                <div className="bg-white p-4 sm:p-6 rounded-xl sm:rounded-2xl shadow-lg border-t-4 border-arkin-gold hover:shadow-xl transition-shadow">
+                <div className="bg-arkin-secondary/50 p-4 sm:p-6 rounded-xl sm:rounded-2xl shadow-lg border-t-4 border-arkin-gold hover:shadow-xl transition-shadow">
                   <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
                     <div className="w-10 sm:w-12 h-10 sm:h-12 bg-arkin-gold/20 rounded-full flex items-center justify-center flex-shrink-0">
                       <Home className="w-5 sm:w-6 h-5 sm:h-6 text-arkin-gold" />
@@ -67,7 +67,7 @@ export default function FichaMarcaPage() {
                   </p>
                 </div>
 
-                <div className="bg-white p-4 sm:p-6 rounded-xl sm:rounded-2xl shadow-lg border-t-4 border-arkin-gold hover:shadow-xl transition-shadow">
+                <div className="bg-arkin-secondary/50 p-4 sm:p-6 rounded-xl sm:rounded-2xl shadow-lg border-t-4 border-arkin-gold hover:shadow-xl transition-shadow">
                   <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
                     <div className="w-10 sm:w-12 h-10 sm:h-12 bg-arkin-gold/20 rounded-full flex items-center justify-center flex-shrink-0">
                       <Shield className="w-5 sm:w-6 h-5 sm:h-6 text-arkin-gold" />
@@ -79,7 +79,7 @@ export default function FichaMarcaPage() {
                   </p>
                 </div>
 
-                <div className="bg-white p-4 sm:p-6 rounded-xl sm:rounded-2xl shadow-lg border-t-4 border-arkin-gold hover:shadow-xl transition-shadow">
+                <div className="bg-arkin-secondary/50 p-4 sm:p-6 rounded-xl sm:rounded-2xl shadow-lg border-t-4 border-arkin-gold hover:shadow-xl transition-shadow">
                   <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
                     <div className="w-10 sm:w-12 h-10 sm:h-12 bg-arkin-gold/20 rounded-full flex items-center justify-center flex-shrink-0">
                       <Palette className="w-5 sm:w-6 h-5 sm:h-6 text-arkin-gold" />
@@ -154,11 +154,11 @@ export default function FichaMarcaPage() {
               <div className="bg-arkin-graphite text-white p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl text-center">
                 <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">📞 Contáctanos</h2>
                 <div className="flex flex-col gap-2 sm:gap-4 justify-center items-center">
-                  <div className="flex items-center gap-2 bg-white/10 px-4 sm:px-6 py-2 sm:py-3 rounded-full text-xs sm:text-sm">
+                  <div className="flex items-center gap-2 bg-arkin-secondary/50/10 px-4 sm:px-6 py-2 sm:py-3 rounded-full text-xs sm:text-sm">
                     <span>📱</span>
                     <p className="font-bold">+52 1 477 475 6951</p>
                   </div>
-                  <div className="flex items-center gap-2 bg-white/10 px-4 sm:px-6 py-2 sm:py-3 rounded-full text-xs sm:text-sm">
+                  <div className="flex items-center gap-2 bg-arkin-secondary/50/10 px-4 sm:px-6 py-2 sm:py-3 rounded-full text-xs sm:text-sm">
                     <span>📧</span>
                     <p className="font-bold">hola@arkin.mx</p>
                   </div>
@@ -174,22 +174,22 @@ export default function FichaMarcaPage() {
             <section>
               <h2 className="text-xl sm:text-2xl font-bold text-arkin-graphite mb-3 sm:mb-4 text-center">🎨 Identidad Visual</h2>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
-                <div className="text-center p-2 sm:p-3 bg-white rounded-lg sm:rounded-xl shadow">
+                <div className="text-center p-2 sm:p-3 bg-arkin-secondary/50 rounded-lg sm:rounded-xl shadow">
                   <div className="w-full h-12 sm:h-16 bg-arkin-gold rounded-lg mb-1 sm:mb-2"></div>
                   <p className="font-bold text-xs">Dorado</p>
                   <p className="text-[9px] sm:text-[10px] text-gray-500">#D4AF37</p>
                 </div>
-                <div className="text-center p-2 sm:p-3 bg-white rounded-lg sm:rounded-xl shadow">
+                <div className="text-center p-2 sm:p-3 bg-arkin-secondary/50 rounded-lg sm:rounded-xl shadow">
                   <div className="w-full h-12 sm:h-16 bg-arkin-primary rounded-lg mb-1 sm:mb-2"></div>
                   <p className="font-bold text-xs">Amarillo</p>
                   <p className="text-[9px] sm:text-[10px] text-gray-500">#F4E5C3</p>
                 </div>
-                <div className="text-center p-2 sm:p-3 bg-white rounded-lg sm:rounded-xl shadow">
+                <div className="text-center p-2 sm:p-3 bg-arkin-secondary/50 rounded-lg sm:rounded-xl shadow">
                   <div className="w-full h-12 sm:h-16 bg-arkin-graphite rounded-lg mb-1 sm:mb-2"></div>
                   <p className="font-bold text-xs">Grafito</p>
                   <p className="text-[9px] sm:text-[10px] text-gray-500">#212121</p>
                 </div>
-                <div className="text-center p-2 sm:p-3 bg-white rounded-lg sm:rounded-xl shadow">
+                <div className="text-center p-2 sm:p-3 bg-arkin-secondary/50 rounded-lg sm:rounded-xl shadow">
                   <div className="w-full h-12 sm:h-16 bg-arkin-secondary rounded-lg mb-1 sm:mb-2 border border-gray-200"></div>
                   <p className="font-bold text-xs">Beige</p>
                   <p className="text-[9px] sm:text-[10px] text-gray-500">#F5F5DC</p>

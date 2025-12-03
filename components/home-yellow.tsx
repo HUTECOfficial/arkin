@@ -24,7 +24,7 @@ export function HomeYellow() {
         <div className="relative z-10 max-w-6xl mx-auto">
           <div className="text-center space-y-6 sm:space-y-8">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-white/10 border-2 border-arkin-primary rounded-full backdrop-blur-md">
+            <div className="inline-flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-arkin-secondary/50/10 border-2 border-arkin-primary rounded-full backdrop-blur-md">
               <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-arkin-primary" />
               <span className="text-xs sm:text-sm font-bold text-white uppercase tracking-wider">
                 Tu Inmobiliaria de Confianza
@@ -58,7 +58,7 @@ export function HomeYellow() {
               <Link href="/propietarios" className="w-full sm:w-auto">
                 <Button
                   variant="outline"
-                  className="w-full sm:w-auto border-3 border-white text-white font-bold px-8 sm:px-10 py-5 sm:py-7 rounded-2xl text-base sm:text-lg hover:bg-white hover:text-arkin-accent transition-all duration-300 backdrop-blur-sm bg-white/5"
+                  className="w-full sm:w-auto border-3 border-white text-white font-bold px-8 sm:px-10 py-5 sm:py-7 rounded-2xl text-base sm:text-lg hover:bg-arkin-secondary/50 hover:text-arkin-accent transition-all duration-300 backdrop-blur-sm bg-arkin-secondary/50/5"
                 >
                   Vender mi Propiedad
                   <ArrowRight className="h-5 w-5 sm:h-6 sm:w-6 ml-2 sm:ml-3" />

@@ -47,7 +47,7 @@ export default function FavoritosPage() {
           {wishlistCount === 0 ? (
             /* Empty State */
             <div className="text-center py-16">
-              <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <div className="w-24 h-24 bg-arkin-secondary rounded-full flex items-center justify-center mx-auto mb-6">
                 <Heart className="h-12 w-12 text-gray-400" />
               </div>
               <h3 className="font-serif text-2xl font-semibold text-gray-900 mb-4">
@@ -66,7 +66,7 @@ export default function FavoritosPage() {
             /* Properties Grid */
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {wishlist.map((property) => (
-                <Card key={property.id} className="group overflow-hidden rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 hover:scale-[1.02] bg-white">
+                <Card key={property.id} className="group overflow-hidden rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 hover:scale-[1.02] bg-arkin-secondary/50">
                   <div className="relative">
                     <div className="aspect-[4/3] overflow-hidden">
                       <Image

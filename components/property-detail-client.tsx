@@ -216,12 +216,12 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
                 area: `${property.area} m²`
               }}
               size="lg"
-              className="bg-white/90 hover:bg-white"
+              className="bg-arkin-secondary/50/90 hover:bg-arkin-secondary/50"
             />
             <Button
               variant="ghost"
               size="sm"
-              className="bg-white/90 hover:bg-white text-gray-700 rounded-full w-12 h-12 p-0"
+              className="bg-arkin-secondary/50/90 hover:bg-arkin-secondary/50 text-gray-700 rounded-full w-12 h-12 p-0"
             >
               <Share2 className="h-5 w-5" />
             </Button>
@@ -229,7 +229,7 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
               variant="ghost"
               size="sm"
               onClick={() => setIsImageFullscreen(true)}
-              className="bg-white/90 hover:bg-white text-gray-700 rounded-full w-12 h-12 p-0"
+              className="bg-arkin-secondary/50/90 hover:bg-arkin-secondary/50 text-gray-700 rounded-full w-12 h-12 p-0"
             >
               <Maximize className="h-5 w-5" />
             </Button>

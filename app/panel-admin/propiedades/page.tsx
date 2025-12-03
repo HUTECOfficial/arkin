@@ -95,7 +95,7 @@ export default function AdminPropiedadesPage() {
 
                 {/* Stats */}
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
-                    <Card className="bg-gray-100/60 backdrop-blur-xl border-white/40 shadow-lg">
+                    <Card className="bg-arkin-secondary/60 backdrop-blur-xl border-white/40 shadow-lg">
                         <CardContent className="p-4 sm:p-6">
                             <div className="flex items-center justify-between">
                                 <div>
@@ -113,7 +113,7 @@ export default function AdminPropiedadesPage() {
                         </CardContent>
                     </Card>
 
-                    <Card className="bg-gray-100/60 backdrop-blur-xl border-white/40 shadow-lg">
+                    <Card className="bg-arkin-secondary/60 backdrop-blur-xl border-white/40 shadow-lg">
                         <CardContent className="p-4 sm:p-6">
                             <div className="flex items-center justify-between">
                                 <div>
@@ -131,7 +131,7 @@ export default function AdminPropiedadesPage() {
                         </CardContent>
                     </Card>
 
-                    <Card className="bg-gray-100/60 backdrop-blur-xl border-white/40 shadow-lg">
+                    <Card className="bg-arkin-secondary/60 backdrop-blur-xl border-white/40 shadow-lg">
                         <CardContent className="p-4 sm:p-6">
                             <div className="flex items-center justify-between">
                                 <div>
@@ -149,7 +149,7 @@ export default function AdminPropiedadesPage() {
                         </CardContent>
                     </Card>
 
-                    <Card className="bg-gray-100/60 backdrop-blur-xl border-white/40 shadow-lg">
+                    <Card className="bg-arkin-secondary/60 backdrop-blur-xl border-white/40 shadow-lg">
                         <CardContent className="p-4 sm:p-6">
                             <div className="flex items-center justify-between">
                                 <div>
@@ -170,7 +170,7 @@ export default function AdminPropiedadesPage() {
 
                 {/* Lista de Propiedades */}
                 {propiedades.length === 0 ? (
-                    <Card className="bg-gray-100/60 backdrop-blur-xl border-white/40 shadow-lg">
+                    <Card className="bg-arkin-secondary/60 backdrop-blur-xl border-white/40 shadow-lg">
                         <CardContent className="p-12 text-center">
                             <Building2 className="h-16 w-16 text-arkin-gold mx-auto mb-4" />
                             <h3 className="text-xl font-semibold mb-2 text-arkin-graphite">
@@ -186,7 +186,7 @@ export default function AdminPropiedadesPage() {
                         {propiedades.map((propiedad) => (
                             <Card
                                 key={propiedad.id}
-                                className="bg-gray-100/60 backdrop-blur-xl border-white/40 shadow-lg hover:shadow-xl transition-all duration-300"
+                                className="bg-arkin-secondary/60 backdrop-blur-xl border-white/40 shadow-lg hover:shadow-xl transition-all duration-300"
                             >
                                 <CardContent className="p-6">
                                     <div className="flex flex-col md:flex-row gap-6">

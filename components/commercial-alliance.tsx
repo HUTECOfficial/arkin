@@ -96,8 +96,8 @@ export function CommercialAlliance() {
                                 <Card
                                     key={index}
                                     className={`relative flex flex-col transition-all duration-300 hover:shadow-2xl ${plan.highlight
-                                            ? 'border-arkin-primary shadow-xl scale-105 z-10 bg-white/90 backdrop-blur-xl'
-                                            : 'border-arkin-accent/10 hover:-translate-y-1 bg-white/60 backdrop-blur-lg hover:bg-white/80'
+                                            ? 'border-arkin-primary shadow-xl scale-105 z-10 bg-arkin-secondary/50/90 backdrop-blur-xl'
+                                            : 'border-arkin-accent/10 hover:-translate-y-1 bg-arkin-secondary/50/60 backdrop-blur-lg hover:bg-arkin-secondary/50/80'
                                         }`}
                                 >
                                     {plan.highlight && (

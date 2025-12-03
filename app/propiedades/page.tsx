@@ -318,7 +318,7 @@ export default function PropiedadesPage() {
                         {/* Features */}
                         <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-4 sm:mb-6">
                           {propiedad.caracteristicas.slice(0, 2).map((caracteristica, index) => (
-                            <Badge key={index} className="bg-gray-50 text-gray-600 text-[10px] sm:text-xs border-0">
+                            <Badge key={index} className="bg-arkin-secondary/70 text-gray-600 text-[10px] sm:text-xs border-0">
                               {caracteristica}
                             </Badge>
                           ))}
@@ -356,7 +356,7 @@ export default function PropiedadesPage() {
                   {filteredAndSortedProperties.map((propiedad) => (
                     <div
                       key={propiedad.id}
-                      className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-arkin-gold/20"
+                      className="group bg-arkin-secondary/50 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-arkin-gold/20"
                     >
                       <div className="flex flex-col md:flex-row">
                         {/* Image */}
@@ -386,7 +386,7 @@ export default function PropiedadesPage() {
                             <div className="flex items-start justify-between mb-4">
                               <div>
                                 <div className="flex items-center gap-3 mb-2">
-                                  <Badge className="bg-gray-100 text-gray-700 text-xs">{propiedad.tipo}</Badge>
+                                  <Badge className="bg-arkin-secondary text-gray-700 text-xs">{propiedad.tipo}</Badge>
                                   <span className="text-2xl font-bold text-arkin-gold">{propiedad.precioTexto}</span>
                                 </div>
                                 <h3 className="text-xl font-serif font-bold text-gray-900 mb-2">{propiedad.titulo}</h3>
@@ -409,7 +409,7 @@ export default function PropiedadesPage() {
                                   }}
                                   size="sm"
                                 />
-                                <Button size="sm" className="w-8 h-8 p-0 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full">
+                                <Button size="sm" className="w-8 h-8 p-0 bg-arkin-secondary hover:bg-gray-200 text-gray-700 rounded-full">
                                   <Eye className="h-4 w-4" />
                                 </Button>
                               </div>
@@ -460,7 +460,7 @@ export default function PropiedadesPage() {
 
               {/* Map View */}
               {viewMode === 'map' && (
-                <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+                <div className="bg-arkin-secondary/50 rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
                   <div className="h-96 bg-gray-200 flex items-center justify-center">
                     <div className="text-center text-gray-500">
                       <Map className="h-16 w-16 mx-auto mb-4" />

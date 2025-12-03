@@ -27,7 +27,7 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-arkin-light-gray">
       {/* Navigation */}
-      <nav className="bg-white border-b border-gray-100">
+      <nav className="bg-arkin-secondary/50 border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center space-x-3">
@@ -96,7 +96,7 @@ export default function DashboardPage() {
                     <img src="/penthouse-living-room.png" alt="Sala" className="w-full h-16 object-cover rounded" />
                     <img src="/penthouse-kitchen.png" alt="Cocina" className="w-full h-16 object-cover rounded" />
                     <img src="/penthouse-bedroom.png" alt="Recámara" className="w-full h-16 object-cover rounded" />
-                    <div className="w-full h-16 bg-gray-100 rounded flex items-center justify-center border-2 border-dashed border-gray-300 hover:border-arkin-gold transition-colors cursor-pointer">
+                    <div className="w-full h-16 bg-arkin-secondary rounded flex items-center justify-center border-2 border-dashed border-gray-300 hover:border-arkin-gold transition-colors cursor-pointer">
                       <Upload className="h-4 w-4 text-gray-400" />
                     </div>
                   </div>

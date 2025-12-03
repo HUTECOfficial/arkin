@@ -75,7 +75,7 @@ export function WishlistButton({
           ${sizeClasses[size]} rounded-full p-0
           ${isLiked 
             ? 'bg-red-50 hover:bg-red-100 text-red-500 border-red-200' 
-            : 'bg-white/80 hover:bg-white text-gray-600 border-gray-200'
+            : 'bg-arkin-secondary/50/80 hover:bg-arkin-secondary/50 text-gray-600 border-gray-200'
           }
           border backdrop-blur-sm transition-all duration-300 
           hover:scale-110 active:scale-95 shadow-sm hover:shadow-md

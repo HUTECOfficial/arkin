@@ -639,7 +639,7 @@ export default function PropietariosPage() {
                         className={`p-3 rounded-lg border cursor-pointer transition-all ${
                           formData.amenities.includes(amenity)
                             ? 'border-arkin-gold bg-arkin-gold/10 text-arkin-gold'
-                            : 'border-gray-200 hover:border-arkin-gold/50 hover:bg-gray-50'
+                            : 'border-gray-200 hover:border-arkin-gold/50 hover:bg-arkin-secondary/70'
                         }`}
                       >
                         <div className="flex items-center space-x-2">
@@ -721,7 +721,7 @@ export default function PropietariosPage() {
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                       {uploadedPhotos.map((photo, index) => (
                         <div key={index} className="relative group">
-                          <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
+                          <div className="aspect-square bg-arkin-secondary rounded-lg overflow-hidden">
                             <img
                               src={URL.createObjectURL(photo)}
                               alt={`Foto ${index + 1}`}
@@ -884,7 +884,7 @@ export default function PropietariosPage() {
           )}
 
           {/* Navigation Buttons */}
-          <div className="px-8 py-6 bg-gray-50 border-t border-gray-100">
+          <div className="px-8 py-6 bg-arkin-secondary/70 border-t border-gray-100">
             <div className="flex justify-between items-center">
               <Button
                 type="button"

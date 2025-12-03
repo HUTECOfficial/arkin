@@ -50,7 +50,7 @@ export default function MarketingPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-arkin-secondary/50">
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
@@ -214,7 +214,7 @@ export default function MarketingPage() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="aspect-video bg-gray-100 rounded-lg flex items-center justify-center">
+                  <div className="aspect-video bg-arkin-secondary rounded-lg flex items-center justify-center">
                     <div className="text-center">
                       <Camera className="h-12 w-12 text-gray-400 mx-auto mb-2" />
                       <p className="text-gray-600">Vista previa del tour virtual</p>
@@ -269,7 +269,7 @@ export default function MarketingPage() {
                     </Select>
                   </div>
                   <Button className="w-full bg-yellow-600 hover:bg-yellow-700">Traducir Contenido</Button>
-                  <div className="p-4 bg-gray-50 rounded-lg">
+                  <div className="p-4 bg-arkin-secondary/70 rounded-lg">
                     <Label className="text-sm font-medium text-gray-700">Traducción:</Label>
                     <p className="text-sm text-gray-600 mt-1">La traducción aparecerá aquí...</p>
                   </div>

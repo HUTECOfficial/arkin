@@ -16,7 +16,7 @@ export default function EmpresaPage() {
 
       {/* Story Section */}
       <div className="max-w-4xl mx-auto px-6 mb-24">
-        <Card className="p-12 rounded-3xl border-0 bg-white shadow-xl">
+        <Card className="p-12 rounded-3xl border-0 bg-arkin-secondary/50 shadow-xl">
           <h2 className="font-serif text-3xl font-semibold text-arkin-graphite mb-8 text-center">Nuestra Historia</h2>
           <div className="prose prose-lg max-w-none text-gray-600">
             <p className="mb-6">
@@ -42,7 +42,7 @@ export default function EmpresaPage() {
       <div className="max-w-6xl mx-auto px-6 mb-24">
         <h2 className="font-serif text-4xl font-light text-arkin-graphite mb-16 text-center">Nuestros Valores</h2>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          <Card className="p-8 text-center rounded-3xl border-0 bg-white shadow-xl hover:shadow-2xl transition-all duration-300">
+          <Card className="p-8 text-center rounded-3xl border-0 bg-arkin-secondary/50 shadow-xl hover:shadow-2xl transition-all duration-300">
             <div className="w-16 h-16 bg-gradient-to-br from-arkin-gold to-yellow-400 rounded-2xl flex items-center justify-center mx-auto mb-6">
               <Award className="h-8 w-8 text-white" />
             </div>
@@ -52,7 +52,7 @@ export default function EmpresaPage() {
             </p>
           </Card>
 
-          <Card className="p-8 text-center rounded-3xl border-0 bg-white shadow-xl hover:shadow-2xl transition-all duration-300">
+          <Card className="p-8 text-center rounded-3xl border-0 bg-arkin-secondary/50 shadow-xl hover:shadow-2xl transition-all duration-300">
             <div className="w-16 h-16 bg-gradient-to-br from-arkin-gold to-yellow-400 rounded-2xl flex items-center justify-center mx-auto mb-6">
               <Users className="h-8 w-8 text-white" />
             </div>
@@ -62,7 +62,7 @@ export default function EmpresaPage() {
             </p>
           </Card>
 
-          <Card className="p-8 text-center rounded-3xl border-0 bg-white shadow-xl hover:shadow-2xl transition-all duration-300">
+          <Card className="p-8 text-center rounded-3xl border-0 bg-arkin-secondary/50 shadow-xl hover:shadow-2xl transition-all duration-300">
             <div className="w-16 h-16 bg-gradient-to-br from-arkin-gold to-yellow-400 rounded-2xl flex items-center justify-center mx-auto mb-6">
               <TrendingUp className="h-8 w-8 text-white" />
             </div>
@@ -72,7 +72,7 @@ export default function EmpresaPage() {
             </p>
           </Card>
 
-          <Card className="p-8 text-center rounded-3xl border-0 bg-white shadow-xl hover:shadow-2xl transition-all duration-300">
+          <Card className="p-8 text-center rounded-3xl border-0 bg-arkin-secondary/50 shadow-xl hover:shadow-2xl transition-all duration-300">
             <div className="w-16 h-16 bg-gradient-to-br from-arkin-gold to-yellow-400 rounded-2xl flex items-center justify-center mx-auto mb-6">
               <Globe className="h-8 w-8 text-white" />
             </div>
@@ -86,7 +86,7 @@ export default function EmpresaPage() {
       <div className="max-w-6xl mx-auto px-6 mb-24">
         <h2 className="font-serif text-4xl font-light text-arkin-graphite mb-16 text-center">Nuestro Equipo</h2>
         <div className="grid md:grid-cols-3 gap-8">
-          <Card className="p-8 text-center rounded-3xl border-0 bg-white shadow-xl">
+          <Card className="p-8 text-center rounded-3xl border-0 bg-arkin-secondary/50 shadow-xl">
             <div className="w-24 h-24 bg-gradient-to-br from-arkin-gold to-yellow-400 rounded-full mx-auto mb-6"></div>
             <h3 className="font-serif text-xl font-semibold text-arkin-graphite mb-2">Elena Martínez</h3>
             <p className="text-arkin-gold font-medium mb-4">CEO & Fundadora</p>
@@ -95,7 +95,7 @@ export default function EmpresaPage() {
             </p>
           </Card>
 
-          <Card className="p-8 text-center rounded-3xl border-0 bg-white shadow-xl">
+          <Card className="p-8 text-center rounded-3xl border-0 bg-arkin-secondary/50 shadow-xl">
             <div className="w-24 h-24 bg-gradient-to-br from-arkin-gold to-yellow-400 rounded-full mx-auto mb-6"></div>
             <h3 className="font-serif text-xl font-semibold text-arkin-graphite mb-2">Carlos Ruiz</h3>
             <p className="text-arkin-gold font-medium mb-4">Director de Marketing</p>
@@ -104,7 +104,7 @@ export default function EmpresaPage() {
             </p>
           </Card>
 
-          <Card className="p-8 text-center rounded-3xl border-0 bg-white shadow-xl">
+          <Card className="p-8 text-center rounded-3xl border-0 bg-arkin-secondary/50 shadow-xl">
             <div className="w-24 h-24 bg-gradient-to-br from-arkin-gold to-yellow-400 rounded-full mx-auto mb-6"></div>
             <h3 className="font-serif text-xl font-semibold text-arkin-graphite mb-2">Ana López</h3>
             <p className="text-arkin-gold font-medium mb-4">Directora de Operaciones</p>

@@ -96,7 +96,7 @@ export function DynamicHeader() {
               : `rounded-full px-5 py-2.5 max-w-fit
                  ${isScrolled
                 ? 'backdrop-blur-2xl bg-arkin-secondary/95 border border-arkin-accent/20 shadow-2xl shadow-black/20 px-4 py-2 scale-[0.95]'
-                : 'backdrop-blur-md bg-white/10 border border-white/20 shadow-lg'
+                : 'backdrop-blur-md bg-arkin-secondary/50/10 border border-white/20 shadow-lg'
               }
                  transform scale-100 opacity-100`
             }
@@ -132,7 +132,7 @@ export function DynamicHeader() {
                       transition-all duration-300 ease-out flex-shrink-0 min-w-[80px]
                       ${isActive(item.href)
                         ? 'bg-arkin-primary/20 text-arkin-primary font-semibold shadow-sm shadow-arkin-primary/20'
-                        : `${isScrolled ? 'text-arkin-accent/70 hover:text-arkin-primary hover:bg-arkin-primary/10' : 'text-white/90 hover:text-white hover:bg-white/10'} hover:shadow-sm`
+                        : `${isScrolled ? 'text-arkin-accent/70 hover:text-arkin-primary hover:bg-arkin-primary/10' : 'text-white/90 hover:text-white hover:bg-arkin-secondary/50/10'} hover:shadow-sm`
                       }
                     `}
                   >
@@ -151,14 +151,14 @@ export function DynamicHeader() {
               <Button
                 variant="ghost"
                 size="sm"
-                className={`rounded-full w-8 h-8 p-0 flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-md ${isScrolled ? 'text-arkin-accent/70 hover:bg-arkin-primary/10 hover:text-arkin-primary' : 'text-white/90 hover:bg-white/10 hover:text-white'}`}
+                className={`rounded-full w-8 h-8 p-0 flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-md ${isScrolled ? 'text-arkin-accent/70 hover:bg-arkin-primary/10 hover:text-arkin-primary' : 'text-white/90 hover:bg-arkin-secondary/50/10 hover:text-white'}`}
               >
                 <Search className="h-3.5 w-3.5" />
               </Button>
               <Button
                 variant="ghost"
                 size="sm"
-                className={`rounded-full w-8 h-8 p-0 flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-md ${isScrolled ? 'text-arkin-accent/70 hover:bg-arkin-primary/10 hover:text-arkin-primary' : 'text-white/90 hover:bg-white/10 hover:text-white'}`}
+                className={`rounded-full w-8 h-8 p-0 flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-md ${isScrolled ? 'text-arkin-accent/70 hover:bg-arkin-primary/10 hover:text-arkin-primary' : 'text-white/90 hover:bg-arkin-secondary/50/10 hover:text-white'}`}
               >
                 <Heart className="h-3.5 w-3.5" />
               </Button>
@@ -191,7 +191,7 @@ export function DynamicHeader() {
                 <Button
                   size="sm"
                   onClick={() => setIsOtrosMenuOpen(!isOtrosMenuOpen)}
-                  className={`rounded-full px-3 py-1.5 font-medium text-xs h-8 transition-all duration-300 hover:scale-105 hover:shadow-md whitespace-nowrap flex items-center gap-1.5 ${isScrolled ? 'bg-arkin-accent/10 hover:bg-arkin-accent/20 text-arkin-accent' : 'bg-white/10 hover:bg-white/20 text-white'}`}
+                  className={`rounded-full px-3 py-1.5 font-medium text-xs h-8 transition-all duration-300 hover:scale-105 hover:shadow-md whitespace-nowrap flex items-center gap-1.5 ${isScrolled ? 'bg-arkin-accent/10 hover:bg-arkin-accent/20 text-arkin-accent' : 'bg-arkin-secondary/50/10 hover:bg-arkin-secondary/50/20 text-white'}`}
                 >
                   Otros
                   <ChevronDown className={`h-3 w-3 transition-transform duration-200 ${isOtrosMenuOpen ? 'rotate-180' : ''}`} />
@@ -306,7 +306,7 @@ export function DynamicHeader() {
                 <Link href="/login">
                   <Button
                     size="sm"
-                    className={`rounded-full px-2 py-0.5 font-medium text-xs h-5 ml-0.5 transition-all duration-300 hover:scale-105 whitespace-nowrap flex items-center gap-1 ${isScrolled ? 'bg-arkin-accent/10 hover:bg-arkin-accent/20 text-arkin-accent' : 'bg-white/10 hover:bg-white/20 text-white'}`}
+                    className={`rounded-full px-2 py-0.5 font-medium text-xs h-5 ml-0.5 transition-all duration-300 hover:scale-105 whitespace-nowrap flex items-center gap-1 ${isScrolled ? 'bg-arkin-accent/10 hover:bg-arkin-accent/20 text-arkin-accent' : 'bg-arkin-secondary/50/10 hover:bg-arkin-secondary/50/20 text-white'}`}
                   >
                     <UserCircle className="h-2.5 w-2.5" />
                     <span>Acceso</span>

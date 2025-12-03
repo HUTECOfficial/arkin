@@ -37,7 +37,7 @@ export default function PanelPropietario() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-8">
         <div className="max-w-7xl mx-auto">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 text-center">
+          <div className="bg-arkin-secondary/50 dark:bg-gray-800 rounded-2xl shadow-xl p-8 text-center">
             <Building2 className="w-16 h-16 mx-auto mb-4 text-gray-400" />
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
               No se encontró información de su propiedad
@@ -81,7 +81,7 @@ export default function PanelPropietario() {
       en_negociacion: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400',
       vendida: 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400',
       rentada: 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400',
-      pausada: 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400'
+      pausada: 'bg-arkin-secondary text-gray-800 dark:bg-gray-900/30 dark:text-gray-400'
     }
     return badges[status as keyof typeof badges] || badges.activa
   }
@@ -113,14 +113,14 @@ export default function PanelPropietario() {
       case 'contactado': return 'text-green-600 bg-green-50 dark:bg-green-900/20'
       case 'calificado': return 'text-purple-600 bg-purple-50 dark:bg-purple-900/20'
       case 'descartado': return 'text-red-600 bg-red-50 dark:bg-red-900/20'
-      default: return 'text-gray-600 bg-gray-50 dark:bg-gray-900/20'
+      default: return 'text-gray-600 bg-arkin-secondary/70 dark:bg-gray-900/20'
     }
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       {/* Header */}
-      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+      <div className="bg-arkin-secondary/50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
@@ -134,7 +134,7 @@ export default function PanelPropietario() {
             </div>
             <button
               onClick={() => router.push('/')}
-              className="px-6 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-white rounded-lg transition-colors"
+              className="px-6 py-2 bg-arkin-secondary hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-white rounded-lg transition-colors"
             >
               Volver al Inicio
             </button>
@@ -144,7 +144,7 @@ export default function PanelPropietario() {
 
       <div className="max-w-7xl mx-auto p-8 space-y-8">
         {/* Información de la Propiedad */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden">
+        <div className="bg-arkin-secondary/50 dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden">
           <div className="relative h-64">
             <img 
               src={miPropiedad.imagen} 
@@ -250,7 +250,7 @@ export default function PanelPropietario() {
         {/* Gráficas */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Distribución de Leads */}
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6">
+          <div className="bg-arkin-secondary/50 dark:bg-gray-800 rounded-2xl shadow-xl p-6">
             <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
               <Users className="w-6 h-6 text-blue-600" />
               Distribución de Leads
@@ -287,7 +287,7 @@ export default function PanelPropietario() {
           </div>
 
           {/* Actividad de la Semana */}
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6">
+          <div className="bg-arkin-secondary/50 dark:bg-gray-800 rounded-2xl shadow-xl p-6">
             <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
               <Activity className="w-6 h-6 text-green-600" />
               Actividad de la Semana
@@ -330,14 +330,14 @@ export default function PanelPropietario() {
         {/* Leads Recientes y Actividad */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Leads Recientes */}
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6">
+          <div className="bg-arkin-secondary/50 dark:bg-gray-800 rounded-2xl shadow-xl p-6">
             <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
               <Users className="w-6 h-6 text-blue-600" />
               Leads Recientes
             </h3>
             <div className="space-y-4">
               {leadsPropiedad.slice(0, 5).map((lead) => (
-                <div key={lead.id} className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl hover:shadow-md transition-shadow">
+                <div key={lead.id} className="p-4 bg-arkin-secondary/70 dark:bg-gray-700/50 rounded-xl hover:shadow-md transition-shadow">
                   <div className="flex items-start justify-between mb-2">
                     <div>
                       <h4 className="font-semibold text-gray-900 dark:text-white">{lead.nombre}</h4>
@@ -373,20 +373,20 @@ export default function PanelPropietario() {
           </div>
 
           {/* Actividad Reciente */}
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6">
+          <div className="bg-arkin-secondary/50 dark:bg-gray-800 rounded-2xl shadow-xl p-6">
             <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
               <Activity className="w-6 h-6 text-green-600" />
               Actividad Reciente
             </h3>
             <div className="space-y-4">
               {actividadPropiedad.slice(0, 5).map((actividad) => (
-                <div key={actividad.id} className="flex items-start gap-4 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
+                <div key={actividad.id} className="flex items-start gap-4 p-4 bg-arkin-secondary/70 dark:bg-gray-700/50 rounded-xl">
                   <div className={`p-2 rounded-lg ${
                     actividad.tipo === 'lead' ? 'bg-blue-100 dark:bg-blue-900/30' :
                     actividad.tipo === 'visita' ? 'bg-green-100 dark:bg-green-900/30' :
                     actividad.tipo === 'oferta' ? 'bg-purple-100 dark:bg-purple-900/30' :
                     actividad.tipo === 'venta' ? 'bg-orange-100 dark:bg-orange-900/30' :
-                    'bg-gray-100 dark:bg-gray-900/30'
+                    'bg-arkin-secondary dark:bg-gray-900/30'
                   }`}>
                     {actividad.tipo === 'lead' && <Users className="w-5 h-5 text-blue-600" />}
                     {actividad.tipo === 'visita' && <Eye className="w-5 h-5 text-green-600" />}

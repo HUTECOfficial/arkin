@@ -73,10 +73,10 @@ export function PropertyComparison({
   const getLargestArea = () => Math.max(...properties.map(p => p.area))
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-2xl">
+    <div className="fixed bottom-0 left-0 right-0 z-50 bg-arkin-secondary/50 border-t border-gray-200 shadow-2xl">
       {/* Collapsed Header */}
       <div 
-        className="px-6 py-4 cursor-pointer hover:bg-gray-50 transition-colors"
+        className="px-6 py-4 cursor-pointer hover:bg-arkin-secondary/70 transition-colors"
         onClick={() => setIsExpanded(!isExpanded)}
       >
         <div className="flex items-center justify-between">
@@ -116,7 +116,7 @@ export function PropertyComparison({
                 </div>
               ))}
               {properties.length > 3 && (
-                <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-sm font-medium text-gray-600">
+                <div className="w-12 h-12 bg-arkin-secondary rounded-lg flex items-center justify-center text-sm font-medium text-gray-600">
                   +{properties.length - 3}
                 </div>
               )}
@@ -145,7 +145,7 @@ export function PropertyComparison({
 
       {/* Expanded Comparison */}
       {isExpanded && (
-        <div className="border-t border-gray-200 bg-gray-50 max-h-96 overflow-y-auto">
+        <div className="border-t border-gray-200 bg-arkin-secondary/70 max-h-96 overflow-y-auto">
           <div className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {properties.map((property) => (
@@ -153,7 +153,7 @@ export function PropertyComparison({
                   {/* Remove Button */}
                   <button
                     onClick={() => onRemoveProperty(property.id)}
-                    className="absolute top-3 right-3 z-10 w-8 h-8 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-sm"
+                    className="absolute top-3 right-3 z-10 w-8 h-8 bg-arkin-secondary/50/90 hover:bg-arkin-secondary/50 rounded-full flex items-center justify-center shadow-sm"
                   >
                     <X className="h-4 w-4 text-gray-600" />
                   </button>
@@ -183,7 +183,7 @@ export function PropertyComparison({
                   <CardContent className="p-4">
                     {/* Price Comparison Indicators */}
                     <div className="flex items-center justify-between mb-3">
-                      <Badge className="bg-gray-100 text-gray-700 text-xs">
+                      <Badge className="bg-arkin-secondary text-gray-700 text-xs">
                         {property.tipo}
                       </Badge>
                       <div className="flex items-center space-x-1">
@@ -244,7 +244,7 @@ export function PropertyComparison({
                     <div className="mb-4">
                       <div className="flex flex-wrap gap-1">
                         {property.caracteristicas.slice(0, 2).map((caracteristica, index) => (
-                          <Badge key={index} className="bg-gray-50 text-gray-600 text-xs border-0">
+                          <Badge key={index} className="bg-arkin-secondary/70 text-gray-600 text-xs border-0">
                             {caracteristica}
                           </Badge>
                         ))}
@@ -289,7 +289,7 @@ export function PropertyComparison({
             </div>
 
             {/* Comparison Summary */}
-            <div className="mt-6 p-4 bg-white rounded-lg border border-gray-200">
+            <div className="mt-6 p-4 bg-arkin-secondary/50 rounded-lg border border-gray-200">
               <h4 className="font-semibold text-gray-900 mb-3">Resumen de Comparación</h4>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                 <div>

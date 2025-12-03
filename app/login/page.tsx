@@ -75,7 +75,7 @@ export default function LoginPage() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-11 pr-4 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-arkin-gold focus:border-transparent outline-none transition-all text-gray-900 dark:text-white"
+                  className="w-full pl-11 pr-4 py-3 bg-arkin-secondary/70 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-arkin-gold focus:border-transparent outline-none transition-all text-gray-900 dark:text-white"
                   placeholder="tu@arkin.mx"
                   required
                 />
@@ -94,7 +94,7 @@ export default function LoginPage() {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-11 pr-4 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-arkin-gold focus:border-transparent outline-none transition-all text-gray-900 dark:text-white"
+                  className="w-full pl-11 pr-4 py-3 bg-arkin-secondary/70 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-arkin-gold focus:border-transparent outline-none transition-all text-gray-900 dark:text-white"
                   placeholder="••••••••"
                   required
                 />
@@ -125,19 +125,19 @@ export default function LoginPage() {
               Credenciales de prueba:
             </p>
             <div className="space-y-2 text-xs">
-              <div className="p-2 bg-gray-50 dark:bg-gray-900 rounded-lg">
+              <div className="p-2 bg-arkin-secondary/70 dark:bg-gray-900 rounded-lg">
                 <p className="font-medium text-gray-700 dark:text-gray-300">Admin:</p>
                 <p className="text-gray-600 dark:text-gray-400">admin@arkin.mx / arkin2025</p>
               </div>
-              <div className="p-2 bg-gray-50 dark:bg-gray-900 rounded-lg">
+              <div className="p-2 bg-arkin-secondary/70 dark:bg-gray-900 rounded-lg">
                 <p className="font-medium text-gray-700 dark:text-gray-300">Asesor:</p>
                 <p className="text-gray-600 dark:text-gray-400">ana@arkin.mx / ana_arkin2025</p>
               </div>
-              <div className="p-2 bg-gray-50 dark:bg-gray-900 rounded-lg">
+              <div className="p-2 bg-arkin-secondary/70 dark:bg-gray-900 rounded-lg">
                 <p className="font-medium text-gray-700 dark:text-gray-300">Propietario:</p>
                 <p className="text-gray-600 dark:text-gray-400">eduardo@propietario.com / eduardo_arkin2025</p>
               </div>
-              <div className="p-2 bg-gray-50 dark:bg-gray-900 rounded-lg">
+              <div className="p-2 bg-arkin-secondary/70 dark:bg-gray-900 rounded-lg">
                 <p className="font-medium text-gray-700 dark:text-gray-300">Fotógrafo:</p>
                 <p className="text-gray-600 dark:text-gray-400">santiago@arkin.mx / santiago_arkin2025</p>
               </div>

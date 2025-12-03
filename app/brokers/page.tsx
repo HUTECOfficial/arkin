@@ -100,7 +100,7 @@ export default function BrokersPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-arkin-secondary">
       {/* Hero Section */}
       <section className="relative py-20 bg-gradient-to-r from-arkin-dark to-gray-900 text-white overflow-hidden">
         <div className="absolute inset-0 opacity-10">
@@ -123,7 +123,7 @@ export default function BrokersPage() {
                 <Handshake className="mr-2 h-5 w-5" />
                 Únete como Broker
               </Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+              <Button size="lg" variant="outline" className="border-white text-white hover:bg-arkin-secondary/50/10">
                 <Scale className="mr-2 h-5 w-5" />
                 Directorio de Notarías
               </Button>
@@ -147,7 +147,7 @@ export default function BrokersPage() {
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {beneficios.map((beneficio, index) => (
-              <Card key={index} className="border-0 shadow-lg hover:shadow-xl transition-shadow">
+              <Card key={index} className="border border-arkin-primary/30 bg-arkin-secondary/50 shadow-lg hover:shadow-xl transition-shadow">
                 <CardContent className="p-6">
                   <div className="w-12 h-12 bg-arkin-gold/10 rounded-xl flex items-center justify-center mb-4">
                     <beneficio.icon className="h-6 w-6 text-arkin-gold" />
@@ -166,7 +166,7 @@ export default function BrokersPage() {
       </section>
 
       {/* Notarías Asociadas */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-arkin-secondary/70">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
@@ -180,7 +180,7 @@ export default function BrokersPage() {
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {notariasAsociadas.map((notaria, index) => (
-              <Card key={index} className="border-0 shadow-lg">
+              <Card key={index} className="border border-arkin-primary/30 bg-arkin-secondary/50 shadow-lg">
                 <CardHeader>
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
@@ -228,7 +228,7 @@ export default function BrokersPage() {
               </p>
             </div>
             
-            <Card className="border-0 shadow-xl">
+            <Card className="border border-arkin-primary/30 bg-arkin-secondary/50 shadow-xl">
               <CardContent className="p-8">
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid md:grid-cols-2 gap-4">

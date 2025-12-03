@@ -226,7 +226,7 @@ function DesarrolloCard({ desarrollo, tipo }: { desarrollo: any, tipo: string })
 
 export default function DesarrollosPage() {
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-arkin-secondary">
       {/* Hero Section */}
       <section className="relative py-20 bg-gradient-to-r from-arkin-dark to-gray-900 text-white overflow-hidden">
         <div className="absolute inset-0 opacity-10">
@@ -249,7 +249,7 @@ export default function DesarrollosPage() {
                 <Building2 className="mr-2 h-5 w-5" />
                 Ver Desarrollos
               </Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+              <Button size="lg" variant="outline" className="border-white text-white hover:bg-arkin-secondary/50/10">
                 <Phone className="mr-2 h-5 w-5" />
                 Contactar Asesor
               </Button>
@@ -343,7 +343,7 @@ export default function DesarrollosPage() {
       </section>
 
       {/* Beneficios */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-arkin-secondary/70">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
@@ -416,7 +416,7 @@ export default function DesarrollosPage() {
               </Button>
             </Link>
             <Link href="https://wa.me/524774756951">
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+              <Button size="lg" variant="outline" className="border-white text-white hover:bg-arkin-secondary/50/10">
                 <Phone className="mr-2 h-5 w-5" />
                 WhatsApp
               </Button>

@@ -176,7 +176,7 @@ export default function PropiedadesAsesorPage() {
 
         {/* Stats */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
-          <Card className="bg-gray-100/60 backdrop-blur-xl border-white/40 shadow-lg hover:shadow-xl transition-all duration-300">
+          <Card className="bg-arkin-secondary/60 backdrop-blur-xl border-white/40 shadow-lg hover:shadow-xl transition-all duration-300">
             <CardContent className="p-4 sm:p-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -190,7 +190,7 @@ export default function PropiedadesAsesorPage() {
             </CardContent>
           </Card>
 
-          <Card className="bg-gray-100/60 backdrop-blur-xl border-white/40 shadow-lg hover:shadow-xl transition-all duration-300">
+          <Card className="bg-arkin-secondary/60 backdrop-blur-xl border-white/40 shadow-lg hover:shadow-xl transition-all duration-300">
             <CardContent className="p-4 sm:p-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -206,7 +206,7 @@ export default function PropiedadesAsesorPage() {
             </CardContent>
           </Card>
 
-          <Card className="bg-gray-100/60 backdrop-blur-xl border-white/40 shadow-lg hover:shadow-xl transition-all duration-300">
+          <Card className="bg-arkin-secondary/60 backdrop-blur-xl border-white/40 shadow-lg hover:shadow-xl transition-all duration-300">
             <CardContent className="p-4 sm:p-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -222,7 +222,7 @@ export default function PropiedadesAsesorPage() {
             </CardContent>
           </Card>
 
-          <Card className="bg-gray-100/60 backdrop-blur-xl border-white/40 shadow-lg hover:shadow-xl transition-all duration-300">
+          <Card className="bg-arkin-secondary/60 backdrop-blur-xl border-white/40 shadow-lg hover:shadow-xl transition-all duration-300">
             <CardContent className="p-4 sm:p-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -241,7 +241,7 @@ export default function PropiedadesAsesorPage() {
 
         {/* Lista de Propiedades */}
         {propiedades.length === 0 ? (
-          <Card className="bg-gray-100/60 backdrop-blur-xl border-white/40 shadow-lg">
+          <Card className="bg-arkin-secondary/60 backdrop-blur-xl border-white/40 shadow-lg">
             <CardContent className="p-12 text-center">
               <Building2 className="h-16 w-16 text-arkin-gold mx-auto mb-4" />
               <h3 className="text-xl font-semibold mb-2 text-arkin-graphite">No tienes propiedades</h3>
@@ -258,7 +258,7 @@ export default function PropiedadesAsesorPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {propiedades.map((propiedad) => (
-              <Card key={propiedad.id} className="bg-gray-100/60 backdrop-blur-xl border-white/40 shadow-lg overflow-hidden group hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+              <Card key={propiedad.id} className="bg-arkin-secondary/60 backdrop-blur-xl border-white/40 shadow-lg overflow-hidden group hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
                 <div className="relative h-48 overflow-hidden">
                   <img
                     src={propiedad.imagen}
@@ -360,7 +360,7 @@ export default function PropiedadesAsesorPage() {
 
         {/* Dialog de Confirmación de Eliminación */}
         <Dialog open={deleteConfirm !== null} onOpenChange={() => setDeleteConfirm(null)}>
-          <DialogContent className="bg-white border-arkin-gold/20">
+          <DialogContent className="bg-arkin-secondary/50 border-arkin-gold/20">
             <DialogHeader>
               <DialogTitle className="text-arkin-graphite">¿Eliminar propiedad?</DialogTitle>
               <DialogDescription className="text-gray-600">

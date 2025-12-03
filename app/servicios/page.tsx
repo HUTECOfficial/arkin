@@ -19,7 +19,7 @@ export default function ServiciosPage() {
       {/* Services Grid */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 pb-16 sm:pb-24">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          <Card className="p-6 sm:p-8 rounded-2xl sm:rounded-3xl border-0 bg-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+          <Card className="p-6 sm:p-8 rounded-2xl sm:rounded-3xl border-0 bg-arkin-secondary/50 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
             <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-arkin-gold to-yellow-400 rounded-xl sm:rounded-2xl flex items-center justify-center mb-4 sm:mb-6">
               <Shield className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
             </div>
@@ -36,7 +36,7 @@ export default function ServiciosPage() {
             </ul>
           </Card>
 
-          <Card className="p-6 sm:p-8 rounded-2xl sm:rounded-3xl border-0 bg-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+          <Card className="p-6 sm:p-8 rounded-2xl sm:rounded-3xl border-0 bg-arkin-secondary/50 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
             <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-arkin-gold to-yellow-400 rounded-xl sm:rounded-2xl flex items-center justify-center mb-4 sm:mb-6">
               <Star className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
             </div>
@@ -53,7 +53,7 @@ export default function ServiciosPage() {
             </ul>
           </Card>
 
-          <Card className="p-6 sm:p-8 rounded-2xl sm:rounded-3xl border-0 bg-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 sm:col-span-2 lg:col-span-1">
+          <Card className="p-6 sm:p-8 rounded-2xl sm:rounded-3xl border-0 bg-arkin-secondary/50 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 sm:col-span-2 lg:col-span-1">
             <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-arkin-gold to-yellow-400 rounded-xl sm:rounded-2xl flex items-center justify-center mb-4 sm:mb-6">
               <TrendingUp className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
             </div>
@@ -70,7 +70,7 @@ export default function ServiciosPage() {
             </ul>
           </Card>
 
-          <Card className="p-6 sm:p-8 rounded-2xl sm:rounded-3xl border-0 bg-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+          <Card className="p-6 sm:p-8 rounded-2xl sm:rounded-3xl border-0 bg-arkin-secondary/50 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
             <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-arkin-gold to-yellow-400 rounded-xl sm:rounded-2xl flex items-center justify-center mb-4 sm:mb-6">
               <Eye className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
             </div>
@@ -88,7 +88,7 @@ export default function ServiciosPage() {
             </ul>
           </Card>
 
-          <Card className="p-6 sm:p-8 rounded-2xl sm:rounded-3xl border-0 bg-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+          <Card className="p-6 sm:p-8 rounded-2xl sm:rounded-3xl border-0 bg-arkin-secondary/50 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
             <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-arkin-gold to-yellow-400 rounded-xl sm:rounded-2xl flex items-center justify-center mb-4 sm:mb-6">
               <Zap className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
             </div>
@@ -106,7 +106,7 @@ export default function ServiciosPage() {
             </ul>
           </Card>
 
-          <Card className="p-6 sm:p-8 rounded-2xl sm:rounded-3xl border-0 bg-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 sm:col-span-2 lg:col-span-1">
+          <Card className="p-6 sm:p-8 rounded-2xl sm:rounded-3xl border-0 bg-arkin-secondary/50 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 sm:col-span-2 lg:col-span-1">
             <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-arkin-gold to-yellow-400 rounded-xl sm:rounded-2xl flex items-center justify-center mb-4 sm:mb-6">
               <Users className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
             </div>

@@ -13,7 +13,7 @@ export default function LegalPage() {
 
       <div className="max-w-4xl mx-auto px-6 pb-24 space-y-8">
         {/* Privacy Policy */}
-        <Card className="p-8 rounded-3xl border-0 bg-white shadow-xl">
+        <Card className="p-8 rounded-3xl border-0 bg-arkin-secondary/50 shadow-xl">
           <h2 className="font-serif text-3xl font-semibold text-arkin-graphite mb-6">Política de Privacidad</h2>
           <div className="prose prose-gray max-w-none">
             <p className="mb-4">
@@ -38,7 +38,7 @@ export default function LegalPage() {
         </Card>
 
         {/* Terms of Use */}
-        <Card className="p-8 rounded-3xl border-0 bg-white shadow-xl">
+        <Card className="p-8 rounded-3xl border-0 bg-arkin-secondary/50 shadow-xl">
           <h2 className="font-serif text-3xl font-semibold text-arkin-graphite mb-6">Términos de Uso</h2>
           <div className="prose prose-gray max-w-none">
             <h3 className="text-xl font-semibold text-arkin-graphite mt-6 mb-3">Servicios</h3>
@@ -60,7 +60,7 @@ export default function LegalPage() {
         </Card>
 
         {/* Cookies Policy */}
-        <Card className="p-8 rounded-3xl border-0 bg-white shadow-xl">
+        <Card className="p-8 rounded-3xl border-0 bg-arkin-secondary/50 shadow-xl">
           <h2 className="font-serif text-3xl font-semibold text-arkin-graphite mb-6">Política de Cookies</h2>
           <div className="prose prose-gray max-w-none">
             <p className="mb-4">

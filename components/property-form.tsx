@@ -244,7 +244,7 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
                       h-10 w-10 rounded-lg border flex items-center justify-center transition-all
                       ${formData.habitaciones === num
                         ? 'bg-arkin-gold text-black border-arkin-gold font-bold shadow-md scale-105'
-                        : 'bg-white text-gray-600 border-gray-200 hover:border-arkin-gold/50 hover:bg-arkin-gold/5'
+                        : 'bg-arkin-secondary/50 text-gray-600 border-gray-200 hover:border-arkin-gold/50 hover:bg-arkin-gold/5'
                       }
                     `}
                   >
@@ -266,7 +266,7 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
                       h-10 w-10 rounded-lg border flex items-center justify-center transition-all
                       ${formData.banos === num
                         ? 'bg-arkin-gold text-black border-arkin-gold font-bold shadow-md scale-105'
-                        : 'bg-white text-gray-600 border-gray-200 hover:border-arkin-gold/50 hover:bg-arkin-gold/5'
+                        : 'bg-arkin-secondary/50 text-gray-600 border-gray-200 hover:border-arkin-gold/50 hover:bg-arkin-gold/5'
                       }
                     `}
                   >

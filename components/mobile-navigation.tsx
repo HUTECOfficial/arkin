@@ -56,7 +56,7 @@ export function MobileNavigation() {
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center space-x-3">
                 <div className="w-6 h-6 bg-gradient-to-br from-arkin-gold to-yellow-400 rounded-lg shadow-lg flex items-center justify-center">
-                  <div className="w-2 h-2 bg-white rounded-sm"></div>
+                  <div className="w-2 h-2 bg-arkin-secondary/50 rounded-sm"></div>
                 </div>
                 <span className="text-white font-serif text-lg font-bold">ARKIN</span>
               </div>
@@ -66,10 +66,10 @@ export function MobileNavigation() {
                   setIsExpanded(false)
                   setShowProperties(false)
                 }}
-                className="w-6 h-6 p-0 bg-white/10 hover:bg-white/20 rounded-full border-0"
+                className="w-6 h-6 p-0 bg-arkin-secondary/50/10 hover:bg-arkin-secondary/50/20 rounded-full border-0"
               >
-                <div className="w-3 h-0.5 bg-white rounded-full transform rotate-45 absolute"></div>
-                <div className="w-3 h-0.5 bg-white rounded-full transform -rotate-45 absolute"></div>
+                <div className="w-3 h-0.5 bg-arkin-secondary/50 rounded-full transform rotate-45 absolute"></div>
+                <div className="w-3 h-0.5 bg-arkin-secondary/50 rounded-full transform -rotate-45 absolute"></div>
               </Button>
             </div>
 
@@ -94,7 +94,7 @@ export function MobileNavigation() {
               {/* Properties List */}
               {showProperties && (
                 <div className="mt-3 space-y-2 animate-slide-down">
-                  <div className="bg-white/10 backdrop-blur-xl rounded-xl p-3 border border-white/20">
+                  <div className="bg-arkin-secondary/50/10 backdrop-blur-xl rounded-xl p-3 border border-white/20">
                     <div className="flex items-center space-x-3">
                       <img
                         src="/luxury-penthouse-polanco-main.png"
@@ -111,7 +111,7 @@ export function MobileNavigation() {
                       </div>
                     </div>
                   </div>
-                  <div className="bg-white/10 backdrop-blur-xl rounded-xl p-3 border border-white/20">
+                  <div className="bg-arkin-secondary/50/10 backdrop-blur-xl rounded-xl p-3 border border-white/20">
                     <div className="flex items-center space-x-3">
                       <img src="/luxury-villa-santa-fe.png" alt="Villa" className="w-10 h-8 object-cover rounded-lg" />
                       <div className="flex-1">
@@ -133,7 +133,7 @@ export function MobileNavigation() {
               <Link
                 href="/servicios"
                 onClick={() => setIsExpanded(false)}
-                className="bg-white/10 hover:bg-white/20 backdrop-blur-xl rounded-2xl p-4 border border-white/20 transition-all duration-300 hover:scale-105"
+                className="bg-arkin-secondary/50/10 hover:bg-arkin-secondary/50/20 backdrop-blur-xl rounded-2xl p-4 border border-white/20 transition-all duration-300 hover:scale-105"
               >
                 <div className="flex flex-col items-center space-y-2">
                   <div className="w-8 h-8 bg-blue-500/20 rounded-xl flex items-center justify-center">
@@ -146,7 +146,7 @@ export function MobileNavigation() {
               <Link
                 href="/empresa"
                 onClick={() => setIsExpanded(false)}
-                className="bg-white/10 hover:bg-white/20 backdrop-blur-xl rounded-2xl p-4 border border-white/20 transition-all duration-300 hover:scale-105"
+                className="bg-arkin-secondary/50/10 hover:bg-arkin-secondary/50/20 backdrop-blur-xl rounded-2xl p-4 border border-white/20 transition-all duration-300 hover:scale-105"
               >
                 <div className="flex flex-col items-center space-y-2">
                   <div className="w-8 h-8 bg-green-500/20 rounded-xl flex items-center justify-center">
@@ -159,7 +159,7 @@ export function MobileNavigation() {
               <Link
                 href="/propiedades"
                 onClick={() => setIsExpanded(false)}
-                className="bg-white/10 hover:bg-white/20 backdrop-blur-xl rounded-2xl p-4 border border-white/20 transition-all duration-300 hover:scale-105"
+                className="bg-arkin-secondary/50/10 hover:bg-arkin-secondary/50/20 backdrop-blur-xl rounded-2xl p-4 border border-white/20 transition-all duration-300 hover:scale-105"
               >
                 <div className="flex flex-col items-center space-y-2">
                   <div className="w-8 h-8 bg-purple-500/20 rounded-xl flex items-center justify-center">
@@ -172,7 +172,7 @@ export function MobileNavigation() {
               <Link
                 href="/marketing"
                 onClick={() => setIsExpanded(false)}
-                className="bg-white/10 hover:bg-white/20 backdrop-blur-xl rounded-2xl p-4 border border-white/20 transition-all duration-300 hover:scale-105"
+                className="bg-arkin-secondary/50/10 hover:bg-arkin-secondary/50/20 backdrop-blur-xl rounded-2xl p-4 border border-white/20 transition-all duration-300 hover:scale-105"
               >
                 <div className="flex flex-col items-center space-y-2">
                   <div className="w-8 h-8 bg-orange-500/20 rounded-xl flex items-center justify-center">
@@ -191,7 +191,7 @@ export function MobileNavigation() {
                 </Button>
               </Link>
               <Link href="/dashboard" onClick={() => setIsExpanded(false)}>
-                <Button className="w-full bg-white/20 hover:bg-white/30 border border-white/30 text-white rounded-2xl py-3 text-sm font-medium">
+                <Button className="w-full bg-arkin-secondary/50/20 hover:bg-arkin-secondary/50/30 border border-white/30 text-white rounded-2xl py-3 text-sm font-medium">
                   Acceso Propietarios
                 </Button>
               </Link>
