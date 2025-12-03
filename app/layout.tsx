@@ -1,5 +1,5 @@
 import type React from "react"
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { GeistSans } from "geist/font/sans"
 import { GeistMono } from "geist/font/mono"
 import { Playfair_Display } from "next/font/google"
@@ -21,6 +21,12 @@ export const metadata: Metadata = {
   title: "ARKIN SELECT - Tu Inmobiliaria de Confianza",
   description: "Exclusividad, Conexión y Confianza. Confía tu propiedad a ARKIN SELECT.",
   generator: "v0.app",
+}
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
 }
 
 export default function RootLayout({
