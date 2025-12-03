@@ -126,10 +126,6 @@ export default function LoginPage() {
             </p>
             <div className="space-y-2 text-xs">
               <div className="p-2 bg-arkin-secondary/70 dark:bg-gray-900 rounded-lg">
-                <p className="font-medium text-gray-700 dark:text-gray-300">Admin:</p>
-                <p className="text-gray-600 dark:text-gray-400">admin@arkin.mx / arkin2025</p>
-              </div>
-              <div className="p-2 bg-arkin-secondary/70 dark:bg-gray-900 rounded-lg">
                 <p className="font-medium text-gray-700 dark:text-gray-300">Asesor:</p>
                 <p className="text-gray-600 dark:text-gray-400">ana@arkin.mx / ana_arkin2025</p>
               </div>
