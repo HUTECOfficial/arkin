@@ -87,11 +87,12 @@ export function DynamicHeader() {
             mx-auto md:origin-top origin-bottom
             transition-all duration-[400ms] ease-[cubic-bezier(0.25,0.46,0.45,0.94)]
             ${isMobileMenuOpen
-              ? `rounded-[28px] px-6 py-6 pt-[max(1.5rem,env(safe-area-inset-top))] min-w-[320px] 
+              ? `rounded-[28px] px-6 py-6 min-w-[320px] 
                  backdrop-blur-2xl bg-arkin-secondary/95
                  border border-arkin-accent/20
                  shadow-2xl shadow-black/20
-                 transform scale-100 opacity-100`
+                 transform scale-100 opacity-100
+                 mobile-menu-expanded`
               : `rounded-full px-5 py-2.5 max-w-fit
                  ${isScrolled
                 ? 'backdrop-blur-2xl bg-arkin-secondary/95 border border-arkin-accent/20 shadow-2xl shadow-black/20 px-4 py-2 scale-[0.95]'

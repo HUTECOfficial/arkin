@@ -168,9 +168,9 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-100">
       {/* Hero Image Gallery */}
-      <section className="relative h-[60vh] lg:h-[70vh] overflow-hidden">
+      <section className="relative h-[50vh] sm:h-[60vh] lg:h-[70vh] overflow-hidden">
         <div className="relative w-full h-full">
           <img
             src={property.imagenes[currentImageIndex] || "/placeholder.svg"}
@@ -274,63 +274,63 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
           {/* Left Column - Property Details */}
           <div className="lg:col-span-2 space-y-8">
             {/* Property Header */}
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-              <div className="flex items-start justify-between mb-4">
-                <div>
-                  <h1 className="text-3xl font-serif font-bold text-gray-900 mb-2">
+            <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-100">
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-4">
+                <div className="flex-1">
+                  <h1 className="text-xl sm:text-2xl lg:text-3xl font-serif font-bold text-gray-900 mb-2">
                     {property.titulo}
                   </h1>
-                  <div className="flex items-center text-gray-600 mb-4">
-                    <MapPin className="h-5 w-5 mr-2" />
-                    <span className="text-lg">{property.ubicacion}</span>
+                  <div className="flex items-center text-gray-600">
+                    <MapPin className="h-4 w-4 sm:h-5 sm:w-5 mr-2 flex-shrink-0" />
+                    <span className="text-sm sm:text-base lg:text-lg">{property.ubicacion}</span>
                   </div>
                 </div>
-                <div className="text-right">
-                  <div className="text-3xl font-bold text-arkin-gold mb-1">
+                <div className="text-left sm:text-right">
+                  <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-arkin-gold mb-1">
                     {formatPrice(property.precio)}
                   </div>
-                  <div className="text-sm text-gray-500">
+                  <div className="text-xs sm:text-sm text-gray-500">
                     {formatPrice(Math.round(property.precio / property.area))} / m²
                   </div>
                 </div>
               </div>
 
               {/* Property Stats */}
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-4 p-4 bg-gray-50 rounded-xl">
+              <div className="grid grid-cols-3 sm:grid-cols-5 gap-2 sm:gap-4 p-3 sm:p-4 bg-gray-50 rounded-xl">
                 <div className="text-center">
-                  <div className="flex items-center justify-center mb-2">
-                    <Bed className="h-5 w-5 text-arkin-gold" />
+                  <div className="flex items-center justify-center mb-1 sm:mb-2">
+                    <Bed className="h-4 w-4 sm:h-5 sm:w-5 text-arkin-gold" />
                   </div>
-                  <div className="text-2xl font-bold text-gray-900">{property.habitaciones}</div>
-                  <div className="text-sm text-gray-600">Habitaciones</div>
+                  <div className="text-lg sm:text-2xl font-bold text-gray-900">{property.habitaciones}</div>
+                  <div className="text-xs sm:text-sm text-gray-600">Habitaciones</div>
                 </div>
                 <div className="text-center">
-                  <div className="flex items-center justify-center mb-2">
-                    <Bath className="h-5 w-5 text-arkin-gold" />
+                  <div className="flex items-center justify-center mb-1 sm:mb-2">
+                    <Bath className="h-4 w-4 sm:h-5 sm:w-5 text-arkin-gold" />
                   </div>
-                  <div className="text-2xl font-bold text-gray-900">{property.banos}</div>
-                  <div className="text-sm text-gray-600">Baños</div>
+                  <div className="text-lg sm:text-2xl font-bold text-gray-900">{property.banos}</div>
+                  <div className="text-xs sm:text-sm text-gray-600">Baños</div>
                 </div>
                 <div className="text-center">
-                  <div className="flex items-center justify-center mb-2">
-                    <Square className="h-5 w-5 text-arkin-gold" />
+                  <div className="flex items-center justify-center mb-1 sm:mb-2">
+                    <Square className="h-4 w-4 sm:h-5 sm:w-5 text-arkin-gold" />
                   </div>
-                  <div className="text-2xl font-bold text-gray-900">{property.area}</div>
-                  <div className="text-sm text-gray-600">m² Construidos</div>
+                  <div className="text-lg sm:text-2xl font-bold text-gray-900">{property.area}</div>
+                  <div className="text-xs sm:text-sm text-gray-600">m² Construidos</div>
                 </div>
                 <div className="text-center">
-                  <div className="flex items-center justify-center mb-2">
-                    <Car className="h-5 w-5 text-arkin-gold" />
+                  <div className="flex items-center justify-center mb-1 sm:mb-2">
+                    <Car className="h-4 w-4 sm:h-5 sm:w-5 text-arkin-gold" />
                   </div>
-                  <div className="text-2xl font-bold text-gray-900">{property.estacionamientos}</div>
-                  <div className="text-sm text-gray-600">Estacionamientos</div>
+                  <div className="text-lg sm:text-2xl font-bold text-gray-900">{property.estacionamientos}</div>
+                  <div className="text-xs sm:text-sm text-gray-600">Estacionamientos</div>
                 </div>
                 <div className="text-center">
-                  <div className="flex items-center justify-center mb-2">
-                    <Clock className="h-5 w-5 text-arkin-gold" />
+                  <div className="flex items-center justify-center mb-1 sm:mb-2">
+                    <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-arkin-gold" />
                   </div>
-                  <div className="text-2xl font-bold text-gray-900">{property.antiguedad}</div>
-                  <div className="text-sm text-gray-600">Años</div>
+                  <div className="text-lg sm:text-2xl font-bold text-gray-900">{property.antiguedad}</div>
+                  <div className="text-xs sm:text-sm text-gray-600">Años</div>
                 </div>
               </div>
             </div>
@@ -338,10 +338,10 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
             {/* Tabs Content */}
             <Tabs defaultValue="descripcion" className="bg-white rounded-2xl shadow-sm border border-gray-100">
               <TabsList className="grid w-full grid-cols-4 p-1 bg-gray-50 rounded-t-2xl">
-                <TabsTrigger value="descripcion" className="rounded-xl">Descripción</TabsTrigger>
-                <TabsTrigger value="caracteristicas" className="rounded-xl">Características</TabsTrigger>
-                <TabsTrigger value="amenidades" className="rounded-xl">Amenidades</TabsTrigger>
-                <TabsTrigger value="ubicacion" className="rounded-xl">Ubicación</TabsTrigger>
+                <TabsTrigger value="descripcion" className="rounded-xl text-xs sm:text-sm px-1 sm:px-3">Descripción</TabsTrigger>
+                <TabsTrigger value="caracteristicas" className="rounded-xl text-xs sm:text-sm px-1 sm:px-3">Características</TabsTrigger>
+                <TabsTrigger value="amenidades" className="rounded-xl text-xs sm:text-sm px-1 sm:px-3">Amenidades</TabsTrigger>
+                <TabsTrigger value="ubicacion" className="rounded-xl text-xs sm:text-sm px-1 sm:px-3">Ubicación</TabsTrigger>
               </TabsList>
 
               <TabsContent value="descripcion" className="p-6">

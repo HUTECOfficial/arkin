@@ -422,3 +422,14 @@
     transform: rotate(360deg);
   }
 }
+
+/* Safe Area Insets para iPhone Dynamic Island */
+@supports (padding-top: env(safe-area-inset-top)) {
+  .safe-area-top {
+    padding-top: max(1.5rem, env(safe-area-inset-top));
+  }
+  
+  .mobile-menu-expanded {
+    padding-top: max(1.5rem, env(safe-area-inset-top)) !important;
+  }
+}
