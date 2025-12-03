@@ -168,7 +168,7 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-arkin-secondary">
       {/* Hero Image Gallery */}
       <section className="relative h-[50vh] sm:h-[60vh] lg:h-[70vh] overflow-hidden">
         <div className="relative w-full h-full">
@@ -274,7 +274,7 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
           {/* Left Column - Property Details */}
           <div className="lg:col-span-2 space-y-8">
             {/* Property Header */}
-            <div className="bg-gray-50 rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-200">
+            <div className="bg-white/80 rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-200">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-4">
                 <div className="flex-1">
                   <h1 className="text-xl sm:text-2xl lg:text-3xl font-serif font-bold text-gray-900 mb-2">
@@ -296,7 +296,7 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
               </div>
 
               {/* Property Stats */}
-              <div className="grid grid-cols-3 sm:grid-cols-5 gap-2 sm:gap-4 p-3 sm:p-4 bg-gray-100 rounded-xl">
+              <div className="grid grid-cols-3 sm:grid-cols-5 gap-2 sm:gap-4 p-3 sm:p-4 bg-arkin-secondary/50 rounded-xl">
                 <div className="text-center">
                   <div className="flex items-center justify-center mb-1 sm:mb-2">
                     <Bed className="h-4 w-4 sm:h-5 sm:w-5 text-arkin-gold" />
@@ -336,8 +336,8 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
             </div>
 
             {/* Tabs Content */}
-            <Tabs defaultValue="descripcion" className="bg-gray-50 rounded-2xl shadow-sm border border-gray-200">
-              <TabsList className="grid w-full grid-cols-4 p-1 bg-gray-200 rounded-t-2xl">
+            <Tabs defaultValue="descripcion" className="bg-white/80 rounded-2xl shadow-sm border border-gray-200">
+              <TabsList className="grid w-full grid-cols-4 p-1 bg-arkin-secondary/50 rounded-t-2xl">
                 <TabsTrigger value="descripcion" className="rounded-xl text-xs sm:text-sm px-1 sm:px-3">Descripción</TabsTrigger>
                 <TabsTrigger value="caracteristicas" className="rounded-xl text-xs sm:text-sm px-1 sm:px-3">Características</TabsTrigger>
                 <TabsTrigger value="amenidades" className="rounded-xl text-xs sm:text-sm px-1 sm:px-3">Amenidades</TabsTrigger>
@@ -399,7 +399,7 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
               <TabsContent value="caracteristicas" className="p-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {property.caracteristicas.map((caracteristica, index) => (
-                    <div key={index} className="flex items-center space-x-3 p-3 bg-gray-100 rounded-lg">
+                    <div key={index} className="flex items-center space-x-3 p-3 bg-arkin-secondary/30 rounded-lg">
                       <div className="w-2 h-2 bg-arkin-gold rounded-full"></div>
                       <span className="text-gray-700">{caracteristica}</span>
                     </div>
@@ -410,7 +410,7 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
               <TabsContent value="amenidades" className="p-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {property.amenidades.map((amenidad, index) => (
-                    <div key={index} className="flex items-start space-x-4 p-4 bg-gray-100 rounded-lg">
+                    <div key={index} className="flex items-start space-x-4 p-4 bg-arkin-secondary/30 rounded-lg">
                       <div className="w-12 h-12 bg-arkin-gold/10 rounded-lg flex items-center justify-center">
                         <amenidad.icon className="h-6 w-6 text-arkin-gold" />
                       </div>
@@ -427,21 +427,21 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
                 <div className="space-y-6">
                   {/* Location Scores */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="text-center p-4 bg-gray-100 rounded-lg">
+                    <div className="text-center p-4 bg-arkin-secondary/30 rounded-lg">
                       <div className="text-2xl font-bold text-arkin-gold mb-1">
                         {property.ubicacionInfo.walkScore}
                       </div>
                       <div className="text-sm text-gray-600">Walk Score</div>
                       <div className="text-xs text-gray-500">Muy caminable</div>
                     </div>
-                    <div className="text-center p-4 bg-gray-100 rounded-lg">
+                    <div className="text-center p-4 bg-arkin-secondary/30 rounded-lg">
                       <div className="text-2xl font-bold text-arkin-gold mb-1">
                         {property.ubicacionInfo.transitScore}
                       </div>
                       <div className="text-sm text-gray-600">Transit Score</div>
                       <div className="text-xs text-gray-500">Excelente transporte</div>
                     </div>
-                    <div className="text-center p-4 bg-gray-100 rounded-lg">
+                    <div className="text-center p-4 bg-arkin-secondary/30 rounded-lg">
                       <div className="text-2xl font-bold text-arkin-gold mb-1">
                         {property.ubicacionInfo.bikeScore}
                       </div>
@@ -455,7 +455,7 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
                     <h4 className="font-semibold text-gray-900 mb-4">Lugares Cercanos</h4>
                     <div className="space-y-3">
                       {property.ubicacionInfo.cercanos.map((lugar, index) => (
-                        <div key={index} className="flex items-center justify-between p-3 bg-gray-100 rounded-lg">
+                        <div key={index} className="flex items-center justify-between p-3 bg-arkin-secondary/30 rounded-lg">
                           <div>
                             <span className="font-medium text-gray-900">{lugar.nombre}</span>
                             <span className="text-sm text-gray-600 ml-2">({lugar.tipo})</span>
@@ -482,7 +482,7 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
           {/* Right Column - Agent & Actions */}
           <div className="space-y-6">
             {/* Asesor Responsable Card */}
-            <Card className="bg-gray-50 border-gray-200 shadow-lg">
+            <Card className="bg-white/80 border-gray-200 shadow-lg">
               <CardHeader className="pb-4">
                 <CardTitle className="text-lg font-serif">Asesor Responsable</CardTitle>
               </CardHeader>
@@ -502,7 +502,7 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
             </Card>
 
             {/* Schedule Visit */}
-            <Card className="bg-gray-50 border-gray-200 shadow-lg">
+            <Card className="bg-white/80 border-gray-200 shadow-lg">
               <CardHeader className="pb-4">
                 <CardTitle className="text-lg font-serif">Agendar Visita</CardTitle>
               </CardHeader>
@@ -518,7 +518,7 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
             </Card>
 
             {/* Mortgage Calculator */}
-            <Card className="bg-gray-50 border-gray-200 shadow-lg">
+            <Card className="bg-white/80 border-gray-200 shadow-lg">
               <CardHeader className="pb-4">
                 <CardTitle className="text-lg font-serif">Calculadora de Crédito</CardTitle>
               </CardHeader>
@@ -546,7 +546,7 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
             </Card>
 
             {/* Price History */}
-            <Card className="bg-gray-50 border-gray-200 shadow-lg">
+            <Card className="bg-white/80 border-gray-200 shadow-lg">
               <CardHeader className="pb-4">
                 <CardTitle className="text-lg font-serif">Historial de Precio</CardTitle>
               </CardHeader>
