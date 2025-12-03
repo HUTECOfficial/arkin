@@ -146,21 +146,21 @@ export function DynamicHeader() {
               })}
             </nav>
 
-            {/* Action Buttons */}
+            {/* Action Buttons - Lupa pegada al corazón */}
             <div className="flex items-center gap-0 flex-shrink-0">
               <Button
                 variant="ghost"
                 size="sm"
                 className={`rounded-full w-8 h-8 p-0 flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-md ${isScrolled ? 'text-arkin-accent/70 hover:bg-arkin-primary/10 hover:text-arkin-primary' : 'text-white/90 hover:bg-arkin-accent/10 hover:text-white'}`}
               >
-                <Search className="h-3.5 w-3.5" />
+                <Heart className="h-3.5 w-3.5" />
               </Button>
               <Button
                 variant="ghost"
                 size="sm"
                 className={`rounded-full w-8 h-8 p-0 flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-md ${isScrolled ? 'text-arkin-accent/70 hover:bg-arkin-primary/10 hover:text-arkin-primary' : 'text-white/90 hover:bg-arkin-accent/10 hover:text-white'}`}
               >
-                <Heart className="h-3.5 w-3.5" />
+                <Search className="h-3.5 w-3.5" />
               </Button>
             </div>
 
