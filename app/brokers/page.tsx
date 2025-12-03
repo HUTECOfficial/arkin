@@ -123,7 +123,7 @@ export default function BrokersPage() {
                 <Handshake className="mr-2 h-5 w-5" />
                 Únete como Broker
               </Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-arkin-secondary/50/10">
+              <Button size="lg" variant="outline" className="border-arkin-accent text-arkin-accent hover:bg-arkin-accent/10">
                 <Scale className="mr-2 h-5 w-5" />
                 Directorio de Notarías
               </Button>

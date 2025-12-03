@@ -58,7 +58,7 @@ export function HomeYellow() {
               <Link href="/propietarios" className="w-full sm:w-auto">
                 <Button
                   variant="outline"
-                  className="w-full sm:w-auto border-3 border-white text-white font-bold px-8 sm:px-10 py-5 sm:py-7 rounded-2xl text-base sm:text-lg hover:bg-arkin-secondary/50 hover:text-arkin-accent transition-all duration-300 backdrop-blur-sm bg-arkin-secondary/50/5"
+                  className="w-full sm:w-auto border-3 border-arkin-accent text-arkin-accent font-bold px-8 sm:px-10 py-5 sm:py-7 rounded-2xl text-base sm:text-lg hover:bg-arkin-secondary/50 hover:text-arkin-accent transition-all duration-300 backdrop-blur-sm bg-arkin-secondary/20"
                 >
                   Vender mi Propiedad
                   <ArrowRight className="h-5 w-5 sm:h-6 sm:w-6 ml-2 sm:ml-3" />

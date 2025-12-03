@@ -249,7 +249,7 @@ export default function DesarrollosPage() {
                 <Building2 className="mr-2 h-5 w-5" />
                 Ver Desarrollos
               </Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-arkin-secondary/50/10">
+              <Button size="lg" variant="outline" className="border-arkin-accent text-arkin-accent hover:bg-arkin-accent/10">
                 <Phone className="mr-2 h-5 w-5" />
                 Contactar Asesor
               </Button>
@@ -416,7 +416,7 @@ export default function DesarrollosPage() {
               </Button>
             </Link>
             <Link href="https://wa.me/524774756951">
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-arkin-secondary/50/10">
+              <Button size="lg" variant="outline" className="border-arkin-accent text-arkin-accent hover:bg-arkin-accent/10">
                 <Phone className="mr-2 h-5 w-5" />
                 WhatsApp
               </Button>

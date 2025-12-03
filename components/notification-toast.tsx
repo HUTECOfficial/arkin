@@ -91,7 +91,7 @@ export function NotificationToast({
                 variant="ghost"
                 size="sm"
                 onClick={handleClose}
-                className="text-white hover:bg-arkin-secondary/50/10 rounded-full w-8 h-8 p-0"
+                className="text-white hover:bg-arkin-accent/10 rounded-full w-8 h-8 p-0"
               >
                 <X className="h-4 w-4" />
               </Button>

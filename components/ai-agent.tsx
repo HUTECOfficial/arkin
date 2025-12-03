@@ -234,7 +234,7 @@ export function AIAgent() {
               variant="ghost"
               size="sm"
               onClick={() => setIsOpen(false)}
-              className="text-white hover:bg-arkin-secondary/50/10 rounded-full w-9 h-9 sm:w-10 sm:h-10 transition-all duration-300 hover:scale-110"
+              className="text-white hover:bg-arkin-accent/10 rounded-full w-9 h-9 sm:w-10 sm:h-10 transition-all duration-300 hover:scale-110"
             >
               <X className="h-4 w-4 sm:h-5 sm:w-5" />
             </Button>
