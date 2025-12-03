@@ -17,7 +17,10 @@ export class PropertiesStorage {
       tipo: dbProp.tipo,
       habitaciones: dbProp.habitaciones,
       banos: dbProp.banos,
+      mediosBanos: (dbProp as any).medios_banos || 0,
       area: dbProp.area,
+      areaConstruccion: (dbProp as any).area_construccion || 0,
+      cochera: (dbProp as any).cochera || 0,
       areaTexto: dbProp.area_texto,
       imagen: dbProp.imagen || '',
       descripcion: dbProp.descripcion || '',
@@ -37,7 +40,7 @@ export class PropertiesStorage {
   }
 
   // Convertir de formato App a formato DB
-  private static appToDb(appProp: Omit<Propiedad, 'id'>, usuarioId?: string): Database['public']['Tables']['propiedades']['Insert'] {
+  private static appToDb(appProp: Omit<Propiedad, 'id'>, usuarioId?: string): any {
     const dbData: any = {
       titulo: appProp.titulo,
       ubicacion: appProp.ubicacion,
@@ -56,6 +59,18 @@ export class PropertiesStorage {
       fecha_publicacion: appProp.fechaPublicacion,
       tour_virtual: appProp.tourVirtual,
       galeria: appProp.galeria,
+    }
+    
+    // Campos opcionales - solo agregar si tienen valor
+    // Estos campos pueden no existir en la DB aún
+    if (appProp.mediosBanos !== undefined) {
+      dbData.medios_banos = appProp.mediosBanos
+    }
+    if (appProp.areaConstruccion !== undefined) {
+      dbData.area_construccion = appProp.areaConstruccion
+    }
+    if (appProp.cochera !== undefined) {
+      dbData.cochera = appProp.cochera
     }
 
     // Solo incluir usuario_id si es un UUID válido

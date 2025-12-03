@@ -11,7 +11,7 @@ if (!supabaseUrl || !supabaseAnonKey) {
 }
 
 // Singleton pattern para evitar múltiples instancias
-let supabaseInstance: SupabaseClient<Database> | null = null
+let supabaseInstance: SupabaseClient | null = null
 
 /**
  * Cliente Supabase optimizado para alto rendimiento
@@ -19,12 +19,12 @@ let supabaseInstance: SupabaseClient<Database> | null = null
  * - Retry logic con exponential backoff
  * - Configuración optimizada para alta concurrencia
  */
-export function getOptimizedSupabase(): SupabaseClient<Database> {
+export function getOptimizedSupabase(): SupabaseClient {
     if (supabaseInstance) {
         return supabaseInstance
     }
 
-    supabaseInstance = createClient<Database>(supabaseUrl, supabaseAnonKey, {
+    supabaseInstance = createClient(supabaseUrl, supabaseAnonKey, {
         auth: {
             persistSession: true,
             autoRefreshToken: true,

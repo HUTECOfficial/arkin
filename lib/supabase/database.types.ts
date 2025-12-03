@@ -19,7 +19,10 @@ export interface Database {
                     tipo: string
                     habitaciones: number
                     banos: number
+                    medios_banos: number | null
                     area: number
+                    area_construccion: number | null
+                    cochera: number | null
                     area_texto: string
                     imagen: string | null
                     descripcion: string | null
@@ -42,7 +45,10 @@ export interface Database {
                     tipo: string
                     habitaciones: number
                     banos: number
+                    medios_banos?: number | null
                     area: number
+                    area_construccion?: number | null
+                    cochera?: number | null
                     area_texto: string
                     imagen?: string | null
                     descripcion?: string | null
@@ -65,7 +71,10 @@ export interface Database {
                     tipo?: string
                     habitaciones?: number
                     banos?: number
+                    medios_banos?: number | null
                     area?: number
+                    area_construccion?: number | null
+                    cochera?: number | null
                     area_texto?: string
                     imagen?: string | null
                     descripcion?: string | null
