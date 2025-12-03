@@ -146,6 +146,9 @@ export function DynamicHeader() {
               })}
             </nav>
 
+            {/* Separator entre nav y action buttons */}
+            <div className="w-px h-4 bg-arkin-accent/20 mx-2"></div>
+
             {/* Action Buttons - Lupa pegada al corazón */}
             <div className="flex items-center gap-0 flex-shrink-0">
               <Button
