@@ -33,8 +33,7 @@ import {
   Maximize,
   Star,
   Clock,
-  TrendingUp,
-  Calculator,
+    Calculator,
   Loader2
 } from "lucide-react"
 import Link from "next/link"
@@ -545,36 +544,7 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
               </CardContent>
             </Card>
 
-            {/* Price History */}
-            <Card className="bg-arkin-secondary/50 border-arkin-primary/30 shadow-lg">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-lg font-serif">Historial de Precio</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {property.historialPrecio.map((item, index) => (
-                    <div key={index} className="flex items-center justify-between text-sm">
-                      <span className="text-gray-600">
-                        {new Date(item.fecha).toLocaleDateString('es-MX', { 
-                          year: 'numeric', 
-                          month: 'short' 
-                        })}
-                      </span>
-                      <span className="font-medium">{formatPrice(item.precio)}</span>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-4 p-3 bg-green-50 rounded-lg">
-                  <div className="flex items-center text-green-700">
-                    <TrendingUp className="h-4 w-4 mr-2" />
-                    <span className="text-sm font-medium">
-                      Precio reducido 3.6% este mes
-                    </span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+                      </div>
         </div>
       </div>
     </div>
