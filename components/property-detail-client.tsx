@@ -274,7 +274,7 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
           {/* Left Column - Property Details */}
           <div className="lg:col-span-2 space-y-8">
             {/* Property Header */}
-            <div className="bg-arkin-secondary/50 rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-200">
+            <div className="bg-arkin-secondary/50 rounded-2xl p-4 sm:p-6 shadow-sm border border-arkin-primary/30">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-4">
                 <div className="flex-1">
                   <h1 className="text-xl sm:text-2xl lg:text-3xl font-serif font-bold text-gray-900 mb-2">
@@ -336,7 +336,7 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
             </div>
 
             {/* Tabs Content */}
-            <Tabs defaultValue="descripcion" className="bg-arkin-secondary/50 rounded-2xl shadow-sm border border-gray-200">
+            <Tabs defaultValue="descripcion" className="bg-arkin-secondary/50 rounded-2xl shadow-sm border border-arkin-primary/30">
               <TabsList className="grid w-full grid-cols-4 p-1 bg-arkin-secondary/50 rounded-t-2xl">
                 <TabsTrigger value="descripcion" className="rounded-xl text-xs sm:text-sm px-1 sm:px-3">Descripción</TabsTrigger>
                 <TabsTrigger value="caracteristicas" className="rounded-xl text-xs sm:text-sm px-1 sm:px-3">Características</TabsTrigger>
@@ -482,7 +482,7 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
           {/* Right Column - Agent & Actions */}
           <div className="space-y-6">
             {/* Asesor Responsable Card */}
-            <Card className="bg-arkin-secondary/50 border-gray-200 shadow-lg">
+            <Card className="bg-arkin-secondary/50 border-arkin-primary/30 shadow-lg">
               <CardHeader className="pb-4">
                 <CardTitle className="text-lg font-serif">Asesor Responsable</CardTitle>
               </CardHeader>
@@ -502,7 +502,7 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
             </Card>
 
             {/* Schedule Visit */}
-            <Card className="bg-arkin-secondary/50 border-gray-200 shadow-lg">
+            <Card className="bg-arkin-secondary/50 border-arkin-primary/30 shadow-lg">
               <CardHeader className="pb-4">
                 <CardTitle className="text-lg font-serif">Agendar Visita</CardTitle>
               </CardHeader>
@@ -518,7 +518,7 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
             </Card>
 
             {/* Mortgage Calculator */}
-            <Card className="bg-arkin-secondary/50 border-gray-200 shadow-lg">
+            <Card className="bg-arkin-secondary/50 border-arkin-primary/30 shadow-lg">
               <CardHeader className="pb-4">
                 <CardTitle className="text-lg font-serif">Calculadora de Crédito</CardTitle>
               </CardHeader>
@@ -546,7 +546,7 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
             </Card>
 
             {/* Price History */}
-            <Card className="bg-arkin-secondary/50 border-gray-200 shadow-lg">
+            <Card className="bg-arkin-secondary/50 border-arkin-primary/30 shadow-lg">
               <CardHeader className="pb-4">
                 <CardTitle className="text-lg font-serif">Historial de Precio</CardTitle>
               </CardHeader>
