@@ -35,8 +35,39 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
   })
 
   const [caracteristica, setCaracteristica] = useState("")
+  const [amenidadesSeleccionadas, setAmenidadesSeleccionadas] = useState<string[]>(
+    (initialData?.detalles as any)?.amenidades || []
+  )
   const [imagePreview, setImagePreview] = useState<string>(initialData?.imagen || "")
   const [galleryPreviews, setGalleryPreviews] = useState<string[]>(initialData?.galeria || [])
+
+  // Lista de amenidades disponibles
+  const amenidadesDisponibles = [
+    "Seguridad 24/7",
+    "Estacionamiento",
+    "Gimnasio",
+    "Alberca",
+    "Jardín",
+    "Internet",
+    "Terraza",
+    "Spa",
+    "Roof Garden",
+    "Área de Juegos",
+    "Salón de Eventos",
+    "Bodega",
+    "Elevador",
+    "Portero",
+    "Área de BBQ",
+    "Pet Friendly"
+  ]
+
+  const toggleAmenidad = (amenidad: string) => {
+    setAmenidadesSeleccionadas(prev => 
+      prev.includes(amenidad) 
+        ? prev.filter(a => a !== amenidad)
+        : [...prev, amenidad]
+    )
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -71,8 +102,9 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
         antiguedad: "Nueva",
         vistas: 0,
         favoritos: 0,
-        publicado: new Date().toLocaleDateString('es-MX')
-      },
+        publicado: new Date().toLocaleDateString('es-MX'),
+        amenidades: amenidadesSeleccionadas
+      } as any,
       galeria: galleryPreviews, // Usar las imágenes de la galería
       tourVirtual: undefined
     }
@@ -356,6 +388,38 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
               </div>
             ))}
           </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Amenidades</CardTitle>
+          <CardDescription>Selecciona las amenidades disponibles en la propiedad</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {amenidadesDisponibles.map((amenidad) => (
+              <button
+                key={amenidad}
+                type="button"
+                onClick={() => toggleAmenidad(amenidad)}
+                className={`
+                  p-3 rounded-lg border text-sm font-medium transition-all text-left
+                  ${amenidadesSeleccionadas.includes(amenidad)
+                    ? 'bg-arkin-gold text-black border-arkin-gold shadow-md'
+                    : 'bg-arkin-secondary/50 text-gray-600 border-gray-200 hover:border-arkin-gold/50 hover:bg-arkin-gold/5'
+                  }
+                `}
+              >
+                {amenidad}
+              </button>
+            ))}
+          </div>
+          {amenidadesSeleccionadas.length > 0 && (
+            <p className="text-sm text-gray-500 mt-3">
+              {amenidadesSeleccionadas.length} amenidad(es) seleccionada(s)
+            </p>
+          )}
         </CardContent>
       </Card>
 

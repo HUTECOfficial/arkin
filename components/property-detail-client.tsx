@@ -33,8 +33,9 @@ import {
   Maximize,
   Star,
   Clock,
-    Calculator,
-  Loader2
+  Calculator,
+  Loader2,
+  Users
 } from "lucide-react"
 import Link from "next/link"
 import { WishlistButton } from "@/components/wishlist-button"
@@ -82,6 +83,56 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
     )
   }
 
+  // Función para generar lugares cercanos basados en la ubicación
+  const generarLugaresCercanos = (ubicacion: string) => {
+    const ciudad = ubicacion.split(',').pop()?.trim() || ubicacion
+    
+    // Lugares genéricos basados en la zona
+    const lugaresBase = [
+      { tipo: "Supermercado", nombre: `Superama ${ciudad}`, distancia: "0.3 km" },
+      { tipo: "Hospital", nombre: `Hospital General ${ciudad}`, distancia: "1.2 km" },
+      { tipo: "Escuela", nombre: `Colegio ${ciudad}`, distancia: "0.8 km" },
+      { tipo: "Parque", nombre: `Parque Central`, distancia: "0.5 km" },
+      { tipo: "Centro Comercial", nombre: `Plaza ${ciudad}`, distancia: "1.0 km" }
+    ]
+    
+    return lugaresBase
+  }
+
+  // Mapeo de amenidades con iconos
+  const amenidadesIconMap: { [key: string]: any } = {
+    "Seguridad 24/7": { icon: Shield, description: "Vigilancia y acceso controlado" },
+    "Estacionamiento": { icon: Car, description: "Espacios de estacionamiento" },
+    "Gimnasio": { icon: Dumbbell, description: "Área de ejercicio equipada" },
+    "Alberca": { icon: Waves, description: "Piscina" },
+    "Jardín": { icon: TreePine, description: "Áreas verdes" },
+    "Internet": { icon: Wifi, description: "Conexión de alta velocidad" },
+    "Terraza": { icon: Sun, description: "Área exterior" },
+    "Spa": { icon: Wind, description: "Área de relajación" },
+    "Roof Garden": { icon: TreePine, description: "Jardín en azotea" },
+    "Área de Juegos": { icon: Users, description: "Espacio recreativo" },
+  }
+
+  // Generar amenidades desde los datos o usar defaults
+  const getAmenidades = () => {
+    const detalles = propertyData.detalles as any
+    if (detalles?.amenidades && Array.isArray(detalles.amenidades)) {
+      return detalles.amenidades.map((amenidad: string) => {
+        const mapped = amenidadesIconMap[amenidad]
+        return {
+          icon: mapped?.icon || Shield,
+          name: amenidad,
+          description: mapped?.description || amenidad
+        }
+      })
+    }
+    // Amenidades por defecto si no hay datos
+    return [
+      { icon: Shield, name: "Seguridad 24/7", description: "Vigilancia y acceso controlado" },
+      { icon: Car, name: "Estacionamiento", description: "Espacios de estacionamiento" },
+    ]
+  }
+
   // Transform data to match component structure
   const property = {
     id: propertyData.id,
@@ -92,27 +143,13 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
     habitaciones: propertyData.habitaciones,
     banos: propertyData.banos,
     area: propertyData.area,
-    areaTerreno: 120, // Default value
-    estacionamientos: 3, // Default value
+    areaTerreno: (propertyData.detalles as any)?.areaTerreno || 120,
+    estacionamientos: (propertyData.detalles as any)?.estacionamientos || 2,
     antiguedad: propertyData.detalles?.antiguedad ? parseInt(propertyData.detalles.antiguedad) : 2,
     descripcion: propertyData.descripcion,
     caracteristicas: propertyData.caracteristicas,
-    amenidades: [
-      { icon: Shield, name: "Seguridad 24/7", description: "Vigilancia y acceso controlado" },
-      { icon: Car, name: "Valet Parking", description: "Servicio de estacionamiento" },
-      { icon: Dumbbell, name: "Gimnasio", description: "Equipado con tecnología Technogym" },
-      { icon: Waves, name: "Piscina Infinity", description: "Con vista a la ciudad" },
-      { icon: TreePine, name: "Jardín Zen", description: "Área de relajación" },
-      { icon: Wifi, name: "Internet Fibra", description: "1GB simétrico incluido" },
-      { icon: ChefHat, name: "Concierge", description: "Servicio 24 horas" },
-      { icon: Wind, name: "Spa", description: "Sauna y vapor" }
-    ],
+    amenidades: getAmenidades(),
     imagenes: propertyData.galeria || [propertyData.imagen],
-    planos: [
-      "/penthouse-floor-plan-1.png",
-      "/penthouse-floor-plan-2.png"
-    ],
-    video: "/penthouse-virtual-tour.mp4",
     agente: propertyData.agente || {
       nombre: "Agente ARKIN SELECT",
       especialidad: "Especialista en Propiedades",
@@ -122,23 +159,11 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
       ventas: 50
     },
     ubicacionInfo: {
-      coordenadas: { lat: 19.4326, lng: -99.1332 },
-      walkScore: 95,
-      transitScore: 88,
-      bikeScore: 78,
-      cercanos: [
-        { tipo: "Restaurante", nombre: "Pujol", distancia: "0.3 km" },
-        { tipo: "Centro Comercial", nombre: "Antara Fashion Hall", distancia: "0.5 km" },
-        { tipo: "Hospital", nombre: "Hospital ABC", distancia: "0.8 km" },
-        { tipo: "Escuela", nombre: "Colegio Peterson", distancia: "1.2 km" },
-        { tipo: "Metro", nombre: "Polanco", distancia: "0.4 km" }
-      ]
+      walkScore: Math.floor(Math.random() * 20) + 75,
+      transitScore: Math.floor(Math.random() * 20) + 70,
+      bikeScore: Math.floor(Math.random() * 20) + 65,
+      cercanos: generarLugaresCercanos(propertyData.ubicacion)
     },
-    historialPrecio: [
-      { fecha: "2024-01", precio: 19200000 },
-      { fecha: "2024-02", precio: 18800000 },
-      { fecha: "2024-03", precio: 18500000 }
-    ],
     status: propertyData.status,
     fechaPublicacion: propertyData.fechaPublicacion,
     vistas: propertyData.detalles?.vistas || 100,
@@ -408,7 +433,7 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
 
               <TabsContent value="amenidades" className="p-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {property.amenidades.map((amenidad, index) => (
+                  {property.amenidades.map((amenidad: { icon: any; name: string; description: string }, index: number) => (
                     <div key={index} className="flex items-start space-x-4 p-4 bg-arkin-secondary/30 rounded-lg">
                       <div className="w-12 h-12 bg-arkin-gold/10 rounded-lg flex items-center justify-center">
                         <amenidad.icon className="h-6 w-6 text-arkin-gold" />
@@ -465,13 +490,15 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
                     </div>
                   </div>
 
-                  {/* Map Placeholder */}
-                  <div className="h-64 bg-gray-200 rounded-lg flex items-center justify-center">
-                    <div className="text-center text-gray-500">
-                      <MapPin className="h-12 w-12 mx-auto mb-2" />
-                      <p>Mapa interactivo</p>
-                      <p className="text-sm">Ubicación exacta disponible al contactar</p>
+                  {/* Ubicación Info */}
+                  <div className="p-4 bg-arkin-secondary/30 rounded-lg">
+                    <div className="flex items-center gap-2 text-gray-700">
+                      <MapPin className="h-5 w-5 text-arkin-gold" />
+                      <span className="font-medium">{property.ubicacion}</span>
                     </div>
+                    <p className="text-sm text-gray-500 mt-2">
+                      Contacta al asesor para conocer la ubicación exacta de la propiedad.
+                    </p>
                   </div>
                 </div>
               </TabsContent>
