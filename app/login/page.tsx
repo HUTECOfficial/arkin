@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/auth-context'
 import { Building2, Lock, Mail, AlertCircle } from 'lucide-react'
 import Image from 'next/image'
+import Link from 'next/link'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -56,7 +57,7 @@ export default function LoginPage() {
             />
           </div>
           <p className="text-gray-600 dark:text-gray-400 text-lg font-medium">
-            Panel Interno
+            Acceso a Plataforma ARKIN SELECT
           </p>
         </div>
 
@@ -138,6 +139,16 @@ export default function LoginPage() {
                 <p className="text-gray-600 dark:text-gray-400">santiago@arkin.mx / santiago_arkin2025</p>
               </div>
             </div>
+          </div>
+
+          {/* Link a registro */}
+          <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700 text-center">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              ¿No tienes cuenta?{' '}
+              <Link href="/registro" className="text-arkin-gold hover:underline font-medium">
+                Crear cuenta
+              </Link>
+            </p>
           </div>
         </div>
 

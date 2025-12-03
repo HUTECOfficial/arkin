@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { ArrowRight, Shield, Star, Users, MapPin, Home, Sparkles } from "lucide-react"
 import Link from "next/link"
+import Image from "next/image"
 import { FeaturedPropertiesCarousel } from "./featured-properties-carousel"
 import { VirtualToursSection } from "./virtual-tours-section"
 import { AnimatedStats } from "./animated-stats"
@@ -31,12 +32,17 @@ export function HomeYellow() {
               </span>
             </div>
 
-            {/* Main Heading - Extra Bold */}
-            <h1 className="font-serif text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white leading-none px-4 drop-shadow-lg">
-              ARKIN
-              <br />
-              <span className="text-arkin-primary">SELECT</span>
-            </h1>
+            {/* Main Logo Image */}
+            <div className="px-4">
+              <Image
+                src="/arkin-select-white.png"
+                alt="ARKIN SELECT"
+                width={600}
+                height={200}
+                className="w-[280px] sm:w-[400px] md:w-[500px] lg:w-[600px] h-auto mx-auto drop-shadow-2xl"
+                priority
+              />
+            </div>
 
             {/* Subheading */}
             <p className="text-xl sm:text-2xl md:text-3xl text-gray-200 font-light max-w-3xl mx-auto px-4 drop-shadow-md">

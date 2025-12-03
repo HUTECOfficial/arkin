@@ -1,6 +1,31 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* Helvetica Neue Extended - Fuentes ARKIN */
+@font-face {
+  font-family: 'Helvetica Neue Extended';
+  src: url('/fonts/HelveticaNeue-LightExt.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Helvetica Neue Extended';
+  src: url('/fonts/HelveticaNeue-Extended.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Helvetica Neue Extended';
+  src: url('/fonts/HelveticaNeue-BoldExt.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 :root {
@@ -47,6 +72,9 @@
   --arkin-primary: #E8FF50; /* Canary */
   --arkin-secondary: #CDD2D7; /* Iron */
   --arkin-accent: #28282D; /* Shark */
+  
+  /* ARKIN Font */
+  --font-arkin: 'Helvetica Neue Extended', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 
@@ -90,6 +118,8 @@
   --font-mono: var(--font-geist-mono);
   /* Adding serif font variable for premium typography */
   --font-serif: var(--font-playfair);
+  /* ARKIN Helvetica Neue Extended */
+  --font-arkin: 'Helvetica Neue Extended', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -189,6 +219,23 @@
   }
   .border-arkin-accent {
     border-color: var(--color-arkin-accent);
+  }
+  
+  /* ARKIN Font utilities */
+  .font-arkin {
+    font-family: var(--font-arkin);
+  }
+  .font-arkin-light {
+    font-family: var(--font-arkin);
+    font-weight: 300;
+  }
+  .font-arkin-regular {
+    font-family: var(--font-arkin);
+    font-weight: 400;
+  }
+  .font-arkin-bold {
+    font-family: var(--font-arkin);
+    font-weight: 700;
   }
 }
 

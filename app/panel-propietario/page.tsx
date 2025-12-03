@@ -5,11 +5,11 @@ import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/auth-context'
 import { propertyProgress, leads, activities } from '@/data/internal-users'
 import { propiedades } from '@/data/propiedades'
-import { Building2, TrendingUp, Users, Eye, Heart, Calendar, Phone, Mail, MapPin, DollarSign, Home, Activity, MessageSquare, CheckCircle2, Clock, XCircle, Sparkles } from 'lucide-react'
+import { Building2, TrendingUp, Users, Eye, Heart, Calendar, Phone, Mail, MapPin, DollarSign, Home, Activity, MessageSquare, CheckCircle2, Clock, XCircle, Sparkles, LogOut } from 'lucide-react'
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 
 export default function PanelPropietario() {
-  const { user, isAuthenticated } = useAuth()
+  const { user, isAuthenticated, logout } = useAuth()
   const router = useRouter()
   const [mounted, setMounted] = useState(false)
 
@@ -132,12 +132,24 @@ export default function PanelPropietario() {
                 Bienvenido, {user.nombre}
               </p>
             </div>
-            <button
-              onClick={() => router.push('/')}
-              className="px-6 py-2 bg-arkin-secondary hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-white rounded-lg transition-colors"
-            >
-              Volver al Inicio
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => router.push('/')}
+                className="px-6 py-2 bg-arkin-secondary hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-white rounded-lg transition-colors"
+              >
+                Volver al Inicio
+              </button>
+              <button
+                onClick={() => {
+                  logout()
+                  router.push('/login')
+                }}
+                className="flex items-center gap-2 px-4 py-2 bg-red-50 hover:bg-red-100 dark:bg-red-900/20 dark:hover:bg-red-900/30 text-red-600 dark:text-red-400 rounded-lg transition-colors"
+              >
+                <LogOut className="w-4 h-4" />
+                Cerrar Sesión
+              </button>
+            </div>
           </div>
         </div>
       </div>

@@ -36,7 +36,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" suppressHydrationWarning>
-      <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable} ${playfair.variable} m-0 p-0`}>
+      <body className={`font-arkin ${GeistSans.variable} ${GeistMono.variable} ${playfair.variable} m-0 p-0`}>
         <SWRProvider>
           <AuthProvider>
             <WishlistProvider>

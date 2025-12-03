@@ -96,7 +96,46 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signup = async (email: string, password: string, userData: Partial<User>) => {
     try {
-      throw new Error('Signup no está disponible. Contacta al administrador.')
+      // Crear usuario en Supabase Auth
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+      })
+
+      if (error) {
+        console.error('Supabase signup error:', error)
+        throw new Error(error.message || 'Error al crear la cuenta')
+      }
+
+      if (!data.user) {
+        throw new Error('No se pudo crear la cuenta')
+      }
+
+      // Crear perfil del usuario en la tabla usuarios
+      const { error: profileError } = await supabase
+        .from('usuarios')
+        .insert({
+          id: data.user.id,
+          email: email,
+          nombre: userData.nombre || '',
+          telefono: userData.telefono || '',
+          role: 'cliente', // Por defecto todos los nuevos usuarios son clientes
+        })
+
+      if (profileError) {
+        console.error('Error creating profile:', profileError)
+        // No lanzar error aquí, el usuario ya fue creado en auth
+      }
+
+      // Establecer el usuario en el estado
+      setUser({
+        id: data.user.id,
+        email: email,
+        nombre: userData.nombre,
+        role: 'cliente',
+        telefono: userData.telefono,
+      })
+
     } catch (error: any) {
       console.error('Error en signup:', error)
       throw new Error(error.message || 'Error al crear la cuenta')
