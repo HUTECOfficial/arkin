@@ -7,7 +7,10 @@ export interface Propiedad {
   tipo: string
   habitaciones: number
   banos: number
+  mediosBanos?: number
   area: number
+  areaConstruccion?: number
+  cochera?: number
   areaTexto: string
   imagen: string
   descripcion: string

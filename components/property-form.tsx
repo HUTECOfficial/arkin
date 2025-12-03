@@ -26,7 +26,10 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
     tipo: "Departamento",
     habitaciones: undefined,
     banos: undefined,
+    mediosBanos: undefined,
     area: undefined,
+    areaConstruccion: undefined,
+    cochera: undefined,
     descripcion: "",
     caracteristicas: [],
     status: "Disponible",
@@ -47,6 +50,7 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
     "Estacionamiento",
     "Gimnasio",
     "Alberca",
+    "Alberca Techada",
     "Jardín",
     "Internet",
     "Terraza",
@@ -55,10 +59,16 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
     "Área de Juegos",
     "Salón de Eventos",
     "Bodega",
+    "Cuarto de Servicio",
+    "Cuarto de Lavado",
     "Elevador",
     "Portero",
     "Área de BBQ",
-    "Pet Friendly"
+    "Pet Friendly",
+    "Tinaco",
+    "Calentador Solar",
+    "Hidroneumático",
+    "Aljibe"
   ]
 
   const toggleAmenidad = (amenidad: string) => {
@@ -80,7 +90,10 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
       tipo: formData.tipo || "Departamento",
       habitaciones: formData.habitaciones || 1,
       banos: formData.banos || 1,
+      mediosBanos: formData.mediosBanos || 0,
       area: formData.area || 0,
+      areaConstruccion: formData.areaConstruccion || 0,
+      cochera: formData.cochera || 0,
       areaTexto: `${formData.area || 0} m²`,
       imagen: formData.imagen || "/placeholder-property.jpg",
       descripcion: formData.descripcion || "",
@@ -287,7 +300,7 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
             </div>
 
             <div className="space-y-2">
-              <Label>Baños *</Label>
+              <Label>Baños Completos *</Label>
               <div className="flex gap-2">
                 {[1, 2, 3, 4, 5].map((num) => (
                   <button
@@ -309,7 +322,29 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="area">Área (m²) *</Label>
+              <Label>Medios Baños</Label>
+              <div className="flex gap-2">
+                {[0, 1, 2, 3].map((num) => (
+                  <button
+                    key={num}
+                    type="button"
+                    onClick={() => setFormData({ ...formData, mediosBanos: num })}
+                    className={`
+                      h-10 w-10 rounded-lg border flex items-center justify-center transition-all
+                      ${formData.mediosBanos === num
+                        ? 'bg-arkin-gold text-black border-arkin-gold font-bold shadow-md scale-105'
+                        : 'bg-arkin-secondary/50 text-gray-600 border-gray-200 hover:border-arkin-gold/50 hover:bg-arkin-gold/5'
+                      }
+                    `}
+                  >
+                    {num}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="area">Área Terreno (m²) *</Label>
               <Input
                 id="area"
                 type="number"
@@ -319,6 +354,40 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
                 placeholder="450"
                 className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
               />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="areaConstruccion">Área Construcción (m²)</Label>
+              <Input
+                id="areaConstruccion"
+                type="number"
+                value={formData.areaConstruccion || ''}
+                onChange={(e) => setFormData({ ...formData, areaConstruccion: Number(e.target.value) })}
+                placeholder="350"
+                className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label>Cochera (Coches)</Label>
+              <div className="flex gap-2">
+                {[0, 1, 2, 3, 4, 5].map((num) => (
+                  <button
+                    key={num}
+                    type="button"
+                    onClick={() => setFormData({ ...formData, cochera: num })}
+                    className={`
+                      h-10 w-10 rounded-lg border flex items-center justify-center transition-all
+                      ${formData.cochera === num
+                        ? 'bg-arkin-gold text-black border-arkin-gold font-bold shadow-md scale-105'
+                        : 'bg-arkin-secondary/50 text-gray-600 border-gray-200 hover:border-arkin-gold/50 hover:bg-arkin-gold/5'
+                      }
+                    `}
+                  >
+                    {num}{num === 5 ? '+' : ''}
+                  </button>
+                ))}
+              </div>
             </div>
 
             <div className="space-y-2">
