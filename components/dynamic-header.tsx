@@ -94,10 +94,8 @@ export function DynamicHeader() {
                  transform scale-100 opacity-100
                  mobile-menu-expanded`
               : `rounded-full px-5 py-2.5 max-w-fit
-                 ${isScrolled
-                ? 'backdrop-blur-2xl bg-arkin-secondary/95 border border-arkin-accent/20 shadow-2xl shadow-black/20 px-4 py-2 scale-[0.95]'
-                : 'backdrop-blur-md bg-arkin-secondary/50/10 border border-white/20 shadow-lg'
-              }
+                 backdrop-blur-2xl bg-arkin-secondary/95 border border-arkin-accent/20 shadow-2xl shadow-black/20
+                 ${isScrolled ? 'px-4 py-2 scale-[0.95]' : ''}
                  transform scale-100 opacity-100`
             }
             hover:shadow-xl
@@ -132,7 +130,7 @@ export function DynamicHeader() {
                       transition-all duration-300 ease-out flex-shrink-0 min-w-[80px]
                       ${isActive(item.href)
                         ? 'bg-arkin-primary/20 text-arkin-primary font-semibold shadow-sm shadow-arkin-primary/20'
-                        : `${isScrolled ? 'text-arkin-accent/70 hover:text-arkin-primary hover:bg-arkin-primary/10' : 'text-white/90 hover:text-white hover:bg-arkin-accent/10'} hover:shadow-sm`
+                        : 'text-arkin-accent/70 hover:text-arkin-primary hover:bg-arkin-primary/10 hover:shadow-sm'
                       }
                     `}
                   >
@@ -155,7 +153,7 @@ export function DynamicHeader() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className={`rounded-full w-8 h-8 p-0 flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-md ${isScrolled ? 'text-arkin-accent/70 hover:bg-arkin-primary/10 hover:text-arkin-primary' : 'text-white/90 hover:bg-arkin-accent/10 hover:text-white'}`}
+                  className="rounded-full w-8 h-8 p-0 flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-md text-arkin-accent/70 hover:bg-arkin-primary/10 hover:text-arkin-primary"
                 >
                   <Heart className="h-3.5 w-3.5" />
                 </Button>
@@ -163,7 +161,7 @@ export function DynamicHeader() {
               <Button
                 variant="ghost"
                 size="sm"
-                className={`rounded-full w-8 h-8 p-0 flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-md ${isScrolled ? 'text-arkin-accent/70 hover:bg-arkin-primary/10 hover:text-arkin-primary' : 'text-white/90 hover:bg-arkin-accent/10 hover:text-white'}`}
+                className="rounded-full w-8 h-8 p-0 flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-md text-arkin-accent/70 hover:bg-arkin-primary/10 hover:text-arkin-primary"
               >
                 <Search className="h-3.5 w-3.5" />
               </Button>

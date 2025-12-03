@@ -19,7 +19,7 @@ export default function FavoritosPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
+    <div className="min-h-screen bg-arkin-secondary">
       {/* Hero Section */}
       <section className="pt-24 pb-12 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto">
