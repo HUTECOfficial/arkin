@@ -61,12 +61,18 @@ export class PropertiesStorage {
       galeria: appProp.galeria,
     }
     
-    // NOTA: Los campos medios_banos, area_construccion y cochera están comentados
-    // porque no existen en la tabla de Supabase. Para habilitarlos, ejecuta en Supabase:
+    // NOTA: Los campos medios_banos, area_construccion, cochera y tipo_credito
+    // requieren que existan en la tabla de Supabase. Ejecuta en Supabase:
     // ALTER TABLE propiedades 
     // ADD COLUMN IF NOT EXISTS medios_banos INTEGER DEFAULT 0,
     // ADD COLUMN IF NOT EXISTS area_construccion INTEGER DEFAULT 0,
-    // ADD COLUMN IF NOT EXISTS cochera INTEGER DEFAULT 0;
+    // ADD COLUMN IF NOT EXISTS cochera INTEGER DEFAULT 0,
+    // ADD COLUMN IF NOT EXISTS tipo_credito TEXT;
+    
+    // Tipo de crédito - agregar si existe la columna
+    if ((appProp as any).tipoCredito !== undefined) {
+      dbData.tipo_credito = (appProp as any).tipoCredito
+    }
     
     // Descomentar cuando las columnas existan en la DB:
     // if (appProp.mediosBanos !== undefined) {

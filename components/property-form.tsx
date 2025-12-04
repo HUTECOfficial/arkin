@@ -119,8 +119,9 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
         amenidades: amenidadesSeleccionadas
       } as any,
       galeria: galleryPreviews, // Usar las imágenes de la galería
-      tourVirtual: undefined
-    }
+      tourVirtual: undefined,
+      tipoCredito: (formData as any).tipoCredito || undefined
+    } as any
 
     console.log('Enviando propiedad:', propertyData)
     onSubmit(propertyData)
@@ -275,7 +276,9 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
                   <SelectItem value="Residencia">Residencia</SelectItem>
                   <SelectItem value="Bodega">Bodega</SelectItem>
                   <SelectItem value="Nave Industrial">Nave Industrial</SelectItem>
-                  <SelectItem value="Terreno">Terreno</SelectItem>
+                  <SelectItem value="Terreno (m²)">Terreno (m²)</SelectItem>
+                  <SelectItem value="Rancho">Rancho</SelectItem>
+                  <SelectItem value="Hectáreas">Hectáreas</SelectItem>
                   <SelectItem value="Local Comercial">Local Comercial</SelectItem>
                   <SelectItem value="Oficina">Oficina</SelectItem>
                 </SelectContent>
@@ -411,16 +414,37 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
                 </SelectContent>
               </Select>
             </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="tipoCredito">Tipo de Crédito</Label>
+              <Select
+                value={(formData as any).tipoCredito || ''}
+                onValueChange={(value) => setFormData({ ...formData, tipoCredito: value } as any)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecciona tipo de crédito" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Contado">Contado</SelectItem>
+                  <SelectItem value="Crédito Bancario">Crédito Bancario</SelectItem>
+                  <SelectItem value="Infonavit">Infonavit</SelectItem>
+                  <SelectItem value="Fovissste">Fovissste</SelectItem>
+                  <SelectItem value="Cofinavit">Cofinavit</SelectItem>
+                  <SelectItem value="Crédito Puente">Crédito Puente</SelectItem>
+                  <SelectItem value="Cualquier Crédito">Cualquier Crédito</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="descripcion">Descripción *</Label>
+            <Label htmlFor="descripcion">Uso *</Label>
             <Textarea
               id="descripcion"
               required
               value={formData.descripcion}
               onChange={(e) => setFormData({ ...formData, descripcion: e.target.value })}
-              placeholder="Describe la propiedad en detalle..."
+              placeholder="Describe el uso de la propiedad (habitacional, comercial, industrial, mixto, etc.)..."
               rows={4}
             />
           </div>
