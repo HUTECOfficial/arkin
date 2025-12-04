@@ -163,7 +163,7 @@ export default function DashboardPage() {
                 <div className="flex items-center space-x-3 p-3 bg-arkin-light-gray rounded-lg">
                   <TrendingUp className="h-5 w-5 text-arkin-gold" />
                   <div>
-                    <p className="text-sm font-medium">Análisis de Mercado</p>
+                    <p className="text-sm font-medium">ánalisis de mercado</p>
                     <p className="text-xs text-gray-600">Viernes 3:00 PM</p>
                   </div>
                 </div>

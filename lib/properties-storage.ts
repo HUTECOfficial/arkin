@@ -61,17 +61,23 @@ export class PropertiesStorage {
       galeria: appProp.galeria,
     }
     
-    // Campos opcionales - solo agregar si tienen valor
-    // Estos campos pueden no existir en la DB aún
-    if (appProp.mediosBanos !== undefined) {
-      dbData.medios_banos = appProp.mediosBanos
-    }
-    if (appProp.areaConstruccion !== undefined) {
-      dbData.area_construccion = appProp.areaConstruccion
-    }
-    if (appProp.cochera !== undefined) {
-      dbData.cochera = appProp.cochera
-    }
+    // NOTA: Los campos medios_banos, area_construccion y cochera están comentados
+    // porque no existen en la tabla de Supabase. Para habilitarlos, ejecuta en Supabase:
+    // ALTER TABLE propiedades 
+    // ADD COLUMN IF NOT EXISTS medios_banos INTEGER DEFAULT 0,
+    // ADD COLUMN IF NOT EXISTS area_construccion INTEGER DEFAULT 0,
+    // ADD COLUMN IF NOT EXISTS cochera INTEGER DEFAULT 0;
+    
+    // Descomentar cuando las columnas existan en la DB:
+    // if (appProp.mediosBanos !== undefined) {
+    //   dbData.medios_banos = appProp.mediosBanos
+    // }
+    // if (appProp.areaConstruccion !== undefined) {
+    //   dbData.area_construccion = appProp.areaConstruccion
+    // }
+    // if (appProp.cochera !== undefined) {
+    //   dbData.cochera = appProp.cochera
+    // }
 
     // Solo incluir usuario_id si es un UUID válido
     if (usuarioId && this.isValidUUID(usuarioId)) {
