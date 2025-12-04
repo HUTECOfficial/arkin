@@ -43,6 +43,7 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
   )
   const [imagePreview, setImagePreview] = useState<string>(initialData?.imagen || "")
   const [galleryPreviews, setGalleryPreviews] = useState<string[]>(initialData?.galeria || [])
+  const [observaciones, setObservaciones] = useState<string>((initialData as any)?.observaciones || "")
 
   // Lista de amenidades disponibles
   const amenidadesDisponibles = [
@@ -120,7 +121,8 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
       } as any,
       galeria: galleryPreviews, // Usar las imágenes de la galería
       tourVirtual: undefined,
-      tipoCredito: (formData as any).tipoCredito || undefined
+      tipoCredito: (formData as any).tipoCredito || undefined,
+      observaciones: observaciones || undefined
     } as any
 
     console.log('Enviando propiedad:', propertyData)
@@ -438,14 +440,25 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="descripcion">Uso *</Label>
+            <Label htmlFor="descripcion">Información de la Propiedad *</Label>
             <Textarea
               id="descripcion"
               required
               value={formData.descripcion}
               onChange={(e) => setFormData({ ...formData, descripcion: e.target.value })}
-              placeholder="Describe el uso de la propiedad (habitacional, comercial, industrial, mixto, etc.)..."
+              placeholder="Describe la información de la propiedad (características, amenidades, ubicación, etc.)..."
               rows={4}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="observaciones">Observaciones de la Propiedad</Label>
+            <Textarea
+              id="observaciones"
+              value={observaciones}
+              onChange={(e) => setObservaciones(e.target.value)}
+              placeholder="Agrega observaciones adicionales sobre la propiedad (estado, reparaciones necesarias, etc.)..."
+              rows={3}
             />
           </div>
         </CardContent>
