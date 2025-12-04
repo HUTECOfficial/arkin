@@ -31,6 +31,7 @@ import {
   ArrowLeft,
   ArrowRight,
   Maximize,
+  X,
   Star,
   Clock,
   Calculator,
@@ -193,6 +194,41 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
 
   return (
     <div className="min-h-screen bg-arkin-secondary">
+      {/* Fullscreen Image Modal */}
+      {isImageFullscreen && (
+        <div 
+          className="fixed inset-0 z-50 bg-black flex items-center justify-center"
+          onClick={() => setIsImageFullscreen(false)}
+        >
+          <button
+            onClick={() => setIsImageFullscreen(false)}
+            className="absolute top-4 right-4 text-white bg-black/50 hover:bg-black/70 rounded-full p-2 z-10"
+          >
+            <X className="h-6 w-6" />
+          </button>
+          <button
+            onClick={(e) => { e.stopPropagation(); prevImage(); }}
+            className="absolute left-4 text-white bg-black/50 hover:bg-black/70 rounded-full p-3"
+          >
+            <ArrowLeft className="h-6 w-6" />
+          </button>
+          <img
+            src={property.imagenes[currentImageIndex] || "/placeholder.svg"}
+            alt={property.titulo}
+            className="max-h-[90vh] max-w-[90vw] object-contain"
+            onClick={(e) => e.stopPropagation()}
+          />
+          <button
+            onClick={(e) => { e.stopPropagation(); nextImage(); }}
+            className="absolute right-4 text-white bg-black/50 hover:bg-black/70 rounded-full p-3"
+          >
+            <ArrowRight className="h-6 w-6" />
+          </button>
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white bg-black/70 px-4 py-2 rounded-full">
+            {currentImageIndex + 1} / {property.imagenes.length}
+          </div>
+        </div>
+      )}
       {/* Hero Image Gallery */}
       <section className="relative h-[50vh] sm:h-[60vh] lg:h-[70vh] overflow-hidden">
         <div className="relative w-full h-full">

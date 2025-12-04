@@ -273,6 +273,11 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
                   <SelectItem value="Villa">Villa</SelectItem>
                   <SelectItem value="Loft">Loft</SelectItem>
                   <SelectItem value="Residencia">Residencia</SelectItem>
+                  <SelectItem value="Bodega">Bodega</SelectItem>
+                  <SelectItem value="Nave Industrial">Nave Industrial</SelectItem>
+                  <SelectItem value="Terreno">Terreno</SelectItem>
+                  <SelectItem value="Local Comercial">Local Comercial</SelectItem>
+                  <SelectItem value="Oficina">Oficina</SelectItem>
                 </SelectContent>
               </Select>
             </div>
