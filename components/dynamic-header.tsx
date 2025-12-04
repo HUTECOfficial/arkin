@@ -578,8 +578,8 @@ export function DynamicHeader() {
                     <span>León, Guanajuato</span>
                   </div>
                   <div className="space-y-1 text-sm text-arkin-accent/60">
-                    <div>+52 477 123 4567</div>
-                    <div>hola@arkin.mx</div>
+                    <div>+52 1 477 475 6951</div>
+                    <div>arkinselect@gmail.com</div>
                   </div>
                 </div>
               </div>

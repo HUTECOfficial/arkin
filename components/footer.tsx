@@ -155,7 +155,7 @@ export function Footer() {
                 <div>
                   <p className="text-gray-400 text-sm">Email</p>
                   <Link href="/contacto" className="text-gray-200 hover:text-arkin-gold transition-colors">
-                    hola@arkin.mx
+                    arkinselect@gmail.com
                   </Link>
                 </div>
               </div>
@@ -190,12 +190,6 @@ export function Footer() {
             <div className="flex space-x-8 text-sm">
               <Link href="/legal" className="text-gray-300 hover:text-arkin-gold transition-colors duration-300">
                 Política de Privacidad
-              </Link>
-              <Link href="/legal" className="text-gray-300 hover:text-arkin-gold transition-colors duration-300">
-                Términos de Uso
-              </Link>
-              <Link href="/legal" className="text-gray-300 hover:text-arkin-gold transition-colors duration-300">
-                Cookies
               </Link>
             </div>
           </div>

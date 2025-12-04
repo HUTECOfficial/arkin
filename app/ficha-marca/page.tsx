@@ -160,7 +160,7 @@ export default function FichaMarcaPage() {
                   </div>
                   <div className="flex items-center gap-2 bg-arkin-secondary/50/10 px-4 sm:px-6 py-2 sm:py-3 rounded-full text-xs sm:text-sm">
                     <span>📧</span>
-                    <p className="font-bold">hola@arkin.mx</p>
+                    <p className="font-bold">arkinselect@gmail.com</p>
                   </div>
                   <div className="flex items-center gap-2 bg-arkin-gold text-arkin-graphite px-4 sm:px-6 py-2 sm:py-3 rounded-full font-bold text-xs sm:text-sm">
                     <span>📍</span>

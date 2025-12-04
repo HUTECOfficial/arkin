@@ -199,7 +199,7 @@ export default function ExclusivosPage() {
               WhatsApp
             </Button>
             <Button 
-              onClick={() => window.location.href = 'mailto:hola@arkin.mx'}
+              onClick={() => window.location.href = 'mailto:arkinselect@gmail.com'}
               variant="outline"
               className="border-arkin-primary text-arkin-primary hover:bg-arkin-primary hover:text-arkin-accent px-8 py-4 text-lg font-semibold rounded-2xl"
             >

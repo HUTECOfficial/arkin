@@ -180,7 +180,7 @@ export function ContactoYellow() {
                     </div>
                     <div>
                       <h3 className="font-bold text-arkin-secondary text-lg mb-2">EMAIL</h3>
-                      <p className="text-arkin-secondary/80">hola@arkin.mx</p>
+                      <p className="text-arkin-secondary/80">arkinselect@gmail.com</p>
                       <p className="text-arkin-secondary/60 text-sm mt-1">Respuesta en 24h</p>
                     </div>
                   </div>
