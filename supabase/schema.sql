@@ -120,21 +120,21 @@ ALTER TABLE propiedad_detalles ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Propiedades son visibles para todos" ON propiedades
     FOR SELECT USING (true);
 
-CREATE POLICY "Solo admins y propietarios pueden insertar propiedades" ON propiedades
+CREATE POLICY "Solo admins, propietarios y asesores pueden insertar propiedades" ON propiedades
     FOR INSERT WITH CHECK (
         EXISTS (
             SELECT 1 FROM usuarios 
             WHERE id = auth.uid() 
-            AND role IN ('admin', 'propietario')
+            AND role IN ('admin', 'propietario', 'asesor')
         )
     );
 
-CREATE POLICY "Solo admins y propietarios pueden actualizar propiedades" ON propiedades
+CREATE POLICY "Solo admins, propietarios y asesores pueden actualizar propiedades" ON propiedades
     FOR UPDATE USING (
         EXISTS (
             SELECT 1 FROM usuarios 
             WHERE id = auth.uid() 
-            AND role IN ('admin', 'propietario')
+            AND role IN ('admin', 'propietario', 'asesor')
         )
     );
 
