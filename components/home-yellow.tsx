@@ -44,11 +44,6 @@ export function HomeYellow() {
               />
             </div>
 
-            {/* Subheading */}
-            <p className="text-xl sm:text-2xl md:text-3xl text-gray-200 font-light max-w-3xl mx-auto px-4 drop-shadow-md">
-              Exclusividad • Conexión • Confianza
-            </p>
-
             <p className="text-base sm:text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed px-4 drop-shadow">
               Conectamos directamente compradores y vendedores. Sin complicaciones.
             </p>
