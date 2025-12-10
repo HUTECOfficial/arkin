@@ -23,17 +23,18 @@ export function HomeYellow() {
         </div>
 
         <div className="relative z-10 max-w-6xl mx-auto h-full flex flex-col justify-between min-h-[80vh]">
-          {/* Top Section - Badge and Title */}
+          {/* Top Section - Badge */}
           <div className="text-center pt-4">
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-arkin-secondary/50/10 border-2 border-arkin-primary rounded-full backdrop-blur-md mb-4">
+            <div className="inline-flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-arkin-secondary/50/10 border-2 border-arkin-primary rounded-full backdrop-blur-md">
               <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-arkin-primary" />
               <span className="text-xs sm:text-sm font-bold text-white uppercase tracking-wider">
                 Tu Inmobiliaria de Confianza
               </span>
             </div>
+          </div>
 
-            {/* Main Logo Image */}
+          {/* Middle Section - Logo centered */}
+          <div className="flex-1 flex items-center justify-center">
             <div className="px-4">
               <Image
                 src="/arkin-select-white.png"
@@ -45,9 +46,6 @@ export function HomeYellow() {
               />
             </div>
           </div>
-
-          {/* Middle Section - Spacer for image visibility */}
-          <div className="flex-1"></div>
 
           {/* Bottom Section - Text and Buttons */}
           <div className="text-center pb-8">
