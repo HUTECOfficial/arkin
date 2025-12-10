@@ -12,29 +12,30 @@ export function HomeYellow() {
     <div className="min-h-screen bg-arkin-secondary relative overflow-hidden transition-all duration-500">
       {/* Hero Section - Bold & Minimalist */}
       <section className="relative min-h-[100dvh] flex items-center justify-center px-4 sm:px-6 overflow-hidden pt-20 pb-16">
-        {/* Background Image with Overlay */}
+        {/* Background Video with Overlay */}
         <div className="absolute inset-0 z-0">
-          <div
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-[20s] hover:scale-105"
-            style={{ backgroundImage: "url('/fondoarkin.jpg')" }}
-          ></div>
-          <div className="absolute inset-0 bg-black/50 backdrop-blur-[1px]"></div>
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-arkin-secondary"></div>
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+          >
+            <source src="https://y8r30twace85ybxf.public.blob.vercel-storage.com/x-large-vecteezy_aerial-top-view-drone-4k-footage-of-modern-skyscrapers-in_24487021_x-large.mp4" type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 bg-black/50"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-arkin-secondary"></div>
         </div>
 
         <div className="relative z-10 max-w-6xl mx-auto h-full flex flex-col justify-between min-h-[80vh]">
-          {/* Top Section - Badge */}
+          {/* Top Section - Badge and Logo */}
           <div className="text-center pt-4">
-            <div className="inline-flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-arkin-secondary/50/10 border-2 border-arkin-primary rounded-full backdrop-blur-md">
+            <div className="inline-flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-arkin-secondary/50/10 border-2 border-arkin-primary rounded-full backdrop-blur-md mb-4">
               <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-arkin-primary" />
               <span className="text-xs sm:text-sm font-bold text-white uppercase tracking-wider">
                 Tu Inmobiliaria de Confianza
               </span>
             </div>
-          </div>
-
-          {/* Middle Section - Logo centered */}
-          <div className="flex-1 flex items-center justify-center">
             <div className="px-4">
               <Image
                 src="/arkin-select-white.png"
@@ -46,6 +47,9 @@ export function HomeYellow() {
               />
             </div>
           </div>
+
+          {/* Middle Section - Spacer */}
+          <div className="flex-1"></div>
 
           {/* Bottom Section - Text and Buttons */}
           <div className="text-center pb-8">
