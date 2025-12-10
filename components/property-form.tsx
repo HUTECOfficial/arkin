@@ -85,6 +85,12 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
+    // Validar imagen principal si no hay datos iniciales
+    if (!initialData && !imagePreview) {
+      alert('Por favor sube una imagen principal')
+      return
+    }
+
     const propertyData: Omit<Propiedad, 'id'> = {
       titulo: formData.titulo || "",
       ubicacion: formData.ubicacion || "",
@@ -647,7 +653,6 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
                   accept="image/*"
                   onChange={handleImageUpload}
                   className="hidden"
-                  required={!initialData}
                 />
                 <label htmlFor="imagen" className="cursor-pointer">
                   <Upload className={`h-12 w-12 mx-auto mb-3 transition-transform ${isDraggingMain ? 'text-arkin-gold scale-125' : 'text-arkin-gold'}`} />
