@@ -319,7 +319,13 @@ export default function PropiedadesPage() {
 
                         {/* Actions */}
                         <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
-                          <Button className="flex-1 bg-arkin-gold hover:bg-arkin-gold/90 text-black rounded-xl text-sm">
+                          <Button 
+                            className="flex-1 bg-arkin-gold hover:bg-arkin-gold/90 text-black rounded-xl text-sm"
+                            onClick={() => {
+                              const mensaje = `¡Hola! 👋 Me interesa agendar una visita para la propiedad:\n\n🏠 *${propiedad.titulo}*\n📍 ${propiedad.ubicacion}\n💰 ${propiedad.precioTexto}\n\n¿Podrían darme más información?`
+                              window.open(`https://wa.me/5214774756951?text=${encodeURIComponent(mensaje)}`, '_blank')
+                            }}
+                          >
                             <Calendar className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-2" />
                             Agendar Visita
                           </Button>
@@ -423,7 +429,14 @@ export default function PropiedadesPage() {
                               </div>
 
                               <div className="flex space-x-3">
-                                <Button size="sm" className="bg-arkin-gold hover:bg-arkin-gold/90 text-black rounded-xl">
+                                <Button 
+                                  size="sm" 
+                                  className="bg-arkin-gold hover:bg-arkin-gold/90 text-black rounded-xl"
+                                  onClick={() => {
+                                    const mensaje = `¡Hola! 👋 Me interesa agendar una visita para la propiedad:\n\n🏠 *${propiedad.titulo}*\n📍 ${propiedad.ubicacion}\n💰 ${propiedad.precioTexto}\n\n¿Podrían darme más información?`
+                                    window.open(`https://wa.me/5214774756951?text=${encodeURIComponent(mensaje)}`, '_blank')
+                                  }}
+                                >
                                   <Calendar className="h-4 w-4 mr-2" />
                                   Agendar
                                 </Button>
