@@ -120,27 +120,6 @@ export default function LoginPage() {
             </button>
           </form>
 
-          {/* Info de prueba */}
-          <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
-            <p className="text-xs text-gray-500 dark:text-gray-400 text-center mb-3">
-              Credenciales de prueba:
-            </p>
-            <div className="space-y-2 text-xs">
-              <div className="p-2 bg-arkin-secondary/70 dark:bg-gray-900 rounded-lg">
-                <p className="font-medium text-gray-700 dark:text-gray-300">Asesor:</p>
-                <p className="text-gray-600 dark:text-gray-400">ana@arkin.mx / ana_arkin2025</p>
-              </div>
-              <div className="p-2 bg-arkin-secondary/70 dark:bg-gray-900 rounded-lg">
-                <p className="font-medium text-gray-700 dark:text-gray-300">Propietario:</p>
-                <p className="text-gray-600 dark:text-gray-400">eduardo@propietario.com / eduardo_arkin2025</p>
-              </div>
-              <div className="p-2 bg-arkin-secondary/70 dark:bg-gray-900 rounded-lg">
-                <p className="font-medium text-gray-700 dark:text-gray-300">Fotógrafo:</p>
-                <p className="text-gray-600 dark:text-gray-400">santiago@arkin.mx / santiago_arkin2025</p>
-              </div>
-            </div>
-          </div>
-
           {/* Link a registro */}
           <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700 text-center">
             <p className="text-sm text-gray-600 dark:text-gray-400">

@@ -481,50 +481,28 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
                 <TabsTrigger value="ubicacion" className="rounded-xl text-xs sm:text-sm px-1 sm:px-3">Ubicación</TabsTrigger>
               </TabsList>
 
-              <TabsContent value="descripcion" className="p-6">
+              <TabsContent value="descripcion" className="p-3 sm:p-6">
                 <div className="prose max-w-none">
-                  <p className="text-gray-700 leading-relaxed text-lg">
+                  <p className="text-gray-700 leading-relaxed text-sm sm:text-base lg:text-lg break-words">
                     {property.descripcion}
                   </p>
                   
-                  <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="mt-4 sm:mt-6 grid grid-cols-1 gap-4 sm:gap-6">
                     <div>
-                      <h4 className="font-semibold text-gray-900 mb-3">Detalles Generales</h4>
-                      <div className="space-y-2 text-sm">
-                        <div className="flex justify-between">
-                          <span className="text-gray-600">Tipo de propiedad:</span>
-                          <span className="font-medium">{property.tipo}</span>
+                      <h4 className="font-semibold text-gray-900 mb-2 sm:mb-3 text-sm sm:text-base">Detalles Generales</h4>
+                      <div className="space-y-2 text-xs sm:text-sm">
+                        <div className="flex justify-between gap-2">
+                          <span className="text-gray-600 flex-shrink-0">Tipo:</span>
+                          <span className="font-medium text-right truncate">{property.tipo}</span>
                         </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-600">Área construida:</span>
-                          <span className="font-medium">{property.area} m²</span>
+                        <div className="flex justify-between gap-2">
+                          <span className="text-gray-600 flex-shrink-0">Área:</span>
+                          <span className="font-medium text-right">{property.area} m²</span>
                         </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-600">Área de terraza:</span>
-                          <span className="font-medium">{property.areaTerreno} m²</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-600">Antigüedad:</span>
-                          <span className="font-medium">{property.antiguedad} años</span>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div>
-                      <h4 className="font-semibold text-gray-900 mb-3">Estadísticas</h4>
-                      <div className="space-y-2 text-sm">
-                        <div className="flex justify-between">
-                          <span className="text-gray-600">Vistas:</span>
-                          <span className="font-medium">{property.vistas.toLocaleString()}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-600">En favoritos:</span>
-                          <span className="font-medium">{property.favoritos}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-600">Publicado:</span>
-                          <span className="font-medium">
-                            {new Date(property.fechaPublicacion).toLocaleDateString('es-MX')}
+                        <div className="flex justify-between gap-2">
+                          <span className="text-gray-600 flex-shrink-0">Publicado:</span>
+                          <span className="font-medium text-right">
+                            {property.fechaPublicacion ? new Date(property.fechaPublicacion).toLocaleDateString('es-MX') : 'N/A'}
                           </span>
                         </div>
                       </div>
@@ -533,81 +511,44 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
                 </div>
               </TabsContent>
 
-              <TabsContent value="caracteristicas" className="p-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <TabsContent value="caracteristicas" className="p-3 sm:p-6">
+                <div className="grid grid-cols-1 gap-2 sm:gap-3">
                   {property.caracteristicas.map((caracteristica, index) => (
-                    <div key={index} className="flex items-center space-x-3 p-3 bg-arkin-secondary/30 rounded-lg">
-                      <div className="w-2 h-2 bg-arkin-gold rounded-full"></div>
-                      <span className="text-gray-700">{caracteristica}</span>
+                    <div key={index} className="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 bg-arkin-secondary/30 rounded-lg">
+                      <div className="w-2 h-2 bg-arkin-gold rounded-full flex-shrink-0"></div>
+                      <span className="text-gray-700 text-xs sm:text-sm break-words">{caracteristica}</span>
                     </div>
                   ))}
                 </div>
               </TabsContent>
 
-              <TabsContent value="amenidades" className="p-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {property.amenidades.map((amenidad: { icon: any; name: string; description: string }, index: number) => (
-                    <div key={index} className="flex items-start space-x-4 p-4 bg-arkin-secondary/30 rounded-lg">
-                      <div className="w-12 h-12 bg-arkin-gold/10 rounded-lg flex items-center justify-center">
-                        <amenidad.icon className="h-6 w-6 text-arkin-gold" />
-                      </div>
-                      <div>
-                        <h4 className="font-semibold text-gray-900 mb-1">{amenidad.name}</h4>
-                        <p className="text-sm text-gray-600">{amenidad.description}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </TabsContent>
-
-              <TabsContent value="ubicacion" className="p-6">
-                <div className="space-y-6">
-                  {/* Location Scores */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="text-center p-4 bg-arkin-secondary/30 rounded-lg">
-                      <div className="text-2xl font-bold text-arkin-gold mb-1">
-                        {property.ubicacionInfo.walkScore}
-                      </div>
-                      <div className="text-sm text-gray-600">Walk Score</div>
-                      <div className="text-xs text-gray-500">Muy caminable</div>
-                    </div>
-                    <div className="text-center p-4 bg-arkin-secondary/30 rounded-lg">
-                      <div className="text-2xl font-bold text-arkin-gold mb-1">
-                        {property.ubicacionInfo.transitScore}
-                      </div>
-                      <div className="text-sm text-gray-600">Transit Score</div>
-                      <div className="text-xs text-gray-500">Excelente transporte</div>
-                    </div>
-                    <div className="text-center p-4 bg-arkin-secondary/30 rounded-lg">
-                      <div className="text-2xl font-bold text-arkin-gold mb-1">
-                        {property.ubicacionInfo.bikeScore}
-                      </div>
-                      <div className="text-sm text-gray-600">Bike Score</div>
-                      <div className="text-xs text-gray-500">Muy ciclable</div>
-                    </div>
-                  </div>
-
-                  {/* Nearby Places */}
-                  <div>
-                    <h4 className="font-semibold text-gray-900 mb-4">Lugares Cercanos</h4>
-                    <div className="space-y-3">
-                      {property.ubicacionInfo.cercanos.map((lugar, index) => (
-                        <div key={index} className="flex items-center justify-between p-3 bg-arkin-secondary/30 rounded-lg">
-                          <div>
-                            <span className="font-medium text-gray-900">{lugar.nombre}</span>
-                            <span className="text-sm text-gray-600 ml-2">({lugar.tipo})</span>
-                          </div>
-                          <span className="text-sm font-medium text-arkin-gold">{lugar.distancia}</span>
+              <TabsContent value="amenidades" className="p-3 sm:p-6">
+                <div className="grid grid-cols-1 gap-3 sm:gap-4">
+                  {property.amenidades && property.amenidades.length > 0 ? (
+                    property.amenidades.map((amenidad: { icon: any; name: string; description: string }, index: number) => (
+                      <div key={index} className="flex items-start space-x-3 p-3 bg-arkin-secondary/30 rounded-lg">
+                        <div className="w-10 h-10 bg-arkin-gold/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                          <amenidad.icon className="h-5 w-5 text-arkin-gold" />
                         </div>
-                      ))}
-                    </div>
-                  </div>
+                        <div className="min-w-0">
+                          <h4 className="font-semibold text-gray-900 text-sm">{amenidad.name}</h4>
+                          <p className="text-xs text-gray-600 break-words">{amenidad.description}</p>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-gray-500 text-sm">No hay amenidades registradas</p>
+                  )}
+                </div>
+              </TabsContent>
 
+              <TabsContent value="ubicacion" className="p-3 sm:p-6">
+                <div className="space-y-4">
                   {/* Ubicación Info */}
-                  <div className="p-4 bg-arkin-secondary/30 rounded-lg">
+                  <div className="p-3 sm:p-4 bg-arkin-secondary/30 rounded-lg">
                     <div className="flex items-center gap-2 text-gray-700">
-                      <MapPin className="h-5 w-5 text-arkin-gold" />
-                      <span className="font-medium">{property.ubicacion}</span>
+                      <MapPin className="h-4 w-4 sm:h-5 sm:w-5 text-arkin-gold flex-shrink-0" />
+                      <span className="font-medium text-sm sm:text-base break-words">{property.ubicacion}</span>
                     </div>
                     <p className="text-sm text-gray-500 mt-2">
                       Contacta al asesor para conocer la ubicación exacta de la propiedad.
