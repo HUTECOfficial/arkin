@@ -330,13 +330,21 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
               <Label htmlFor="precio">Precio (MXN) *</Label>
               <Input
                 id="precio"
-                type="number"
+                type="text"
                 required
-                value={formData.precio || ''}
-                onChange={(e) => setFormData({ ...formData, precio: Number(e.target.value) })}
-                placeholder="18500000"
-                className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                value={formData.precio ? formData.precio.toLocaleString('es-MX') : ''}
+                onChange={(e) => {
+                  const rawValue = e.target.value.replace(/,/g, '')
+                  const numValue = parseInt(rawValue) || 0
+                  setFormData({ ...formData, precio: numValue })
+                }}
+                placeholder="18,500,000"
               />
+              {formData.precio && formData.precio > 0 && (
+                <p className="text-xs text-arkin-gold font-medium">
+                  ${formData.precio.toLocaleString('es-MX')} MXN
+                </p>
+              )}
             </div>
 
             <div className="space-y-2">
