@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -40,7 +40,6 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { WishlistButton } from "@/components/wishlist-button"
-import { usePropertyStatic } from "@/hooks/use-properties-static"
 import type { Propiedad } from "@/data/propiedades"
 
 interface PropertyDetailClientProps {
@@ -51,18 +50,88 @@ interface PropertyDetailClientProps {
 export function PropertyDetailClient({ propertyData: initialData, propertyId }: PropertyDetailClientProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [isImageFullscreen, setIsImageFullscreen] = useState(false)
-  
-  // Parsear ID de forma segura
-  const parsedId = parseInt(propertyId, 10)
-  console.log('PropertyDetailClient - propertyId:', propertyId, 'parsedId:', parsedId)
-  
-  // Cargar propiedad desde Supabase
-  const { property: supabaseProperty, isLoading, error } = usePropertyStatic(parsedId)
-  
-  console.log('PropertyDetailClient - isLoading:', isLoading, 'property:', supabaseProperty?.titulo, 'error:', error)
-  
-  // Usar datos de Supabase o los iniciales
-  const propertyData = supabaseProperty || initialData
+  const [propertyData, setPropertyData] = useState<Propiedad | null>(initialData)
+  const [isLoading, setIsLoading] = useState(true)
+  const [loadError, setLoadError] = useState<string | null>(null)
+
+  // Cargar propiedad directamente desde Supabase
+  useEffect(() => {
+    const loadProperty = async () => {
+      try {
+        setIsLoading(true)
+        setLoadError(null)
+        
+        const id = parseInt(propertyId, 10)
+        if (isNaN(id)) {
+          setLoadError('ID de propiedad inválido')
+          setIsLoading(false)
+          return
+        }
+
+        // Importar supabase dinámicamente para evitar problemas de SSR
+        const { supabase } = await import('@/lib/supabase/client')
+        
+        // Cargar datos básicos
+        const { data: prop, error } = await supabase
+          .from('propiedades')
+          .select('*')
+          .eq('id', id)
+          .single()
+
+        if (error) {
+          console.error('Error cargando propiedad:', error)
+          setLoadError('Error al cargar la propiedad')
+          setIsLoading(false)
+          return
+        }
+
+        if (!prop) {
+          setLoadError('Propiedad no encontrada')
+          setIsLoading(false)
+          return
+        }
+
+        // Formatear datos
+        const formattedProperty: Propiedad = {
+          id: Number(prop.id),
+          titulo: prop.titulo,
+          ubicacion: prop.ubicacion,
+          precio: Number(prop.precio),
+          precioTexto: prop.precio_texto || `$${Number(prop.precio).toLocaleString('es-MX')}`,
+          tipo: prop.tipo,
+          habitaciones: prop.habitaciones || 0,
+          banos: prop.banos || 0,
+          area: prop.area || 0,
+          areaTexto: prop.area_texto || `${prop.area || 0} m²`,
+          imagen: prop.imagen || '/placeholder-property.jpg',
+          descripcion: prop.descripcion || '',
+          caracteristicas: prop.caracteristicas || [],
+          status: prop.status || 'Disponible',
+          categoria: prop.categoria || 'venta',
+          fechaPublicacion: prop.fecha_publicacion,
+          tourVirtual: prop.tour_virtual || undefined,
+          galeria: prop.galeria || [],
+          agente: {
+            nombre: 'Asesor ARKIN',
+            especialidad: 'Especialista en Propiedades',
+            rating: 5.0,
+            ventas: 0,
+            telefono: '+52 1 477 475 6951',
+            email: 'arkinselect@gmail.com',
+          },
+        }
+
+        setPropertyData(formattedProperty)
+        setIsLoading(false)
+      } catch (err) {
+        console.error('Error:', err)
+        setLoadError('Error inesperado')
+        setIsLoading(false)
+      }
+    }
+
+    loadProperty()
+  }, [propertyId])
   
   // Handle loading state
   if (isLoading) {
@@ -76,12 +145,14 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
     )
   }
   
-  // Handle case when property is not found
-  if (!propertyData) {
+  // Handle case when property is not found or error
+  if (!propertyData || loadError) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Propiedad no encontrada</h1>
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">
+            {loadError || 'Propiedad no encontrada'}
+          </h1>
           <Link href="/propiedades">
             <Button>Volver a Propiedades</Button>
           </Link>
