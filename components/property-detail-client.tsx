@@ -474,11 +474,11 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
 
             {/* Tabs Content */}
             <Tabs defaultValue="descripcion" className="bg-arkin-secondary/50 rounded-2xl shadow-sm border border-arkin-primary/30">
-              <TabsList className="grid w-full grid-cols-4 p-1 bg-arkin-secondary/50 rounded-t-2xl">
-                <TabsTrigger value="descripcion" className="rounded-xl text-xs sm:text-sm px-1 sm:px-3">Descripción</TabsTrigger>
-                <TabsTrigger value="caracteristicas" className="rounded-xl text-xs sm:text-sm px-1 sm:px-3">Características</TabsTrigger>
-                <TabsTrigger value="amenidades" className="rounded-xl text-xs sm:text-sm px-1 sm:px-3">Amenidades</TabsTrigger>
-                <TabsTrigger value="ubicacion" className="rounded-xl text-xs sm:text-sm px-1 sm:px-3">Ubicación</TabsTrigger>
+              <TabsList className="grid w-full grid-cols-4 p-1 bg-arkin-secondary/50 rounded-t-2xl gap-1">
+                <TabsTrigger value="descripcion" className="rounded-xl text-[10px] sm:text-sm px-0.5 sm:px-3 truncate">Info</TabsTrigger>
+                <TabsTrigger value="caracteristicas" className="rounded-xl text-[10px] sm:text-sm px-0.5 sm:px-3 truncate">Caract.</TabsTrigger>
+                <TabsTrigger value="amenidades" className="rounded-xl text-[10px] sm:text-sm px-0.5 sm:px-3 truncate">Amenid.</TabsTrigger>
+                <TabsTrigger value="ubicacion" className="rounded-xl text-[10px] sm:text-sm px-0.5 sm:px-3 truncate">Ubic.</TabsTrigger>
               </TabsList>
 
               <TabsContent value="descripcion" className="p-3 sm:p-6">
