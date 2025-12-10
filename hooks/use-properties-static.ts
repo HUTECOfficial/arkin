@@ -184,14 +184,83 @@ export function usePropertiesStatic() {
   }
 }
 
-// Hook para obtener una propiedad específica
+// Fetcher para cargar una propiedad específica por ID
+const fetchPropertyById = async (id: number): Promise<Propiedad | null> => {
+  try {
+    const { data: prop, error } = await supabase
+      .from('propiedades')
+      .select('*')
+      .eq('id', id)
+      .single()
+
+    if (error || !prop) {
+      console.error('Error fetching property:', error)
+      return null
+    }
+
+    // Obtener nombre del usuario si existe
+    let agenteNombre = 'Asesor ARKIN'
+    if (prop.usuario_id) {
+      const { data: usuario } = await supabase
+        .from('usuarios')
+        .select('nombre')
+        .eq('id', prop.usuario_id)
+        .single()
+      
+      if (usuario) {
+        agenteNombre = usuario.nombre
+      }
+    }
+
+    return {
+      id: Number(prop.id),
+      titulo: prop.titulo,
+      ubicacion: prop.ubicacion,
+      precio: Number(prop.precio),
+      precioTexto: prop.precio_texto,
+      tipo: prop.tipo,
+      habitaciones: prop.habitaciones,
+      banos: prop.banos,
+      area: prop.area,
+      areaTexto: prop.area_texto,
+      imagen: prop.imagen || '/placeholder-property.jpg',
+      descripcion: prop.descripcion || '',
+      caracteristicas: prop.caracteristicas || [],
+      status: prop.status,
+      categoria: prop.categoria,
+      fechaPublicacion: prop.fecha_publicacion,
+      tourVirtual: prop.tour_virtual || undefined,
+      galeria: prop.galeria || [],
+      agente: {
+        nombre: agenteNombre,
+        especialidad: 'Especialista en Propiedades',
+        rating: 5.0,
+        ventas: 0,
+        telefono: '+52 1 477 475 6951',
+        email: 'arkinselect@gmail.com',
+      },
+    }
+  } catch (error) {
+    console.error('Error fetching property:', error)
+    return null
+  }
+}
+
+// Hook para obtener una propiedad específica - carga directa sin depender de todas las propiedades
 export function usePropertyStatic(id: number) {
-  const { properties, isLoading } = usePropertiesStatic()
-  const property = properties.find((p) => p.id === id)
+  const { data: property, isLoading, error } = useSWR(
+    id ? `property-${id}` : null,
+    () => fetchPropertyById(id),
+    {
+      revalidateOnFocus: false,
+      dedupingInterval: 60000,
+    }
+  )
 
   return {
     property,
     isLoading,
+    error,
   }
 }
 
