@@ -22,10 +22,11 @@ export function HomeYellow() {
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-arkin-secondary"></div>
         </div>
 
-        <div className="relative z-10 max-w-6xl mx-auto">
-          <div className="text-center space-y-6 sm:space-y-8">
+        <div className="relative z-10 max-w-6xl mx-auto h-full flex flex-col justify-between min-h-[80vh]">
+          {/* Top Section - Badge and Title */}
+          <div className="text-center pt-4">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-arkin-secondary/50/10 border-2 border-arkin-primary rounded-full backdrop-blur-md">
+            <div className="inline-flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-arkin-secondary/50/10 border-2 border-arkin-primary rounded-full backdrop-blur-md mb-4">
               <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-arkin-primary" />
               <span className="text-xs sm:text-sm font-bold text-white uppercase tracking-wider">
                 Tu Inmobiliaria de Confianza
@@ -39,30 +40,36 @@ export function HomeYellow() {
                 alt="ARKIN SELECT"
                 width={600}
                 height={200}
-                className="w-[280px] sm:w-[400px] md:w-[500px] lg:w-[600px] h-auto mx-auto drop-shadow-2xl"
+                className="w-[220px] sm:w-[350px] md:w-[450px] lg:w-[550px] h-auto mx-auto drop-shadow-2xl"
                 priority
               />
             </div>
+          </div>
 
-            <p className="text-base sm:text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed px-4 drop-shadow">
+          {/* Middle Section - Spacer for image visibility */}
+          <div className="flex-1"></div>
+
+          {/* Bottom Section - Text and Buttons */}
+          <div className="text-center pb-8">
+            <p className="text-sm sm:text-base text-gray-300 max-w-xl mx-auto leading-relaxed px-4 drop-shadow mb-6">
               Conectamos directamente compradores y vendedores. Sin complicaciones.
             </p>
 
             {/* CTA Buttons - Bold Design */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 pt-6 sm:pt-8 px-4">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 px-4">
               <Link href="/propiedades" className="w-full sm:w-auto">
-                <Button className="w-full sm:w-auto bg-arkin-primary hover:bg-arkin-primary/90 text-arkin-accent font-bold px-8 sm:px-10 py-5 sm:py-7 rounded-2xl text-base sm:text-lg shadow-2xl shadow-arkin-primary/30 hover:scale-105 transition-all duration-300">
-                  <Home className="h-5 w-5 sm:h-6 sm:w-6 mr-2 sm:mr-3" />
+                <Button className="w-full sm:w-auto bg-arkin-primary hover:bg-arkin-primary/90 text-arkin-accent font-bold px-6 sm:px-10 py-4 sm:py-6 rounded-2xl text-sm sm:text-lg shadow-2xl shadow-arkin-primary/30 hover:scale-105 transition-all duration-300">
+                  <Home className="h-4 w-4 sm:h-6 sm:w-6 mr-2 sm:mr-3" />
                   Explorar Propiedades
                 </Button>
               </Link>
               <Link href="/propietarios" className="w-full sm:w-auto">
                 <Button
                   variant="outline"
-                  className="w-full sm:w-auto border-3 border-arkin-accent text-arkin-accent font-bold px-8 sm:px-10 py-5 sm:py-7 rounded-2xl text-base sm:text-lg hover:bg-arkin-secondary/50 hover:text-arkin-accent transition-all duration-300 backdrop-blur-sm bg-arkin-secondary/20"
+                  className="w-full sm:w-auto border-2 border-arkin-accent text-arkin-accent font-bold px-6 sm:px-10 py-4 sm:py-6 rounded-2xl text-sm sm:text-lg hover:bg-arkin-secondary/50 hover:text-arkin-accent transition-all duration-300 backdrop-blur-sm bg-arkin-secondary/20"
                 >
                   Vender mi Propiedad
-                  <ArrowRight className="h-5 w-5 sm:h-6 sm:w-6 ml-2 sm:ml-3" />
+                  <ArrowRight className="h-4 w-4 sm:h-6 sm:w-6 ml-2 sm:ml-3" />
                 </Button>
               </Link>
             </div>

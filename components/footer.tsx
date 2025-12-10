@@ -25,7 +25,7 @@ export function Footer() {
           
           {/* Contenido del footer */}
           <div className="relative z-10 px-6 py-16 bg-[#212121]">
-        <div className="grid md:grid-cols-5 gap-8 mb-12">
+        <div className="grid md:grid-cols-4 gap-8 mb-12">
           {/* Brand Column */}
           <div className="md:col-span-1">
             <div className="mb-6">
@@ -98,38 +98,6 @@ export function Footer() {
               <li>
                 <Link href="/servicios" className="text-gray-300 hover:text-arkin-gold transition-colors duration-300">
                   Construcción
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Company Column */}
-          <div>
-            <h3 className="font-serif text-xl font-semibold text-white mb-6">Empresa</h3>
-            <ul className="space-y-3">
-              <li>
-                <Link href="/empresa" className="text-gray-300 hover:text-arkin-gold transition-colors duration-300">
-                  Sobre ARKIN SELECT
-                </Link>
-              </li>
-              <li>
-                <Link href="/empresa" className="text-gray-300 hover:text-arkin-gold transition-colors duration-300">
-                  Nuestro Equipo
-                </Link>
-              </li>
-              <li>
-                <Link href="/empresa" className="text-gray-300 hover:text-arkin-gold transition-colors duration-300">
-                  Casos de Éxito
-                </Link>
-              </li>
-              <li>
-                <Link href="/empresa" className="text-gray-300 hover:text-arkin-gold transition-colors duration-300">
-                  Prensa
-                </Link>
-              </li>
-              <li>
-                <Link href="/empresa" className="text-gray-300 hover:text-arkin-gold transition-colors duration-300">
-                  Carreras
                 </Link>
               </li>
             </ul>
