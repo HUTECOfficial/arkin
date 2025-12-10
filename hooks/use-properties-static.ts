@@ -6,15 +6,34 @@ import type { Propiedad } from '@/data/propiedades'
 // Fetcher para cargar propiedades desde Supabase con nombre del asesor
 const fetchPropertiesFromSupabase = async (): Promise<Propiedad[]> => {
   try {
-    // Primero obtener las propiedades
+    // Obtener propiedades SIN las imágenes pesadas para carga rápida
     const { data: propiedades, error: propError } = await supabase
       .from('propiedades')
-      .select('*')
+      .select('id, titulo, ubicacion, precio, precio_texto, tipo, habitaciones, banos, area, area_texto, descripcion, caracteristicas, status, categoria, fecha_publicacion, tour_virtual, usuario_id, created_at')
       .order('created_at', { ascending: false })
+      .limit(100)
 
     if (propError) {
       console.error('Error fetching properties from Supabase:', propError)
       return []
+    }
+
+    // Obtener solo las imágenes principales (sin galería) en consulta separada
+    const propIds = (propiedades || []).map((p: any) => p.id)
+    let imagenesMap: Record<number, string> = {}
+    
+    if (propIds.length > 0) {
+      const { data: imagenes } = await supabase
+        .from('propiedades')
+        .select('id, imagen')
+        .in('id', propIds)
+      
+      if (imagenes) {
+        imagenesMap = imagenes.reduce((acc: Record<number, string>, p: any) => {
+          acc[p.id] = p.imagen || ''
+          return acc
+        }, {})
+      }
     }
 
     // Obtener los IDs de usuarios únicos
@@ -49,14 +68,14 @@ const fetchPropertiesFromSupabase = async (): Promise<Propiedad[]> => {
       banos: prop.banos,
       area: prop.area,
       areaTexto: prop.area_texto,
-      imagen: prop.imagen || '',
+      imagen: imagenesMap[prop.id] || '/placeholder-property.jpg',
       descripcion: prop.descripcion || '',
       caracteristicas: prop.caracteristicas || [],
       status: prop.status,
       categoria: prop.categoria,
       fechaPublicacion: prop.fecha_publicacion,
       tourVirtual: prop.tour_virtual || undefined,
-      galeria: prop.galeria || undefined,
+      galeria: undefined, // La galería se carga solo en el detalle
       agente: prop.usuario_id && usuariosMap[prop.usuario_id] ? {
         nombre: usuariosMap[prop.usuario_id],
         especialidad: 'Especialista en Propiedades',
