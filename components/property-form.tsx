@@ -181,8 +181,8 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
     const fileArray = Array.from(files)
 
     // Validar que no sean más de 10 imágenes en total
-    if (galleryPreviews.length + fileArray.length > 10) {
-      alert('Máximo 10 imágenes en la galería')
+    if (galleryPreviews.length + fileArray.length > 30) {
+      alert('Máximo 30 imágenes en la galería')
       return
     }
 
@@ -273,8 +273,8 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
   }
 
   const processGalleryImages = (files: File[]) => {
-    if (galleryPreviews.length + files.length > 10) {
-      alert('Máximo 10 imágenes en la galería')
+    if (galleryPreviews.length + files.length > 30) {
+      alert('Máximo 30 imágenes en la galería')
       return
     }
     files.forEach(file => {
@@ -693,7 +693,7 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
       <Card>
         <CardHeader>
           <CardTitle>Galería de Imágenes</CardTitle>
-          <CardDescription>Sube hasta 10 imágenes adicionales</CardDescription>
+          <CardDescription>Sube hasta 30 imágenes adicionales</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
@@ -726,11 +726,11 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
                   {isDraggingGallery ? '¡Suelta las imágenes aquí!' : 'Arrastra imágenes o haz click'}
                 </p>
                 <p className="text-xs text-gray-500">
-                  JPG, PNG o WEBP (máx. 5MB cada una) • Hasta 10 imágenes
+                  JPG, PNG o WEBP (máx. 5MB cada una) • Hasta 30 imágenes
                 </p>
                 {galleryPreviews.length > 0 && (
                   <p className="text-xs text-arkin-gold mt-2 font-medium">
-                    {galleryPreviews.length}/10 imágenes subidas
+                    {galleryPreviews.length}/30 imágenes subidas
                   </p>
                 )}
               </label>
