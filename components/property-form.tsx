@@ -44,6 +44,8 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
   const [imagePreview, setImagePreview] = useState<string>(initialData?.imagen || "")
   const [galleryPreviews, setGalleryPreviews] = useState<string[]>(initialData?.galeria || [])
   const [observaciones, setObservaciones] = useState<string>((initialData as any)?.observaciones || "")
+  const [isDraggingMain, setIsDraggingMain] = useState(false)
+  const [isDraggingGallery, setIsDraggingGallery] = useState(false)
 
   // Lista de amenidades disponibles
   const amenidadesDisponibles = [
@@ -214,6 +216,83 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
 
   const removeGalleryImage = (index: number) => {
     setGalleryPreviews(prev => prev.filter((_, i) => i !== index))
+  }
+
+  // Funciones de Drag & Drop para imagen principal
+  const handleDragOver = (e: React.DragEvent, setDragging: (value: boolean) => void) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setDragging(true)
+  }
+
+  const handleDragLeave = (e: React.DragEvent, setDragging: (value: boolean) => void) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setDragging(false)
+  }
+
+  const handleDropMain = (e: React.DragEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsDraggingMain(false)
+
+    const files = e.dataTransfer.files
+    if (files && files.length > 0) {
+      const file = files[0]
+      processMainImage(file)
+    }
+  }
+
+  const handleDropGallery = (e: React.DragEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsDraggingGallery(false)
+
+    const files = e.dataTransfer.files
+    if (files && files.length > 0) {
+      processGalleryImages(Array.from(files))
+    }
+  }
+
+  const processMainImage = (file: File) => {
+    if (!file.type.startsWith('image/')) {
+      alert('Por favor selecciona una imagen válida')
+      return
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      alert('La imagen no debe superar 5MB')
+      return
+    }
+    const reader = new FileReader()
+    reader.onloadend = () => {
+      const base64String = reader.result as string
+      setImagePreview(base64String)
+      setFormData({ ...formData, imagen: base64String })
+    }
+    reader.readAsDataURL(file)
+  }
+
+  const processGalleryImages = (files: File[]) => {
+    if (galleryPreviews.length + files.length > 10) {
+      alert('Máximo 10 imágenes en la galería')
+      return
+    }
+    files.forEach(file => {
+      if (!file.type.startsWith('image/')) {
+        alert(`${file.name} no es una imagen válida`)
+        return
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        alert(`${file.name} no debe superar 5MB`)
+        return
+      }
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        const base64String = reader.result as string
+        setGalleryPreviews(prev => [...prev, base64String])
+      }
+      reader.readAsDataURL(file)
+    })
   }
 
   return (
@@ -544,7 +623,16 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
             <Label htmlFor="imagen">Imagen Principal *</Label>
 
             {!imagePreview ? (
-              <div className="border-2 border-dashed border-arkin-gold/30 rounded-xl p-8 text-center bg-arkin-gold/5 hover:bg-arkin-gold/10 transition-colors">
+              <div 
+                className={`border-2 border-dashed rounded-xl p-8 text-center transition-all duration-300 ${
+                  isDraggingMain 
+                    ? 'border-arkin-gold bg-arkin-gold/20 scale-[1.02]' 
+                    : 'border-arkin-gold/30 bg-arkin-gold/5 hover:bg-arkin-gold/10'
+                }`}
+                onDragOver={(e) => handleDragOver(e, setIsDraggingMain)}
+                onDragLeave={(e) => handleDragLeave(e, setIsDraggingMain)}
+                onDrop={handleDropMain}
+              >
                 <input
                   type="file"
                   id="imagen"
@@ -554,9 +642,9 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
                   required={!initialData}
                 />
                 <label htmlFor="imagen" className="cursor-pointer">
-                  <Upload className="h-12 w-12 text-arkin-gold mx-auto mb-3" />
+                  <Upload className={`h-12 w-12 mx-auto mb-3 transition-transform ${isDraggingMain ? 'text-arkin-gold scale-125' : 'text-arkin-gold'}`} />
                   <p className="text-sm font-medium text-arkin-graphite mb-1">
-                    Click para subir imagen
+                    {isDraggingMain ? '¡Suelta la imagen aquí!' : 'Arrastra una imagen o haz click'}
                   </p>
                   <p className="text-xs text-gray-500">
                     JPG, PNG o WEBP (máx. 5MB)
@@ -611,7 +699,16 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
           <div className="space-y-2">
             <Label htmlFor="galeria">Imágenes de la Galería</Label>
 
-            <div className="border-2 border-dashed border-arkin-gold/30 rounded-xl p-8 text-center bg-arkin-gold/5 hover:bg-arkin-gold/10 transition-colors">
+            <div 
+              className={`border-2 border-dashed rounded-xl p-8 text-center transition-all duration-300 ${
+                isDraggingGallery 
+                  ? 'border-arkin-gold bg-arkin-gold/20 scale-[1.02]' 
+                  : 'border-arkin-gold/30 bg-arkin-gold/5 hover:bg-arkin-gold/10'
+              }`}
+              onDragOver={(e) => handleDragOver(e, setIsDraggingGallery)}
+              onDragLeave={(e) => handleDragLeave(e, setIsDraggingGallery)}
+              onDrop={handleDropGallery}
+            >
               <input
                 type="file"
                 id="galeria"
@@ -622,15 +719,20 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
               />
               <label htmlFor="galeria" className="cursor-pointer">
                 <div className="flex justify-center gap-2 mb-3">
-                  <Upload className="h-12 w-12 text-arkin-gold" />
-                  <Plus className="h-6 w-6 text-arkin-gold mt-6 -ml-4" />
+                  <Upload className={`h-12 w-12 transition-transform ${isDraggingGallery ? 'text-arkin-gold scale-125' : 'text-arkin-gold'}`} />
+                  <Plus className={`h-6 w-6 text-arkin-gold mt-6 -ml-4 transition-transform ${isDraggingGallery ? 'scale-125' : ''}`} />
                 </div>
                 <p className="text-sm font-medium text-arkin-graphite mb-1">
-                  Click para subir múltiples imágenes
+                  {isDraggingGallery ? '¡Suelta las imágenes aquí!' : 'Arrastra imágenes o haz click'}
                 </p>
                 <p className="text-xs text-gray-500">
-                  JPG, PNG o WEBP (máx. 5MB cada una)
+                  JPG, PNG o WEBP (máx. 5MB cada una) • Hasta 10 imágenes
                 </p>
+                {galleryPreviews.length > 0 && (
+                  <p className="text-xs text-arkin-gold mt-2 font-medium">
+                    {galleryPreviews.length}/10 imágenes subidas
+                  </p>
+                )}
               </label>
             </div>
 
