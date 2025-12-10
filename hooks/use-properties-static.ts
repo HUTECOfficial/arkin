@@ -187,16 +187,36 @@ export function usePropertiesStatic() {
 // Fetcher para cargar una propiedad específica por ID
 const fetchPropertyById = async (id: number): Promise<Propiedad | null> => {
   try {
+    console.log('Fetching property by ID:', id)
+    
+    // Primero cargar datos sin imágenes pesadas
     const { data: prop, error } = await supabase
       .from('propiedades')
-      .select('*')
+      .select('id, titulo, ubicacion, precio, precio_texto, tipo, habitaciones, banos, area, area_texto, descripcion, caracteristicas, status, categoria, fecha_publicacion, tour_virtual, usuario_id, created_at')
       .eq('id', id)
       .single()
 
-    if (error || !prop) {
+    if (error) {
       console.error('Error fetching property:', error)
       return null
     }
+    
+    if (!prop) {
+      console.log('Property not found:', id)
+      return null
+    }
+
+    console.log('Property found:', prop.titulo)
+
+    // Cargar imagen y galería en consulta separada
+    const { data: mediaData } = await supabase
+      .from('propiedades')
+      .select('imagen, galeria')
+      .eq('id', id)
+      .single()
+    
+    const imagen = mediaData?.imagen || '/placeholder-property.jpg'
+    const galeria = mediaData?.galeria || []
 
     // Obtener nombre del usuario si existe
     let agenteNombre = 'Asesor ARKIN'
@@ -223,14 +243,14 @@ const fetchPropertyById = async (id: number): Promise<Propiedad | null> => {
       banos: prop.banos,
       area: prop.area,
       areaTexto: prop.area_texto,
-      imagen: prop.imagen || '/placeholder-property.jpg',
+      imagen: imagen,
       descripcion: prop.descripcion || '',
       caracteristicas: prop.caracteristicas || [],
       status: prop.status,
       categoria: prop.categoria,
       fechaPublicacion: prop.fecha_publicacion,
       tourVirtual: prop.tour_virtual || undefined,
-      galeria: prop.galeria || [],
+      galeria: galeria,
       agente: {
         nombre: agenteNombre,
         especialidad: 'Especialista en Propiedades',
