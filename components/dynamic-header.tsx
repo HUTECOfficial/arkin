@@ -34,6 +34,7 @@ export function DynamicHeader() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isLoaded, setIsLoaded] = useState(false)
   const [isOtrosMenuOpen, setIsOtrosMenuOpen] = useState(false)
+  const [isCategoriesOpen, setIsCategoriesOpen] = useState(false)
   const pathname = usePathname()
   const { user, isAuthenticated } = useAuth()
 
@@ -421,59 +422,56 @@ export function DynamicHeader() {
                   })}
                 </div>
 
-                {/* Categorías Grid */}
+                {/* Categorías Dropdown */}
                 <div className="pt-3 border-t border-arkin-accent/20">
-                  <p className="text-xs font-semibold text-arkin-accent/60 mb-3 px-1">CATEGORÍAS</p>
-                  <div className="grid grid-cols-3 gap-2">
-                    <Link href="/venta" onClick={() => setIsMobileMenuOpen(false)}>
-                      <button className="flex flex-col items-center space-y-1.5 px-3 py-3 rounded-xl bg-arkin-accent/5 hover:bg-green-500/10 transition-all duration-300 hover:scale-105 active:scale-95">
-                        <Tag className="h-5 w-5 text-green-600" />
-                        <span className="text-xs font-medium text-arkin-accent">Venta</span>
-                      </button>
-                    </Link>
-                    <Link href="/renta" onClick={() => setIsMobileMenuOpen(false)}>
-                      <button className="flex flex-col items-center space-y-1.5 px-3 py-3 rounded-xl bg-arkin-accent/5 hover:bg-blue-500/10 transition-all duration-300 hover:scale-105 active:scale-95">
-                        <Key className="h-5 w-5 text-blue-600" />
-                        <span className="text-xs font-medium text-arkin-accent">Renta</span>
-                      </button>
-                    </Link>
-                    <Link href="/especiales" onClick={() => setIsMobileMenuOpen(false)}>
-                      <button className="flex flex-col items-center space-y-1.5 px-3 py-3 rounded-xl bg-arkin-accent/5 hover:bg-purple-500/10 transition-all duration-300 hover:scale-105 active:scale-95">
-                        <Sparkles className="h-5 w-5 text-purple-600" />
-                        <span className="text-xs font-medium text-arkin-accent">Especiales</span>
-                      </button>
-                    </Link>
-                    <Link href="/ofertas" onClick={() => setIsMobileMenuOpen(false)}>
-                      <button className="flex flex-col items-center space-y-1.5 px-3 py-3 rounded-xl bg-arkin-accent/5 hover:bg-red-500/10 transition-all duration-300 hover:scale-105 active:scale-95">
-                        <Percent className="h-5 w-5 text-red-600" />
-                        <span className="text-xs font-medium text-arkin-accent">Ofertas</span>
-                      </button>
-                    </Link>
-                    <Link href="/exclusivos" onClick={() => setIsMobileMenuOpen(false)}>
-                      <button className="flex flex-col items-center space-y-1.5 px-3 py-3 rounded-xl bg-arkin-accent/5 hover:bg-arkin-primary/10 transition-all duration-300 hover:scale-105 active:scale-95">
-                        <Shield className="h-5 w-5 text-arkin-primary" />
-                        <span className="text-xs font-medium text-arkin-accent">Exclusivos</span>
-                      </button>
-                    </Link>
-                    <Link href="/desarrollos" onClick={() => setIsMobileMenuOpen(false)}>
-                      <button className="flex flex-col items-center space-y-1.5 px-3 py-3 rounded-xl bg-arkin-accent/5 hover:bg-blue-500/10 transition-all duration-300 hover:scale-105 active:scale-95">
-                        <Building className="h-5 w-5 text-blue-600" />
-                        <span className="text-xs font-medium text-arkin-accent">Desarrollos</span>
-                      </button>
-                    </Link>
-                    <Link href="/brokers" onClick={() => setIsMobileMenuOpen(false)}>
-                      <button className="flex flex-col items-center space-y-1.5 px-3 py-3 rounded-xl bg-arkin-accent/5 hover:bg-teal-500/10 transition-all duration-300 hover:scale-105 active:scale-95">
-                        <Users className="h-5 w-5 text-teal-600" />
-                        <span className="text-xs font-medium text-arkin-accent">Brokers</span>
-                      </button>
-                    </Link>
-                    <Link href="/ficha-marca" onClick={() => setIsMobileMenuOpen(false)}>
-                      <button className="flex flex-col items-center space-y-1.5 px-3 py-3 rounded-xl bg-arkin-accent/5 hover:bg-arkin-gold/10 transition-all duration-300 hover:scale-105 active:scale-95">
-                        <Palette className="h-5 w-5 text-arkin-gold" />
-                        <span className="text-xs font-medium text-arkin-accent">Ficha</span>
-                      </button>
-                    </Link>
-                  </div>
+                  <button
+                    onClick={() => setIsCategoriesOpen(!isCategoriesOpen)}
+                    className="w-full flex items-center justify-between px-4 py-3 rounded-xl bg-arkin-accent/5 hover:bg-arkin-accent/10 transition-all duration-300"
+                  >
+                    <span className="text-sm font-semibold text-arkin-accent">Categorías</span>
+                    <ChevronDown className={`h-5 w-5 text-arkin-accent transition-transform duration-300 ${isCategoriesOpen ? 'rotate-180' : ''}`} />
+                  </button>
+                  
+                  {isCategoriesOpen && (
+                    <div className="mt-2 grid grid-cols-2 gap-2 animate-in slide-in-from-top-2 duration-200">
+                      <Link href="/venta" onClick={() => setIsMobileMenuOpen(false)}>
+                        <button className="w-full flex items-center space-x-2 px-3 py-2.5 rounded-xl bg-arkin-accent/5 hover:bg-green-500/10 transition-all">
+                          <Tag className="h-4 w-4 text-green-600" />
+                          <span className="text-xs font-medium text-arkin-accent">Venta</span>
+                        </button>
+                      </Link>
+                      <Link href="/renta" onClick={() => setIsMobileMenuOpen(false)}>
+                        <button className="w-full flex items-center space-x-2 px-3 py-2.5 rounded-xl bg-arkin-accent/5 hover:bg-blue-500/10 transition-all">
+                          <Key className="h-4 w-4 text-blue-600" />
+                          <span className="text-xs font-medium text-arkin-accent">Renta</span>
+                        </button>
+                      </Link>
+                      <Link href="/exclusivos" onClick={() => setIsMobileMenuOpen(false)}>
+                        <button className="w-full flex items-center space-x-2 px-3 py-2.5 rounded-xl bg-arkin-accent/5 hover:bg-arkin-primary/10 transition-all">
+                          <Shield className="h-4 w-4 text-arkin-primary" />
+                          <span className="text-xs font-medium text-arkin-accent">Exclusivos</span>
+                        </button>
+                      </Link>
+                      <Link href="/desarrollos" onClick={() => setIsMobileMenuOpen(false)}>
+                        <button className="w-full flex items-center space-x-2 px-3 py-2.5 rounded-xl bg-arkin-accent/5 hover:bg-blue-500/10 transition-all">
+                          <Building className="h-4 w-4 text-blue-600" />
+                          <span className="text-xs font-medium text-arkin-accent">Desarrollos</span>
+                        </button>
+                      </Link>
+                      <Link href="/especiales" onClick={() => setIsMobileMenuOpen(false)}>
+                        <button className="w-full flex items-center space-x-2 px-3 py-2.5 rounded-xl bg-arkin-accent/5 hover:bg-purple-500/10 transition-all">
+                          <Sparkles className="h-4 w-4 text-purple-600" />
+                          <span className="text-xs font-medium text-arkin-accent">Especiales</span>
+                        </button>
+                      </Link>
+                      <Link href="/ofertas" onClick={() => setIsMobileMenuOpen(false)}>
+                        <button className="w-full flex items-center space-x-2 px-3 py-2.5 rounded-xl bg-arkin-accent/5 hover:bg-red-500/10 transition-all">
+                          <Percent className="h-4 w-4 text-red-600" />
+                          <span className="text-xs font-medium text-arkin-accent">Ofertas</span>
+                        </button>
+                      </Link>
+                    </div>
+                  )}
                 </div>
 
                 {/* Action Buttons Row */}

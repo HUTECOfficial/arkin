@@ -288,7 +288,7 @@ export default function PropiedadesPage() {
                           <span className="text-lg sm:text-xl md:text-2xl font-bold text-arkin-primary">{propiedad.precioTexto}</span>
                         </div>
 
-                        <h3 className="text-base sm:text-lg md:text-xl font-serif font-bold text-arkin-accent mb-1.5 sm:mb-2 line-clamp-2">{propiedad.titulo}</h3>
+                        <h3 className="text-base sm:text-lg md:text-xl font-serif font-bold text-arkin-accent mb-1.5 sm:mb-2 line-clamp-2 uppercase">{propiedad.titulo}</h3>
 
                         <div className="flex items-center text-arkin-accent/70 mb-3 sm:mb-4">
                           <MapPin className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1.5 sm:mr-2 flex-shrink-0" />
@@ -389,7 +389,7 @@ export default function PropiedadesPage() {
                                   <Badge className="bg-arkin-secondary text-gray-700 text-xs">{propiedad.tipo}</Badge>
                                   <span className="text-2xl font-bold text-arkin-gold">{propiedad.precioTexto}</span>
                                 </div>
-                                <h3 className="text-xl font-serif font-bold text-gray-900 mb-2">{propiedad.titulo}</h3>
+                                <h3 className="text-xl font-serif font-bold text-gray-900 mb-2 uppercase">{propiedad.titulo}</h3>
                                 <div className="flex items-center text-gray-600 mb-3">
                                   <MapPin className="h-4 w-4 mr-2" />
                                   <span className="text-sm">{propiedad.ubicacion}</span>

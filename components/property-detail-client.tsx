@@ -414,7 +414,7 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
             <div className="bg-arkin-secondary/50 rounded-2xl p-4 sm:p-6 shadow-sm border border-arkin-primary/30">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-4">
                 <div className="flex-1">
-                  <h1 className="text-xl sm:text-2xl lg:text-3xl font-serif font-bold text-gray-900 mb-2">
+                  <h1 className="text-xl sm:text-2xl lg:text-3xl font-serif font-bold text-gray-900 mb-2 uppercase">
                     {property.titulo}
                   </h1>
                   <div className="flex items-center text-gray-600">
@@ -653,34 +653,6 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
                 <p className="text-xs text-gray-500 mt-2 text-center">
                   Respuesta en menos de 2 horas
                 </p>
-              </CardContent>
-            </Card>
-
-            {/* Mortgage Calculator */}
-            <Card className="bg-arkin-secondary/50 border-arkin-primary/30 shadow-lg">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-lg font-serif">Calculadora de Crédito</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-arkin-gold">
-                    {formatPrice(property.precio * 0.2)}
-                  </div>
-                  <div className="text-sm text-gray-600">Enganche estimado (20%)</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-xl font-semibold text-gray-900">
-                    {formatPrice(Math.round((property.precio * 0.8 * 0.01) / 12))}
-                  </div>
-                  <div className="text-sm text-gray-600">Pago mensual estimado</div>
-                </div>
-                <Button 
-                  variant="outline" 
-                  className="w-full border-arkin-gold/20 hover:border-arkin-gold hover:bg-arkin-gold/5"
-                >
-                  <Calculator className="h-4 w-4 mr-2" />
-                  Calcular Crédito
-                </Button>
               </CardContent>
             </Card>
 
