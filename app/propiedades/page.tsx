@@ -104,34 +104,22 @@ export default function PropiedadesPage() {
     <div className="min-h-screen bg-arkin-secondary transition-colors duration-500">
       {/* Hero Section */}
       <section className="relative pt-0 pb-12 sm:pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden min-h-[400px] sm:min-h-[600px] flex items-center">
-        <div className="absolute inset-0 bg-gradient-to-r from-arkin-accent/80 via-arkin-accent/60 to-transparent"></div>
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
             backgroundImage: "url('/fondoarkin.jpg')",
           }}
         ></div>
+        <div className="absolute inset-0 bg-black/60"></div>
 
         <div className="relative max-w-7xl mx-auto text-center">
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-serif font-bold text-white mb-4 sm:mb-6 text-balance px-4">
             Propiedades
             <span className="block text-arkin-primary">Exclusivas</span>
           </h1>
-          <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-arkin-secondary/90 mb-6 sm:mb-8 max-w-3xl mx-auto text-pretty px-4">
-            Descubre nuestra selecta cartera de propiedades de lujo en las ubicaciones más prestigiosas de México
-          </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center px-4">
             <Badge className="bg-arkin-primary/20 text-arkin-primary border-arkin-primary/30 px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm">
               {isLoading ? 'Cargando...' : `${filteredAndSortedProperties.length} de ${propiedades.length} Propiedades`}
-            </Badge>
-            {realtimeCount > 0 && !isLoading && (
-              <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30 px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm animate-pulse">
-                <RefreshCw className="h-3 w-3 mr-1 animate-spin" />
-                {realtimeCount} actualizaciones en tiempo real
-              </Badge>
-            )}
-            <Badge className="bg-arkin-secondary/20 text-arkin-secondary border-arkin-secondary/30 px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm">
-              Solo para clientes selectos
             </Badge>
           </div>
         </div>
