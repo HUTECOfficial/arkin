@@ -8,7 +8,8 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Propiedad } from "@/data/propiedades"
-import { Upload, X, Plus } from "lucide-react"
+import { Upload, X, Plus, Loader2 } from "lucide-react"
+import { uploadImage, uploadMultipleImages } from "@/lib/supabase/storage"
 
 interface PropertyFormProps {
   initialData?: Propiedad
@@ -46,6 +47,8 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
   const [observaciones, setObservaciones] = useState<string>((initialData as any)?.observaciones || "")
   const [isDraggingMain, setIsDraggingMain] = useState(false)
   const [isDraggingGallery, setIsDraggingGallery] = useState(false)
+  const [isUploading, setIsUploading] = useState(false)
+  const [uploadProgress, setUploadProgress] = useState("")
 
   // Lista de amenidades disponibles
   const amenidadesDisponibles = [
@@ -82,7 +85,7 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
     )
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     // Validar imagen principal si no hay datos iniciales
@@ -91,50 +94,96 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
       return
     }
 
-    const propertyData: Omit<Propiedad, 'id'> = {
-      titulo: formData.titulo || "",
-      ubicacion: formData.ubicacion || "",
-      precio: formData.precio || 0,
-      precioTexto: `$${(formData.precio || 0).toLocaleString('es-MX')}`,
-      tipo: formData.tipo || "Departamento",
-      habitaciones: formData.habitaciones || 1,
-      banos: formData.banos || 1,
-      mediosBanos: formData.mediosBanos || 0,
-      area: formData.area || 0,
-      areaConstruccion: formData.areaConstruccion || 0,
-      cochera: formData.cochera || 0,
-      areaTexto: `${formData.area || 0} m²`,
-      imagen: formData.imagen || "/placeholder-property.jpg",
-      descripcion: formData.descripcion || "",
-      caracteristicas: formData.caracteristicas || [],
-      status: formData.status as "Disponible" | "Exclusiva" | "Reservada" || "Disponible",
-      categoria: "venta", // Categoría por defecto
-      fechaPublicacion: new Date().toISOString().split('T')[0],
-      agente: {
-        nombre: asesorNombre,
-        especialidad: "Asesor Inmobiliario",
-        rating: 4.5,
-        ventas: 0,
-        telefono: "+52 1 477 475 6951",
-        email: asesorEmail
-      },
-      detalles: {
-        tipoPropiedad: formData.tipo || "Departamento",
-        areaTerreno: `${formData.area || 0} m²`,
-        antiguedad: "Nueva",
-        vistas: 0,
-        favoritos: 0,
-        publicado: new Date().toLocaleDateString('es-MX'),
-        amenidades: amenidadesSeleccionadas
-      } as any,
-      galeria: galleryPreviews, // Usar las imágenes de la galería
-      tourVirtual: undefined,
-      tipoCredito: (formData as any).tipoCredito || undefined,
-      observaciones: observaciones || undefined
-    } as any
+    setIsUploading(true)
+    setUploadProgress("Subiendo imágenes...")
 
-    console.log('Enviando propiedad:', propertyData)
-    onSubmit(propertyData)
+    try {
+      // Subir imagen principal a Storage si es base64
+      let imagenUrl = imagePreview
+      if (imagePreview && imagePreview.startsWith('data:')) {
+        setUploadProgress("Subiendo imagen principal...")
+        const result = await uploadImage(imagePreview, 'principal')
+        if (result.error) {
+          alert('Error al subir imagen principal: ' + result.error)
+          setIsUploading(false)
+          return
+        }
+        imagenUrl = result.url
+      }
+
+      // Subir galería a Storage si hay imágenes base64
+      let galeriaUrls = galleryPreviews
+      const base64Images = galleryPreviews.filter(img => img.startsWith('data:'))
+      const urlImages = galleryPreviews.filter(img => !img.startsWith('data:'))
+      
+      if (base64Images.length > 0) {
+        setUploadProgress(`Subiendo galería (0/${base64Images.length})...`)
+        const uploadedUrls: string[] = []
+        
+        for (let i = 0; i < base64Images.length; i++) {
+          setUploadProgress(`Subiendo galería (${i + 1}/${base64Images.length})...`)
+          const result = await uploadImage(base64Images[i], 'galeria')
+          if (result.url) {
+            uploadedUrls.push(result.url)
+          }
+        }
+        
+        galeriaUrls = [...urlImages, ...uploadedUrls]
+      }
+
+      setUploadProgress("Guardando propiedad...")
+
+      const propertyData: Omit<Propiedad, 'id'> = {
+        titulo: formData.titulo || "",
+        ubicacion: formData.ubicacion || "",
+        precio: formData.precio || 0,
+        precioTexto: `$${(formData.precio || 0).toLocaleString('es-MX')}`,
+        tipo: formData.tipo || "Departamento",
+        habitaciones: formData.habitaciones || 1,
+        banos: formData.banos || 1,
+        mediosBanos: formData.mediosBanos || 0,
+        area: formData.area || 0,
+        areaConstruccion: formData.areaConstruccion || 0,
+        cochera: formData.cochera || 0,
+        areaTexto: `${formData.area || 0} m²`,
+        imagen: imagenUrl || "/placeholder-property.jpg",
+        descripcion: formData.descripcion || "",
+        caracteristicas: formData.caracteristicas || [],
+        status: formData.status as "Disponible" | "Exclusiva" | "Reservada" || "Disponible",
+        categoria: "venta",
+        fechaPublicacion: new Date().toISOString().split('T')[0],
+        agente: {
+          nombre: asesorNombre,
+          especialidad: "Asesor Inmobiliario",
+          rating: 4.5,
+          ventas: 0,
+          telefono: "+52 1 477 475 6951",
+          email: asesorEmail
+        },
+        detalles: {
+          tipoPropiedad: formData.tipo || "Departamento",
+          areaTerreno: `${formData.area || 0} m²`,
+          antiguedad: "Nueva",
+          vistas: 0,
+          favoritos: 0,
+          publicado: new Date().toLocaleDateString('es-MX'),
+          amenidades: amenidadesSeleccionadas
+        } as any,
+        galeria: galeriaUrls,
+        tourVirtual: undefined,
+        tipoCredito: (formData as any).tipoCredito || undefined,
+        observaciones: observaciones || undefined
+      } as any
+
+      console.log('Enviando propiedad:', propertyData)
+      await onSubmit(propertyData)
+    } catch (error) {
+      console.error('Error al guardar propiedad:', error)
+      alert('Error al guardar la propiedad')
+    } finally {
+      setIsUploading(false)
+      setUploadProgress("")
+    }
   }
 
   const addCaracteristica = () => {
@@ -782,8 +831,19 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
             Cancelar
           </Button>
         )}
-        <Button type="submit" className="bg-arkin-gold hover:bg-arkin-gold/90 text-black font-semibold">
-          {initialData ? 'Actualizar' : 'Publicar'} Propiedad
+        <Button 
+          type="submit" 
+          className="bg-arkin-gold hover:bg-arkin-gold/90 text-black font-semibold min-w-[200px]"
+          disabled={isUploading}
+        >
+          {isUploading ? (
+            <>
+              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              {uploadProgress || 'Procesando...'}
+            </>
+          ) : (
+            <>{initialData ? 'Actualizar' : 'Publicar'} Propiedad</>
+          )}
         </Button>
       </div>
     </form>
