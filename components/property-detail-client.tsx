@@ -52,8 +52,14 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [isImageFullscreen, setIsImageFullscreen] = useState(false)
   
+  // Parsear ID de forma segura
+  const parsedId = parseInt(propertyId, 10)
+  console.log('PropertyDetailClient - propertyId:', propertyId, 'parsedId:', parsedId)
+  
   // Cargar propiedad desde Supabase
-  const { property: supabaseProperty, isLoading } = usePropertyStatic(parseInt(propertyId))
+  const { property: supabaseProperty, isLoading, error } = usePropertyStatic(parsedId)
+  
+  console.log('PropertyDetailClient - isLoading:', isLoading, 'property:', supabaseProperty?.titulo, 'error:', error)
   
   // Usar datos de Supabase o los iniciales
   const propertyData = supabaseProperty || initialData
