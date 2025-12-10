@@ -646,7 +646,14 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
                 <CardTitle className="text-lg font-serif">Agendar Visita</CardTitle>
               </CardHeader>
               <CardContent>
-                <Button className="w-full bg-arkin-gold hover:bg-arkin-gold/90 text-black text-lg py-3">
+                <Button 
+                  className="w-full bg-arkin-gold hover:bg-arkin-gold/90 text-black text-lg py-3"
+                  onClick={() => {
+                    const mensaje = `¡Hola! 👋 Me interesa agendar una visita para la propiedad:\n\n🏠 *${property.titulo}*\n📍 ${property.ubicacion}\n💰 ${formatPrice(property.precio)}\n\n¿Podrían darme más información y coordinar una visita?`
+                    const url = `https://wa.me/5214774756951?text=${encodeURIComponent(mensaje)}`
+                    window.open(url, '_blank')
+                  }}
+                >
                   <Calendar className="h-5 w-5 mr-2" />
                   Agendar Visita Privada
                 </Button>
