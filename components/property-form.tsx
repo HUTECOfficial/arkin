@@ -614,6 +614,8 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
                   <SelectItem value="Cofinavit">Cofinavit</SelectItem>
                   <SelectItem value="Crédito Puente">Crédito Puente</SelectItem>
                   <SelectItem value="Cualquier Crédito">Cualquier Crédito</SelectItem>
+                  <SelectItem value="Otro">Otro</SelectItem>
+                  <SelectItem value="No aplica">No aplica</SelectItem>
                 </SelectContent>
               </Select>
             </div>
