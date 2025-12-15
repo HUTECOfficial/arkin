@@ -38,10 +38,10 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
     galeria: []
   })
 
-  const [caracteristica, setCaracteristica] = useState("")
   const [amenidadesSeleccionadas, setAmenidadesSeleccionadas] = useState<string[]>(
     (initialData?.detalles as any)?.amenidades || []
   )
+  const [caracteristicaPersonalizada, setCaracteristicaPersonalizada] = useState("")
   const [imagePreview, setImagePreview] = useState<string>(initialData?.imagen || "")
   const [galleryPreviews, setGalleryPreviews] = useState<string[]>(initialData?.galeria || [])
   const [observaciones, setObservaciones] = useState<string>((initialData as any)?.observaciones || "")
@@ -77,12 +77,66 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
     "Aljibe"
   ]
 
+  const caracteristicasDisponibles = [
+    "Tinaco",
+    "Aljibe",
+    "Calentador solar",
+    "Hidroneumático",
+    "Bodega",
+    "Cuarto de servicio",
+    "Cuarto de lavado",
+    "Elevador",
+    "Sala de televisión",
+    "Cuarto de máquinas",
+    "Penthouse",
+    "Casa cuadra",
+    "Sistema de sonido Bose",
+    "Cámara de vigilancia",
+    "Spa",
+    "Bomba de calor",
+    "Celda eléctrica",
+    "Panel solar",
+    "Mini split"
+  ]
+
   const toggleAmenidad = (amenidad: string) => {
     setAmenidadesSeleccionadas(prev => 
       prev.includes(amenidad) 
         ? prev.filter(a => a !== amenidad)
         : [...prev, amenidad]
     )
+  }
+
+  const toggleCaracteristica = (caracteristica: string) => {
+    setFormData(prev => {
+      const actuales = prev.caracteristicas || []
+      return {
+        ...prev,
+        caracteristicas: actuales.includes(caracteristica)
+          ? actuales.filter(c => c !== caracteristica)
+          : [...actuales, caracteristica]
+      }
+    })
+  }
+
+  const addCaracteristicaPersonalizada = () => {
+    if (caracteristicaPersonalizada.trim()) {
+      const nueva = caracteristicaPersonalizada.trim()
+      if (!formData.caracteristicas?.includes(nueva)) {
+        setFormData(prev => ({
+          ...prev,
+          caracteristicas: [...(prev.caracteristicas || []), nueva]
+        }))
+      }
+      setCaracteristicaPersonalizada("")
+    }
+  }
+
+  const removeCaracteristica = (car: string) => {
+    setFormData(prev => ({
+      ...prev,
+      caracteristicas: prev.caracteristicas?.filter(c => c !== car)
+    }))
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -184,23 +238,6 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
       setIsUploading(false)
       setUploadProgress("")
     }
-  }
-
-  const addCaracteristica = () => {
-    if (caracteristica.trim()) {
-      setFormData({
-        ...formData,
-        caracteristicas: [...(formData.caracteristicas || []), caracteristica.trim()]
-      })
-      setCaracteristica("")
-    }
-  }
-
-  const removeCaracteristica = (index: number) => {
-    setFormData({
-      ...formData,
-      caracteristicas: formData.caracteristicas?.filter((_, i) => i !== index)
-    })
   }
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -416,6 +453,7 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
                   <SelectItem value="Casa">Casa</SelectItem>
                   <SelectItem value="Penthouse">Penthouse</SelectItem>
                   <SelectItem value="Villa">Villa</SelectItem>
+                  <SelectItem value="Edificio">Edificio</SelectItem>
                   <SelectItem value="Loft">Loft</SelectItem>
                   <SelectItem value="Residencia">Residencia</SelectItem>
                   <SelectItem value="Bodega">Bodega</SelectItem>
@@ -612,35 +650,61 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
           <CardDescription>Agrega las características destacadas</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex gap-2">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+            {caracteristicasDisponibles.map((car) => (
+              <button
+                key={car}
+                type="button"
+                onClick={() => toggleCaracteristica(car)}
+                className={`
+                  p-3 rounded-lg border text-sm font-medium transition-all text-left
+                  ${formData.caracteristicas?.includes(car)
+                    ? 'bg-[#D4AF37]/90 text-black border-[#D4AF37] shadow-md'
+                    : 'bg-arkin-secondary/50 text-gray-600 border-gray-200 hover:border-arkin-gold/50 hover:bg-arkin-gold/5'
+                  }
+                `}
+              >
+                {car}
+              </button>
+            ))}
+          </div>
+
+          <div className="flex gap-2 mt-4">
             <Input
-              value={caracteristica}
-              onChange={(e) => setCaracteristica(e.target.value)}
-              placeholder="Ej: Vista panorámica"
-              onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addCaracteristica())}
+              value={caracteristicaPersonalizada}
+              onChange={(e) => setCaracteristicaPersonalizada(e.target.value)}
+              placeholder="Agregar otra característica..."
+              onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addCaracteristicaPersonalizada())}
             />
-            <Button type="button" onClick={addCaracteristica}>
+            <Button type="button" onClick={addCaracteristicaPersonalizada}>
               <Plus className="h-4 w-4" />
             </Button>
           </div>
 
-          <div className="flex flex-wrap gap-2">
-            {formData.caracteristicas?.map((car, index) => (
-              <div
-                key={index}
-                className="flex items-center gap-2 bg-[#D4AF37]/10 text-[#D4AF37] px-3 py-1 rounded-full"
-              >
-                <span className="text-sm">{car}</span>
-                <button
-                  type="button"
-                  onClick={() => removeCaracteristica(index)}
-                  className="hover:text-red-500"
-                >
-                  <X className="h-3 w-3" />
-                </button>
+          {formData.caracteristicas && formData.caracteristicas.length > 0 && (
+            <div className="space-y-2">
+              <p className="text-sm text-gray-500">
+                {formData.caracteristicas.length} característica(s) seleccionada(s)
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {formData.caracteristicas.filter(c => !caracteristicasDisponibles.includes(c)).map((car) => (
+                  <div
+                    key={car}
+                    className="flex items-center gap-2 bg-[#D4AF37]/10 text-[#D4AF37] px-3 py-1 rounded-full"
+                  >
+                    <span className="text-sm">{car}</span>
+                    <button
+                      type="button"
+                      onClick={() => removeCaracteristica(car)}
+                      className="hover:text-red-500"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </div>
+          )}
         </CardContent>
       </Card>
 
