@@ -139,9 +139,9 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
         precio: formData.precio || 0,
         precioTexto: `$${(formData.precio || 0).toLocaleString('es-MX')}`,
         tipo: formData.tipo || "Departamento",
-        habitaciones: formData.habitaciones || 1,
-        banos: formData.banos || 1,
-        mediosBanos: formData.mediosBanos || 0,
+        habitaciones: formData.habitaciones ?? 0,
+        banos: formData.banos ?? 0,
+        mediosBanos: formData.mediosBanos ?? 0,
         area: formData.area || 0,
         areaConstruccion: formData.areaConstruccion || 0,
         cochera: formData.cochera || 0,
@@ -432,7 +432,7 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
             <div className="space-y-2">
               <Label>Habitaciones *</Label>
               <div className="flex gap-2">
-                {[1, 2, 3, 4, 5].map((num) => (
+                {[0, 1, 2, 3, 4, 5].map((num) => (
                   <button
                     key={num}
                     type="button"
@@ -454,7 +454,7 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
             <div className="space-y-2">
               <Label>Baños Completos *</Label>
               <div className="flex gap-2">
-                {[1, 2, 3, 4, 5].map((num) => (
+                {[0, 1, 2, 3, 4, 5].map((num) => (
                   <button
                     key={num}
                     type="button"
