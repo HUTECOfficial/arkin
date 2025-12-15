@@ -19,7 +19,7 @@ export default function PropiedadesPage() {
   const [filters, setFilters] = useState<any>({})
   const [isFiltersOpen, setIsFiltersOpen] = useState(false)
   const [viewMode, setViewMode] = useState<'grid' | 'list' | 'map'>('grid')
-  const [sortBy, setSortBy] = useState('precio-desc')
+  const [sortBy, setSortBy] = useState('fecha-desc')
   const [isAIChatOpen, setIsAIChatOpen] = useState(false)
 
   // El hook usePropertiesStatic ya maneja realtime automáticamente
