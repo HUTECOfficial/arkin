@@ -109,6 +109,7 @@ export function ContactoYellow() {
                     </label>
                     <select className="w-full px-4 h-12 rounded-xl border-2 border-arkin-accent/20 focus:border-arkin-primary focus:outline-none bg-arkin-secondary font-medium text-arkin-accent">
                       <option>Vender mi propiedad</option>
+                      <option>Rentar mi propiedad</option>
                       <option>Comprar propiedad</option>
                       <option>Consulta general</option>
                       <option>Información sobre servicios</option>

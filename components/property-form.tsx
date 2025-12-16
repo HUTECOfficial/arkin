@@ -39,6 +39,14 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
     galeria: []
   })
 
+  const [actividadesRecreativas, setActividadesRecreativas] = useState<string>(
+    (() => {
+      const desc = String(initialData?.descripcion || '')
+      const match = desc.match(/Actividades recreativas:\s*(.*)$/i)
+      return (match?.[1] || '').trim()
+    })()
+  )
+
   const [amenidadesSeleccionadas, setAmenidadesSeleccionadas] = useState<string[]>(
     (initialData?.detalles as any)?.amenidades || []
   )
@@ -203,9 +211,15 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
         amueblado: formData.amueblado,
         areaTexto: `${formData.area ?? 0} m²`,
         imagen: imagenUrl || "/placeholder-property.jpg",
-        descripcion: formData.descripcion || "",
+        descripcion: (() => {
+          const base = String(formData.descripcion || '').trim()
+          const act = String(actividadesRecreativas || '').trim()
+          if (!act) return base
+          if (!base) return `Actividades recreativas: ${act}`
+          return `${base}\n\nActividades recreativas: ${act}`
+        })(),
         caracteristicas: formData.caracteristicas || [],
-        status: formData.status as "Disponible" | "Exclusiva" | "Reservada" || "Disponible",
+        status: formData.status as any,
         categoria: "venta",
         fechaPublicacion: new Date().toISOString().split('T')[0],
         agente: {
@@ -644,14 +658,25 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="descripcion">Información de la Propiedad *</Label>
+            <Label htmlFor="descripcion">Descripción *</Label>
             <Textarea
               id="descripcion"
               required
               value={formData.descripcion}
               onChange={(e) => setFormData({ ...formData, descripcion: e.target.value })}
-              placeholder="Describe la información de la propiedad (características, amenidades, ubicación, etc.)..."
+              placeholder="Describe la propiedad..."
               rows={4}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="actividadesRecreativas">Actividades recreativas (opcional)</Label>
+            <Textarea
+              id="actividadesRecreativas"
+              value={actividadesRecreativas}
+              onChange={(e) => setActividadesRecreativas(e.target.value)}
+              placeholder="Ej: Cancha de tenis, alberca, parques cercanos, club..."
+              rows={3}
             />
           </div>
 

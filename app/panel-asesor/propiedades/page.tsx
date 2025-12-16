@@ -50,9 +50,9 @@ export default function PropiedadesAsesorPage() {
     if (!user) return
 
     try {
-      // Cargar TODAS las propiedades desde PropertiesStorage
-      const allProperties = await PropertiesStorage.getAll()
-      setPropiedades(allProperties)
+      // Cargar SOLO las propiedades del asesor logueado
+      const myProperties = await PropertiesStorage.getByUsuario(user.id)
+      setPropiedades(myProperties)
     } catch (error) {
       console.error('Error in loadProperties:', error)
       setPropiedades([])

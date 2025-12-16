@@ -1,12 +1,14 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
@@ -32,7 +34,8 @@ import {
   X,
   Plus,
   Eye,
-  Sparkles
+  Sparkles,
+  ChevronsUpDown
 } from "lucide-react"
 import Link from "next/link"
 import { OwnerSubmissionsStorage } from "@/lib/owner-submissions-storage"
@@ -45,19 +48,26 @@ export default function PropietariosPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submissionSuccess, setSubmissionSuccess] = useState(false)
   const [submissionId, setSubmissionId] = useState<string>('')
+  const [neighborhoodOpen, setNeighborhoodOpen] = useState(false)
+  const [neighborhoodQuery, setNeighborhoodQuery] = useState('')
+  const [zones, setZones] = useState<string[]>([])
+  const [placesSuggestions, setPlacesSuggestions] = useState<string[]>([])
   const [formData, setFormData] = useState({
     propertyType: '',
     bedrooms: '',
     bathrooms: '',
     area: '',
+    areaConstruccion: '',
     address: '',
     city: '',
     neighborhood: '',
     postalCode: '',
     askingPrice: '',
+    tipoConsulta: '',
     urgency: '',
     description: '',
     amenities: [] as string[],
+    actividadesRecreativas: '',
     photos: [] as File[],
     ownerName: '',
     phone: '',
@@ -72,6 +82,74 @@ export default function PropietariosPage() {
 
   const totalSteps = 5
   const progress = (currentStep / totalSteps) * 100
+
+  useEffect(() => {
+    if (!neighborhoodOpen) return
+    if (zones.length > 0) return
+
+    let cancelled = false
+
+    ;(async () => {
+      try {
+        const res = await fetch('/api/zones', { cache: 'no-store' })
+        const json = await res.json()
+        const list = Array.isArray(json?.zones) ? json.zones : []
+        if (!cancelled) setZones(list)
+      } catch {
+        if (!cancelled) setZones([])
+      }
+    })()
+
+    return () => {
+      cancelled = true
+    }
+  }, [neighborhoodOpen, zones.length])
+
+  useEffect(() => {
+    if (!neighborhoodOpen) return
+    const q = neighborhoodQuery.trim()
+
+    if (q.length < 2) {
+      setPlacesSuggestions([])
+      return
+    }
+
+    const t = setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/places/autocomplete?input=${encodeURIComponent(q)}`, {
+          cache: 'no-store',
+        })
+        const json = await res.json()
+        const list = Array.isArray(json?.suggestions) ? json.suggestions : []
+        setPlacesSuggestions(list)
+      } catch {
+        setPlacesSuggestions([])
+      }
+    }, 250)
+
+    return () => clearTimeout(t)
+  }, [neighborhoodOpen, neighborhoodQuery])
+
+  const combinedNeighborhoodSuggestions = useMemo(() => {
+    const q = neighborhoodQuery.trim().toLowerCase()
+    const localFiltered = q
+      ? zones.filter((z) => z.toLowerCase().includes(q))
+      : zones
+
+    const map = new Map<string, string>()
+
+    for (const z of localFiltered) {
+      const key = z.toLowerCase()
+      if (!map.has(key)) map.set(key, z)
+    }
+
+    for (const z of placesSuggestions) {
+      const key = z.toLowerCase()
+      if (!map.has(key)) map.set(key, z)
+    }
+
+    return Array.from(map.values()).slice(0, 30)
+  }, [neighborhoodQuery, placesSuggestions, zones])
 
   const amenitiesList = [
     'Piscina', 'Jardín privado', 'Terraza', 'Balcón', 'Gimnasio',
@@ -98,15 +176,19 @@ export default function PropietariosPage() {
     setUploadedPhotos(prev => prev.filter((_, i) => i !== index))
   }
 
+  const calculateEstimateFor = (area: string, neighborhood: string) => {
+    const basePrice = parseInt(area) * 45000 // Precio base por m²
+    const locationMultiplier = neighborhood.toLowerCase().includes('polanco') ? 1.8 :
+                              neighborhood.toLowerCase().includes('santa fe') ? 1.6 :
+                              neighborhood.toLowerCase().includes('roma') ? 1.4 : 1.2
+    const estimate = basePrice * locationMultiplier
+    setPriceEstimate(estimate)
+  }
+
   const calculateEstimate = () => {
     // Simulación de cálculo de precio estimado
     if (formData.area && formData.neighborhood) {
-      const basePrice = parseInt(formData.area) * 45000 // Precio base por m²
-      const locationMultiplier = formData.neighborhood.toLowerCase().includes('polanco') ? 1.8 :
-                                formData.neighborhood.toLowerCase().includes('santa fe') ? 1.6 :
-                                formData.neighborhood.toLowerCase().includes('roma') ? 1.4 : 1.2
-      const estimate = basePrice * locationMultiplier
-      setPriceEstimate(estimate)
+      calculateEstimateFor(formData.area, formData.neighborhood)
     }
   }
 
@@ -158,14 +240,17 @@ export default function PropietariosPage() {
         bedrooms: formData.bedrooms,
         bathrooms: formData.bathrooms,
         area: formData.area,
+        areaConstruccion: formData.areaConstruccion || undefined,
         address: formData.address,
         city: formData.city,
         neighborhood: formData.neighborhood,
         postalCode: formData.postalCode,
         askingPrice: formData.askingPrice,
+        tipoConsulta: formData.tipoConsulta || undefined,
         urgency: formData.urgency,
         description: formData.description,
         amenities: formData.amenities,
+        actividadesRecreativas: formData.actividadesRecreativas || undefined,
         photoCount: uploadedPhotos.length,
         ownerName: formData.ownerName,
         phone: formData.phone,
@@ -404,6 +489,19 @@ export default function PropietariosPage() {
                 </div>
 
                 <div className="space-y-2">
+                  <Label htmlFor="area-construccion" className="text-sm font-medium text-gray-700">
+                    Área de Construcción (m²)
+                  </Label>
+                  <Input
+                    id="area-construccion"
+                    placeholder="Ej: 350"
+                    value={formData.areaConstruccion}
+                    onChange={(e) => setFormData(prev => ({ ...prev, areaConstruccion: e.target.value }))}
+                    className="border-gray-200 focus:border-arkin-gold focus:ring-arkin-gold/20"
+                  />
+                </div>
+
+                <div className="space-y-2">
                   <Label htmlFor="bedrooms" className="text-sm font-medium text-gray-700">
                     Habitaciones *
                   </Label>
@@ -415,6 +513,7 @@ export default function PropietariosPage() {
                       <SelectValue placeholder="Número de habitaciones" />
                     </SelectTrigger>
                     <SelectContent>
+                      <SelectItem value="0">0 habitaciones</SelectItem>
                       <SelectItem value="1">1 habitación</SelectItem>
                       <SelectItem value="2">2 habitaciones</SelectItem>
                       <SelectItem value="3">3 habitaciones</SelectItem>
@@ -437,6 +536,7 @@ export default function PropietariosPage() {
                       <SelectValue placeholder="Número de baños" />
                     </SelectTrigger>
                     <SelectContent>
+                      <SelectItem value="0">0 baños</SelectItem>
                       <SelectItem value="1">1 baño</SelectItem>
                       <SelectItem value="2">2 baños</SelectItem>
                       <SelectItem value="3">3 baños</SelectItem>
@@ -503,27 +603,78 @@ export default function PropietariosPage() {
                   <Label htmlFor="neighborhood" className="text-sm font-medium text-gray-700">
                     Colonia/Zona *
                   </Label>
-                  <Select 
-                    value={formData.neighborhood} 
-                    onValueChange={(value) => {
-                      setFormData(prev => ({...prev, neighborhood: value}))
-                      calculateEstimate()
-                    }}
-                  >
-                    <SelectTrigger className="border-gray-200 focus:border-arkin-gold focus:ring-arkin-gold/20">
-                      <SelectValue placeholder="Selecciona la zona" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Polanco">Polanco</SelectItem>
-                      <SelectItem value="Santa Fe">Santa Fe</SelectItem>
-                      <SelectItem value="Roma Norte">Roma Norte</SelectItem>
-                      <SelectItem value="Condesa">Condesa</SelectItem>
-                      <SelectItem value="Las Lomas">Las Lomas</SelectItem>
-                      <SelectItem value="Interlomas">Interlomas</SelectItem>
-                      <SelectItem value="León Centro">León Centro</SelectItem>
-                      <SelectItem value="León Zona Dorada">León Zona Dorada</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <Popover open={neighborhoodOpen} onOpenChange={(open) => {
+                    if (open) {
+                      setNeighborhoodQuery(formData.neighborhood || '')
+                    }
+                    setNeighborhoodOpen(open)
+                  }}>
+                    <PopoverTrigger asChild>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        role="combobox"
+                        aria-expanded={neighborhoodOpen}
+                        className="w-full justify-between border-gray-200 focus:border-arkin-gold focus:ring-arkin-gold/20 font-normal"
+                      >
+                        {formData.neighborhood ? formData.neighborhood : 'Selecciona la zona'}
+                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent
+                      align="start"
+                      className="w-[--radix-popover-trigger-width] p-0"
+                    >
+                      <Command>
+                        <CommandInput
+                          placeholder="Buscar zona..."
+                          value={neighborhoodQuery}
+                          onValueChange={setNeighborhoodQuery}
+                        />
+                        <CommandList>
+                          <CommandEmpty>No se encontró la zona.</CommandEmpty>
+                          <CommandGroup>
+                            {neighborhoodQuery.trim().length > 0 && (
+                              <CommandItem
+                                key={`__custom__${neighborhoodQuery}`}
+                                value={neighborhoodQuery}
+                                onSelect={() => {
+                                  const custom = neighborhoodQuery.trim()
+                                  if (!custom) return
+                                  setFormData(prev => ({ ...prev, neighborhood: custom }))
+                                  setNeighborhoodOpen(false)
+                                  if (formData.area) {
+                                    calculateEstimateFor(formData.area, custom)
+                                  }
+                                }}
+                              >
+                                Usar "{neighborhoodQuery.trim()}"
+                              </CommandItem>
+                            )}
+
+                            {combinedNeighborhoodSuggestions.map((zone) => (
+                              <CommandItem
+                                key={zone}
+                                value={zone}
+                                onSelect={() => {
+                                  setFormData(prev => ({ ...prev, neighborhood: zone }))
+                                  setNeighborhoodOpen(false)
+                                  if (formData.area) {
+                                    calculateEstimateFor(formData.area, zone)
+                                  }
+                                }}
+                              >
+                                <CheckCircle
+                                  className={`h-4 w-4 mr-2 ${formData.neighborhood === zone ? 'opacity-100' : 'opacity-0'}`}
+                                />
+                                {zone}
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
                 </div>
 
                 <div className="space-y-2">
@@ -581,11 +732,11 @@ export default function PropietariosPage() {
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <Label htmlFor="asking-price" className="text-sm font-medium text-gray-700">
-                      Precio Solicitado (MXN) *
+                      {formData.tipoConsulta === 'rentar' ? 'Renta mensual (MXN) *' : 'Precio Solicitado (MXN) *'}
                     </Label>
                     <Input 
                       id="asking-price" 
-                      placeholder="Ej: $15,000,000"
+                      placeholder={formData.tipoConsulta === 'rentar' ? 'Ej: $35,000' : 'Ej: $15,000,000'}
                       value={formData.askingPrice}
                       onChange={(e) => setFormData(prev => ({...prev, askingPrice: e.target.value}))}
                       className="border-gray-200 focus:border-arkin-gold focus:ring-arkin-gold/20"
@@ -611,53 +762,84 @@ export default function PropietariosPage() {
                       </SelectContent>
                     </Select>
                   </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="tipo-consulta" className="text-sm font-medium text-gray-700">
+                      Tipo de consulta
+                    </Label>
+                    <Select
+                      value={formData.tipoConsulta}
+                      onValueChange={(value) => setFormData(prev => ({ ...prev, tipoConsulta: value }))}
+                    >
+                      <SelectTrigger className="border-gray-200 focus:border-arkin-gold focus:ring-arkin-gold/20">
+                        <SelectValue placeholder="Selecciona una opción" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="vender">Vender mi propiedad</SelectItem>
+                        <SelectItem value="rentar">Rentar mi propiedad</SelectItem>
+                        <SelectItem value="comprar">Comprar propiedad</SelectItem>
+                        <SelectItem value="general">Consulta general</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="description" className="text-sm font-medium text-gray-700">
-                    Descripción Detallada *
-                  </Label>
-                  <Textarea
-                    id="description"
-                    placeholder="Describe las características especiales, acabados de lujo, vistas, etc."
-                    rows={4}
-                    value={formData.description}
-                    onChange={(e) => setFormData(prev => ({...prev, description: e.target.value}))}
-                    className="border-gray-200 focus:border-arkin-gold focus:ring-arkin-gold/20"
-                  />
-                </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="description" className="text-sm font-medium text-gray-700">
+                      Descripción de la Propiedad *
+                    </Label>
+                    <Textarea
+                      id="description"
+                      placeholder="Describe las características especiales, acabados de lujo, vistas, etc."
+                      rows={4}
+                      value={formData.description}
+                      onChange={(e) => setFormData(prev => ({...prev, description: e.target.value}))}
+                      className="border-gray-200 focus:border-arkin-gold focus:ring-arkin-gold/20"
+                    />
+                  </div>
 
-                <div className="space-y-4">
-                  <Label className="text-sm font-medium text-gray-700">
-                    Amenidades Destacadas
-                  </Label>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                    {amenitiesList.map((amenity) => (
-                      <div 
-                        key={amenity}
-                        onClick={() => handleAmenityToggle(amenity)}
-                        className={`p-3 rounded-lg border cursor-pointer transition-all ${
-                          formData.amenities.includes(amenity)
-                            ? 'border-arkin-gold bg-arkin-gold/10 text-arkin-gold'
-                            : 'border-gray-200 hover:border-arkin-gold/50 hover:bg-arkin-secondary/70'
-                        }`}
-                      >
-                        <div className="flex items-center space-x-2">
-                          <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
-                            formData.amenities.includes(amenity)
-                              ? 'border-arkin-gold bg-arkin-gold'
-                              : 'border-gray-300'
-                          }`}>
-                            {formData.amenities.includes(amenity) && (
-                              <CheckCircle className="h-3 w-3 text-black" />
-                            )}
-                          </div>
-                          <span className="text-sm">{amenity}</span>
-                        </div>
-                      </div>
-                    ))}
+                  <div className="space-y-2">
+                    <Label htmlFor="actividades-recreativas" className="text-sm font-medium text-gray-700">
+                      Actividades recreativas (opcional)
+                    </Label>
+                    <Textarea
+                      id="actividades-recreativas"
+                      placeholder="Ej: Cancha de tenis, área de juegos, club, parques cercanos, ciclovía..."
+                      rows={3}
+                      value={formData.actividadesRecreativas}
+                      onChange={(e) => setFormData(prev => ({ ...prev, actividadesRecreativas: e.target.value }))}
+                      className="border-gray-200 focus:border-arkin-gold focus:ring-arkin-gold/20"
+                    />
                   </div>
                 </div>
+
+                {amenitiesList.map((amenity) => (
+                  <div
+                    key={amenity}
+                    onClick={() => handleAmenityToggle(amenity)}
+                    className={`p-3 rounded-lg border cursor-pointer transition-all ${
+                      formData.amenities.includes(amenity)
+                        ? 'border-arkin-gold bg-arkin-gold/10 text-arkin-gold'
+                        : 'border-gray-200 hover:border-arkin-gold/50 hover:bg-arkin-secondary/70'
+                    }`}
+                  >
+                    <div className="flex items-center space-x-2">
+                      <div
+                        className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
+                          formData.amenities.includes(amenity)
+                            ? 'border-arkin-gold bg-arkin-gold'
+                            : 'border-gray-300'
+                        }`}
+                      >
+                        {formData.amenities.includes(amenity) && (
+                          <CheckCircle className="h-3 w-3 text-black" />
+                        )}
+                      </div>
+                      <span className="text-sm">{amenity}</span>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           )}

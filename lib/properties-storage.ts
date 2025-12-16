@@ -31,6 +31,26 @@ export class PropertiesStorage {
       tourVirtual: dbProp.tour_virtual || undefined,
       galeria: dbProp.galeria || undefined,
     }
+
+  }
+
+  // Obtener propiedades por usuario (asesor) con caché
+  static async getByUsuario(usuarioId: string): Promise<Propiedad[]> {
+    return getCachedOrFetch(
+      CACHE_KEYS.PROPERTIES_BY_USUARIO(usuarioId),
+      async () => {
+        const { data, error } = await withRetry(async () => {
+          return supabaseOptimized
+            .from('propiedades')
+            .select('*')
+            .eq('usuario_id', usuarioId)
+            .order('created_at', { ascending: false })
+        })
+
+        if (error) throw error
+        return data?.map(this.dbToApp) || []
+      }
+    )
   }
 
   // Validar si un string es un UUID válido
@@ -241,6 +261,7 @@ export class PropertiesStorage {
       
       // Invalidar caché para refrescar lista
       propertiesCache.invalidate(CACHE_KEYS.ALL_PROPERTIES)
+      propertiesCache.invalidate(CACHE_KEYS.PROPERTIES_BY_USUARIO(usuarioId))
       
       return data ? this.dbToApp(data) : null
     } catch (error) {
@@ -252,6 +273,16 @@ export class PropertiesStorage {
   // Actualizar propiedad existente con invalidación de caché
   static async update(id: number, updates: Partial<Propiedad>): Promise<Propiedad | null> {
     try {
+      const { data: existing, error: existingError } = await supabaseOptimized
+        .from('propiedades')
+        .select('usuario_id')
+        .eq('id', id)
+        .maybeSingle()
+
+      if (existingError) {
+        console.warn('Could not load usuario_id for cache invalidation:', existingError)
+      }
+
       const dbData = this.appToDb(updates as any)
 
       const { data, error } = await withRetry(async () => {
@@ -268,6 +299,11 @@ export class PropertiesStorage {
       // Invalidar cachés relacionados
       propertiesCache.invalidate(CACHE_KEYS.ALL_PROPERTIES)
       propertiesCache.invalidate(CACHE_KEYS.PROPERTY_BY_ID(id))
+
+      const usuarioId = (existing as any)?.usuario_id
+      if (usuarioId) {
+        propertiesCache.invalidate(CACHE_KEYS.PROPERTIES_BY_USUARIO(String(usuarioId)))
+      }
       
       return data ? this.dbToApp(data) : null
     } catch (error) {
@@ -279,6 +315,16 @@ export class PropertiesStorage {
   // Eliminar propiedad con invalidación de caché
   static async delete(id: number): Promise<boolean> {
     try {
+      const { data: existing, error: existingError } = await supabaseOptimized
+        .from('propiedades')
+        .select('usuario_id')
+        .eq('id', id)
+        .maybeSingle()
+
+      if (existingError) {
+        console.warn('Could not load usuario_id for cache invalidation:', existingError)
+      }
+
       const { error } = await withRetry(async () => {
         return supabaseOptimized
           .from('propiedades')
@@ -291,6 +337,11 @@ export class PropertiesStorage {
       // Invalidar cachés
       propertiesCache.invalidate(CACHE_KEYS.ALL_PROPERTIES)
       propertiesCache.invalidate(CACHE_KEYS.PROPERTY_BY_ID(id))
+
+      const usuarioId = (existing as any)?.usuario_id
+      if (usuarioId) {
+        propertiesCache.invalidate(CACHE_KEYS.PROPERTIES_BY_USUARIO(String(usuarioId)))
+      }
       
       return true
     } catch (error) {

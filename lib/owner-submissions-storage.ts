@@ -5,6 +5,7 @@ export interface OwnerSubmission {
   bedrooms: string
   bathrooms: string
   area: string
+  areaConstruccion?: string
   // Ubicación
   address: string
   city: string
@@ -12,9 +13,11 @@ export interface OwnerSubmission {
   postalCode: string
   // Detalles
   askingPrice: string
+  tipoConsulta?: string
   urgency: string
   description: string
   amenities: string[]
+  actividadesRecreativas?: string
   // Fotos (guardamos los nombres/URLs)
   photoCount: number
   // Contacto

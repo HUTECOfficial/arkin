@@ -144,6 +144,7 @@ export const CACHE_KEYS = {
     PROPERTY_BY_ID: (id: number) => `properties:${id}`,
     PROPERTIES_BY_CATEGORY: (cat: string) => `properties:category:${cat}`,
     PROPERTIES_BY_ASESOR: (email: string) => `properties:asesor:${email}`,
+    PROPERTIES_BY_USUARIO: (usuarioId: string) => `properties:usuario:${usuarioId}`,
     FEATURED_PROPERTIES: 'properties:featured',
 }
 
