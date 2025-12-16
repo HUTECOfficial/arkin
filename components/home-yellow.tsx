@@ -21,7 +21,7 @@ export function HomeYellow() {
             playsInline
             className="absolute inset-0 w-full h-full object-cover"
           >
-            <source src="https://y8r30twace85ybxf.public.blob.vercel-storage.com/x-large-vecteezy_aerial-top-view-drone-4k-footage-of-modern-skyscrapers-in_24487021_x-large.mp4" type="video/mp4" />
+            <source src="https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/video/large-vecteezy_aerial-top-view-drone-4k-footage-of-modern-skyscrapers-in_24487021_large.mp4" type="video/mp4" />
           </video>
           <div className="absolute inset-0 bg-black/50"></div>
           <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-arkin-secondary"></div>
