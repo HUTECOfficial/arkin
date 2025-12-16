@@ -10,12 +10,21 @@ import { PropertiesStorage } from '@/lib/properties-storage'
 import { Propiedad } from '@/data/propiedades'
 import { toast } from 'sonner'
 import { supabase } from '@/lib/supabase/client'
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select'
 
 export default function AdminPropiedadesPage() {
     const { user, isAuthenticated } = useAuth()
     const router = useRouter()
     const [propiedades, setPropiedades] = useState<Propiedad[]>([])
     const [deleteConfirm, setDeleteConfirm] = useState<number | null>(null)
+    const [asesores, setAsesores] = useState<Array<{ id: string; nombre: string; email: string }>>([])
+    const [savingOwnerByPropertyId, setSavingOwnerByPropertyId] = useState<Record<number, boolean>>({})
 
     useEffect(() => {
         if (!isAuthenticated || user?.role !== 'admin') {
@@ -23,8 +32,28 @@ export default function AdminPropiedadesPage() {
             return
         }
 
+        loadAsesores()
         loadProperties()
     }, [user, isAuthenticated, router])
+
+    const loadAsesores = async () => {
+        try {
+            const res = await fetch('/api/admin/asesores')
+
+            if (!res.ok) {
+                const body = await res.json().catch(() => ({}))
+                console.error('Error loading asesores via API:', body)
+                setAsesores([])
+                return
+            }
+
+            const body = await res.json()
+            setAsesores(Array.isArray(body?.asesores) ? body.asesores : [])
+        } catch (error) {
+            console.error('Error in loadAsesores:', error)
+            setAsesores([])
+        }
+    }
 
     const loadProperties = async () => {
         try {
@@ -44,6 +73,30 @@ export default function AdminPropiedadesPage() {
         } catch (error) {
             console.error('Error in loadProperties:', error)
             setPropiedades([])
+        }
+    }
+
+    const handleReassignOwner = async (propertyId: number, newUsuarioId: string | null) => {
+        setSavingOwnerByPropertyId(prev => ({ ...prev, [propertyId]: true }))
+
+        try {
+            const { error } = await supabase
+                .from('propiedades')
+                .update({ usuario_id: newUsuarioId })
+                .eq('id', propertyId)
+
+            if (error) {
+                toast.error(error.message || 'No se pudo reasignar el asesor')
+                return
+            }
+
+            toast.success('Asesor reasignado exitosamente')
+            await loadProperties()
+        } catch (error: any) {
+            console.error('Error reassigning owner:', error)
+            toast.error(error?.message || 'No se pudo reasignar el asesor')
+        } finally {
+            setSavingOwnerByPropertyId(prev => ({ ...prev, [propertyId]: false }))
         }
     }
 
@@ -226,6 +279,41 @@ export default function AdminPropiedadesPage() {
                                                     {propiedad.agente.nombre} ({propiedad.agente.email})
                                                 </div>
                                             )}
+
+                                            <div className="mb-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                                <div>
+                                                    <div className="text-xs font-medium text-gray-500 mb-1">
+                                                        Asesor asignado
+                                                    </div>
+                                                    <Select
+                                                        value={propiedad.usuarioId ? propiedad.usuarioId : '__unassigned__'}
+                                                        onValueChange={(val) => {
+                                                            const next = val === '__unassigned__' ? null : val
+                                                            void handleReassignOwner(propiedad.id, next)
+                                                        }}
+                                                        disabled={!!savingOwnerByPropertyId[propiedad.id]}
+                                                    >
+                                                        <SelectTrigger className="w-full">
+                                                            <SelectValue placeholder="Seleccionar asesor" />
+                                                        </SelectTrigger>
+                                                        <SelectContent>
+                                                            <SelectItem value="__unassigned__">Sin asignar</SelectItem>
+                                                            {asesores.map((a) => (
+                                                                <SelectItem key={a.id} value={a.id}>
+                                                                    {a.nombre} ({a.email})
+                                                                </SelectItem>
+                                                            ))}
+                                                        </SelectContent>
+                                                    </Select>
+                                                </div>
+
+                                                <div>
+                                                    <div className="text-xs font-medium text-gray-500 mb-1">UUID</div>
+                                                    <div className="h-10 px-3 flex items-center rounded-md border border-input bg-background text-xs text-gray-600 overflow-hidden">
+                                                        {propiedad.usuarioId || '—'}
+                                                    </div>
+                                                </div>
+                                            </div>
 
                                             <p className="text-2xl font-bold text-arkin-gold mb-3">
                                                 {propiedad.precioTexto}

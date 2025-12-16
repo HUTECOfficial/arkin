@@ -25,6 +25,8 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
+const MOCK_USER_STORAGE_KEY = 'arkin_mock_user'
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
@@ -38,7 +40,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (session?.user) {
         await loadUserProfile(session.user.id)
       } else {
-        setUser(null)
+        // Solo limpiar si no hay mock user guardado
+        const savedMockUser = localStorage.getItem(MOCK_USER_STORAGE_KEY)
+        if (!savedMockUser) {
+          setUser(null)
+        }
       }
       setLoading(false)
     })
@@ -48,6 +54,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const checkUser = async () => {
     try {
+      // Primero verificar si hay un mock user guardado
+      const savedMockUser = localStorage.getItem(MOCK_USER_STORAGE_KEY)
+      if (savedMockUser) {
+        try {
+          const parsedUser = JSON.parse(savedMockUser) as User
+          setUser(parsedUser)
+          setLoading(false)
+          return
+        } catch {
+          localStorage.removeItem(MOCK_USER_STORAGE_KEY)
+        }
+      }
+
+      // Si no hay mock user, verificar sesión de Supabase
       const { data: { session } } = await supabase.auth.getSession()
       if (session?.user) {
         await loadUserProfile(session.user.id)
@@ -153,8 +173,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           (mockUser.role === 'admin' ? 'arkin2025' : `${email.split('@')[0]}_arkin2025`)
         
         if (password === expectedPassword) {
+          // Intentar obtener el UUID real de Supabase por email via API (evita RLS)
+          let realUserId = mockUser.id
+          try {
+            const res = await fetch(`/api/auth/user-id?email=${encodeURIComponent(email)}`)
+            if (res.ok) {
+              const { userId } = await res.json()
+              if (userId) {
+                realUserId = userId
+              }
+            }
+          } catch {
+            // Si falla, usar el ID mock
+          }
+
           const userData: User = {
-            id: mockUser.id,
+            id: realUserId,
             email: mockUser.email,
             nombre: mockUser.nombre,
             role: mockUser.role as User['role'],
@@ -163,6 +197,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             propiedadId: mockUser.propiedadId,
           }
           setUser(userData)
+          // Guardar en localStorage para persistir en reload
+          localStorage.setItem(MOCK_USER_STORAGE_KEY, JSON.stringify(userData))
           return userData
         }
       }
@@ -194,6 +230,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = async () => {
     try {
+      // Limpiar mock user de localStorage
+      localStorage.removeItem(MOCK_USER_STORAGE_KEY)
       await supabase.auth.signOut()
       setUser(null)
     } catch (error: any) {

@@ -3,8 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/auth-context'
-import { users, propertyProgress, leads, activities } from '@/data/internal-users'
-import { propiedades } from '@/data/propiedades'
+import { supabase } from '@/lib/supabase/client'
 import {
   Building2,
   Users,
@@ -27,48 +26,84 @@ import {
 } from 'lucide-react'
 import { OwnerSubmissionsStorage } from '@/lib/owner-submissions-storage'
 
+interface Asesor {
+  id: string
+  nombre: string
+  email: string
+  telefono?: string
+}
+
+interface PropiedadDB {
+  id: number
+  titulo: string
+  ubicacion: string
+  precio: number
+  precio_texto: string
+  usuario_id?: string
+  status: string
+}
+
 export default function PanelAdminPage() {
   const { user, logout, isAuthenticated } = useAuth()
   const router = useRouter()
-  const [activeTab, setActiveTab] = useState<'overview' | 'properties' | 'team' | 'leads'>('overview')
+  const [activeTab, setActiveTab] = useState<'overview' | 'properties' | 'team'>('overview')
+  const [asesores, setAsesores] = useState<Asesor[]>([])
+  const [propiedades, setPropiedades] = useState<PropiedadDB[]>([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     if (!isAuthenticated || user?.role !== 'admin') {
       router.push('/login')
       return
     }
+    loadData()
   }, [user, isAuthenticated, router])
+
+  const loadData = async () => {
+    setLoading(true)
+    try {
+      // Cargar asesores desde API
+      const resAsesores = await fetch('/api/admin/asesores')
+      if (resAsesores.ok) {
+        const data = await resAsesores.json()
+        setAsesores(data.asesores || [])
+      }
+
+      // Cargar propiedades desde Supabase
+      const { data: propsData } = await supabase
+        .from('propiedades')
+        .select('id, titulo, ubicacion, precio, precio_texto, usuario_id, status')
+        .order('created_at', { ascending: false })
+      setPropiedades(propsData || [])
+    } catch (error) {
+      console.error('Error loading admin data:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   if (!user) return null
 
-  const totalLeads = leads.length
   const totalPropiedades = propiedades.length
-  const totalAsesores = users.filter(u => u.role === 'asesor').length
-  const totalOfertas = propertyProgress.reduce((sum, p) => sum + p.ofertas, 0)
-  const totalVisitas = propertyProgress.reduce((sum, p) => sum + p.visitas, 0)
+  const totalAsesores = asesores.length
   const submissionsStats = OwnerSubmissionsStorage.getStats()
 
-  const propiedadesActivas = propertyProgress.filter(p => p.status === 'activa').length
-  const propiedadesEnNegociacion = propertyProgress.filter(p => p.status === 'en_negociacion').length
+  const propiedadesDisponibles = propiedades.filter(p => p.status === 'Disponible').length
+  const propiedadesExclusivas = propiedades.filter(p => p.status === 'Exclusiva').length
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'activa': return 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
-      case 'en_negociacion': return 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'
-      case 'vendida': return 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
-      case 'rentada': return 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400'
+      case 'Disponible': return 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+      case 'Exclusiva': return 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'
+      case 'Reservada': return 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
       default: return 'bg-arkin-secondary text-gray-700 dark:bg-gray-900/30 dark:text-gray-400'
     }
   }
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString)
-    return new Intl.DateTimeFormat('es-MX', {
-      day: 'numeric',
-      month: 'short',
-      hour: '2-digit',
-      minute: '2-digit'
-    }).format(date)
+  const getAsesorName = (usuarioId?: string) => {
+    if (!usuarioId) return 'Sin asignar'
+    const asesor = asesores.find(a => a.id === usuarioId)
+    return asesor?.nombre || 'Desconocido'
   }
 
   return (
@@ -158,16 +193,6 @@ export default function PanelAdminPage() {
             <Users className="w-4 h-4" />
             Equipo
           </button>
-          <button
-            onClick={() => setActiveTab('leads')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl font-medium transition-all whitespace-nowrap ${activeTab === 'leads'
-                ? 'bg-arkin-gold text-white'
-                : 'bg-arkin-secondary/50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-arkin-secondary dark:hover:bg-gray-700'
-              }`}
-          >
-            <FileText className="w-4 h-4" />
-            Leads
-          </button>
         </div>
 
         {/* Overview Tab */}
@@ -182,151 +207,131 @@ export default function PanelAdminPage() {
                 </div>
                 <p className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{totalPropiedades}</p>
                 <p className="text-xs text-green-600 dark:text-green-400">
-                  {propiedadesActivas} activas • {propiedadesEnNegociacion} en negociación
+                  {propiedadesDisponibles} disponibles • {propiedadesExclusivas} exclusivas
                 </p>
               </div>
 
               <div className="bg-arkin-secondary/50 dark:bg-gray-800 rounded-2xl p-6 border border-gray-200 dark:border-gray-700">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-gray-600 dark:text-gray-400 text-sm">Total Leads</span>
+                  <span className="text-gray-600 dark:text-gray-400 text-sm">Asesores</span>
                   <Users className="w-5 h-5 text-blue-500" />
                 </div>
-                <p className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{totalLeads}</p>
+                <p className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{totalAsesores}</p>
                 <p className="text-xs text-blue-600 dark:text-blue-400">
-                  {leads.filter(l => l.status === 'nuevo').length} nuevos
+                  Activos en el sistema
                 </p>
               </div>
 
               <div className="bg-arkin-secondary/50 dark:bg-gray-800 rounded-2xl p-6 border border-gray-200 dark:border-gray-700">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-gray-600 dark:text-gray-400 text-sm">Visitas</span>
-                  <Eye className="w-5 h-5 text-green-500" />
+                  <span className="text-gray-600 dark:text-gray-400 text-sm">Solicitudes</span>
+                  <ClipboardList className="w-5 h-5 text-green-500" />
                 </div>
-                <p className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{totalVisitas}</p>
+                <p className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{submissionsStats.total}</p>
                 <p className="text-xs text-green-600 dark:text-green-400">
-                  Programadas este mes
+                  {submissionsStats.pending} pendientes
                 </p>
               </div>
 
               <div className="bg-arkin-secondary/50 dark:bg-gray-800 rounded-2xl p-6 border border-gray-200 dark:border-gray-700">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-gray-600 dark:text-gray-400 text-sm">Ofertas</span>
-                  <DollarSign className="w-5 h-5 text-purple-500" />
+                  <span className="text-gray-600 dark:text-gray-400 text-sm">Sin Asignar</span>
+                  <AlertCircle className="w-5 h-5 text-orange-500" />
                 </div>
-                <p className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{totalOfertas}</p>
-                <p className="text-xs text-purple-600 dark:text-purple-400">
-                  En proceso
+                <p className="text-3xl font-bold text-gray-900 dark:text-white mb-1">
+                  {propiedades.filter(p => !p.usuario_id).length}
+                </p>
+                <p className="text-xs text-orange-600 dark:text-orange-400">
+                  Propiedades sin asesor
                 </p>
               </div>
             </div>
 
-            {/* Actividad Reciente */}
+            {/* Propiedades Recientes */}
             <div className="bg-arkin-secondary/50 dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden mb-8">
               <div className="p-6 border-b border-gray-200 dark:border-gray-700">
                 <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                  <TrendingUp className="w-5 h-5 text-arkin-gold" />
-                  Actividad Reciente del Equipo
+                  <Building2 className="w-5 h-5 text-arkin-gold" />
+                  Propiedades Recientes
                 </h2>
               </div>
               <div className="p-6">
-                <div className="space-y-4">
-                  {activities.slice(0, 10).map((activity) => {
-                    const propiedad = propiedades.find(p => p.id === activity.propiedadId)
-                    const asesor = users.find(u => u.id === activity.asesorId)
-                    if (!propiedad || !asesor) return null
-
-                    const getActivityIcon = () => {
-                      switch (activity.tipo) {
-                        case 'lead': return <Users className="w-4 h-4 text-blue-500" />
-                        case 'visita': return <Eye className="w-4 h-4 text-green-500" />
-                        case 'oferta': return <DollarSign className="w-4 h-4 text-purple-500" />
-                        case 'venta': return <CheckCircle2 className="w-4 h-4 text-green-600" />
-                        case 'nota': return <FileText className="w-4 h-4 text-gray-500" />
-                      }
-                    }
-
-                    return (
-                      <div key={activity.id} className="flex items-start gap-4 p-4 bg-arkin-secondary/70 dark:bg-gray-900 rounded-xl">
-                        <div className="w-10 h-10 bg-arkin-secondary/50 dark:bg-gray-800 rounded-xl flex items-center justify-center flex-shrink-0 border border-gray-200 dark:border-gray-700">
-                          {getActivityIcon()}
+                {loading ? (
+                  <p className="text-center text-gray-500">Cargando...</p>
+                ) : propiedades.length === 0 ? (
+                  <p className="text-center text-gray-500">No hay propiedades registradas</p>
+                ) : (
+                  <div className="space-y-4">
+                    {propiedades.slice(0, 5).map((propiedad) => (
+                      <div key={propiedad.id} className="flex items-start gap-4 p-4 bg-arkin-secondary/70 dark:bg-gray-900 rounded-xl">
+                        <div className="w-10 h-10 bg-arkin-gold/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                          <Home className="w-5 h-5 text-arkin-gold" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="text-sm text-gray-900 dark:text-white font-medium">
-                            {activity.descripcion}
+                            {propiedad.titulo}
                           </p>
                           <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
-                            {propiedad.titulo} • {asesor.nombre}
+                            {propiedad.ubicacion} • {propiedad.precio_texto}
                           </p>
-                          <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
-                            {formatDate(activity.fecha)}
+                          <p className="text-xs text-gray-500 mt-1">
+                            Asesor: {getAsesorName(propiedad.usuario_id)}
                           </p>
                         </div>
+                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(propiedad.status)}`}>
+                          {propiedad.status}
+                        </span>
                       </div>
-                    )
-                  })}
-                </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
 
-            {/* Performance por Asesor */}
+            {/* Asesores del Equipo */}
             <div className="bg-arkin-secondary/50 dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
               <div className="p-6 border-b border-gray-200 dark:border-gray-700">
                 <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
                   <Award className="w-5 h-5 text-arkin-gold" />
-                  Performance del Equipo
+                  Equipo de Asesores
                 </h2>
               </div>
               <div className="p-6">
-                <div className="space-y-4">
-                  {users.filter(u => u.role === 'asesor').map((asesor) => {
-                    const asesorProgress = propertyProgress.filter(p => p.asesorId === asesor.id)
-                    const asesorLeads = leads.filter(l => l.asesorId === asesor.id)
-                    const totalLeadsAsesor = asesorProgress.reduce((sum, p) => sum + p.leads, 0)
-                    const totalVisitasAsesor = asesorProgress.reduce((sum, p) => sum + p.visitas, 0)
-                    const totalOfertasAsesor = asesorProgress.reduce((sum, p) => sum + p.ofertas, 0)
+                {loading ? (
+                  <p className="text-center text-gray-500">Cargando...</p>
+                ) : asesores.length === 0 ? (
+                  <p className="text-center text-gray-500">No hay asesores registrados</p>
+                ) : (
+                  <div className="space-y-4">
+                    {asesores.map((asesor) => {
+                      const propiedadesAsesor = propiedades.filter(p => p.usuario_id === asesor.id)
 
-                    return (
-                      <div key={asesor.id} className="p-4 bg-arkin-secondary/70 dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700">
-                        <div className="flex items-center justify-between mb-4">
-                          <div className="flex items-center gap-3">
-                            <div className="w-12 h-12 bg-arkin-gold/10 rounded-xl flex items-center justify-center">
-                              <UserCircle className="w-6 h-6 text-arkin-gold" />
+                      return (
+                        <div key={asesor.id} className="p-4 bg-arkin-secondary/70 dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                              <div className="w-12 h-12 bg-arkin-gold/10 rounded-xl flex items-center justify-center">
+                                <UserCircle className="w-6 h-6 text-arkin-gold" />
+                              </div>
+                              <div>
+                                <h3 className="font-semibold text-gray-900 dark:text-white">
+                                  {asesor.nombre}
+                                </h3>
+                                <p className="text-sm text-gray-600 dark:text-gray-400">
+                                  {asesor.email}
+                                </p>
+                              </div>
                             </div>
-                            <div>
-                              <h3 className="font-semibold text-gray-900 dark:text-white">
-                                {asesor.nombre}
-                              </h3>
-                              <p className="text-sm text-gray-600 dark:text-gray-400">
-                                {asesorProgress.length} propiedades asignadas
-                              </p>
+                            <div className="text-right">
+                              <p className="text-2xl font-bold text-arkin-gold">{propiedadesAsesor.length}</p>
+                              <p className="text-xs text-gray-600 dark:text-gray-400">propiedades</p>
                             </div>
                           </div>
                         </div>
-
-                        <div className="grid grid-cols-4 gap-4">
-                          <div className="text-center p-3 bg-arkin-secondary/50 dark:bg-gray-800 rounded-lg">
-                            <p className="text-2xl font-bold text-gray-900 dark:text-white">{totalLeadsAsesor}</p>
-                            <p className="text-xs text-gray-600 dark:text-gray-400">Leads</p>
-                          </div>
-                          <div className="text-center p-3 bg-arkin-secondary/50 dark:bg-gray-800 rounded-lg">
-                            <p className="text-2xl font-bold text-gray-900 dark:text-white">{totalVisitasAsesor}</p>
-                            <p className="text-xs text-gray-600 dark:text-gray-400">Visitas</p>
-                          </div>
-                          <div className="text-center p-3 bg-arkin-secondary/50 dark:bg-gray-800 rounded-lg">
-                            <p className="text-2xl font-bold text-gray-900 dark:text-white">{totalOfertasAsesor}</p>
-                            <p className="text-xs text-gray-600 dark:text-gray-400">Ofertas</p>
-                          </div>
-                          <div className="text-center p-3 bg-arkin-secondary/50 dark:bg-gray-800 rounded-lg">
-                            <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                              {totalVisitasAsesor > 0 ? Math.round((totalOfertasAsesor / totalVisitasAsesor) * 100) : 0}%
-                            </p>
-                            <p className="text-xs text-gray-600 dark:text-gray-400">Conversión</p>
-                          </div>
-                        </div>
-                      </div>
-                    )
-                  })}
-                </div>
+                      )
+                    })}
+                  </div>
+                )}
               </div>
             </div>
           </>
@@ -342,12 +347,13 @@ export default function PanelAdminPage() {
               </h2>
             </div>
             <div className="p-6">
-              <div className="space-y-4">
-                {propiedades.map((propiedad) => {
-                  const progress = propertyProgress.find(p => p.propiedadId === propiedad.id)
-                  const asesor = progress ? users.find(u => u.id === progress.asesorId) : null
-
-                  return (
+              {loading ? (
+                <p className="text-center text-gray-500">Cargando...</p>
+              ) : propiedades.length === 0 ? (
+                <p className="text-center text-gray-500">No hay propiedades registradas</p>
+              ) : (
+                <div className="space-y-4">
+                  {propiedades.map((propiedad) => (
                     <div key={propiedad.id} className="p-4 bg-arkin-secondary/70 dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700">
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex-1">
@@ -355,41 +361,20 @@ export default function PanelAdminPage() {
                             {propiedad.titulo}
                           </h3>
                           <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                            {propiedad.ubicacion} • {propiedad.precioTexto}
+                            {propiedad.ubicacion} • {propiedad.precio_texto}
                           </p>
-                          {asesor && (
-                            <p className="text-xs text-gray-500 dark:text-gray-500">
-                              Asesor: {asesor.nombre}
-                            </p>
-                          )}
+                          <p className="text-xs text-gray-500 dark:text-gray-500">
+                            Asesor: {getAsesorName(propiedad.usuario_id)}
+                          </p>
                         </div>
-                        {progress && (
-                          <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(progress.status)}`}>
-                            {progress.status.replace('_', ' ')}
-                          </span>
-                        )}
+                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(propiedad.status)}`}>
+                          {propiedad.status}
+                        </span>
                       </div>
-
-                      {progress && (
-                        <div className="grid grid-cols-3 gap-4">
-                          <div className="text-center p-3 bg-arkin-secondary/50 dark:bg-gray-800 rounded-lg">
-                            <p className="text-xl font-bold text-gray-900 dark:text-white">{progress.leads}</p>
-                            <p className="text-xs text-gray-600 dark:text-gray-400">Leads</p>
-                          </div>
-                          <div className="text-center p-3 bg-arkin-secondary/50 dark:bg-gray-800 rounded-lg">
-                            <p className="text-xl font-bold text-gray-900 dark:text-white">{progress.visitas}</p>
-                            <p className="text-xs text-gray-600 dark:text-gray-400">Visitas</p>
-                          </div>
-                          <div className="text-center p-3 bg-arkin-secondary/50 dark:bg-gray-800 rounded-lg">
-                            <p className="text-xl font-bold text-gray-900 dark:text-white">{progress.ofertas}</p>
-                            <p className="text-xs text-gray-600 dark:text-gray-400">Ofertas</p>
-                          </div>
-                        </div>
-                      )}
                     </div>
-                  )
-                })}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -404,133 +389,48 @@ export default function PanelAdminPage() {
               </h2>
             </div>
             <div className="p-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {users.filter(u => u.role === 'asesor').map((asesor) => {
-                  const asesorProgress = propertyProgress.filter(p => p.asesorId === asesor.id)
-                  const asesorLeads = leads.filter(l => l.asesorId === asesor.id)
+              {loading ? (
+                <p className="text-center text-gray-500">Cargando...</p>
+              ) : asesores.length === 0 ? (
+                <p className="text-center text-gray-500">No hay asesores registrados</p>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {asesores.map((asesor) => {
+                    const propiedadesAsesor = propiedades.filter(p => p.usuario_id === asesor.id)
 
-                  return (
-                    <div key={asesor.id} className="p-6 bg-arkin-secondary/70 dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700">
-                      <div className="flex items-start gap-4 mb-4">
-                        <div className="w-16 h-16 bg-arkin-gold/10 rounded-xl flex items-center justify-center flex-shrink-0">
-                          <UserCircle className="w-8 h-8 text-arkin-gold" />
+                    return (
+                      <div key={asesor.id} className="p-6 bg-arkin-secondary/70 dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700">
+                        <div className="flex items-start gap-4 mb-4">
+                          <div className="w-16 h-16 bg-arkin-gold/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                            <UserCircle className="w-8 h-8 text-arkin-gold" />
+                          </div>
+                          <div className="flex-1">
+                            <h3 className="font-bold text-gray-900 dark:text-white text-lg">
+                              {asesor.nombre}
+                            </h3>
+                            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                              {asesor.email}
+                            </p>
+                            {asesor.telefono && (
+                              <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                                <Phone className="w-4 h-4" />
+                                <span>{asesor.telefono}</span>
+                              </div>
+                            )}
+                          </div>
                         </div>
-                        <div className="flex-1">
-                          <h3 className="font-bold text-gray-900 dark:text-white text-lg">
-                            {asesor.nombre}
-                          </h3>
-                          <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                            {asesor.email}
+
+                        <div className="text-center p-4 bg-arkin-secondary/50 dark:bg-gray-800 rounded-lg">
+                          <p className="text-3xl font-bold text-arkin-gold">
+                            {propiedadesAsesor.length}
                           </p>
-                          {asesor.telefono && (
-                            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                              <Phone className="w-4 h-4" />
-                              <span>{asesor.telefono}</span>
-                            </div>
-                          )}
+                          <p className="text-sm text-gray-600 dark:text-gray-400">Propiedades asignadas</p>
                         </div>
                       </div>
-
-                      <div className="grid grid-cols-3 gap-3">
-                        <div className="text-center p-3 bg-arkin-secondary/50 dark:bg-gray-800 rounded-lg">
-                          <p className="text-xl font-bold text-gray-900 dark:text-white">
-                            {asesorProgress.length}
-                          </p>
-                          <p className="text-xs text-gray-600 dark:text-gray-400">Propiedades</p>
-                        </div>
-                        <div className="text-center p-3 bg-arkin-secondary/50 dark:bg-gray-800 rounded-lg">
-                          <p className="text-xl font-bold text-gray-900 dark:text-white">
-                            {asesorLeads.length}
-                          </p>
-                          <p className="text-xs text-gray-600 dark:text-gray-400">Leads</p>
-                        </div>
-                        <div className="text-center p-3 bg-arkin-secondary/50 dark:bg-gray-800 rounded-lg">
-                          <p className="text-xl font-bold text-gray-900 dark:text-white">
-                            {asesorProgress.reduce((sum, p) => sum + p.ofertas, 0)}
-                          </p>
-                          <p className="text-xs text-gray-600 dark:text-gray-400">Ofertas</p>
-                        </div>
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Leads Tab */}
-        {activeTab === 'leads' && (
-          <div className="bg-arkin-secondary/50 dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
-            <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-              <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                <FileText className="w-5 h-5 text-arkin-gold" />
-                Todos los Leads
-              </h2>
-            </div>
-            <div className="p-6">
-              <div className="space-y-4">
-                {leads.map((lead) => {
-                  const propiedad = propiedades.find(p => p.id === lead.propiedadId)
-                  const asesor = users.find(u => u.id === lead.asesorId)
-                  if (!propiedad || !asesor) return null
-
-                  const getLeadStatusColor = (status: string) => {
-                    switch (status) {
-                      case 'nuevo': return 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
-                      case 'contactado': return 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'
-                      case 'calificado': return 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
-                      case 'descartado': return 'bg-arkin-secondary text-gray-700 dark:bg-gray-900/30 dark:text-gray-400'
-                      default: return 'bg-arkin-secondary text-gray-700 dark:bg-gray-900/30 dark:text-gray-400'
-                    }
-                  }
-
-                  return (
-                    <div key={lead.id} className="p-4 bg-arkin-secondary/70 dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700">
-                      <div className="flex items-start justify-between mb-3">
-                        <div className="flex-1">
-                          <h3 className="font-semibold text-gray-900 dark:text-white">
-                            {lead.nombre}
-                          </h3>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">
-                            {propiedad.titulo}
-                          </p>
-                          <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
-                            Asesor: {asesor.nombre}
-                          </p>
-                        </div>
-                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${getLeadStatusColor(lead.status)}`}>
-                          {lead.status}
-                        </span>
-                      </div>
-
-                      <p className="text-sm text-gray-700 dark:text-gray-300 mb-3 p-3 bg-arkin-secondary/50 dark:bg-gray-800 rounded-lg">
-                        "{lead.mensaje}"
-                      </p>
-
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                        <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                          <Phone className="w-4 h-4" />
-                          <a href={`tel:${lead.telefono}`} className="hover:text-arkin-gold transition-colors">
-                            {lead.telefono}
-                          </a>
-                        </div>
-                        <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                          <Mail className="w-4 h-4" />
-                          <a href={`mailto:${lead.email}`} className="hover:text-arkin-gold transition-colors">
-                            {lead.email}
-                          </a>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-2 mt-3 text-xs text-gray-500 dark:text-gray-400">
-                        <Clock className="w-3 h-3" />
-                        <span>{formatDate(lead.fecha)}</span>
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
+                    )
+                  })}
+                </div>
+              )}
             </div>
           </div>
         )}

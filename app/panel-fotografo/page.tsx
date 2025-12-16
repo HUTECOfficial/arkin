@@ -1,10 +1,10 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
+import { useRouter } from "next/navigation"
+import { useAuth } from "@/contexts/auth-context"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Progress } from "@/components/ui/progress"
 import { 
   Camera, 
   Video, 
@@ -12,81 +12,13 @@ import {
   Home, 
   CheckCircle, 
   Clock, 
-  TrendingUp,
   Calendar,
   MapPin,
-  Eye,
-  FileText,
-  ArrowRight,
   Banknote,
   PiggyBank,
-  Target
+  LogOut,
+  ImageOff
 } from "lucide-react"
-import Image from "next/image"
-
-// Datos de ejemplo - En producción vendrían de Supabase
-const propiedadesAsignadas = [
-  {
-    id: 1,
-    titulo: "Casa Residencial en Lomas",
-    ubicacion: "Lomas del Campestre, León",
-    precio: 4500000,
-    imagen: "/luxury-villa-santa-fe.png",
-    estadoFoto: "completado", // pendiente, en_proceso, completado
-    estadoVideo: "completado",
-    estadoVenta: "vendida", // disponible, en_negociacion, vendida
-    fechaAsignacion: "2024-11-15",
-    fechaVenta: "2024-12-01",
-  },
-  {
-    id: 2,
-    titulo: "Departamento de Lujo Polanco",
-    ubicacion: "Polanco, CDMX",
-    precio: 8500000,
-    imagen: "/luxury-penthouse-polanco-main.png",
-    estadoFoto: "completado",
-    estadoVideo: "en_proceso",
-    estadoVenta: "en_negociacion",
-    fechaAsignacion: "2024-11-20",
-    fechaVenta: null,
-  },
-  {
-    id: 3,
-    titulo: "Terreno Premium Santa Fe",
-    ubicacion: "Santa Fe, CDMX",
-    precio: 12000000,
-    imagen: "/placeholder.jpg",
-    estadoFoto: "completado",
-    estadoVideo: "completado",
-    estadoVenta: "vendida",
-    fechaAsignacion: "2024-10-05",
-    fechaVenta: "2024-11-28",
-  },
-  {
-    id: 4,
-    titulo: "Casa Moderna Condesa",
-    ubicacion: "Condesa, CDMX",
-    precio: 6200000,
-    imagen: "/modern-apartment-roma-norte.png",
-    estadoFoto: "en_proceso",
-    estadoVideo: "pendiente",
-    estadoVenta: "disponible",
-    fechaAsignacion: "2024-11-28",
-    fechaVenta: null,
-  },
-  {
-    id: 5,
-    titulo: "Penthouse Vista al Parque",
-    ubicacion: "Bosques de las Lomas, CDMX",
-    precio: 15000000,
-    imagen: "/luxury-penthouse-polanco-main.png",
-    estadoFoto: "pendiente",
-    estadoVideo: "pendiente",
-    estadoVenta: "disponible",
-    fechaAsignacion: "2024-12-01",
-    fechaVenta: null,
-  }
-]
 
 // Configuración de comisiones
 const COMISION_ARKIN = 0.02 // 2% del precio de venta
@@ -98,48 +30,28 @@ function calcularComision(precioVenta: number) {
   return { comisionArkin, comisionFotografo }
 }
 
-function getEstadoBadge(estado: string, tipo: "foto" | "video" | "venta") {
-  const colores = {
-    pendiente: "bg-arkin-secondary text-gray-700",
-    en_proceso: "bg-yellow-100 text-yellow-700",
-    completado: "bg-green-100 text-green-700",
-    disponible: "bg-blue-100 text-blue-700",
-    en_negociacion: "bg-orange-100 text-orange-700",
-    vendida: "bg-green-100 text-green-700",
-  }
-  
-  const textos = {
-    pendiente: "Pendiente",
-    en_proceso: "En Proceso",
-    completado: "Completado",
-    disponible: "Disponible",
-    en_negociacion: "En Negociación",
-    vendida: "Vendida",
-  }
-  
-  return (
-    <Badge className={colores[estado as keyof typeof colores] || colores.pendiente}>
-      {textos[estado as keyof typeof textos] || estado}
-    </Badge>
-  )
-}
-
 export default function PanelFotografoPage() {
-  // Calcular estadísticas
-  const propiedadesVendidas = propiedadesAsignadas.filter(p => p.estadoVenta === "vendida")
-  const totalVentas = propiedadesVendidas.reduce((acc, p) => acc + p.precio, 0)
-  const { comisionFotografo: totalComisiones } = calcularComision(totalVentas)
+  const { user, logout, isAuthenticated } = useAuth()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (!isAuthenticated || user?.role !== 'fotografo') {
+      router.push('/login')
+      return
+    }
+  }, [user, isAuthenticated, router])
+
+  if (!user) return null
+
+  // De momento no hay propiedades asignadas al fotógrafo
+  // Esto se llenará cuando el admin asigne propiedades para fotografiar
+  const propiedadesAsignadas: any[] = []
   
-  const fotosCompletadas = propiedadesAsignadas.filter(p => p.estadoFoto === "completado").length
-  const videosCompletados = propiedadesAsignadas.filter(p => p.estadoVideo === "completado").length
-  const enNegociacion = propiedadesAsignadas.filter(p => p.estadoVenta === "en_negociacion").length
-  
-  // Comisiones pendientes (propiedades en negociación)
-  const propiedadesEnNegociacion = propiedadesAsignadas.filter(p => p.estadoVenta === "en_negociacion")
-  const potencialComisiones = propiedadesEnNegociacion.reduce((acc, p) => {
-    const { comisionFotografo } = calcularComision(p.precio)
-    return acc + comisionFotografo
-  }, 0)
+  // Estadísticas (todas en 0 porque no hay contenido aún)
+  const totalComisiones = 0
+  const potencialComisiones = 0
+  const fotosCompletadas = 0
+  const videosCompletados = 0
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-100 to-gray-50">
@@ -270,105 +182,22 @@ export default function PanelFotografoPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              {propiedadesAsignadas.map((propiedad) => {
-                const { comisionFotografo } = calcularComision(propiedad.precio)
-                const progreso = 
-                  (propiedad.estadoFoto === "completado" ? 25 : propiedad.estadoFoto === "en_proceso" ? 12.5 : 0) +
-                  (propiedad.estadoVideo === "completado" ? 25 : propiedad.estadoVideo === "en_proceso" ? 12.5 : 0) +
-                  (propiedad.estadoVenta === "vendida" ? 50 : propiedad.estadoVenta === "en_negociacion" ? 25 : 0)
-                
-                return (
-                  <div 
-                    key={propiedad.id} 
-                    className={`p-4 rounded-xl border ${
-                      propiedad.estadoVenta === "vendida" 
-                        ? "bg-green-50 border-green-200" 
-                        : "bg-arkin-secondary/50 border-gray-200"
-                    }`}
-                  >
-                    <div className="flex flex-col md:flex-row gap-4">
-                      {/* Imagen */}
-                      <div className="relative w-full md:w-32 h-24 rounded-lg overflow-hidden flex-shrink-0">
-                        <Image
-                          src={propiedad.imagen}
-                          alt={propiedad.titulo}
-                          fill
-                          className="object-cover"
-                        />
-                      </div>
-                      
-                      {/* Info */}
-                      <div className="flex-1">
-                        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-2">
-                          <div>
-                            <h3 className="font-semibold text-gray-900">{propiedad.titulo}</h3>
-                            <div className="flex items-center gap-1 text-sm text-gray-500">
-                              <MapPin className="h-3 w-3" />
-                              {propiedad.ubicacion}
-                            </div>
-                            <p className="text-lg font-bold text-arkin-gold mt-1">
-                              ${propiedad.precio.toLocaleString('es-MX')}
-                            </p>
-                          </div>
-                          
-                          <div className="text-right">
-                            <p className="text-xs text-gray-500">Tu comisión potencial</p>
-                            <p className={`text-lg font-bold ${
-                              propiedad.estadoVenta === "vendida" ? "text-green-600" : "text-gray-400"
-                            }`}>
-                              ${comisionFotografo.toLocaleString('es-MX', { minimumFractionDigits: 0 })}
-                              {propiedad.estadoVenta === "vendida" && (
-                                <CheckCircle className="inline ml-1 h-4 w-4" />
-                              )}
-                            </p>
-                          </div>
-                        </div>
-                        
-                        {/* Estados */}
-                        <div className="flex flex-wrap gap-2 mt-3">
-                          <div className="flex items-center gap-1">
-                            <Camera className="h-3 w-3 text-gray-400" />
-                            {getEstadoBadge(propiedad.estadoFoto, "foto")}
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Video className="h-3 w-3 text-gray-400" />
-                            {getEstadoBadge(propiedad.estadoVideo, "video")}
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Home className="h-3 w-3 text-gray-400" />
-                            {getEstadoBadge(propiedad.estadoVenta, "venta")}
-                          </div>
-                        </div>
-                        
-                        {/* Progreso */}
-                        <div className="mt-3">
-                          <div className="flex items-center justify-between text-xs text-gray-500 mb-1">
-                            <span>Progreso</span>
-                            <span>{progreso}%</span>
-                          </div>
-                          <Progress value={progreso} className="h-2" />
-                        </div>
-                        
-                        {/* Fechas */}
-                        <div className="flex gap-4 mt-2 text-xs text-gray-400">
-                          <span className="flex items-center gap-1">
-                            <Calendar className="h-3 w-3" />
-                            Asignado: {propiedad.fechaAsignacion}
-                          </span>
-                          {propiedad.fechaVenta && (
-                            <span className="flex items-center gap-1 text-green-600">
-                              <CheckCircle className="h-3 w-3" />
-                              Vendido: {propiedad.fechaVenta}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
+            {propiedadesAsignadas.length === 0 ? (
+              <div className="text-center py-12">
+                <ImageOff className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                  Sin propiedades asignadas
+                </h3>
+                <p className="text-gray-500 text-sm max-w-md mx-auto">
+                  Aún no tienes propiedades asignadas para fotografiar. 
+                  Cuando el administrador te asigne una propiedad, aparecerá aquí.
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {/* Las propiedades se mostrarán aquí cuando sean asignadas */}
+              </div>
+            )}
           </CardContent>
         </Card>
 
@@ -381,7 +210,7 @@ export default function PanelFotografoPage() {
             </div>
             <div>
               <p className="text-gray-400 text-sm">Propiedades Vendidas</p>
-              <p className="text-3xl font-bold text-green-400">{propiedadesVendidas.length}</p>
+              <p className="text-3xl font-bold text-green-400">0</p>
             </div>
             <div>
               <p className="text-gray-400 text-sm">Total Comisiones Ganadas</p>

@@ -37,6 +37,12 @@ export class PropertiesStorage {
 
   // Obtener propiedades por usuario (asesor) con caché
   static async getByUsuario(usuarioId: string): Promise<Propiedad[]> {
+    // Si el ID no es un UUID válido, devolver array vacío
+    if (!usuarioId || !this.isValidUUID(usuarioId)) {
+      console.warn('getByUsuario: Invalid UUID provided:', usuarioId)
+      return []
+    }
+
     return getCachedOrFetch(
       CACHE_KEYS.PROPERTIES_BY_USUARIO(usuarioId),
       async () => {
