@@ -31,6 +31,7 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
     area: undefined,
     areaConstruccion: undefined,
     cochera: undefined,
+    amueblado: undefined,
     descripcion: "",
     caracteristicas: [],
     status: "Disponible",
@@ -196,10 +197,11 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
         habitaciones: formData.habitaciones ?? 0,
         banos: formData.banos ?? 0,
         mediosBanos: formData.mediosBanos ?? 0,
-        area: formData.area || 0,
-        areaConstruccion: formData.areaConstruccion || 0,
-        cochera: formData.cochera || 0,
-        areaTexto: `${formData.area || 0} m²`,
+        area: formData.area ?? 0,
+        areaConstruccion: formData.areaConstruccion ?? 0,
+        cochera: formData.cochera ?? 0,
+        amueblado: formData.amueblado,
+        areaTexto: `${formData.area ?? 0} m²`,
         imagen: imagenUrl || "/placeholder-property.jpg",
         descripcion: formData.descripcion || "",
         caracteristicas: formData.caracteristicas || [],
@@ -216,7 +218,7 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
         },
         detalles: {
           tipoPropiedad: formData.tipo || "Departamento",
-          areaTerreno: `${formData.area || 0} m²`,
+          areaTerreno: `${formData.area ?? 0} m²`,
           antiguedad: "Nueva",
           vistas: 0,
           favoritos: 0,
@@ -539,11 +541,31 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
                 id="area"
                 type="number"
                 required
-                value={formData.area || ''}
-                onChange={(e) => setFormData({ ...formData, area: Number(e.target.value) })}
+                value={formData.area ?? ''}
+                onChange={(e) => {
+                  const raw = e.target.value
+                  setFormData({ ...formData, area: raw === '' ? undefined : Number(raw) })
+                }}
                 placeholder="450"
                 className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
               />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="amueblado">Amueblado</Label>
+              <Select
+                value={formData.amueblado || ''}
+                onValueChange={(value) => setFormData({ ...formData, amueblado: value as any })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecciona una opción" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="amueblado">Amueblado</SelectItem>
+                  <SelectItem value="semiamueblado">Semiamueblado</SelectItem>
+                  <SelectItem value="sin_amueblar">Sin amueblar</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             <div className="space-y-2">
