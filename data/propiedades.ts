@@ -1,5 +1,6 @@
 export interface Propiedad {
   id: number
+  usuarioId?: string
   titulo: string
   ubicacion: string
   precio: number

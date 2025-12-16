@@ -59,6 +59,7 @@ const fetchPropertiesFromSupabase = async (): Promise<Propiedad[]> => {
 
     return (propiedades || []).map((prop: any) => ({
       id: Number(prop.id),
+      usuarioId: prop.usuario_id || undefined,
       titulo: prop.titulo,
       ubicacion: prop.ubicacion,
       precio: Number(prop.precio),
@@ -120,6 +121,7 @@ export function usePropertiesStatic() {
             const newProp = payload.new as any
             const formattedProp: Propiedad = {
               id: Number(newProp.id),
+              usuarioId: newProp.usuario_id || undefined,
               titulo: newProp.titulo,
               ubicacion: newProp.ubicacion,
               precio: Number(newProp.precio),

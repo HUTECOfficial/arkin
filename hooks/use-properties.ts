@@ -14,6 +14,7 @@ type PropiedadRow = Database['public']['Tables']['propiedades']['Row']
 function dbToApp(dbProp: PropiedadRow): Propiedad {
     return {
         id: Number(dbProp.id),
+        usuarioId: (dbProp as any).usuario_id || undefined,
         titulo: dbProp.titulo,
         ubicacion: dbProp.ubicacion,
         precio: Number(dbProp.precio),

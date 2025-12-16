@@ -11,8 +11,10 @@ import Link from "next/link"
 import { WishlistButton } from "@/components/wishlist-button"
 import { Propiedad } from "@/data/propiedades"
 import { usePropertiesStatic } from "@/hooks/use-properties-static"
+import { useAuth } from "@/contexts/auth-context"
 
 export default function PropiedadesPage() {
+  const { user, isAuthenticated } = useAuth()
   // Hook con datos estáticos + realtime - carga instantánea
   const { properties: propiedades, isLoading, refresh, realtimeCount } = usePropertiesStatic()
   
@@ -27,7 +29,11 @@ export default function PropiedadesPage() {
 
   // Filter and sort properties
   const filteredAndSortedProperties = useMemo(() => {
-    let filtered = propiedades.filter(propiedad => {
+    const base = (isAuthenticated && user?.role === 'asesor')
+      ? propiedades.filter((p) => p.usuarioId === user.id)
+      : propiedades
+
+    let filtered = base.filter(propiedad => {
       // Search filter
       if (filters.search) {
         const searchTerm = filters.search.toLowerCase()
