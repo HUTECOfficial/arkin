@@ -1,9 +1,18 @@
 import { NextResponse } from 'next/server'
-
-import { supabaseAdmin } from '@/lib/supabase/server'
+import { createClient } from '@supabase/supabase-js'
 
 export async function GET() {
-  const { data, error } = await supabaseAdmin
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+  if (!supabaseUrl || !supabaseAnonKey) {
+    return NextResponse.json({ error: 'Missing Supabase config' }, { status: 500 })
+  }
+
+  // Use anon client - usuarios table should allow read access
+  const supabase = createClient(supabaseUrl, supabaseAnonKey)
+
+  const { data, error } = await supabase
     .from('usuarios')
     .select('id,nombre,email,role')
     .eq('role', 'asesor')

@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server'
-
-import { supabaseAdmin } from '@/lib/supabase/server'
+import { createClient } from '@supabase/supabase-js'
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
@@ -10,7 +9,16 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Email is required' }, { status: 400 })
   }
 
-  const { data, error } = await supabaseAdmin
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+  if (!supabaseUrl || !supabaseAnonKey) {
+    return NextResponse.json({ error: 'Missing Supabase config' }, { status: 500 })
+  }
+
+  const supabase = createClient(supabaseUrl, supabaseAnonKey)
+
+  const { data, error } = await supabase
     .from('usuarios')
     .select('id')
     .eq('email', email)
