@@ -35,6 +35,7 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
     descripcion: "",
     caracteristicas: [],
     status: "Disponible",
+    categoria: "venta",
     imagen: "",
     galeria: []
   })
@@ -220,7 +221,7 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
         })(),
         caracteristicas: formData.caracteristicas || [],
         status: formData.status as any,
-        categoria: "venta",
+        categoria: (formData.categoria as "venta" | "renta") || "venta",
         fechaPublicacion: new Date().toISOString().split('T')[0],
         agente: {
           nombre: asesorNombre,
@@ -629,6 +630,22 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
                   <SelectItem value="Disponible">Disponible</SelectItem>
                   <SelectItem value="Exclusiva">Exclusiva</SelectItem>
                   <SelectItem value="Reservada">Reservada</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="categoria">Tipo de Operación *</Label>
+              <Select
+                value={formData.categoria}
+                onValueChange={(value) => setFormData({ ...formData, categoria: value as "venta" | "renta" })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecciona tipo de operación" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="venta">Venta</SelectItem>
+                  <SelectItem value="renta">Renta</SelectItem>
                 </SelectContent>
               </Select>
             </div>
