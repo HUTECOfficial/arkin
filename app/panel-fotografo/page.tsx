@@ -34,6 +34,14 @@ export default function PanelFotografoPage() {
   const { user, logout, isAuthenticated } = useAuth()
   const router = useRouter()
 
+  const handleLogout = async () => {
+    try {
+      await logout()
+    } finally {
+      router.push('/login')
+    }
+  }
+
   useEffect(() => {
     if (!isAuthenticated || user?.role !== 'fotografo') {
       router.push('/login')
@@ -58,14 +66,24 @@ export default function PanelFotografoPage() {
       {/* Header */}
       <div className="bg-gradient-to-r from-arkin-dark to-gray-900 text-white py-8">
         <div className="container mx-auto px-4">
-          <div className="flex items-center gap-4">
-            <div className="w-16 h-16 bg-arkin-gold rounded-full flex items-center justify-center">
-              <Camera className="h-8 w-8 text-black" />
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <div className="w-16 h-16 bg-arkin-gold rounded-full flex items-center justify-center">
+                <Camera className="h-8 w-8 text-black" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold">Panel de Fotografía</h1>
+                <p className="text-gray-300">Santiago Canales - Fotógrafo & Videógrafo</p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-2xl font-bold">Panel de Fotografía</h1>
-              <p className="text-gray-300">Santiago Canales - Fotógrafo & Videógrafo</p>
-            </div>
+
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-2 px-4 py-2 text-white/90 hover:text-white hover:bg-white/10 rounded-xl transition-all"
+            >
+              <LogOut className="w-4 h-4" />
+              <span className="hidden sm:inline">Cerrar Sesión</span>
+            </button>
           </div>
         </div>
       </div>
