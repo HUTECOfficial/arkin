@@ -7,7 +7,7 @@ import "./globals.css"
 import { Footer } from "@/components/footer"
 import { DynamicHeader } from "@/components/dynamic-header"
 import { WishlistProvider } from "@/components/wishlist-provider"
-import { CallButton } from "@/components/call-button"
+import { ShepherdTour } from "@/components/shepherd-tour"
 import { AuthProvider } from "@/contexts/auth-context"
 import { SWRProvider } from "@/components/swr-provider"
 
@@ -43,7 +43,7 @@ export default function RootLayout({
               <DynamicHeader />
               {children}
               <Footer />
-              <CallButton />
+              <ShepherdTour />
             </WishlistProvider>
           </AuthProvider>
         </SWRProvider>

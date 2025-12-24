@@ -22,7 +22,8 @@ import {
   CheckCircle2,
   AlertCircle,
   Award,
-  ClipboardList
+  ClipboardList,
+  Camera
 } from 'lucide-react'
 import { OwnerSubmissionsStorage } from '@/lib/owner-submissions-storage'
 
@@ -132,6 +133,13 @@ export default function PanelAdminPage() {
               >
                 <Building2 className="w-4 h-4" />
                 <span className="hidden sm:inline">Gestionar Propiedades</span>
+              </button>
+              <button
+                onClick={() => router.push('/panel-admin/solicitudes-fotografo')}
+                className="flex items-center gap-2 px-4 py-2 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-xl transition-all font-semibold border border-blue-200"
+              >
+                <Camera className="w-4 h-4" />
+                <span className="hidden sm:inline">Solicitudes Fotógrafo</span>
               </button>
               <button
                 onClick={() => router.push('/panel-admin/solicitudes')}

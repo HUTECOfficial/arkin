@@ -3,8 +3,10 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/contexts/auth-context"
+import { supabase } from "@/lib/supabase/client"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import { 
   Camera, 
   Video, 
@@ -17,7 +19,12 @@ import {
   Banknote,
   PiggyBank,
   LogOut,
-  ImageOff
+  ImageOff,
+  Upload,
+  Image as ImageIcon,
+  Plus,
+  AlertCircle,
+  XCircle
 } from "lucide-react"
 
 // Configuración de comisiones
@@ -30,9 +37,34 @@ function calcularComision(precioVenta: number) {
   return { comisionArkin, comisionFotografo }
 }
 
+interface PropiedadDB {
+  id: number
+  titulo: string
+  ubicacion: string
+  precio: number
+  precio_texto: string
+  imagenes?: string[]
+  status: string
+}
+
+interface SolicitudFotografo {
+  id: string
+  titulo: string
+  ubicacion: string
+  descripcion?: string
+  precio_estimado?: number
+  imagenes: string[]
+  status: 'pendiente' | 'aprobada' | 'rechazada'
+  created_at: string
+  notas_admin?: string
+}
+
 export default function PanelFotografoPage() {
   const { user, logout, isAuthenticated } = useAuth()
   const router = useRouter()
+  const [propiedades, setPropiedades] = useState<PropiedadDB[]>([])
+  const [solicitudes, setSolicitudes] = useState<SolicitudFotografo[]>([])
+  const [loading, setLoading] = useState(true)
 
   const handleLogout = async () => {
     try {
@@ -47,19 +79,68 @@ export default function PanelFotografoPage() {
       router.push('/login')
       return
     }
+    loadPropiedades()
   }, [user, isAuthenticated, router])
+
+  const loadPropiedades = async () => {
+    setLoading(true)
+    try {
+      // Cargar propiedades asignadas al fotógrafo (puede estar vacío si no hay campo fotografo_id)
+      const { data, error } = await supabase
+        .from('propiedades')
+        .select('*')
+        .eq('fotografo_id', user?.id)
+        .order('created_at', { ascending: false })
+      
+      // Si hay error, solo loguearlo pero continuar
+      if (error) {
+        console.warn('No se pudieron cargar propiedades:', error.message)
+        setPropiedades([])
+      } else {
+        setPropiedades(data || [])
+      }
+
+      // Cargar solicitudes del fotógrafo
+      const { data: solicitudesData, error: solicitudesError } = await supabase
+        .from('solicitudes_fotografo')
+        .select('*')
+        .eq('fotografo_id', user?.id)
+        .order('created_at', { ascending: false })
+      
+      if (solicitudesError) {
+        console.warn('No se pudieron cargar solicitudes:', solicitudesError.message)
+        setSolicitudes([])
+      } else {
+        setSolicitudes(solicitudesData || [])
+      }
+    } catch (error) {
+      console.error('Error loading data:', error)
+      setPropiedades([])
+      setSolicitudes([])
+    } finally {
+      setLoading(false)
+    }
+  }
 
   if (!user) return null
 
-  // De momento no hay propiedades asignadas al fotógrafo
-  // Esto se llenará cuando el admin asigne propiedades para fotografiar
-  const propiedadesAsignadas: any[] = []
-  
-  // Estadísticas (todas en 0 porque no hay contenido aún)
-  const totalComisiones = 0
-  const potencialComisiones = 0
-  const fotosCompletadas = 0
+  const propiedadesAsignadas = propiedades
+  const fotosCompletadas = propiedades.filter(p => p.imagenes && p.imagenes.length > 0).length
   const videosCompletados = 0
+  
+  // Calcular comisiones de propiedades vendidas
+  const propiedadesVendidas = propiedades.filter(p => p.status === 'Vendida')
+  const totalComisiones = propiedadesVendidas.reduce((sum, p) => {
+    const { comisionFotografo } = calcularComision(p.precio)
+    return sum + comisionFotografo
+  }, 0)
+  
+  const potencialComisiones = propiedades
+    .filter(p => p.status !== 'Vendida')
+    .reduce((sum, p) => {
+      const { comisionFotografo } = calcularComision(p.precio)
+      return sum + comisionFotografo
+    }, 0)
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-100 to-gray-50">
@@ -89,6 +170,17 @@ export default function PanelFotografoPage() {
       </div>
 
       <div className="container mx-auto px-4 py-8">
+        {/* Botón Nueva Solicitud */}
+        <div className="mb-6">
+          <Button
+            onClick={() => router.push('/panel-fotografo/nueva-solicitud')}
+            className="w-full sm:w-auto bg-arkin-primary hover:bg-arkin-primary/90 text-arkin-accent shadow-lg"
+          >
+            <Plus className="h-5 w-5 mr-2" />
+            Nueva Solicitud de Propiedad
+          </Button>
+        </div>
+
         {/* Stats Cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <Card className="border-0 shadow-lg">
@@ -185,9 +277,114 @@ export default function PanelFotografoPage() {
               </p>
               <div className="flex flex-wrap gap-4 mt-2 text-sm">
                 <span className="text-gray-600">Comisión ARKIN: <strong>$100,000</strong></span>
-                <span className="text-arkin-gold font-bold">→ Tu comisión: $13,500</span>
+                <span className="text-emerald-600 font-bold">→ Tu comisión: $13,500</span>
               </div>
             </div>
+          </CardContent>
+        </Card>
+
+        {/* Mis Solicitudes */}
+        <Card className="border-0 shadow-lg mb-8">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Clock className="h-5 w-5 text-arkin-gold" />
+              Mis Solicitudes ({solicitudes.length})
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {loading ? (
+              <div className="text-center py-12">
+                <p className="text-gray-500">Cargando solicitudes...</p>
+              </div>
+            ) : solicitudes.length === 0 ? (
+              <div className="text-center py-12">
+                <Camera className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                  Sin solicitudes
+                </h3>
+                <p className="text-gray-500 text-sm max-w-md mx-auto mb-4">
+                  Aún no has enviado ninguna solicitud de propiedad.
+                </p>
+                <Button
+                  onClick={() => router.push('/panel-fotografo/nueva-solicitud')}
+                  className="bg-arkin-primary hover:bg-arkin-primary/90 text-arkin-accent"
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Crear Primera Solicitud
+                </Button>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {solicitudes.map((solicitud) => {
+                  const statusConfig = {
+                    pendiente: { 
+                      color: 'bg-yellow-100 text-yellow-700 border-yellow-300',
+                      icon: Clock,
+                      text: 'Pendiente'
+                    },
+                    aprobada: { 
+                      color: 'bg-green-100 text-green-700 border-green-300',
+                      icon: CheckCircle,
+                      text: 'Aprobada'
+                    },
+                    rechazada: { 
+                      color: 'bg-red-100 text-red-700 border-red-300',
+                      icon: XCircle,
+                      text: 'Rechazada'
+                    }
+                  }
+                  const config = statusConfig[solicitud.status]
+                  const StatusIcon = config.icon
+
+                  return (
+                    <div 
+                      key={solicitud.id}
+                      className="p-4 border border-gray-200 rounded-xl hover:shadow-md transition-shadow"
+                    >
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <h3 className="font-semibold text-lg">{solicitud.titulo}</h3>
+                            <Badge className={`${config.color} border`}>
+                              <StatusIcon className="h-3 w-3 mr-1" />
+                              {config.text}
+                            </Badge>
+                          </div>
+                          <div className="flex items-center gap-4 text-sm text-gray-600 mb-2">
+                            <span className="flex items-center gap-1">
+                              <MapPin className="h-4 w-4" />
+                              {solicitud.ubicacion}
+                            </span>
+                            {solicitud.precio_estimado && (
+                              <span className="flex items-center gap-1">
+                                <DollarSign className="h-4 w-4" />
+                                ${solicitud.precio_estimado.toLocaleString('es-MX')}
+                              </span>
+                            )}
+                          </div>
+                          <div className="flex items-center gap-4 text-sm mb-2">
+                            <span className="flex items-center gap-1 text-blue-600">
+                              <ImageIcon className="h-4 w-4" />
+                              {solicitud.imagenes.length} foto{solicitud.imagenes.length !== 1 ? 's' : ''}
+                            </span>
+                            <span className="text-gray-500">
+                              {new Date(solicitud.created_at).toLocaleDateString('es-MX')}
+                            </span>
+                          </div>
+                          {solicitud.notas_admin && (
+                            <div className="mt-2 p-3 bg-blue-50 rounded-lg">
+                              <p className="text-sm text-blue-900">
+                                <strong>Nota del admin:</strong> {solicitud.notas_admin}
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            )}
           </CardContent>
         </Card>
 
@@ -196,11 +393,15 @@ export default function PanelFotografoPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Home className="h-5 w-5 text-arkin-gold" />
-              Propiedades Asignadas
+              Propiedades Asignadas ({propiedadesAsignadas.length})
             </CardTitle>
           </CardHeader>
           <CardContent>
-            {propiedadesAsignadas.length === 0 ? (
+            {loading ? (
+              <div className="text-center py-12">
+                <p className="text-gray-500">Cargando propiedades...</p>
+              </div>
+            ) : propiedadesAsignadas.length === 0 ? (
               <div className="text-center py-12">
                 <ImageOff className="h-16 w-16 text-gray-300 mx-auto mb-4" />
                 <h3 className="text-lg font-semibold text-gray-700 mb-2">
@@ -213,7 +414,55 @@ export default function PanelFotografoPage() {
               </div>
             ) : (
               <div className="space-y-4">
-                {/* Las propiedades se mostrarán aquí cuando sean asignadas */}
+                {propiedadesAsignadas.map((propiedad) => {
+                  const numImagenes = propiedad.imagenes?.length || 0
+                  const { comisionFotografo } = calcularComision(propiedad.precio)
+                  
+                  return (
+                    <div 
+                      key={propiedad.id}
+                      className="p-4 border border-gray-200 rounded-xl hover:shadow-md transition-shadow"
+                    >
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <h3 className="font-semibold text-lg">{propiedad.titulo}</h3>
+                            <Badge variant={propiedad.status === 'Vendida' ? 'default' : 'secondary'}>
+                              {propiedad.status}
+                            </Badge>
+                          </div>
+                          <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
+                            <span className="flex items-center gap-1">
+                              <MapPin className="h-4 w-4" />
+                              {propiedad.ubicacion}
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <DollarSign className="h-4 w-4" />
+                              {propiedad.precio_texto}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-4 text-sm">
+                            <span className="flex items-center gap-1 text-blue-600">
+                              <ImageIcon className="h-4 w-4" />
+                              {numImagenes} imagen{numImagenes !== 1 ? 'es' : ''}
+                            </span>
+                            <span className="flex items-center gap-1 text-green-600">
+                              <Banknote className="h-4 w-4" />
+                              Comisión potencial: ${comisionFotografo.toLocaleString('es-MX', { minimumFractionDigits: 0 })}
+                            </span>
+                          </div>
+                        </div>
+                        <Button
+                          onClick={() => router.push(`/panel-fotografo/propiedades/${propiedad.id}`)}
+                          className="bg-arkin-primary hover:bg-arkin-primary/90 text-arkin-accent"
+                        >
+                          <Upload className="h-4 w-4 mr-2" />
+                          {numImagenes > 0 ? 'Gestionar' : 'Subir'} Fotos
+                        </Button>
+                      </div>
+                    </div>
+                  )
+                })}
               </div>
             )}
           </CardContent>
