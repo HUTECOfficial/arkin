@@ -98,7 +98,6 @@ export default function SolicitudesFotografoPage() {
         .from('solicitudes_fotografo')
         .update({
           status: 'aprobada',
-          aprobada_por: user?.id,
           aprobada_at: new Date().toISOString(),
           notas_admin: notasAdmin || 'Solicitud aprobada y propiedad creada'
         })
@@ -132,7 +131,6 @@ export default function SolicitudesFotografoPage() {
         .from('solicitudes_fotografo')
         .update({
           status: 'rechazada',
-          aprobada_por: user?.id,
           aprobada_at: new Date().toISOString(),
           notas_admin: notasAdmin
         })
