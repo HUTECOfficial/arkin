@@ -1,13 +1,18 @@
+'use client'
+
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { ArrowRight, Shield, Star, Users, MapPin, Home, Sparkles } from "lucide-react"
+import { ArrowRight, Shield, Star, Users, MapPin, Home, Sparkles, Menu, Tag, Key, Percent, Building, X } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import { FeaturedPropertiesCarousel } from "./featured-properties-carousel"
 import { VirtualToursSection } from "./virtual-tours-section"
 import { AnimatedStats } from "./animated-stats"
+import { CommercialAlliance } from "./commercial-alliance"
 
 export function HomeYellow() {
+  const [isCategoriasMenuOpen, setIsCategoriasMenuOpen] = useState(false)
   return (
     <div className="min-h-screen bg-arkin-secondary relative overflow-hidden transition-all duration-500">
       {/* Hero Section - Bold & Minimalist */}
@@ -31,7 +36,6 @@ export function HomeYellow() {
           {/* Top Section - Badge and Logo */}
           <div className="text-center pt-4">
             <div className="inline-flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-arkin-secondary/50/10 border-2 border-arkin-primary rounded-full backdrop-blur-md mb-4">
-              <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-arkin-primary" />
               <span className="text-xs sm:text-sm font-bold text-white uppercase tracking-wider">
                 Tu Inmobiliaria de Confianza
               </span>
@@ -58,22 +62,32 @@ export function HomeYellow() {
             </p>
 
             {/* CTA Buttons - Bold Design */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 px-4">
-              <Link href="/propiedades" className="w-full sm:w-auto">
-                <Button className="w-full sm:w-auto bg-arkin-primary hover:bg-arkin-primary/90 text-arkin-accent font-bold px-6 sm:px-10 py-4 sm:py-6 rounded-2xl text-sm sm:text-lg shadow-2xl shadow-arkin-primary/30 hover:scale-105 transition-all duration-300">
-                  <Home className="h-4 w-4 sm:h-6 sm:w-6 mr-2 sm:mr-3" />
-                  Explorar Propiedades
-                </Button>
-              </Link>
-              <Link href="/propietarios" className="w-full sm:w-auto">
-                <Button
-                  variant="outline"
-                  className="w-full sm:w-auto border-2 border-arkin-accent text-arkin-accent font-bold px-6 sm:px-10 py-4 sm:py-6 rounded-2xl text-sm sm:text-lg hover:bg-arkin-secondary/50 hover:text-arkin-accent transition-all duration-300 backdrop-blur-sm bg-arkin-secondary/20"
-                >
-                  Vender mi Propiedad
-                  <ArrowRight className="h-4 w-4 sm:h-6 sm:w-6 ml-2 sm:ml-3" />
-                </Button>
-              </Link>
+            <div className="flex flex-col items-center justify-center gap-3 px-4">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full">
+                <Link href="/propiedades" className="w-full sm:w-auto">
+                  <Button className="w-full sm:w-auto bg-arkin-primary hover:bg-arkin-primary/90 text-arkin-accent font-bold px-6 sm:px-10 py-4 sm:py-6 rounded-2xl text-sm sm:text-lg shadow-2xl shadow-arkin-primary/30 hover:scale-105 transition-all duration-300">
+                    <Home className="h-4 w-4 sm:h-6 sm:w-6 mr-2 sm:mr-3" />
+                    Explorar Propiedades
+                  </Button>
+                </Link>
+                <Link href="/propietarios" className="w-full sm:w-auto">
+                  <Button
+                    variant="outline"
+                    className="w-full sm:w-auto border-2 border-arkin-accent text-arkin-accent font-bold px-6 sm:px-10 py-4 sm:py-6 rounded-2xl text-sm sm:text-lg hover:bg-arkin-secondary/50 hover:text-arkin-accent transition-all duration-300 backdrop-blur-sm bg-arkin-secondary/20"
+                  >
+                    Rentar/Vender Propiedad
+                    <ArrowRight className="h-4 w-4 sm:h-6 sm:w-6 ml-2 sm:ml-3" />
+                  </Button>
+                </Link>
+              </div>
+              <Button
+                variant="outline"
+                className="w-full sm:w-auto border-2 border-arkin-primary text-arkin-primary font-bold px-6 sm:px-10 py-4 sm:py-6 rounded-2xl text-sm sm:text-lg hover:bg-arkin-primary/10 hover:text-arkin-primary transition-all duration-300 backdrop-blur-sm bg-arkin-secondary/20"
+                onClick={() => setIsCategoriasMenuOpen(true)}
+              >
+                <Menu className="h-4 w-4 sm:h-6 sm:w-6 mr-2 sm:mr-3" />
+                Categorías
+              </Button>
             </div>
           </div>
         </div>
@@ -93,6 +107,11 @@ export function HomeYellow() {
           </div>
           <FeaturedPropertiesCarousel />
         </div>
+      </section>
+
+      {/* Planes de Pago Section */}
+      <section>
+        <CommercialAlliance />
       </section>
 
       {/* Features Section - Card Grid */}
@@ -176,6 +195,125 @@ export function HomeYellow() {
           </div>
         </div>
       </section>
+
+      {/* Modal de Categorías */}
+      {isCategoriasMenuOpen && (
+        <>
+          {/* Overlay */}
+          <div 
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 animate-in fade-in duration-200"
+            onClick={() => setIsCategoriasMenuOpen(false)}
+          />
+          
+          {/* Modal */}
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
+            <div 
+              className="bg-arkin-secondary border-2 border-arkin-primary rounded-3xl shadow-2xl w-full max-w-md pointer-events-auto animate-in zoom-in-95 fade-in duration-200"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between p-6 border-b border-arkin-accent/20">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-arkin-primary/20 rounded-full flex items-center justify-center">
+                    <Menu className="h-5 w-5 text-arkin-primary" />
+                  </div>
+                  <h3 className="text-xl font-bold text-arkin-accent">Categorías</h3>
+                </div>
+                <button
+                  onClick={() => setIsCategoriasMenuOpen(false)}
+                  className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-arkin-accent/10 transition-colors"
+                >
+                  <X className="h-5 w-5 text-arkin-accent" />
+                </button>
+              </div>
+
+              {/* Content */}
+              <div className="p-4">
+                <div className="grid grid-cols-2 gap-3">
+                  <Link href="/venta" onClick={() => setIsCategoriasMenuOpen(false)}>
+                    <button className="w-full p-4 rounded-xl bg-arkin-accent/5 hover:bg-arkin-primary/10 border-2 border-transparent hover:border-arkin-primary transition-all duration-300 group">
+                      <div className="flex flex-col items-center gap-2">
+                        <div className="w-12 h-12 bg-arkin-primary/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                          <Tag className="h-6 w-6 text-arkin-primary" />
+                        </div>
+                        <span className="text-sm font-bold text-arkin-accent">Venta</span>
+                      </div>
+                    </button>
+                  </Link>
+
+                  <Link href="/renta" onClick={() => setIsCategoriasMenuOpen(false)}>
+                    <button className="w-full p-4 rounded-xl bg-arkin-accent/5 hover:bg-arkin-primary/10 border-2 border-transparent hover:border-arkin-primary transition-all duration-300 group">
+                      <div className="flex flex-col items-center gap-2">
+                        <div className="w-12 h-12 bg-arkin-primary/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                          <Key className="h-6 w-6 text-arkin-primary" />
+                        </div>
+                        <span className="text-sm font-bold text-arkin-accent">Renta</span>
+                      </div>
+                    </button>
+                  </Link>
+
+                  <Link href="/especiales" onClick={() => setIsCategoriasMenuOpen(false)}>
+                    <button className="w-full p-4 rounded-xl bg-arkin-accent/5 hover:bg-arkin-primary/10 border-2 border-transparent hover:border-arkin-primary transition-all duration-300 group">
+                      <div className="flex flex-col items-center gap-2">
+                        <div className="w-12 h-12 bg-arkin-primary/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                          <Sparkles className="h-6 w-6 text-arkin-primary" />
+                        </div>
+                        <span className="text-sm font-bold text-arkin-accent">Especiales</span>
+                      </div>
+                    </button>
+                  </Link>
+
+                  <Link href="/ofertas" onClick={() => setIsCategoriasMenuOpen(false)}>
+                    <button className="w-full p-4 rounded-xl bg-arkin-accent/5 hover:bg-arkin-primary/10 border-2 border-transparent hover:border-arkin-primary transition-all duration-300 group">
+                      <div className="flex flex-col items-center gap-2">
+                        <div className="w-12 h-12 bg-arkin-primary/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                          <Percent className="h-6 w-6 text-arkin-primary" />
+                        </div>
+                        <span className="text-sm font-bold text-arkin-accent">Ofertas</span>
+                      </div>
+                    </button>
+                  </Link>
+
+                  <Link href="/exclusivos" onClick={() => setIsCategoriasMenuOpen(false)}>
+                    <button className="w-full p-4 rounded-xl bg-arkin-accent/5 hover:bg-arkin-primary/10 border-2 border-transparent hover:border-arkin-primary transition-all duration-300 group">
+                      <div className="flex flex-col items-center gap-2">
+                        <div className="w-12 h-12 bg-arkin-primary/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                          <Shield className="h-6 w-6 text-arkin-primary" />
+                        </div>
+                        <span className="text-sm font-bold text-arkin-accent">Exclusivos</span>
+                      </div>
+                    </button>
+                  </Link>
+
+                  <Link href="/desarrollos" onClick={() => setIsCategoriasMenuOpen(false)}>
+                    <button className="w-full p-4 rounded-xl bg-arkin-accent/5 hover:bg-arkin-primary/10 border-2 border-transparent hover:border-arkin-primary transition-all duration-300 group">
+                      <div className="flex flex-col items-center gap-2">
+                        <div className="w-12 h-12 bg-arkin-primary/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                          <Building className="h-6 w-6 text-arkin-primary" />
+                        </div>
+                        <span className="text-sm font-bold text-arkin-accent">Desarrollos</span>
+                      </div>
+                    </button>
+                  </Link>
+                </div>
+
+                <div className="mt-4">
+                  <Link href="/brokers" onClick={() => setIsCategoriasMenuOpen(false)}>
+                    <button className="w-full p-4 rounded-xl bg-arkin-accent/5 hover:bg-arkin-primary/10 border-2 border-transparent hover:border-arkin-primary transition-all duration-300 group">
+                      <div className="flex items-center justify-center gap-3">
+                        <div className="w-12 h-12 bg-arkin-primary/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                          <Users className="h-6 w-6 text-arkin-primary" />
+                        </div>
+                        <span className="text-base font-bold text-arkin-accent">Brokers y Notarías</span>
+                      </div>
+                    </button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   )
 }
