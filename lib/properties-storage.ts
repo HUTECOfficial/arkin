@@ -36,12 +36,12 @@ export class PropertiesStorage {
   }
 
   // Obtener propiedades por usuario (asesor) con caché
-  static async getByUsuario(usuarioId: string): Promise<Propiedad[]> {
+  static async getByUsuario(usuarioId: string, userEmail?: string, userName?: string): Promise<Propiedad[]> {
     // Si el ID no es un UUID válido, intentar buscar por email del asesor
     if (!usuarioId || !this.isValidUUID(usuarioId)) {
       console.warn('getByUsuario: Invalid UUID provided, trying alternative methods:', usuarioId)
       
-      // Intentar obtener todas las propiedades y filtrar por el ID mock
+      // Intentar obtener todas las propiedades y filtrar por el ID mock, email o nombre
       // Esto es un fallback para usuarios mock que no tienen UUID
       return getCachedOrFetch(
         CACHE_KEYS.PROPERTIES_BY_USUARIO(usuarioId),
@@ -57,8 +57,21 @@ export class PropertiesStorage {
 
             if (error) throw error
             
-            // Filtrar propiedades que coincidan con el usuario_id (incluso si no es UUID)
-            const filtered = data?.filter((p: any) => p.usuario_id === usuarioId) || []
+            // Filtrar propiedades que coincidan con el usuario_id, email o nombre
+            const filtered = data?.filter((p: any) => {
+              // Buscar por usuario_id
+              if (p.usuario_id === usuarioId) return true
+              
+              // Buscar por email si está disponible
+              if (userEmail && p.usuario_id && p.usuario_id.toLowerCase().includes(userEmail.toLowerCase())) return true
+              
+              // Buscar por nombre de usuario (ej: "Lizzie Lazarini")
+              if (userName && p.usuario_id && p.usuario_id.toLowerCase().includes(userName.toLowerCase())) return true
+              
+              return false
+            }) || []
+            
+            console.log('Filtered properties for user:', usuarioId, 'Found:', filtered.length)
             return filtered.map(this.dbToApp)
           } catch (err) {
             console.error('Error in fallback getByUsuario:', err)
