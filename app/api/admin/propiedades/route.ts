@@ -23,7 +23,8 @@ export async function GET() {
     // Transformar datos al formato esperado por el frontend
     const propiedades = (data || []).map((p: any) => ({
       id: p.id,
-      usuarioId: p.usuario_id,
+      usuarioId: p.asesor_email || p.usuario_id, // Priorizar asesor_email
+      asesorEmail: p.asesor_email,
       titulo: p.titulo,
       ubicacion: p.ubicacion,
       precio: p.precio,

@@ -64,27 +64,35 @@ export class PropertiesStorage {
 
       console.log('Total properties:', data.length)
       
-      // Filtrar por usuario - priorizar email
+      // Filtrar por usuario - priorizar asesor_email
       const filtered = data.filter((p: any) => {
-        if (!p.usuario_id) return false
-        const uid = String(p.usuario_id).toLowerCase().trim()
+        const asesorEmail = p.asesor_email ? String(p.asesor_email).toLowerCase().trim() : null
+        const uid = p.usuario_id ? String(p.usuario_id).toLowerCase().trim() : null
         
-        // Buscar por email exacto (principal método)
+        // Buscar por asesor_email exacto (método principal)
+        if (userEmail && asesorEmail === userEmail.toLowerCase()) return true
+        
+        // Buscar por usuario_id exacto
         if (userEmail && uid === userEmail.toLowerCase()) return true
-        
-        // Buscar por ID de usuario
         if (uid === usuarioId.toLowerCase()) return true
         
-        // Buscar si el email está contenido en usuario_id
-        if (userEmail && uid.includes(userEmail.toLowerCase())) return true
+        // Buscar si el email está contenido en asesor_email o usuario_id
+        if (userEmail) {
+          if (asesorEmail && asesorEmail.includes(userEmail.toLowerCase())) return true
+          if (uid && uid.includes(userEmail.toLowerCase())) return true
+        }
         
         // Buscar por nombre
         if (userName) {
           const name = userName.toLowerCase()
-          if (uid.includes(name)) return true
+          if (asesorEmail && asesorEmail.includes(name)) return true
+          if (uid && uid.includes(name)) return true
           // Buscar por primer nombre
           const firstName = name.split(' ')[0]
-          if (firstName.length > 2 && uid.includes(firstName)) return true
+          if (firstName.length > 2) {
+            if (asesorEmail && asesorEmail.includes(firstName)) return true
+            if (uid && uid.includes(firstName)) return true
+          }
         }
         return false
       })
@@ -149,8 +157,10 @@ export class PropertiesStorage {
     //   dbData.cochera = appProp.cochera
     // }
 
-    // Siempre incluir usuario_id (puede ser UUID o email del asesor)
+    // Guardar el email del asesor en asesor_email (nueva columna TEXT)
     if (usuarioId) {
+      dbData.asesor_email = usuarioId
+      // Mantener usuario_id para compatibilidad con datos antiguos
       dbData.usuario_id = usuarioId
     }
 
