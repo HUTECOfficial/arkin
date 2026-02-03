@@ -56,8 +56,10 @@ export default function PropiedadesAsesorPage() {
     if (!user) return
 
     try {
+      console.log('Loading properties for user:', user.id, 'email:', user.email)
       // Cargar SOLO las propiedades del asesor logueado
       const myProperties = await PropertiesStorage.getByUsuario(user.id)
+      console.log('Loaded properties:', myProperties.length, myProperties)
       setPropiedades(myProperties)
     } catch (error) {
       console.error('Error in loadProperties:', error)
