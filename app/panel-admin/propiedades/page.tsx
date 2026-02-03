@@ -9,7 +9,6 @@ import { Building2, Trash2, Eye, ArrowLeft, AlertTriangle } from 'lucide-react'
 import { PropertiesStorage } from '@/lib/properties-storage'
 import { Propiedad } from '@/data/propiedades'
 import { toast } from 'sonner'
-import { supabase } from '@/lib/supabase/client'
 import {
     Select,
     SelectContent,
@@ -57,19 +56,18 @@ export default function AdminPropiedadesPage() {
 
     const loadProperties = async () => {
         try {
-            const { data, error } = await supabase
-                .from('propiedades')
-                .select('*')
-                .order('created_at', { ascending: false })
-
-            if (error) {
-                console.error('Error loading properties:', error)
+            // Usar API del servidor para bypasear RLS
+            const res = await fetch('/api/admin/propiedades')
+            
+            if (!res.ok) {
+                console.error('Error loading properties:', await res.text())
                 setPropiedades([])
                 return
             }
 
-            const properties = data.map(PropertiesStorage.dbToApp)
-            setPropiedades(properties)
+            const data = await res.json()
+            console.log('Propiedades cargadas:', data.propiedades?.length)
+            setPropiedades(data.propiedades || [])
         } catch (error) {
             console.error('Error in loadProperties:', error)
             setPropiedades([])
@@ -80,13 +78,15 @@ export default function AdminPropiedadesPage() {
         setSavingOwnerByPropertyId(prev => ({ ...prev, [propertyId]: true }))
 
         try {
-            const { error } = await supabase
-                .from('propiedades')
-                .update({ usuario_id: newUsuarioId })
-                .eq('id', propertyId)
+            const res = await fetch('/api/admin/fix-orphan-properties', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ propertyId, asesorEmail: newUsuarioId })
+            })
 
-            if (error) {
-                toast.error(error.message || 'No se pudo reasignar el asesor')
+            if (!res.ok) {
+                const data = await res.json()
+                toast.error(data.error || 'No se pudo reasignar el asesor')
                 return
             }
 
@@ -299,7 +299,7 @@ export default function AdminPropiedadesPage() {
                                                         <SelectContent>
                                                             <SelectItem value="__unassigned__">Sin asignar</SelectItem>
                                                             {asesores.map((a) => (
-                                                                <SelectItem key={a.id} value={a.id}>
+                                                                <SelectItem key={a.email} value={a.email}>
                                                                     {a.nombre} ({a.email})
                                                                 </SelectItem>
                                                             ))}
