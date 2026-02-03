@@ -1,19 +1,22 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useEffect, Suspense } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useAuth } from '@/contexts/auth-context'
-import { Building2, Lock, Mail, AlertCircle } from 'lucide-react'
+import { Lock, Mail, AlertCircle, Sparkles } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
-export default function LoginPage() {
+function LoginContent() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const { login } = useAuth()
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const redirectTo = searchParams.get('redirect') || null
+  const fromPlans = searchParams.get('from') === 'planes'
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -22,6 +25,12 @@ export default function LoginPage() {
 
     try {
       const userData = await login(email, password)
+
+      // Si viene de planes, redirigir de vuelta
+      if (redirectTo) {
+        router.push(redirectTo)
+        return
+      }
 
       // Redirigir según el rol del usuario
       if (userData?.role === 'admin') {
@@ -56,9 +65,26 @@ export default function LoginPage() {
               className="h-16 w-auto object-contain"
             />
           </div>
-          <p className="text-gray-600 dark:text-gray-400 text-lg font-medium">
-            Acceso a Plataforma ARKIN SELECT
-          </p>
+          
+          {/* Mensaje inspirador */}
+          {fromPlans ? (
+            <div className="mb-4">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-arkin-gold/10 rounded-full mb-3">
+                <Sparkles className="w-4 h-4 text-arkin-gold" />
+                <span className="text-sm font-medium text-arkin-gold">Tu éxito comienza aquí</span>
+              </div>
+              <h2 className="text-2xl font-bold text-gray-800 mb-2">
+                Bienvenido a ARKIN SELECT
+              </h2>
+              <p className="text-gray-600 text-sm">
+                Inicia sesión para activar tu plan y potenciar tu carrera inmobiliaria.
+              </p>
+            </div>
+          ) : (
+            <p className="text-gray-600 dark:text-gray-400 text-lg font-medium">
+              Acceso a Plataforma ARKIN SELECT
+            </p>
+          )}
         </div>
 
         {/* Formulario */}
@@ -124,8 +150,11 @@ export default function LoginPage() {
           <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700 text-center">
             <p className="text-sm text-gray-600 dark:text-gray-400">
               ¿No tienes cuenta?{' '}
-              <Link href="/registro" className="text-arkin-gold hover:underline font-medium">
-                Crear cuenta
+              <Link 
+                href={fromPlans ? "/registro?from=planes" : "/registro"} 
+                className="text-arkin-gold hover:underline font-medium"
+              >
+                Crear cuenta de asesor
               </Link>
             </p>
           </div>
@@ -137,5 +166,22 @@ export default function LoginPage() {
         </p>
       </div>
     </div>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-arkin-secondary flex items-center justify-center p-4">
+        <div className="w-full max-w-md text-center">
+          <div className="animate-pulse">
+            <div className="h-16 w-48 bg-gray-300 rounded mx-auto mb-4"></div>
+            <div className="h-4 w-64 bg-gray-300 rounded mx-auto"></div>
+          </div>
+        </div>
+      </div>
+    }>
+      <LoginContent />
+    </Suspense>
   )
 }

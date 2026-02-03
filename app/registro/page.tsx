@@ -1,13 +1,13 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, Suspense } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useAuth } from '@/contexts/auth-context'
-import { User, Lock, Mail, Phone, AlertCircle, CheckCircle2 } from 'lucide-react'
+import { User, Lock, Mail, Phone, AlertCircle, CheckCircle2, Sparkles, Crown } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
-export default function RegistroPage() {
+function RegistroContent() {
   const [formData, setFormData] = useState({
     nombre: '',
     email: '',
@@ -20,6 +20,8 @@ export default function RegistroPage() {
   const [loading, setLoading] = useState(false)
   const { signup } = useAuth()
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const fromPlans = searchParams.get('from') === 'planes'
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -55,7 +57,7 @@ export default function RegistroPage() {
       setSuccess(true)
       // Redirigir después de 2 segundos
       setTimeout(() => {
-        router.push('/')
+        router.push(fromPlans ? '/alianza-comercial' : '/panel-asesor')
       }, 2000)
     } catch (err: any) {
       setError(err.message || 'Error al crear la cuenta')
@@ -71,10 +73,12 @@ export default function RegistroPage() {
           <div className="bg-green-50 dark:bg-green-900/20 rounded-3xl shadow-xl p-8 border border-green-200 dark:border-green-800">
             <CheckCircle2 className="w-16 h-16 text-green-500 mx-auto mb-4" />
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-              ¡Cuenta creada exitosamente!
+              ¡Bienvenido a ARKIN SELECT!
             </h2>
             <p className="text-gray-600 dark:text-gray-400">
-              Redirigiendo al inicio...
+              {fromPlans 
+                ? 'Tu cuenta está lista. Redirigiendo para elegir tu plan...'
+                : 'Tu cuenta está lista. Redirigiendo a tu panel...'}
             </p>
           </div>
         </div>
@@ -96,9 +100,26 @@ export default function RegistroPage() {
               className="h-16 w-auto object-contain"
             />
           </div>
-          <p className="text-gray-600 dark:text-gray-400 text-lg font-medium">
-            Crear Cuenta
-          </p>
+          
+          {/* Mensaje inspirador */}
+          {fromPlans ? (
+            <div className="mb-4">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-arkin-gold/10 rounded-full mb-3">
+                <Crown className="w-4 h-4 text-arkin-gold" />
+                <span className="text-sm font-medium text-arkin-gold">Únete a la élite inmobiliaria</span>
+              </div>
+              <h2 className="text-2xl font-bold text-gray-800 mb-2">
+                Crea tu cuenta de asesor
+              </h2>
+              <p className="text-gray-600 text-sm">
+                El primer paso hacia el éxito. Tu carrera inmobiliaria comienza aquí.
+              </p>
+            </div>
+          ) : (
+            <p className="text-gray-600 dark:text-gray-400 text-lg font-medium">
+              Crear Cuenta
+            </p>
+          )}
         </div>
 
         {/* Formulario */}
@@ -227,7 +248,10 @@ export default function RegistroPage() {
           <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700 text-center">
             <p className="text-sm text-gray-600 dark:text-gray-400">
               ¿Ya tienes cuenta?{' '}
-              <Link href="/login" className="text-arkin-gold hover:underline font-medium">
+              <Link 
+                href={fromPlans ? "/login?from=planes&redirect=/alianza-comercial" : "/login"} 
+                className="text-arkin-gold hover:underline font-medium"
+              >
                 Iniciar sesión
               </Link>
             </p>
@@ -240,5 +264,22 @@ export default function RegistroPage() {
         </p>
       </div>
     </div>
+  )
+}
+
+export default function RegistroPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-arkin-secondary flex items-center justify-center p-4">
+        <div className="w-full max-w-md text-center">
+          <div className="animate-pulse">
+            <div className="h-16 w-48 bg-gray-300 rounded mx-auto mb-4"></div>
+            <div className="h-4 w-64 bg-gray-300 rounded mx-auto"></div>
+          </div>
+        </div>
+      </div>
+    }>
+      <RegistroContent />
+    </Suspense>
   )
 }

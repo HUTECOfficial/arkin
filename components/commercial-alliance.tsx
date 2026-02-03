@@ -22,7 +22,7 @@ export function CommercialAlliance() {
             toast.info('Inicia sesión para continuar', {
                 description: 'Necesitas una cuenta de asesor para suscribirte'
             })
-            router.push('/login')
+            router.push('/login?from=planes&redirect=/alianza-comercial')
             return
         }
 
