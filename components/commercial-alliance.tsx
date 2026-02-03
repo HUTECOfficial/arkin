@@ -9,16 +9,18 @@ import Link from "next/link"
 export function CommercialAlliance() {
     const plans = [
         {
-            name: "Inicial",
-            price: "$500",
-            period: "/mes",
-            properties: "5 Propiedades",
-            description: "Ideal para asesores que están comenzando.",
+            name: "Plan Core",
+            price: "Gratis",
+            period: "",
+            properties: "Hasta 6 Propiedades",
+            description: "Perfecto para comenzar tu carrera como asesor inmobiliario.",
             features: [
-                "Publicación de 5 propiedades",
-                "Panel de control básico",
-                "Soporte por correo",
-                "Visibilidad en búsquedas"
+                "Hasta 6 propiedades activas",
+                "Panel de gestión básico",
+                "Estadísticas de propiedades",
+                "Gestión de leads",
+                "Soporte por email",
+                "Acceso a la plataforma web"
             ],
             icon: Building,
             color: "text-blue-500",
@@ -26,42 +28,27 @@ export function CommercialAlliance() {
             badge: "Básico"
         },
         {
-            name: "Profesional",
-            price: "$1,000",
+            name: "Plan Elite",
+            price: "$999",
             period: "/mes",
-            properties: "10 Propiedades",
-            description: "Para asesores con un portafolio en crecimiento.",
+            properties: "7+ Propiedades",
+            description: "Para asesores profesionales que buscan maximizar su potencial.",
             features: [
-                "Publicación de 10 propiedades",
-                "Panel de control avanzado",
-                "Soporte prioritario",
-                "Destacado en búsquedas",
-                "Estadísticas de visitas"
-            ],
-            icon: Star,
-            color: "text-arkin-gold",
-            borderColor: "border-arkin-gold",
-            badge: "Popular",
-            highlight: true
-        },
-        {
-            name: "Elite",
-            price: "$2,000",
-            period: "/mes",
-            properties: "Más de 10",
-            description: "La solución completa para agencias y top producers.",
-            features: [
-                "Propiedades ilimitadas",
-                "Panel de control premium",
-                "Soporte dedicado 24/7",
-                "Máxima visibilidad",
-                "Reportes avanzados",
-                "Marketing personalizado"
+                "Propiedades ilimitadas (7+)",
+                "Asistente con Inteligencia Artificial",
+                "Panel de gestión avanzado",
+                "Estadísticas detalladas y reportes",
+                "Gestión avanzada de leads",
+                "Prioridad en soporte",
+                "Acceso a herramientas premium",
+                "Marketing automatizado",
+                "Análisis predictivo de mercado"
             ],
             icon: Zap,
-            color: "text-purple-500",
-            borderColor: "border-purple-200",
-            badge: "Premium"
+            color: "text-arkin-gold",
+            borderColor: "border-arkin-gold",
+            badge: "Premium",
+            highlight: true
         }
     ]
 
@@ -89,7 +76,7 @@ export function CommercialAlliance() {
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
                         {plans.map((plan, index) => {
                             const Icon = plan.icon
                             return (
