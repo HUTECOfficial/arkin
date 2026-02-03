@@ -18,7 +18,7 @@ export const users: User[] = [
     telefono: '+52 477 123 4567',
     avatar: '/avatars/ana.jpg',
     password: 'ana_arkin2025',
-    plan: 'core'
+    plan: 'elite'
   },
   {
     id: 'asesor-2',
@@ -38,7 +38,7 @@ export const users: User[] = [
     telefono: '+52 477 345 6789',
     avatar: '/avatars/maria.jpg',
     password: 'maria_arkin2025',
-    plan: 'core'
+    plan: 'elite'
   },
   {
     id: 'asesor-4',
@@ -58,7 +58,7 @@ export const users: User[] = [
     telefono: '+52 477 456 7802',
     avatar: '/avatars/subje.jpg',
     password: 'subje_arkin2025',
-    plan: 'core'
+    plan: 'elite'
   },
   {
     id: 'asesor-6',
@@ -88,7 +88,7 @@ export const users: User[] = [
     telefono: '+52 477 456 7805',
     avatar: '/avatars/ingrid.jpg',
     password: 'ingrid_arkin2025',
-    plan: 'core'
+    plan: 'elite'
   },
   {
     id: 'asesor-9',
@@ -108,7 +108,7 @@ export const users: User[] = [
     telefono: '+52 477 456 7807',
     avatar: '/avatars/elizabeth.jpg',
     password: 'elizabeth_arkin2025',
-    plan: 'core'
+    plan: 'elite'
   },
   // Fotógrafo
   {
