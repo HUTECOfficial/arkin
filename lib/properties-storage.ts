@@ -149,8 +149,8 @@ export class PropertiesStorage {
     //   dbData.cochera = appProp.cochera
     // }
 
-    // Solo incluir usuario_id si es un UUID válido
-    if (usuarioId && this.isValidUUID(usuarioId)) {
+    // Siempre incluir usuario_id (puede ser UUID o email del asesor)
+    if (usuarioId) {
       dbData.usuario_id = usuarioId
     }
 
