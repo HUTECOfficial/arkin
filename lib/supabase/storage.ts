@@ -1,6 +1,15 @@
-import { supabase } from './client'
+import { createClient } from '@supabase/supabase-js'
 
 const BUCKET_NAME = 'propiedades'
+
+// Crear cliente temporal para storage (evita problemas de múltiples instancias)
+const getStorageClient = () => {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    { auth: { persistSession: false } }
+  )
+}
 
 export interface UploadResult {
   url: string
@@ -46,9 +55,10 @@ export async function uploadImage(
     }
 
     const filePath = `${folder}/${fileName}`
+    const client = getStorageClient()
 
     // Subir archivo
-    const { data, error } = await supabase.storage
+    const { data, error } = await client.storage
       .from(BUCKET_NAME)
       .upload(filePath, fileToUpload, {
         cacheControl: '3600',
@@ -61,7 +71,7 @@ export async function uploadImage(
     }
 
     // Obtener URL pública
-    const { data: urlData } = supabase.storage
+    const { data: urlData } = client.storage
       .from(BUCKET_NAME)
       .getPublicUrl(data.path)
 
@@ -106,7 +116,8 @@ export async function deleteImage(path: string): Promise<boolean> {
       path = parts[parts.length - 1]
     }
 
-    const { error } = await supabase.storage
+    const client = getStorageClient()
+    const { error } = await client.storage
       .from(BUCKET_NAME)
       .remove([path])
 

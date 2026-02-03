@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/auth-context'
-import { supabase } from '@/lib/supabase/client'
 import {
   Building2,
   Users,
@@ -63,19 +62,24 @@ export default function PanelAdminPage() {
   const loadData = async () => {
     setLoading(true)
     try {
-      // Cargar asesores desde API
-      const resAsesores = await fetch('/api/admin/asesores')
+      // Cargar asesores y propiedades en paralelo usando APIs del servidor
+      const [resAsesores, resPropiedades] = await Promise.all([
+        fetch('/api/admin/asesores'),
+        fetch('/api/admin/propiedades')
+      ])
+
       if (resAsesores.ok) {
         const data = await resAsesores.json()
         setAsesores(data.asesores || [])
       }
 
-      // Cargar propiedades desde Supabase
-      const { data: propsData } = await supabase
-        .from('propiedades')
-        .select('id, titulo, ubicacion, precio, precio_texto, usuario_id, status')
-        .order('created_at', { ascending: false })
-      setPropiedades(propsData || [])
+      if (resPropiedades.ok) {
+        const data = await resPropiedades.json()
+        console.log('Propiedades loaded:', data.propiedades?.length)
+        setPropiedades(data.propiedades || [])
+      } else {
+        console.error('Error loading propiedades:', await resPropiedades.text())
+      }
     } catch (error) {
       console.error('Error loading admin data:', error)
     } finally {
@@ -102,9 +106,17 @@ export default function PanelAdminPage() {
   }
 
   const getAsesorName = (usuarioId?: string) => {
-    if (!usuarioId) return 'Sin asignar'
-    const asesor = asesores.find(a => a.id === usuarioId)
-    return asesor?.nombre || 'Desconocido'
+    if (!usuarioId || usuarioId.trim() === '') return 'Sin asignar'
+    // Buscar por ID o por email
+    const asesor = asesores.find(a => 
+      a.id === usuarioId || 
+      a.email === usuarioId || 
+      a.email.toLowerCase() === usuarioId.toLowerCase()
+    )
+    if (asesor) return asesor.nombre
+    // Si no se encuentra pero tiene formato de email, mostrar el email
+    if (usuarioId.includes('@')) return usuarioId
+    return 'Sin asignar'
   }
 
   return (
@@ -404,7 +416,12 @@ export default function PanelAdminPage() {
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {asesores.map((asesor) => {
-                    const propiedadesAsesor = propiedades.filter(p => p.usuario_id === asesor.id)
+                    // Contar propiedades por email o ID
+                    const propiedadesAsesor = propiedades.filter(p => 
+                      p.usuario_id === asesor.id || 
+                      p.usuario_id === asesor.email ||
+                      p.usuario_id?.toLowerCase() === asesor.email?.toLowerCase()
+                    )
 
                     return (
                       <div key={asesor.id} className="p-6 bg-arkin-secondary/70 dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700">
@@ -432,7 +449,7 @@ export default function PanelAdminPage() {
                           <p className="text-3xl font-bold text-arkin-gold">
                             {propiedadesAsesor.length}
                           </p>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">Propiedades asignadas</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">propiedades</p>
                         </div>
                       </div>
                     )

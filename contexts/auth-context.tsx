@@ -173,6 +173,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const expectedPassword = mockUser.password || 
           (mockUser.role === 'admin' ? 'arkin2025' : `${email.split('@')[0]}_arkin2025`)
         
+        console.log('Mock user found:', email, 'Expected password:', expectedPassword)
+        
         if (password === expectedPassword) {
           // Intentar obtener el UUID real de Supabase por email via API (evita RLS)
           let realUserId = mockUser.id
@@ -196,16 +198,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             telefono: mockUser.telefono,
             avatar: mockUser.avatar,
             propiedadId: mockUser.propiedadId,
-            plan: (mockUser as any).plan || undefined, // No asignar plan por defecto
+            plan: (mockUser as any).plan || undefined,
           }
           setUser(userData)
-          // Guardar en localStorage para persistir en reload
           localStorage.setItem(MOCK_USER_STORAGE_KEY, JSON.stringify(userData))
           return userData
+        } else {
+          // Si es usuario mock pero contraseña incorrecta, NO intentar con Supabase
+          console.error('Mock user password mismatch')
+          throw new Error('Contraseña incorrecta')
         }
       }
 
-      // Si no hay usuario mock o la contraseña no coincide, intentar con Supabase
+      // Solo intentar con Supabase si NO es un usuario mock
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,

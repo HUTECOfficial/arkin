@@ -57,11 +57,23 @@ export default function PropiedadesAsesorPage() {
 
     try {
       console.log('Loading properties for user:', user.id, 'email:', user.email, 'nombre:', user.nombre)
-      // Cargar SOLO las propiedades del asesor logueado
-      // Pasar email y nombre para buscar propiedades por múltiples criterios
-      const myProperties = await PropertiesStorage.getByUsuario(user.id, user.email, user.nombre)
-      console.log('Loaded properties:', myProperties.length, myProperties)
-      setPropiedades(myProperties)
+      
+      // Usar API del servidor para cargar propiedades (bypasea RLS)
+      const params = new URLSearchParams()
+      if (user.email) params.append('email', user.email)
+      if (user.nombre) params.append('nombre', user.nombre)
+      if (user.id) params.append('userId', user.id)
+      
+      const res = await fetch(`/api/asesor/mis-propiedades?${params.toString()}`)
+      
+      if (res.ok) {
+        const data = await res.json()
+        console.log('Loaded properties:', data.total, data.debug)
+        setPropiedades(data.propiedades || [])
+      } else {
+        console.error('Error loading properties:', await res.text())
+        setPropiedades([])
+      }
     } catch (error) {
       console.error('Error in loadProperties:', error)
       setPropiedades([])
@@ -79,10 +91,11 @@ export default function PropiedadesAsesorPage() {
         }
         toast.success('Propiedad actualizada exitosamente')
       } else {
-        // Usar el usuario del AuthContext
+        // Usar el email del usuario para identificar quién subió la propiedad
         if (!user) throw new Error('Usuario no autenticado')
 
-        const newProperty = await PropertiesStorage.add(data, user.id)
+        // Guardar con el email del usuario para fácil rastreo
+        const newProperty = await PropertiesStorage.add(data, user.email)
         if (!newProperty) {
           throw new Error('No se pudo crear la propiedad')
         }
