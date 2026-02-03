@@ -1,7 +1,5 @@
 import { Propiedad } from '@/data/propiedades'
-import { supabaseOptimized, withRetry } from './supabase/optimized-client'
 import type { Database } from './supabase/database.types'
-import { propertiesCache, CACHE_KEYS, getCachedOrFetch } from './properties-cache'
 
 type PropiedadRow = Database['public']['Tables']['propiedades']['Row']
 
@@ -35,14 +33,21 @@ export class PropertiesStorage {
 
   }
 
-  // Obtener propiedades por usuario (asesor) - busca por usuario_id, email o nombre
+  // Obtener propiedades por usuario (asesor) - busca por email principalmente
   static async getByUsuario(usuarioId: string, userEmail?: string, userName?: string): Promise<Propiedad[]> {
     try {
-      console.log('getByUsuario called with:', { usuarioId, userEmail, userName })
+      console.log('getByUsuario:', { usuarioId, userEmail, userName })
       
-      // Obtener todas las propiedades y filtrar localmente
-      // Esto es más simple y evita problemas con UUIDs vs strings
-      const { data, error } = await supabaseOptimized
+      // Crear cliente temporal sin persistencia para evitar lock errors
+      const { createClient } = await import('@supabase/supabase-js')
+      const tempClient = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        { auth: { persistSession: false } }
+      )
+      
+      // Obtener todas las propiedades
+      const { data, error } = await tempClient
         .from('propiedades')
         .select('*')
         .order('created_at', { ascending: false })
@@ -53,37 +58,38 @@ export class PropertiesStorage {
       }
       
       if (!data || data.length === 0) {
-        console.log('No properties found in database')
+        console.log('No properties in DB')
         return []
       }
 
-      console.log('Total properties in DB:', data.length)
+      console.log('Total properties:', data.length)
       
-      // Filtrar propiedades que pertenezcan al usuario
+      // Filtrar por usuario - priorizar email
       const filtered = data.filter((p: any) => {
         if (!p.usuario_id) return false
+        const uid = String(p.usuario_id).toLowerCase().trim()
         
-        const propUserId = String(p.usuario_id).toLowerCase()
+        // Buscar por email exacto (principal método)
+        if (userEmail && uid === userEmail.toLowerCase()) return true
         
-        // Buscar por usuario_id exacto
-        if (propUserId === usuarioId.toLowerCase()) return true
+        // Buscar por ID de usuario
+        if (uid === usuarioId.toLowerCase()) return true
         
-        // Buscar por email
-        if (userEmail && propUserId.includes(userEmail.toLowerCase())) return true
+        // Buscar si el email está contenido en usuario_id
+        if (userEmail && uid.includes(userEmail.toLowerCase())) return true
         
-        // Buscar por nombre (ej: "Lizzie Lazarini" o "lizzie")
+        // Buscar por nombre
         if (userName) {
-          const nameLower = userName.toLowerCase()
-          if (propUserId.includes(nameLower)) return true
-          // También buscar solo el primer nombre
-          const firstName = nameLower.split(' ')[0]
-          if (propUserId.includes(firstName)) return true
+          const name = userName.toLowerCase()
+          if (uid.includes(name)) return true
+          // Buscar por primer nombre
+          const firstName = name.split(' ')[0]
+          if (firstName.length > 2 && uid.includes(firstName)) return true
         }
-        
         return false
       })
       
-      console.log('Properties found for user:', filtered.length)
+      console.log('Filtered properties for', userEmail || userName, ':', filtered.length)
       return filtered.map(this.dbToApp)
     } catch (err) {
       console.error('Error in getByUsuario:', err)
@@ -154,47 +160,64 @@ export class PropertiesStorage {
     return dbData
   }
 
-  // Obtener todas las propiedades con caché
+  // Obtener todas las propiedades
   static async getAll(): Promise<Propiedad[]> {
-    return getCachedOrFetch(
-      CACHE_KEYS.ALL_PROPERTIES,
-      async () => {
-        const { data, error } = await withRetry(async () => {
-          return supabaseOptimized
-            .from('propiedades')
-            .select('*')
-            .order('created_at', { ascending: false })
-        })
+    try {
+      const { createClient } = await import('@supabase/supabase-js')
+      const tempClient = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        { auth: { persistSession: false } }
+      )
 
-        if (error) throw error
-        return data?.map(this.dbToApp) || []
-      }
-    )
+      const { data, error } = await tempClient
+        .from('propiedades')
+        .select('*')
+        .order('created_at', { ascending: false })
+
+      if (error) throw error
+      return data?.map(this.dbToApp) || []
+    } catch (error) {
+      console.error('Error in getAll:', error)
+      return []
+    }
   }
 
-  // Obtener una propiedad por ID con caché
+  // Obtener una propiedad por ID
   static async getById(id: number): Promise<Propiedad | undefined> {
-    return getCachedOrFetch(
-      CACHE_KEYS.PROPERTY_BY_ID(id),
-      async () => {
-        const { data, error } = await withRetry(async () => {
-          return supabaseOptimized
-            .from('propiedades')
-            .select('*')
-            .eq('id', id)
-            .single()
-        })
+    try {
+      const { createClient } = await import('@supabase/supabase-js')
+      const tempClient = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        { auth: { persistSession: false } }
+      )
 
-        if (error) throw error
-        return data ? this.dbToApp(data) : undefined
-      }
-    )
+      const { data, error } = await tempClient
+        .from('propiedades')
+        .select('*')
+        .eq('id', id)
+        .single()
+
+      if (error) throw error
+      return data ? this.dbToApp(data) : undefined
+    } catch (error) {
+      console.error('Error in getById:', error)
+      return undefined
+    }
   }
 
-  // Verificar si existe una propiedad con el mismo título y ubicación
+  // Verificar si ya existe una propiedad con el mismo título y ubicación
   static async checkDuplicate(titulo: string, ubicacion: string): Promise<boolean> {
     try {
-      const { data, error } = await supabaseOptimized
+      const { createClient } = await import('@supabase/supabase-js')
+      const tempClient = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        { auth: { persistSession: false } }
+      )
+      
+      const { data, error } = await tempClient
         .from('propiedades')
         .select('id')
         .ilike('titulo', titulo)
@@ -225,8 +248,15 @@ export class PropertiesStorage {
         return false
       }
 
+      const { createClient } = await import('@supabase/supabase-js')
+      const tempClient = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        { auth: { persistSession: false } }
+      )
+
       // Buscar en imagen principal
-      const { data: mainImage, error: mainError } = await supabaseOptimized
+      const { data: mainImage, error: mainError } = await tempClient
         .from('propiedades')
         .select('id')
         .eq('imagen', imageUrl)
@@ -236,7 +266,7 @@ export class PropertiesStorage {
       if ((mainImage?.length || 0) > 0) return true
 
       // Buscar en galería - solo si la URL es corta
-      const { data: gallery, error: galleryError } = await supabaseOptimized
+      const { data: gallery, error: galleryError } = await tempClient
         .from('propiedades')
         .select('id, galeria')
 
@@ -255,7 +285,7 @@ export class PropertiesStorage {
     }
   }
 
-  // Agregar nueva propiedad con invalidación de caché
+  // Agregar nueva propiedad
   static async add(property: Omit<Propiedad, 'id'>, usuarioId: string): Promise<Propiedad | null> {
     try {
       // Validar propiedad duplicada
@@ -284,22 +314,23 @@ export class PropertiesStorage {
 
       const dbData = this.appToDb(property, usuarioId)
 
-      const { data, error } = await withRetry(async () => {
-        return supabaseOptimized
-          .from('propiedades')
-          .insert(dbData)
-          .select()
-          .single()
-      })
+      const { createClient } = await import('@supabase/supabase-js')
+      const tempClient = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        { auth: { persistSession: false } }
+      )
+
+      const { data, error } = await tempClient
+        .from('propiedades')
+        .insert(dbData)
+        .select()
+        .single()
 
       if (error) {
         console.error('PropertiesStorage.add - Error de Supabase:', error)
         throw error
       }
-      
-      // Invalidar caché para refrescar lista
-      propertiesCache.invalidate(CACHE_KEYS.ALL_PROPERTIES)
-      propertiesCache.invalidate(CACHE_KEYS.PROPERTIES_BY_USUARIO(usuarioId))
       
       return data ? this.dbToApp(data) : null
     } catch (error) {
@@ -308,40 +339,26 @@ export class PropertiesStorage {
     }
   }
 
-  // Actualizar propiedad existente con invalidación de caché
+  // Actualizar propiedad existente
   static async update(id: number, updates: Partial<Propiedad>): Promise<Propiedad | null> {
     try {
-      const { data: existing, error: existingError } = await supabaseOptimized
-        .from('propiedades')
-        .select('usuario_id')
-        .eq('id', id)
-        .maybeSingle()
-
-      if (existingError) {
-        console.warn('Could not load usuario_id for cache invalidation:', existingError)
-      }
-
       const dbData = this.appToDb(updates as any)
 
-      const { data, error } = await withRetry(async () => {
-        return supabaseOptimized
-          .from('propiedades')
-          .update(dbData)
-          .eq('id', id)
-          .select()
-          .single()
-      })
+      const { createClient } = await import('@supabase/supabase-js')
+      const tempClient = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        { auth: { persistSession: false } }
+      )
+
+      const { data, error } = await tempClient
+        .from('propiedades')
+        .update(dbData)
+        .eq('id', id)
+        .select()
+        .single()
 
       if (error) throw error
-      
-      // Invalidar cachés relacionados
-      propertiesCache.invalidate(CACHE_KEYS.ALL_PROPERTIES)
-      propertiesCache.invalidate(CACHE_KEYS.PROPERTY_BY_ID(id))
-
-      const usuarioId = (existing as any)?.usuario_id
-      if (usuarioId) {
-        propertiesCache.invalidate(CACHE_KEYS.PROPERTIES_BY_USUARIO(String(usuarioId)))
-      }
       
       return data ? this.dbToApp(data) : null
     } catch (error) {
@@ -350,36 +367,22 @@ export class PropertiesStorage {
     }
   }
 
-  // Eliminar propiedad con invalidación de caché
+  // Eliminar propiedad
   static async delete(id: number): Promise<boolean> {
     try {
-      const { data: existing, error: existingError } = await supabaseOptimized
+      const { createClient } = await import('@supabase/supabase-js')
+      const tempClient = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        { auth: { persistSession: false } }
+      )
+
+      const { error } = await tempClient
         .from('propiedades')
-        .select('usuario_id')
+        .delete()
         .eq('id', id)
-        .maybeSingle()
-
-      if (existingError) {
-        console.warn('Could not load usuario_id for cache invalidation:', existingError)
-      }
-
-      const { error } = await withRetry(async () => {
-        return supabaseOptimized
-          .from('propiedades')
-          .delete()
-          .eq('id', id)
-      })
 
       if (error) throw error
-      
-      // Invalidar cachés
-      propertiesCache.invalidate(CACHE_KEYS.ALL_PROPERTIES)
-      propertiesCache.invalidate(CACHE_KEYS.PROPERTY_BY_ID(id))
-
-      const usuarioId = (existing as any)?.usuario_id
-      if (usuarioId) {
-        propertiesCache.invalidate(CACHE_KEYS.PROPERTIES_BY_USUARIO(String(usuarioId)))
-      }
       
       return true
     } catch (error) {
@@ -388,58 +391,53 @@ export class PropertiesStorage {
     }
   }
 
-  // Obtener propiedades por asesor con caché
+  // Obtener propiedades por asesor
   static async getByAsesor(asesorEmail: string): Promise<Propiedad[]> {
-    return getCachedOrFetch(
-      CACHE_KEYS.PROPERTIES_BY_ASESOR(asesorEmail),
-      async () => {
-        // Primero obtener el agente
-        const { data: agente, error: agenteError } = await supabaseOptimized
-          .from('agentes')
-          .select('id')
-          .eq('email', asesorEmail)
-          .single()
+    try {
+      const { createClient } = await import('@supabase/supabase-js')
+      const tempClient = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        { auth: { persistSession: false } }
+      )
 
-        if (agenteError || !agente) return []
+      // Obtener propiedades por email del asesor en usuario_id
+      const { data, error } = await tempClient
+        .from('propiedades')
+        .select('*')
+        .eq('usuario_id', asesorEmail)
+        .order('created_at', { ascending: false })
 
-        // Luego obtener las propiedades asociadas
-        const { data: relaciones, error: relacionesError } = await supabaseOptimized
-          .from('propiedad_agente')
-          .select('propiedad_id')
-          .eq('agente_id', agente.id)
-
-        if (relacionesError || !relaciones) return []
-
-        const propiedadIds = relaciones.map((r: any) => r.propiedad_id)
-
-        const { data, error } = await supabaseOptimized
-          .from('propiedades')
-          .select('*')
-          .in('id', propiedadIds)
-
-        if (error) throw error
-        return data?.map(this.dbToApp) || []
-      }
-    )
+      if (error) throw error
+      return data?.map(this.dbToApp) || []
+    } catch (error) {
+      console.error('Error in getByAsesor:', error)
+      return []
+    }
   }
 
-  // Obtener propiedades por categoría con caché
+  // Obtener propiedades por categoría
   static async getByCategoria(categoria: string): Promise<Propiedad[]> {
-    return getCachedOrFetch(
-      CACHE_KEYS.PROPERTIES_BY_CATEGORY(categoria),
-      async () => {
-        const { data, error } = await withRetry(async () => {
-          return supabaseOptimized
-            .from('propiedades')
-            .select('*')
-            .eq('categoria', categoria)
-            .order('created_at', { ascending: false })
-        })
+    try {
+      const { createClient } = await import('@supabase/supabase-js')
+      const tempClient = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        { auth: { persistSession: false } }
+      )
 
-        if (error) throw error
-        return data?.map(this.dbToApp) || []
-      }
-    )
+      const { data, error } = await tempClient
+        .from('propiedades')
+        .select('*')
+        .eq('categoria', categoria)
+        .order('created_at', { ascending: false })
+
+      if (error) throw error
+      return data?.map(this.dbToApp) || []
+    } catch (error) {
+      console.error('Error in getByCategoria:', error)
+      return []
+    }
   }
 
   // Inicializar con datos mock (solo para desarrollo / fallback)
