@@ -1,14 +1,78 @@
 "use client"
 
+import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { useAuth } from "@/contexts/auth-context"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Check, Building, Star, Zap } from "lucide-react"
+import { Check, Building, Star, Zap, Loader2 } from "lucide-react"
 import Link from "next/link"
+import { toast } from "sonner"
 
 export function CommercialAlliance() {
+    const router = useRouter()
+    const { user, isAuthenticated } = useAuth()
+    const [loading, setLoading] = useState(false)
+    const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null)
+
+    const handleSelectPlan = async (planId: string) => {
+        // Verificar si el usuario está autenticado
+        if (!isAuthenticated || !user) {
+            toast.info('Inicia sesión para continuar', {
+                description: 'Necesitas una cuenta de asesor para suscribirte'
+            })
+            router.push('/login')
+            return
+        }
+
+        // Verificar que sea un asesor
+        if (user.role !== 'asesor') {
+            toast.error('Acceso denegado', {
+                description: 'Solo los asesores pueden suscribirse a estos planes'
+            })
+            return
+        }
+
+        setLoading(true)
+        setSelectedPlanId(planId)
+
+        try {
+            const response = await fetch('/api/stripe/create-checkout-session', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    planId: planId,
+                    userId: user.id,
+                    userEmail: user.email,
+                }),
+            })
+
+            const data = await response.json()
+
+            if (!response.ok) {
+                throw new Error(data.error || 'Error al crear sesión de pago')
+            }
+
+            // Redirigir a Stripe Checkout
+            if (data.url) {
+                window.location.href = data.url
+            }
+        } catch (error: any) {
+            console.error('Error:', error)
+            toast.error('Error al procesar el pago', {
+                description: error.message || 'Intenta nuevamente más tarde'
+            })
+            setLoading(false)
+            setSelectedPlanId(null)
+        }
+    }
+
     const plans = [
         {
+            id: "core",
             name: "Plan Core",
             price: "$99",
             period: "/mes",
@@ -28,6 +92,7 @@ export function CommercialAlliance() {
             badge: "Básico"
         },
         {
+            id: "elite",
             name: "Plan Elite",
             price: "$399",
             period: "/mes",
@@ -121,12 +186,21 @@ export function CommercialAlliance() {
                                     </CardContent>
                                     <CardFooter>
                                         <Button
+                                            onClick={() => handleSelectPlan(plan.id)}
+                                            disabled={loading}
                                             className={`w-full py-7 text-lg font-bold rounded-xl transition-all duration-300 ${plan.highlight
                                                     ? 'bg-arkin-accent hover:bg-arkin-accent/90 text-arkin-primary shadow-lg hover:shadow-xl hover:scale-[1.02]'
                                                     : 'bg-arkin-accent/5 hover:bg-arkin-accent/10 text-arkin-accent hover:scale-[1.02]'
                                                 }`}
                                         >
-                                            Seleccionar Plan
+                                            {loading && selectedPlanId === plan.id ? (
+                                                <>
+                                                    <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                                                    Procesando...
+                                                </>
+                                            ) : (
+                                                'Seleccionar Plan'
+                                            )}
                                         </Button>
                                     </CardFooter>
                                 </Card>
