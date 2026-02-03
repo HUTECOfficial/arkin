@@ -10,8 +10,8 @@ export function CommercialAlliance() {
     const plans = [
         {
             name: "Plan Core",
-            price: "Gratis",
-            period: "",
+            price: "$99",
+            period: "/mes",
             properties: "Hasta 6 Propiedades",
             description: "Perfecto para comenzar tu carrera como asesor inmobiliario.",
             features: [
@@ -29,7 +29,7 @@ export function CommercialAlliance() {
         },
         {
             name: "Plan Elite",
-            price: "$999",
+            price: "$399",
             period: "/mes",
             properties: "7+ Propiedades",
             description: "Para asesores profesionales que buscan maximizar su potencial.",

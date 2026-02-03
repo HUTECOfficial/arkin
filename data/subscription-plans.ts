@@ -18,8 +18,8 @@ export const subscriptionPlans: SubscriptionPlan[] = [
     name: 'Plan Core',
     displayName: 'Core',
     description: 'Perfecto para comenzar tu carrera como asesor inmobiliario',
-    price: 0,
-    priceText: 'Gratis',
+    price: 99,
+    priceText: '$99 MXN/mes',
     maxProperties: 6,
     features: [
       'Hasta 6 propiedades activas',
@@ -35,8 +35,8 @@ export const subscriptionPlans: SubscriptionPlan[] = [
     name: 'Plan Elite',
     displayName: 'Elite',
     description: 'Para asesores profesionales que buscan maximizar su potencial',
-    price: 999,
-    priceText: '$999 MXN/mes',
+    price: 399,
+    priceText: '$399 MXN/mes',
     maxProperties: -1, // -1 significa ilimitado
     features: [
       'Propiedades ilimitadas (7+)',

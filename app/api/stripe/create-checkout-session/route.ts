@@ -12,8 +12,20 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    // Solo crear checkout para Plan Elite
-    if (planId !== 'elite') {
+    // Configurar precio según el plan
+    let planName = ''
+    let planDescription = ''
+    let unitAmount = 0
+
+    if (planId === 'core') {
+      planName = 'Plan Core - ARKIN SELECT'
+      planDescription = 'Hasta 6 propiedades activas'
+      unitAmount = 9900 // $99.00 MXN en centavos
+    } else if (planId === 'elite') {
+      planName = 'Plan Elite - ARKIN SELECT'
+      planDescription = 'Propiedades ilimitadas + Asistente con IA'
+      unitAmount = 39900 // $399.00 MXN en centavos
+    } else {
       return NextResponse.json(
         { error: 'Invalid plan' },
         { status: 400 }
@@ -29,10 +41,10 @@ export async function POST(req: NextRequest) {
           price_data: {
             currency: 'mxn',
             product_data: {
-              name: 'Plan Elite - ARKIN SELECT',
-              description: 'Propiedades ilimitadas + Asistente con IA',
+              name: planName,
+              description: planDescription,
             },
-            unit_amount: 99900, // $999.00 MXN en centavos
+            unit_amount: unitAmount,
             recurring: {
               interval: 'month',
             },
