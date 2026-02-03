@@ -55,9 +55,9 @@ function RegistroContent() {
       })
       
       setSuccess(true)
-      // Redirigir después de 2 segundos
+      // Redirigir después de 2 segundos a elegir plan
       setTimeout(() => {
-        router.push(fromPlans ? '/alianza-comercial' : '/panel-asesor')
+        router.push('/alianza-comercial')
       }, 2000)
     } catch (err: any) {
       setError(err.message || 'Error al crear la cuenta')
@@ -76,9 +76,7 @@ function RegistroContent() {
               ¡Bienvenido a ARKIN SELECT!
             </h2>
             <p className="text-gray-600 dark:text-gray-400">
-              {fromPlans 
-                ? 'Tu cuenta está lista. Redirigiendo para elegir tu plan...'
-                : 'Tu cuenta está lista. Redirigiendo a tu panel...'}
+              Tu cuenta está lista. Ahora elige el plan perfecto para ti...
             </p>
           </div>
         </div>

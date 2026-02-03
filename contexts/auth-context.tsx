@@ -196,7 +196,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             telefono: mockUser.telefono,
             avatar: mockUser.avatar,
             propiedadId: mockUser.propiedadId,
-            plan: (mockUser as any).plan || 'core',
+            plan: (mockUser as any).plan || undefined, // No asignar plan por defecto
           }
           setUser(userData)
           // Guardar en localStorage para persistir en reload

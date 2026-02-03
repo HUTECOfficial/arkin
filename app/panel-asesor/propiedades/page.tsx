@@ -110,8 +110,19 @@ export default function PropiedadesAsesorPage() {
   const handleNewProperty = () => {
     if (!user) return
 
-    // Obtener el plan del usuario (por defecto 'core' si no tiene)
-    const userPlan = user.plan || 'core'
+    // Si no tiene plan, redirigir a elegir uno
+    if (!user.plan) {
+      toast.info('Elige tu plan para comenzar', {
+        description: 'Necesitas seleccionar un plan antes de agregar propiedades',
+        action: {
+          label: 'Elegir Plan',
+          onClick: () => router.push('/alianza-comercial')
+        }
+      })
+      return
+    }
+
+    const userPlan = user.plan
     const currentPlan = getPlanById(userPlan)
     
     // Verificar si puede agregar más propiedades

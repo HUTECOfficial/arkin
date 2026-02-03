@@ -51,6 +51,12 @@ export default function PanelAsesorPage() {
       return
     }
 
+    // Si el asesor no tiene plan asignado, redirigir a elegir plan
+    if (!user.plan) {
+      router.push('/alianza-comercial')
+      return
+    }
+
     // Cargar datos del asesor
     setProgress(getProgressByAsesor(user.id))
     setLeads(getLeadsByAsesor(user.id))
