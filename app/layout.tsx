@@ -10,6 +10,7 @@ import { WishlistProvider } from "@/components/wishlist-provider"
 import { ShepherdTour } from "@/components/shepherd-tour"
 import { AuthProvider } from "@/contexts/auth-context"
 import { SWRProvider } from "@/components/swr-provider"
+import { Toaster } from "sonner"
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -44,6 +45,7 @@ export default function RootLayout({
               {children}
               <Footer />
               <ShepherdTour />
+              <Toaster position="top-right" richColors />
             </WishlistProvider>
           </AuthProvider>
         </SWRProvider>

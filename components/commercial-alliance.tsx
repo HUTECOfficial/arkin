@@ -17,8 +17,13 @@ export function CommercialAlliance() {
     const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null)
 
     const handleSelectPlan = async (planId: string) => {
+        console.log('handleSelectPlan called with planId:', planId)
+        console.log('isAuthenticated:', isAuthenticated)
+        console.log('user:', user)
+        
         // Verificar si el usuario está autenticado
         if (!isAuthenticated || !user) {
+            console.log('Usuario no autenticado, redirigiendo a login')
             toast.info('Inicia sesión para continuar', {
                 description: 'Necesitas una cuenta de asesor para suscribirte'
             })
