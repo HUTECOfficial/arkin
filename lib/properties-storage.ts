@@ -35,67 +35,60 @@ export class PropertiesStorage {
 
   }
 
-  // Obtener propiedades por usuario (asesor) con caché
+  // Obtener propiedades por usuario (asesor) - busca por usuario_id, email o nombre
   static async getByUsuario(usuarioId: string, userEmail?: string, userName?: string): Promise<Propiedad[]> {
-    // Si el ID no es un UUID válido, intentar buscar por email del asesor
-    if (!usuarioId || !this.isValidUUID(usuarioId)) {
-      console.warn('getByUsuario: Invalid UUID provided, trying alternative methods:', usuarioId)
+    try {
+      console.log('getByUsuario called with:', { usuarioId, userEmail, userName })
       
-      // Intentar obtener todas las propiedades y filtrar por el ID mock, email o nombre
-      // Esto es un fallback para usuarios mock que no tienen UUID
-      return getCachedOrFetch(
-        CACHE_KEYS.PROPERTIES_BY_USUARIO(usuarioId),
-        async () => {
-          try {
-            // Buscar propiedades que tengan el usuario_id como string (para IDs mock)
-            const { data, error } = await withRetry(async () => {
-              return supabaseOptimized
-                .from('propiedades')
-                .select('*')
-                .order('created_at', { ascending: false })
-            })
+      // Obtener todas las propiedades y filtrar localmente
+      // Esto es más simple y evita problemas con UUIDs vs strings
+      const { data, error } = await supabaseOptimized
+        .from('propiedades')
+        .select('*')
+        .order('created_at', { ascending: false })
 
-            if (error) throw error
-            
-            // Filtrar propiedades que coincidan con el usuario_id, email o nombre
-            const filtered = data?.filter((p: any) => {
-              // Buscar por usuario_id
-              if (p.usuario_id === usuarioId) return true
-              
-              // Buscar por email si está disponible
-              if (userEmail && p.usuario_id && p.usuario_id.toLowerCase().includes(userEmail.toLowerCase())) return true
-              
-              // Buscar por nombre de usuario (ej: "Lizzie Lazarini")
-              if (userName && p.usuario_id && p.usuario_id.toLowerCase().includes(userName.toLowerCase())) return true
-              
-              return false
-            }) || []
-            
-            console.log('Filtered properties for user:', usuarioId, 'Found:', filtered.length)
-            return filtered.map(this.dbToApp)
-          } catch (err) {
-            console.error('Error in fallback getByUsuario:', err)
-            return []
-          }
-        }
-      )
-    }
-
-    return getCachedOrFetch(
-      CACHE_KEYS.PROPERTIES_BY_USUARIO(usuarioId),
-      async () => {
-        const { data, error } = await withRetry(async () => {
-          return supabaseOptimized
-            .from('propiedades')
-            .select('*')
-            .eq('usuario_id', usuarioId)
-            .order('created_at', { ascending: false })
-        })
-
-        if (error) throw error
-        return data?.map(this.dbToApp) || []
+      if (error) {
+        console.error('Error fetching properties:', error)
+        return []
       }
-    )
+      
+      if (!data || data.length === 0) {
+        console.log('No properties found in database')
+        return []
+      }
+
+      console.log('Total properties in DB:', data.length)
+      
+      // Filtrar propiedades que pertenezcan al usuario
+      const filtered = data.filter((p: any) => {
+        if (!p.usuario_id) return false
+        
+        const propUserId = String(p.usuario_id).toLowerCase()
+        
+        // Buscar por usuario_id exacto
+        if (propUserId === usuarioId.toLowerCase()) return true
+        
+        // Buscar por email
+        if (userEmail && propUserId.includes(userEmail.toLowerCase())) return true
+        
+        // Buscar por nombre (ej: "Lizzie Lazarini" o "lizzie")
+        if (userName) {
+          const nameLower = userName.toLowerCase()
+          if (propUserId.includes(nameLower)) return true
+          // También buscar solo el primer nombre
+          const firstName = nameLower.split(' ')[0]
+          if (propUserId.includes(firstName)) return true
+        }
+        
+        return false
+      })
+      
+      console.log('Properties found for user:', filtered.length)
+      return filtered.map(this.dbToApp)
+    } catch (err) {
+      console.error('Error in getByUsuario:', err)
+      return []
+    }
   }
 
   // Validar si un string es un UUID válido
