@@ -29,9 +29,9 @@ export default function PropiedadesPage() {
 
   // Filter and sort properties
   const filteredAndSortedProperties = useMemo(() => {
-    const base = (isAuthenticated && user?.role === 'asesor')
-      ? propiedades.filter((p) => p.usuarioId === user.id)
-      : propiedades
+    // En la página pública de propiedades, mostrar TODAS las propiedades
+    // Los asesores ven sus propiedades en /panel-asesor/propiedades
+    const base = propiedades
 
     let filtered = base.filter(propiedad => {
       // Search filter

@@ -40,13 +40,36 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
     galeria: []
   })
 
-  const [actividadesRecreativas, setActividadesRecreativas] = useState<string>(
+  const [actividadesRecreativasSeleccionadas, setActividadesRecreativasSeleccionadas] = useState<string[]>(
     (() => {
       const desc = String(initialData?.descripcion || '')
       const match = desc.match(/Actividades recreativas:\s*(.*)$/i)
-      return (match?.[1] || '').trim()
+      const actividades = (match?.[1] || '').trim()
+      return actividades ? actividades.split(',').map(a => a.trim()).filter(Boolean) : []
     })()
   )
+
+  // Lista de actividades recreativas disponibles
+  const actividadesRecreativasDisponibles = [
+    "Clases de yoga",
+    "Torneos deportivos",
+    "Talleres",
+    "Eventos sociales",
+    "Actividades infantiles",
+    "Cine al aire libre",
+    "Clases de baile",
+    "Activaciones comunitarias",
+    "Manualidades",
+    "Convivencia"
+  ]
+
+  const toggleActividadRecreativa = (actividad: string) => {
+    setActividadesRecreativasSeleccionadas(prev => 
+      prev.includes(actividad) 
+        ? prev.filter(a => a !== actividad)
+        : [...prev, actividad]
+    )
+  }
 
   const [amenidadesSeleccionadas, setAmenidadesSeleccionadas] = useState<string[]>(
     (initialData?.detalles as any)?.amenidades || []
@@ -60,33 +83,30 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
   const [isUploading, setIsUploading] = useState(false)
   const [uploadProgress, setUploadProgress] = useState("")
 
-  // Lista de amenidades disponibles
+  // Lista de amenidades disponibles (amenidades del desarrollo/condominio)
   const amenidadesDisponibles = [
-    "Seguridad 24/7",
-    "Estacionamiento",
-    "Gimnasio",
     "Alberca",
-    "Alberca Techada",
-    "Jardín",
-    "Internet",
+    "Gimnasio",
+    "Área de juegos infantiles",
+    "Roof garden",
+    "Asadores",
+    "Salón de eventos",
+    "Coworking",
+    "Seguridad / vigilancia",
+    "Estacionamiento",
+    "Elevadores",
+    "Áreas verdes",
+    "Pet park",
+    "Cancha deportiva",
+    "Guardería",
     "Terraza",
-    "Spa",
-    "Roof Garden",
-    "Área de Juegos",
-    "Salón de Eventos",
-    "Bodega",
-    "Cuarto de Servicio",
-    "Cuarto de Lavado",
-    "Elevador",
-    "Portero",
-    "Área de BBQ",
-    "Pet Friendly",
-    "Tinaco",
-    "Calentador Solar",
-    "Hidroneumático",
-    "Aljibe"
+    "Acceso controlado",
+    "Cámaras de vigilancia",
+    "WIFI en áreas comunes",
+    "Cafetería"
   ]
 
+  // Lista de características (características propias de la propiedad)
   const caracteristicasDisponibles = [
     "Tinaco",
     "Aljibe",
@@ -95,18 +115,23 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
     "Bodega",
     "Cuarto de servicio",
     "Cuarto de lavado",
-    "Elevador",
     "Sala de televisión",
     "Cuarto de máquinas",
     "Penthouse",
     "Casa cuadra",
     "Sistema de sonido Bose",
-    "Cámara de vigilancia",
     "Spa",
     "Bomba de calor",
     "Celda eléctrica",
     "Panel solar",
-    "Mini split"
+    "Mini split",
+    "Jardín privado",
+    "Balcón",
+    "Chimenea",
+    "Cocina equipada",
+    "Aire acondicionado",
+    "Calefacción",
+    "Jacuzzi"
   ]
 
   const toggleAmenidad = (amenidad: string) => {
@@ -214,7 +239,7 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
         imagen: imagenUrl || "/placeholder-property.jpg",
         descripcion: (() => {
           const base = String(formData.descripcion || '').trim()
-          const act = String(actividadesRecreativas || '').trim()
+          const act = actividadesRecreativasSeleccionadas.join(', ')
           if (!act) return base
           if (!base) return `Actividades recreativas: ${act}`
           return `${base}\n\nActividades recreativas: ${act}`
@@ -672,6 +697,44 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
                 </SelectContent>
               </Select>
             </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="antiguedad">Antigüedad</Label>
+              <Select
+                value={(formData as any).antiguedad || ''}
+                onValueChange={(value) => setFormData({ ...formData, antiguedad: value } as any)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecciona antigüedad" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Nueva">Nueva (Estrenar)</SelectItem>
+                  <SelectItem value="1-5 años">1-5 años</SelectItem>
+                  <SelectItem value="6-10 años">6-10 años</SelectItem>
+                  <SelectItem value="11-20 años">11-20 años</SelectItem>
+                  <SelectItem value="21-30 años">21-30 años</SelectItem>
+                  <SelectItem value="Más de 30 años">Más de 30 años</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="gravamen">¿Tiene Gravamen?</Label>
+              <Select
+                value={(formData as any).gravamen || ''}
+                onValueChange={(value) => setFormData({ ...formData, gravamen: value } as any)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecciona una opción" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="no">No tiene gravamen</SelectItem>
+                  <SelectItem value="si">Sí tiene gravamen</SelectItem>
+                  <SelectItem value="en_proceso">En proceso de liberación</SelectItem>
+                  <SelectItem value="desconocido">Desconocido</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           <div className="space-y-2">
@@ -687,14 +750,31 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="actividadesRecreativas">Actividades recreativas (opcional)</Label>
-            <Textarea
-              id="actividadesRecreativas"
-              value={actividadesRecreativas}
-              onChange={(e) => setActividadesRecreativas(e.target.value)}
-              placeholder="Ej: Cancha de tenis, alberca, parques cercanos, club..."
-              rows={3}
-            />
+            <Label>Actividades recreativas (opcional)</Label>
+            <p className="text-xs text-gray-500 mb-2">Selecciona las actividades que ofrece el desarrollo</p>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+              {actividadesRecreativasDisponibles.map((actividad) => (
+                <button
+                  key={actividad}
+                  type="button"
+                  onClick={() => toggleActividadRecreativa(actividad)}
+                  className={`
+                    p-2 rounded-lg border text-sm font-medium transition-all text-left
+                    ${actividadesRecreativasSeleccionadas.includes(actividad)
+                      ? 'bg-blue-500/90 text-white border-blue-500 shadow-md'
+                      : 'bg-arkin-secondary/50 text-gray-600 border-gray-200 hover:border-blue-500/50 hover:bg-blue-500/5'
+                    }
+                  `}
+                >
+                  {actividad}
+                </button>
+              ))}
+            </div>
+            {actividadesRecreativasSeleccionadas.length > 0 && (
+              <p className="text-sm text-gray-500 mt-2">
+                {actividadesRecreativasSeleccionadas.length} actividad(es) seleccionada(s)
+              </p>
+            )}
           </div>
 
           <div className="space-y-2">

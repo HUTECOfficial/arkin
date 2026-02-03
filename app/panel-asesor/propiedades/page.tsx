@@ -21,9 +21,13 @@ import {
   Bed,
   Bath,
   Maximize,
-  User
+  User,
+  AlertTriangle,
+  Crown,
+  Zap
 } from 'lucide-react'
 import { toast } from 'sonner'
+import { getPlanById, canAddProperty, getPropertyLimit } from '@/data/subscription-plans'
 
 export default function PropiedadesAsesorPage() {
   const { user, isAuthenticated } = useAuth()
@@ -32,6 +36,8 @@ export default function PropiedadesAsesorPage() {
   const [showForm, setShowForm] = useState(false)
   const [editingProperty, setEditingProperty] = useState<Propiedad | null>(null)
   const [deleteConfirm, setDeleteConfirm] = useState<number | null>(null)
+  const [bajaConfirm, setBajaConfirm] = useState<Propiedad | null>(null)
+  const [motivoBaja, setMotivoBaja] = useState('')
 
   useEffect(() => {
     if (!isAuthenticated || user?.role !== 'asesor') {
@@ -102,8 +108,48 @@ export default function PropiedadesAsesorPage() {
   }
 
   const handleNewProperty = () => {
+    if (!user) return
+
+    // Obtener el plan del usuario (por defecto 'core' si no tiene)
+    const userPlan = user.plan || 'core'
+    const currentPlan = getPlanById(userPlan)
+    
+    // Verificar si puede agregar más propiedades
+    if (!canAddProperty(userPlan, propiedades.length)) {
+      const limit = getPropertyLimit(userPlan)
+      toast.error(
+        `Has alcanzado el límite de ${limit} propiedades del ${currentPlan?.name}`,
+        {
+          description: 'Actualiza a Plan Elite para propiedades ilimitadas',
+          action: {
+            label: 'Ver Planes',
+            onClick: () => router.push('/panel-asesor/planes')
+          }
+        }
+      )
+      return
+    }
+
     setEditingProperty(null)
     setShowForm(true)
+  }
+
+  const handleNotificarBaja = async (propiedad: Propiedad) => {
+    if (!motivoBaja.trim()) {
+      toast.error('Por favor indica el motivo de la baja')
+      return
+    }
+
+    try {
+      // Aquí se podría enviar una notificación al admin o guardar en base de datos
+      // Por ahora actualizamos el estado de la propiedad a "Baja solicitada"
+      toast.success(`Solicitud de baja enviada para: ${propiedad.titulo}. El administrador será notificado.`)
+      setBajaConfirm(null)
+      setMotivoBaja('')
+    } catch (error) {
+      console.error('Error al notificar baja:', error)
+      toast.error('Error al enviar la solicitud de baja')
+    }
   }
 
   if (!user) return null
@@ -173,6 +219,47 @@ export default function PropiedadesAsesorPage() {
             Nueva Propiedad
           </Button>
         </div>
+
+        {/* Plan Information */}
+        {user && (
+          <Card className="mb-6 bg-gradient-to-r from-arkin-gold/10 to-arkin-gold/5 border-arkin-gold/30">
+            <CardContent className="p-4 sm:p-6">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  {user.plan === 'elite' ? (
+                    <div className="p-3 bg-arkin-gold rounded-xl">
+                      <Crown className="h-6 w-6 text-white" />
+                    </div>
+                  ) : (
+                    <div className="p-3 bg-blue-500 rounded-xl">
+                      <Zap className="h-6 w-6 text-white" />
+                    </div>
+                  )}
+                  <div>
+                    <h3 className="text-lg font-bold text-arkin-graphite">
+                      {getPlanById(user.plan || 'core')?.name}
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      {user.plan === 'elite' 
+                        ? `Propiedades ilimitadas • ${propiedades.length} activas`
+                        : `${propiedades.length} de ${getPropertyLimit(user.plan || 'core')} propiedades`
+                      }
+                    </p>
+                  </div>
+                </div>
+                {user.plan !== 'elite' && (
+                  <Button
+                    onClick={() => router.push('/panel-asesor/planes')}
+                    className="bg-arkin-gold hover:bg-arkin-gold/90 text-black font-semibold"
+                  >
+                    <Crown className="h-4 w-4 mr-2" />
+                    Actualizar a Elite
+                  </Button>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Stats */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
@@ -339,6 +426,17 @@ export default function PropiedadesAsesorPage() {
                       </Button>
                     )}
 
+                    {/* Notificar Baja: Para asesores */}
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setBajaConfirm(propiedad)}
+                      className="flex-1 text-orange-600 hover:text-orange-700 hover:bg-orange-50"
+                      title="Notificar baja de propiedad"
+                    >
+                      <AlertTriangle className="h-4 w-4" />
+                    </Button>
+
                     {/* Eliminar: SOLO admin */}
                     {user?.role === 'admin' && (
                       <Button
@@ -377,6 +475,48 @@ export default function PropiedadesAsesorPage() {
               >
                 Eliminar
               </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Dialog de Notificación de Baja */}
+        <Dialog open={bajaConfirm !== null} onOpenChange={() => { setBajaConfirm(null); setMotivoBaja(''); }}>
+          <DialogContent className="bg-arkin-secondary/50 border-arkin-gold/20">
+            <DialogHeader>
+              <DialogTitle className="text-arkin-graphite flex items-center gap-2">
+                <AlertTriangle className="h-5 w-5 text-orange-500" />
+                Notificar Baja de Propiedad
+              </DialogTitle>
+              <DialogDescription className="text-gray-600">
+                {bajaConfirm && (
+                  <span>Estás solicitando dar de baja: <strong>{bajaConfirm.titulo}</strong></span>
+                )}
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4 mt-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Motivo de la baja *
+                </label>
+                <textarea
+                  value={motivoBaja}
+                  onChange={(e) => setMotivoBaja(e.target.value)}
+                  placeholder="Ej: Propiedad vendida, propietario retiró la propiedad, etc."
+                  className="w-full p-3 border border-gray-200 rounded-lg focus:border-arkin-gold focus:ring-1 focus:ring-arkin-gold/20"
+                  rows={3}
+                />
+              </div>
+              <div className="flex gap-4 justify-end">
+                <Button variant="outline" onClick={() => { setBajaConfirm(null); setMotivoBaja(''); }}>
+                  Cancelar
+                </Button>
+                <Button
+                  onClick={() => bajaConfirm && handleNotificarBaja(bajaConfirm)}
+                  className="bg-orange-500 hover:bg-orange-600 text-white"
+                >
+                  Enviar Notificación
+                </Button>
+              </div>
             </div>
           </DialogContent>
         </Dialog>

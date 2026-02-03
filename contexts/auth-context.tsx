@@ -12,6 +12,7 @@ interface User {
   telefono?: string
   avatar?: string
   propiedadId?: number
+  plan?: 'core' | 'elite'
 }
 
 interface AuthContextType {
@@ -195,6 +196,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             telefono: mockUser.telefono,
             avatar: mockUser.avatar,
             propiedadId: mockUser.propiedadId,
+            plan: (mockUser as any).plan || 'core',
           }
           setUser(userData)
           // Guardar en localStorage para persistir en reload

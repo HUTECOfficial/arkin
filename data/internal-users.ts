@@ -17,7 +17,8 @@ export const users: User[] = [
     role: 'asesor',
     telefono: '+52 477 123 4567',
     avatar: '/avatars/ana.jpg',
-    password: 'ana_arkin2025'
+    password: 'ana_arkin2025',
+    plan: 'core'
   },
   {
     id: 'asesor-2',
@@ -26,7 +27,8 @@ export const users: User[] = [
     role: 'asesor',
     telefono: '+52 477 234 5678',
     avatar: '/avatars/roberto.jpg',
-    password: 'roberto_arkin2025'
+    password: 'roberto_arkin2025',
+    plan: 'elite'
   },
   {
     id: 'asesor-3',
@@ -35,7 +37,8 @@ export const users: User[] = [
     role: 'asesor',
     telefono: '+52 477 345 6789',
     avatar: '/avatars/maria.jpg',
-    password: 'maria_arkin2025'
+    password: 'maria_arkin2025',
+    plan: 'core'
   },
   {
     id: 'asesor-4',
@@ -44,7 +47,8 @@ export const users: User[] = [
     role: 'asesor',
     telefono: '+52 477 456 7801',
     avatar: '/avatars/daniela.jpg',
-    password: 'daniela_arkin2025'
+    password: 'daniela_arkin2025',
+    plan: 'elite'
   },
   {
     id: 'asesor-5',
@@ -53,7 +57,8 @@ export const users: User[] = [
     role: 'asesor',
     telefono: '+52 477 456 7802',
     avatar: '/avatars/subje.jpg',
-    password: 'subje_arkin2025'
+    password: 'subje_arkin2025',
+    plan: 'core'
   },
   {
     id: 'asesor-6',
@@ -62,7 +67,8 @@ export const users: User[] = [
     role: 'asesor',
     telefono: '+52 477 456 7803',
     avatar: '/avatars/gris.jpg',
-    password: 'gris_arkin2025'
+    password: 'gris_arkin2025',
+    plan: 'elite'
   },
   {
     id: 'asesor-7',
@@ -71,7 +77,8 @@ export const users: User[] = [
     role: 'asesor',
     telefono: '+52 477 456 7804',
     avatar: '/avatars/lizzie.jpg',
-    password: 'lizzie_arkin2025'
+    password: 'lizzie_arkin2025',
+    plan: 'elite'
   },
   {
     id: 'asesor-8',
@@ -80,7 +87,8 @@ export const users: User[] = [
     role: 'asesor',
     telefono: '+52 477 456 7805',
     avatar: '/avatars/ingrid.jpg',
-    password: 'ingrid_arkin2025'
+    password: 'ingrid_arkin2025',
+    plan: 'core'
   },
   {
     id: 'asesor-9',
@@ -89,7 +97,8 @@ export const users: User[] = [
     role: 'asesor',
     telefono: '+52 477 456 7806',
     avatar: '/avatars/sofia.jpg',
-    password: 'sofia_arkin2025'
+    password: 'sofia_arkin2025',
+    plan: 'elite'
   },
   {
     id: 'asesor-10',
@@ -98,7 +107,8 @@ export const users: User[] = [
     role: 'asesor',
     telefono: '+52 477 456 7807',
     avatar: '/avatars/elizabeth.jpg',
-    password: 'elizabeth_arkin2025'
+    password: 'elizabeth_arkin2025',
+    plan: 'core'
   },
   // Fotógrafo
   {

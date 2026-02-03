@@ -17,7 +17,7 @@ export interface OwnerSubmission {
   urgency: string
   description: string
   amenities: string[]
-  actividadesRecreativas?: string
+  actividadesRecreativas?: string[]
   // Fotos (guardamos los nombres/URLs)
   photoCount: number
   // Contacto

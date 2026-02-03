@@ -24,8 +24,15 @@ import {
   TrendingDown,
   Flame,
   Plus,
-  Settings
+  Settings,
+  Camera,
+  Crown,
+  Zap
 } from 'lucide-react'
+import { getPlanById } from '@/data/subscription-plans'
+
+// Lista de asesores autorizados para ver solicitudes del fotógrafo
+const ASESORES_AUTORIZADOS_FOTOGRAFO = ['lizzie@arkin.mx']
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 
 export default function PanelAsesorPage() {
@@ -179,14 +186,65 @@ export default function PanelAsesorPage() {
               Gestiona tus propiedades y alcanza tus metas
             </p>
           </div>
-          <button
-            onClick={() => router.push('/panel-asesor/propiedades')}
-            className="flex items-center gap-2 px-6 py-3 bg-arkin-gold hover:bg-arkin-gold/90 text-black rounded-xl transition-all font-semibold shadow-lg hover:shadow-xl whitespace-nowrap"
-          >
-            <Settings className="w-5 h-5" />
-            <span className="hidden sm:inline">Gestionar Propiedades</span>
-            <span className="sm:hidden">Mis Propiedades</span>
-          </button>
+          <div className="flex flex-col sm:flex-row gap-3">
+            {/* Botón para ver solicitudes del fotógrafo (solo para asesores autorizados) */}
+            {ASESORES_AUTORIZADOS_FOTOGRAFO.includes(user.email) && (
+              <button
+                onClick={() => router.push('/panel-asesor/solicitudes-fotografo')}
+                className="flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-all font-semibold shadow-lg hover:shadow-xl whitespace-nowrap"
+              >
+                <Camera className="w-5 h-5" />
+                <span className="hidden sm:inline">Solicitudes Fotógrafo</span>
+                <span className="sm:hidden">Fotógrafo</span>
+              </button>
+            )}
+            <button
+              onClick={() => router.push('/panel-asesor/propiedades')}
+              className="flex items-center gap-2 px-6 py-3 bg-arkin-gold hover:bg-arkin-gold/90 text-black rounded-xl transition-all font-semibold shadow-lg hover:shadow-xl whitespace-nowrap"
+            >
+              <Settings className="w-5 h-5" />
+              <span className="hidden sm:inline">Gestionar Propiedades</span>
+              <span className="sm:hidden">Mis Propiedades</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Plan Information */}
+        <div className="bg-gradient-to-r from-arkin-gold/10 to-arkin-gold/5 rounded-2xl p-6 mb-8 border-2 border-arkin-gold/30">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              {user.plan === 'elite' ? (
+                <div className="w-12 h-12 bg-arkin-gold rounded-xl flex items-center justify-center">
+                  <Crown className="w-6 h-6 text-white" />
+                </div>
+              ) : (
+                <div className="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center">
+                  <Zap className="w-6 h-6 text-white" />
+                </div>
+              )}
+              <div>
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                  {getPlanById(user.plan || 'core')?.name}
+                </h2>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  {user.plan === 'elite' 
+                    ? 'Propiedades ilimitadas • Asistente IA incluido'
+                    : 'Hasta 6 propiedades activas'
+                  }
+                </p>
+              </div>
+            </div>
+            {user.plan !== 'elite' && (
+              <button
+                onClick={() => router.push('/panel-asesor/planes')}
+                className="flex items-center gap-2 px-6 py-3 bg-arkin-gold hover:bg-arkin-gold/90 text-black rounded-xl transition-all font-semibold shadow-lg hover:shadow-xl whitespace-nowrap"
+              >
+                <Crown className="w-5 h-5" />
+                <span className="hidden sm:inline">Actualizar a Elite</span>
+                <span className="sm:inline">Mejorar Plan</span>
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Sistema de Bonos */}

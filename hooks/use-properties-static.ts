@@ -11,7 +11,6 @@ const fetchPropertiesFromSupabase = async (): Promise<Propiedad[]> => {
       .from('propiedades')
       .select('id, titulo, ubicacion, precio, precio_texto, tipo, habitaciones, banos, area, area_texto, descripcion, caracteristicas, status, categoria, fecha_publicacion, tour_virtual, usuario_id, created_at')
       .order('created_at', { ascending: false })
-      .limit(100)
 
     if (propError) {
       console.error('Error fetching properties from Supabase:', propError)

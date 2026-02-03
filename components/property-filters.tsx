@@ -62,18 +62,25 @@ export function PropertyFilters({ onFiltersChange, isOpen, onToggle }: PropertyF
   ]
 
   const amenities = [
-    "Vista panorámica",
-    "Terraza privada",
-    "Piscina",
-    "Jardín privado",
+    "Alberca",
     "Gimnasio",
-    "Seguridad 24/7",
+    "Área de juegos infantiles",
+    "Roof garden",
+    "Asadores",
+    "Salón de eventos",
+    "Coworking",
+    "Seguridad / vigilancia",
     "Estacionamiento",
-    "Elevador",
-    "Balcón",
-    "Chimenea",
-    "Cocina equipada",
-    "Aire acondicionado"
+    "Elevadores",
+    "Áreas verdes",
+    "Pet park",
+    "Cancha deportiva",
+    "Guardería",
+    "Terraza",
+    "Acceso controlado",
+    "Cámaras de vigilancia",
+    "WIFI en áreas comunes",
+    "Cafetería"
   ]
 
   const handleFilterChange = (key: string, value: any) => {

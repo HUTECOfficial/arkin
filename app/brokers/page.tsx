@@ -60,25 +60,39 @@ const beneficios = [
 
 const notariasAsociadas = [
   {
-    nombre: "Notaría 15 de León",
-    notario: "Lic. Roberto Hernández García",
-    especialidad: "Escrituración y Fideicomisos",
+    nombre: "Notaría 100",
+    notario: "Lic. Jorge Arturo Zepeda Orozco",
+    especialidad: "Escrituración y Compraventa",
     ubicacion: "León, Guanajuato",
-    telefono: "+52 477 123 4567"
+    telefono: "+52 477 475 6951"
   },
   {
-    nombre: "Notaría 28 de León",
-    notario: "Lic. María Elena Rodríguez",
-    especialidad: "Compraventa y Hipotecas",
+    nombre: "Notaría 65",
+    notario: "Lic. Pablo Francisco Toriello Arce",
+    especialidad: "Compraventa y Fideicomisos",
     ubicacion: "León, Guanajuato",
-    telefono: "+52 477 234 5678"
+    telefono: "+52 477 475 6951"
   },
   {
-    nombre: "Notaría 5 de Guadalajara",
-    notario: "Lic. Carlos Martínez López",
+    nombre: "Notaría 98",
+    notario: "Lic. Jose Manuel Toriello Arce",
     especialidad: "Desarrollos Inmobiliarios",
-    ubicacion: "Guadalajara, Jalisco",
-    telefono: "+52 33 345 6789"
+    ubicacion: "León, Guanajuato",
+    telefono: "+52 477 475 6951"
+  },
+  {
+    nombre: "Notaría 15",
+    notario: "Lic. Cesar Santos del Muro Amador",
+    especialidad: "Hipotecas y Escrituración",
+    ubicacion: "León, Guanajuato",
+    telefono: "+52 477 475 6951"
+  },
+  {
+    nombre: "Notaría 82",
+    notario: "Lic. Enrique Duran Llamas",
+    especialidad: "Compraventa Inmobiliaria",
+    ubicacion: "León, Guanajuato",
+    telefono: "+52 477 475 6951"
   }
 ]
 

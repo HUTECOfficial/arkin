@@ -1,4 +1,5 @@
 export type UserRole = 'asesor' | 'admin' | 'propietario' | 'fotografo'
+export type PlanType = 'core' | 'elite'
 
 export interface User {
   id: string
@@ -9,6 +10,7 @@ export interface User {
   telefono?: string
   avatar?: string
   propiedadId?: number // Para propietarios
+  plan?: PlanType // Plan de suscripción para asesores
 }
 
 export interface PropertyProgress {

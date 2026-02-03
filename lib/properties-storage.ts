@@ -37,10 +37,35 @@ export class PropertiesStorage {
 
   // Obtener propiedades por usuario (asesor) con caché
   static async getByUsuario(usuarioId: string): Promise<Propiedad[]> {
-    // Si el ID no es un UUID válido, devolver array vacío
+    // Si el ID no es un UUID válido, intentar buscar por email del asesor
     if (!usuarioId || !this.isValidUUID(usuarioId)) {
-      console.warn('getByUsuario: Invalid UUID provided:', usuarioId)
-      return []
+      console.warn('getByUsuario: Invalid UUID provided, trying alternative methods:', usuarioId)
+      
+      // Intentar obtener todas las propiedades y filtrar por el ID mock
+      // Esto es un fallback para usuarios mock que no tienen UUID
+      return getCachedOrFetch(
+        CACHE_KEYS.PROPERTIES_BY_USUARIO(usuarioId),
+        async () => {
+          try {
+            // Buscar propiedades que tengan el usuario_id como string (para IDs mock)
+            const { data, error } = await withRetry(async () => {
+              return supabaseOptimized
+                .from('propiedades')
+                .select('*')
+                .order('created_at', { ascending: false })
+            })
+
+            if (error) throw error
+            
+            // Filtrar propiedades que coincidan con el usuario_id (incluso si no es UUID)
+            const filtered = data?.filter((p: any) => p.usuario_id === usuarioId) || []
+            return filtered.map(this.dbToApp)
+          } catch (err) {
+            console.error('Error in fallback getByUsuario:', err)
+            return []
+          }
+        }
+      )
     }
 
     return getCachedOrFetch(

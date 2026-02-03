@@ -67,7 +67,7 @@ export default function PropietariosPage() {
     urgency: '',
     description: '',
     amenities: [] as string[],
-    actividadesRecreativas: '',
+    actividadesRecreativas: [] as string[],
     photos: [] as File[],
     ownerName: '',
     phone: '',
@@ -152,10 +152,17 @@ export default function PropietariosPage() {
   }, [neighborhoodQuery, placesSuggestions, zones])
 
   const amenitiesList = [
-    'Piscina', 'Jardín privado', 'Terraza', 'Balcón', 'Gimnasio',
-    'Spa', 'Seguridad 24/7', 'Estacionamiento', 'Elevador',
-    'Vista panorámica', 'Chimenea', 'Cocina equipada', 'Aire acondicionado',
-    'Calefacción', 'Jacuzzi', 'Sala de juegos', 'Oficina', 'Bodega'
+    'Alberca', 'Gimnasio', 'Área de juegos infantiles', 'Roof garden',
+    'Asadores', 'Salón de eventos', 'Coworking', 'Seguridad / vigilancia',
+    'Estacionamiento', 'Elevadores', 'Áreas verdes', 'Pet park',
+    'Cancha deportiva', 'Guardería', 'Terraza', 'Acceso controlado',
+    'Cámaras de vigilancia', 'WIFI en áreas comunes', 'Cafetería'
+  ]
+
+  const actividadesRecreativasList = [
+    'Clases de yoga', 'Torneos deportivos', 'Talleres', 'Eventos sociales',
+    'Actividades infantiles', 'Cine al aire libre', 'Clases de baile',
+    'Activaciones comunitarias', 'Manualidades', 'Convivencia'
   ]
 
   const handleAmenityToggle = (amenity: string) => {
@@ -164,6 +171,15 @@ export default function PropietariosPage() {
       amenities: prev.amenities.includes(amenity)
         ? prev.amenities.filter(a => a !== amenity)
         : [...prev.amenities, amenity]
+    }))
+  }
+
+  const handleActividadRecreativaToggle = (actividad: string) => {
+    setFormData(prev => ({
+      ...prev,
+      actividadesRecreativas: prev.actividadesRecreativas.includes(actividad)
+        ? prev.actividadesRecreativas.filter(a => a !== actividad)
+        : [...prev.actividadesRecreativas, actividad]
     }))
   }
 
@@ -800,17 +816,38 @@ export default function PropietariosPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="actividades-recreativas" className="text-sm font-medium text-gray-700">
+                    <Label className="text-sm font-medium text-gray-700">
                       Actividades recreativas (opcional)
                     </Label>
-                    <Textarea
-                      id="actividades-recreativas"
-                      placeholder="Ej: Cancha de tenis, área de juegos, club, parques cercanos, ciclovía..."
-                      rows={3}
-                      value={formData.actividadesRecreativas}
-                      onChange={(e) => setFormData(prev => ({ ...prev, actividadesRecreativas: e.target.value }))}
-                      className="border-gray-200 focus:border-arkin-gold focus:ring-arkin-gold/20"
-                    />
+                    <p className="text-xs text-gray-500 mb-2">Selecciona las actividades que ofrece el desarrollo</p>
+                    <div className="grid grid-cols-2 gap-2">
+                      {actividadesRecreativasList.map((actividad) => (
+                        <div
+                          key={actividad}
+                          onClick={() => handleActividadRecreativaToggle(actividad)}
+                          className={`p-2 rounded-lg border cursor-pointer transition-all ${
+                            formData.actividadesRecreativas.includes(actividad)
+                              ? 'border-blue-500 bg-blue-500/10 text-blue-600'
+                              : 'border-gray-200 hover:border-blue-500/50 hover:bg-blue-500/5'
+                          }`}
+                        >
+                          <div className="flex items-center space-x-2">
+                            <div
+                              className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
+                                formData.actividadesRecreativas.includes(actividad)
+                                  ? 'border-blue-500 bg-blue-500'
+                                  : 'border-gray-300'
+                              }`}
+                            >
+                              {formData.actividadesRecreativas.includes(actividad) && (
+                                <CheckCircle className="h-3 w-3 text-white" />
+                              )}
+                            </div>
+                            <span className="text-sm">{actividad}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
 
