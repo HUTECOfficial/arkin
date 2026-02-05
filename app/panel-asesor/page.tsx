@@ -58,9 +58,18 @@ export default function PanelAsesorPage() {
     }
 
     // Cargar datos del asesor
-    setProgress(getProgressByAsesor(user.id))
-    setLeads(getLeadsByAsesor(user.id))
-    setActivities(getActivitiesByAsesor(user.id))
+    console.log('🔍 Cargando datos para asesor:', user.id, user.email)
+    const progressData = getProgressByAsesor(user.id)
+    const leadsData = getLeadsByAsesor(user.id)
+    const activitiesData = getActivitiesByAsesor(user.id)
+    
+    console.log('📊 Progress cargado:', progressData.length, 'propiedades')
+    console.log('👥 Leads cargados:', leadsData.length, 'leads')
+    console.log('📝 Actividades cargadas:', activitiesData.length, 'actividades')
+    
+    setProgress(progressData)
+    setLeads(leadsData)
+    setActivities(activitiesData)
   }, [user, isAuthenticated, loading, router])
 
   if (!user) return null
