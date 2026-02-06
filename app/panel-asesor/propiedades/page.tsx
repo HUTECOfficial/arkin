@@ -24,7 +24,8 @@ import {
   User,
   AlertTriangle,
   Crown,
-  Zap
+  Zap,
+  Camera
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { getPlanById, canAddProperty, getPropertyLimit } from '@/data/subscription-plans'
@@ -238,13 +239,23 @@ export default function PropiedadesAsesorPage() {
             <h1 className="text-2xl sm:text-3xl font-bold mb-2 text-arkin-graphite">Mis Propiedades</h1>
             <p className="text-sm sm:text-base text-gray-600">Gestiona tu portafolio de propiedades</p>
           </div>
-          <Button
-            onClick={handleNewProperty}
-            className="bg-arkin-gold hover:bg-arkin-gold/90 text-black font-semibold w-full sm:w-auto"
-          >
-            <Plus className="h-4 w-4 mr-2" />
-            Nueva Propiedad
-          </Button>
+          <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+            <Button
+              onClick={() => router.push('/panel-asesor/solicitud-propiedad')}
+              variant="outline"
+              className="border-arkin-gold text-arkin-gold hover:bg-arkin-gold/10 font-semibold w-full sm:w-auto"
+            >
+              <Camera className="h-4 w-4 mr-2" />
+              Solicitar Propiedad
+            </Button>
+            <Button
+              onClick={handleNewProperty}
+              className="bg-arkin-gold hover:bg-arkin-gold/90 text-black font-semibold w-full sm:w-auto"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Nueva Propiedad
+            </Button>
+          </div>
         </div>
 
         {/* Plan Information */}
