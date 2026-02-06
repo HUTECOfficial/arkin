@@ -39,6 +39,8 @@ function LoginContent() {
         router.push('/panel-propietario')
       } else if (userData?.role === 'fotografo') {
         router.push('/panel-fotografo')
+      } else if (userData?.role === 'broker') {
+        router.push('/panel-broker')
       } else if (userData?.role === 'asesor') {
         router.push('/panel-asesor')
       } else {

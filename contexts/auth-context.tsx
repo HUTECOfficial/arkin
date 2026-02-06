@@ -8,7 +8,7 @@ interface User {
   id: string
   email: string
   nombre?: string
-  role: 'admin' | 'propietario' | 'asesor' | 'fotografo' | 'cliente'
+  role: 'admin' | 'propietario' | 'asesor' | 'fotografo' | 'cliente' | 'broker'
   telefono?: string
   avatar?: string
   propiedadId?: number

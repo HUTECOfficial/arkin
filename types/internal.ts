@@ -1,4 +1,4 @@
-export type UserRole = 'asesor' | 'admin' | 'propietario' | 'fotografo'
+export type UserRole = 'asesor' | 'admin' | 'propietario' | 'fotografo' | 'broker'
 export type PlanType = 'core' | 'elite'
 
 export interface User {
