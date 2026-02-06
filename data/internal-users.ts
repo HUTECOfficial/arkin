@@ -110,6 +110,26 @@ export const users: User[] = [
     password: 'elizabeth_arkin2025',
     plan: 'elite'
   },
+  {
+    id: 'asesor-11',
+    nombre: 'Alexandra',
+    email: 'alexandra@arkin.mx',
+    role: 'asesor',
+    telefono: '+52 477 456 7808',
+    avatar: '/avatars/alexandra.jpg',
+    password: 'alexandra_2025',
+    plan: 'elite'
+  },
+  {
+    id: 'asesor-12',
+    nombre: 'Claraliz',
+    email: 'claraliz@arkin.mx',
+    role: 'asesor',
+    telefono: '+52 477 456 7809',
+    avatar: '/avatars/claraliz.jpg',
+    password: 'liz_2025',
+    plan: 'elite'
+  },
   // Fotógrafo
   {
     id: 'fotografo-1',
