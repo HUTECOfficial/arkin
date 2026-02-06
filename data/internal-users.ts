@@ -138,7 +138,8 @@ export const users: User[] = [
     role: 'broker',
     telefono: '+52 477 600 1234',
     avatar: '/avatars/broker.jpg',
-    password: 'broker_arkin2025'
+    password: 'broker_arkin2025',
+    plan: 'elite'
   },
   // Fotógrafo
   {
