@@ -68,7 +68,7 @@ export function DynamicHeader() {
   }
 
   // Detectar si estamos en una página de panel
-  const isInPanel = pathname.startsWith('/panel-admin') || pathname.startsWith('/panel-asesor')
+  const isInPanel = pathname.startsWith('/panel-admin') || pathname.startsWith('/panel-asesor') || pathname.startsWith('/panel-broker') || pathname.startsWith('/panel-fotografo')
 
   return (
     <>
@@ -276,7 +276,8 @@ export function DynamicHeader() {
                     user.role === 'admin' ? '/panel-admin' :
                       user.role === 'propietario' ? '/panel-propietario' :
                         user.role === 'fotografo' ? '/panel-fotografo' :
-                          '/panel-asesor'
+                          user.role === 'broker' ? '/panel-broker' :
+                            '/panel-asesor'
                   }
                 >
                   <Button
@@ -515,7 +516,7 @@ export function DynamicHeader() {
                       </Link>
                     ) : (
                       <Link
-                        href={user.role === 'admin' ? '/panel-admin' : '/panel-asesor'}
+                        href={user.role === 'admin' ? '/panel-admin' : user.role === 'broker' ? '/panel-broker' : user.role === 'fotografo' ? '/panel-fotografo' : '/panel-asesor'}
                         className="transition-all duration-200 ease-out"
                       >
                         <Button
