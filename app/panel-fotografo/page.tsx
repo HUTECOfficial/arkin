@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/contexts/auth-context"
+import { uploadImage } from "@/lib/supabase/storage"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -30,8 +31,12 @@ import {
   Maximize,
   FileText,
   ChevronRight,
-  Eye
+  Eye,
+  X,
+  Loader2,
+  Trash2
 } from "lucide-react"
+import { toast } from 'sonner'
 
 // Configuración de comisiones
 const COMISION_ARKIN = 0.02
@@ -71,6 +76,7 @@ interface SolicitudPropiedad {
   area?: number
   status: 'pendiente' | 'en_proceso' | 'completada' | 'rechazada'
   notas_fotografo?: string
+  imagenes?: string[]
   propiedad_id?: number
   created_at: string
   updated_at: string
@@ -86,6 +92,10 @@ export default function PanelFotografoPage() {
   const [solicitudDetalle, setSolicitudDetalle] = useState<SolicitudPropiedad | null>(null)
   const [notaFotografo, setNotaFotografo] = useState('')
   const [updatingId, setUpdatingId] = useState<string | null>(null)
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([])
+  const [previewUrls, setPreviewUrls] = useState<string[]>([])
+  const [uploading, setUploading] = useState(false)
+  const [uploadProgress, setUploadProgress] = useState(0)
 
   const handleLogout = async () => {
     try {
@@ -135,14 +145,101 @@ export default function PanelFotografoPage() {
         body: JSON.stringify({ id, status, notas_fotografo: notas || undefined })
       })
       if (res.ok) {
+        const data = await res.json()
+        // Actualizar solicitudDetalle con los datos frescos sin cerrar
+        if (data.solicitud) {
+          setSolicitudDetalle(data.solicitud)
+        }
         await loadData()
-        setSolicitudDetalle(null)
-        setNotaFotografo('')
       }
     } catch (error) {
       console.error('Error updating solicitud:', error)
     } finally {
       setUpdatingId(null)
+    }
+  }
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || [])
+    setSelectedFiles(prev => [...prev, ...files])
+    const newPreviews = files.map(file => URL.createObjectURL(file))
+    setPreviewUrls(prev => [...prev, ...newPreviews])
+  }
+
+  const removeSelectedFile = (index: number) => {
+    setSelectedFiles(prev => prev.filter((_, i) => i !== index))
+    URL.revokeObjectURL(previewUrls[index])
+    setPreviewUrls(prev => prev.filter((_, i) => i !== index))
+  }
+
+  const handleUploadToSolicitud = async () => {
+    if (!solicitudDetalle || selectedFiles.length === 0) return
+    setUploading(true)
+    setUploadProgress(0)
+    try {
+      const uploadedUrls: string[] = []
+      const total = selectedFiles.length
+
+      for (let i = 0; i < total; i++) {
+        setUploadProgress(Math.round((i / total) * 100))
+        const result = await uploadImage(selectedFiles[i], `solicitudes/${solicitudDetalle.id}`)
+        if (result.error) {
+          toast.error(`Error subiendo ${selectedFiles[i].name}: ${result.error}`)
+          continue
+        }
+        if (result.url) uploadedUrls.push(result.url)
+      }
+
+      if (uploadedUrls.length === 0) {
+        toast.error('No se pudo subir ninguna imagen')
+        return
+      }
+
+      const currentImages = solicitudDetalle.imagenes || []
+      const newImages = [...currentImages, ...uploadedUrls]
+
+      const res = await fetch('/api/solicitudes-propiedad', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: solicitudDetalle.id, imagenes: newImages })
+      })
+
+      if (!res.ok) throw new Error('Error guardando imágenes')
+
+      const data = await res.json()
+      setSolicitudDetalle(data.solicitud)
+      setSelectedFiles([])
+      previewUrls.forEach(url => URL.revokeObjectURL(url))
+      setPreviewUrls([])
+      setUploadProgress(100)
+      toast.success(`${uploadedUrls.length} imagen${uploadedUrls.length > 1 ? 'es' : ''} subida${uploadedUrls.length > 1 ? 's' : ''}`)
+      await loadData()
+    } catch (error: any) {
+      console.error('Error:', error)
+      toast.error(error.message || 'Error al subir imágenes')
+    } finally {
+      setUploading(false)
+      setUploadProgress(0)
+    }
+  }
+
+  const handleDeleteSolicitudImage = async (imageUrl: string) => {
+    if (!solicitudDetalle || !confirm('¿Eliminar esta imagen?')) return
+    try {
+      const newImages = (solicitudDetalle.imagenes || []).filter(img => img !== imageUrl)
+      const res = await fetch('/api/solicitudes-propiedad', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: solicitudDetalle.id, imagenes: newImages })
+      })
+      if (!res.ok) throw new Error('Error eliminando imagen')
+      const data = await res.json()
+      setSolicitudDetalle(data.solicitud)
+      toast.success('Imagen eliminada')
+      await loadData()
+    } catch (error) {
+      console.error('Error:', error)
+      toast.error('Error al eliminar imagen')
     }
   }
 
@@ -429,6 +526,98 @@ export default function PanelFotografoPage() {
                     <p className="text-sm text-gray-600 bg-gray-50 p-4 rounded-xl">{solicitudDetalle.descripcion}</p>
                   </div>
                 )}
+
+                {/* === SECCIÓN DE FOTOS === */}
+                <div className="border-t pt-6">
+                  <p className="text-sm font-medium text-gray-700 mb-3 flex items-center gap-2">
+                    <Camera className="h-4 w-4 text-arkin-gold" />
+                    Fotos de la propiedad ({(solicitudDetalle.imagenes || []).length})
+                  </p>
+
+                  {/* Fotos existentes */}
+                  {(solicitudDetalle.imagenes || []).length > 0 && (
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+                      {(solicitudDetalle.imagenes || []).map((imgUrl, idx) => (
+                        <div key={idx} className="relative group">
+                          <img src={imgUrl} alt={`Foto ${idx + 1}`} className="w-full h-32 object-cover rounded-lg" />
+                          <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center gap-2">
+                            <button
+                              onClick={() => window.open(imgUrl, '_blank')}
+                              className="text-white hover:text-arkin-gold"
+                            >
+                              <Eye className="h-5 w-5" />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteSolicitudImage(imgUrl)}
+                              className="text-white hover:text-red-400"
+                            >
+                              <Trash2 className="h-5 w-5" />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Subir nuevas fotos */}
+                  <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-arkin-gold transition-colors mb-4">
+                    <input
+                      type="file"
+                      multiple
+                      accept="image/*"
+                      onChange={handleFileSelect}
+                      className="hidden"
+                      id="solicitud-file-upload"
+                      disabled={uploading}
+                    />
+                    <label htmlFor="solicitud-file-upload" className="cursor-pointer">
+                      <ImageIcon className="h-10 w-10 text-gray-400 mx-auto mb-2" />
+                      <p className="text-sm font-semibold text-gray-700">Selecciona imágenes</p>
+                      <p className="text-xs text-gray-500">Haz clic para subir fotos de esta propiedad</p>
+                    </label>
+                  </div>
+
+                  {/* Preview de archivos seleccionados */}
+                  {selectedFiles.length > 0 && (
+                    <div className="mb-4">
+                      <p className="text-sm font-medium mb-2">Seleccionadas ({selectedFiles.length})</p>
+                      <div className="grid grid-cols-3 md:grid-cols-5 gap-2 mb-3">
+                        {previewUrls.map((url, idx) => (
+                          <div key={idx} className="relative group">
+                            <img src={url} alt={`Preview ${idx + 1}`} className="w-full h-24 object-cover rounded-lg" />
+                            <button
+                              onClick={() => removeSelectedFile(idx)}
+                              className="absolute top-1 right-1 bg-red-500 text-white p-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                            >
+                              <X className="h-3 w-3" />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+
+                      {uploading && (
+                        <div className="mb-3">
+                          <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                            <div className="h-full bg-arkin-gold rounded-full transition-all duration-300" style={{ width: `${uploadProgress}%` }} />
+                          </div>
+                          <p className="text-xs text-gray-500 mt-1 text-center">{uploadProgress}%</p>
+                        </div>
+                      )}
+
+                      <Button
+                        onClick={handleUploadToSolicitud}
+                        disabled={uploading}
+                        className="w-full bg-arkin-gold hover:bg-arkin-gold/90 text-black font-semibold"
+                      >
+                        {uploading ? (
+                          <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Subiendo...</>
+                        ) : (
+                          <><Upload className="h-4 w-4 mr-2" /> Subir {selectedFiles.length} imagen{selectedFiles.length > 1 ? 'es' : ''}</>
+                        )}
+                      </Button>
+                    </div>
+                  )}
+                </div>
 
                 {/* Notas del fotógrafo */}
                 <div>

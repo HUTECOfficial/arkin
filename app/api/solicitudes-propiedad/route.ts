@@ -47,6 +47,7 @@ export async function GET(request: Request) {
   area NUMERIC,
   status TEXT DEFAULT 'pendiente',
   notas_fotografo TEXT,
+  imagenes JSONB DEFAULT '[]'::jsonb,
   propiedad_id INTEGER,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
@@ -109,7 +110,7 @@ export async function POST(request: Request) {
 export async function PATCH(request: Request) {
   try {
     const body = await request.json()
-    const { id, status, notas_fotografo, propiedad_id } = body
+    const { id, status, notas_fotografo, propiedad_id, imagenes } = body
 
     if (!id) {
       return NextResponse.json({ error: 'Se requiere ID de solicitud' }, { status: 400 })
@@ -119,6 +120,7 @@ export async function PATCH(request: Request) {
     if (status) updateData.status = status
     if (notas_fotografo !== undefined) updateData.notas_fotografo = notas_fotografo
     if (propiedad_id !== undefined) updateData.propiedad_id = propiedad_id
+    if (imagenes !== undefined) updateData.imagenes = imagenes
 
     const { data, error } = await supabaseAdmin
       .from('solicitudes_propiedad')
