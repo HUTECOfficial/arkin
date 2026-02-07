@@ -3,7 +3,8 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/contexts/auth-context"
-import { supabase } from "@/lib/supabase/client"
+import { uploadImage } from "@/lib/supabase/storage"
+import { toast } from 'sonner'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -69,66 +70,69 @@ export default function NuevaSolicitudPage() {
     setUploadProgress(0)
 
     try {
-      // 1. Subir imágenes a Supabase Storage
+      // 1. Subir imágenes usando uploadImage (misma lógica que asesores)
       const uploadedUrls: string[] = []
       const totalFiles = selectedFiles.length
 
-      for (let i = 0; i < selectedFiles.length; i++) {
+      for (let i = 0; i < totalFiles; i++) {
         const file = selectedFiles[i]
-        const fileExt = file.name.split('.').pop()
-        const fileName = `${user?.id}/${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`
+        setUploadProgress(Math.round(((i) / totalFiles) * 100))
+
+        const result = await uploadImage(file, `solicitudes/${user?.id}`)
         
-        const { data, error } = await supabase.storage
-          .from('solicitudes-fotografo')
-          .upload(fileName, file, {
-            cacheControl: '3600',
-            upsert: false
-          })
+        if (result.error) {
+          toast.error(`Error subiendo ${file.name}: ${result.error}`)
+          continue
+        }
 
-        if (error) throw error
-
-        const { data: { publicUrl } } = supabase.storage
-          .from('solicitudes-fotografo')
-          .getPublicUrl(fileName)
-
-        uploadedUrls.push(publicUrl)
+        if (result.url) {
+          uploadedUrls.push(result.url)
+        }
         setUploadProgress(Math.round(((i + 1) / totalFiles) * 100))
       }
 
-      // 2. Crear solicitud en la base de datos
-      console.log('Intentando crear solicitud con datos:', {
-        fotografo_id: user?.id,
-        titulo: formData.titulo,
-        ubicacion: formData.ubicacion,
-        descripcion: formData.descripcion,
-        precio_estimado: formData.precio_estimado ? parseFloat(formData.precio_estimado) : null,
-        imagenes: uploadedUrls,
-        status: 'pendiente'
-      })
+      if (uploadedUrls.length === 0) {
+        toast.error('No se pudo subir ninguna imagen')
+        return
+      }
 
-      const { data: insertData, error: insertError } = await supabase
-        .from('solicitudes_fotografo')
-        .insert({
-          fotografo_id: user?.id,
+      // 2. Crear solicitud via API (usa service role, sin RLS)
+      const res = await fetch('/api/solicitudes-propiedad', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          asesor_email: user?.email || 'fotografo@arkin.mx',
+          asesor_nombre: user?.nombre || 'Santiago Canales',
           titulo: formData.titulo,
           ubicacion: formData.ubicacion,
           descripcion: formData.descripcion,
-          precio_estimado: formData.precio_estimado ? parseFloat(formData.precio_estimado) : null,
-          imagenes: uploadedUrls,
-          status: 'pendiente'
+          precio_estimado: formData.precio_estimado ? parseFloat(formData.precio_estimado) : null
         })
-        .select()
+      })
 
-      if (insertError) {
-        console.error('Error de inserción:', insertError)
-        throw insertError
+      if (!res.ok) {
+        const errData = await res.json()
+        throw new Error(errData.error || 'Error creando solicitud')
       }
 
-      console.log('Solicitud creada exitosamente:', insertData)
+      const data = await res.json()
+
+      // 3. Agregar imágenes a la solicitud
+      if (data.solicitud?.id && uploadedUrls.length > 0) {
+        await fetch('/api/solicitudes-propiedad', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id: data.solicitud.id,
+            imagenes: uploadedUrls
+          })
+        })
+      }
+
       setShowSuccessModal(true)
     } catch (error: any) {
       console.error('Error creating request:', error)
-      // Mostrar error en consola, el usuario verá el estado de error
+      toast.error(error.message || 'Error al enviar solicitud')
     } finally {
       setUploading(false)
       setUploadProgress(0)

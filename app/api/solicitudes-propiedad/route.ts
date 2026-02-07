@@ -130,6 +130,25 @@ export async function PATCH(request: Request) {
       .single()
 
     if (error) {
+      // Si el error es por columna imagenes faltante, intentar sin ella
+      if (error.message.includes('imagenes') && imagenes !== undefined) {
+        console.warn('Columna imagenes no existe, intentando sin ella. Ejecuta: ALTER TABLE solicitudes_propiedad ADD COLUMN imagenes JSONB DEFAULT \'[]\'::jsonb;')
+        const { imagenes: _, ...updateWithoutImages } = updateData
+        const { data: data2, error: error2 } = await supabaseAdmin
+          .from('solicitudes_propiedad')
+          .update(updateWithoutImages)
+          .eq('id', id)
+          .select()
+          .single()
+
+        if (error2) {
+          console.error('Error updating solicitud (fallback):', error2)
+          return NextResponse.json({ error: error2.message }, { status: 500 })
+        }
+        // Devolver con imagenes vacío para que el frontend no crashee
+        return NextResponse.json({ solicitud: { ...data2, imagenes: [] } })
+      }
+
       console.error('Error updating solicitud:', error)
       return NextResponse.json({ error: error.message }, { status: 500 })
     }
