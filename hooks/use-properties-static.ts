@@ -1,13 +1,29 @@
 import { useState, useEffect } from 'react'
 import useSWR from 'swr'
+import { createClient } from '@supabase/supabase-js'
 import { supabase } from '@/lib/supabase/client'
 import type { Propiedad } from '@/data/propiedades'
+
+// Singleton para queries de datos (sin persistSession para evitar conflictos con auth)
+let _queryClient: ReturnType<typeof createClient> | null = null
+function getQueryClient() {
+  if (!_queryClient) {
+    _queryClient = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false } }
+    )
+  }
+  return _queryClient
+}
 
 // Fetcher para cargar propiedades desde Supabase con nombre del asesor
 const fetchPropertiesFromSupabase = async (): Promise<Propiedad[]> => {
   try {
+    const db = getQueryClient()
+
     // Obtener propiedades SIN las imágenes pesadas para carga rápida
-    const { data: propiedades, error: propError } = await supabase
+    const { data: propiedades, error: propError } = await db
       .from('propiedades')
       .select('id, titulo, ubicacion, precio, precio_texto, tipo, habitaciones, banos, area, area_texto, descripcion, caracteristicas, status, categoria, fecha_publicacion, tour_virtual, usuario_id, created_at')
       .order('created_at', { ascending: false })
@@ -22,7 +38,7 @@ const fetchPropertiesFromSupabase = async (): Promise<Propiedad[]> => {
     let imagenesMap: Record<number, string> = {}
     
     if (propIds.length > 0) {
-      const { data: imagenes } = await supabase
+      const { data: imagenes } = await db
         .from('propiedades')
         .select('id, imagen')
         .in('id', propIds)
@@ -43,7 +59,7 @@ const fetchPropertiesFromSupabase = async (): Promise<Propiedad[]> => {
     // Obtener nombres de usuarios si hay IDs
     let usuariosMap: Record<string, string> = {}
     if (usuarioIds.length > 0) {
-      const { data: usuarios } = await supabase
+      const { data: usuarios } = await db
         .from('usuarios')
         .select('id, nombre')
         .in('id', usuarioIds)
@@ -188,10 +204,11 @@ export function usePropertiesStatic() {
 // Fetcher para cargar una propiedad específica por ID
 const fetchPropertyById = async (id: number): Promise<Propiedad | null> => {
   try {
+    const db = getQueryClient()
     console.log('Fetching property by ID:', id)
     
     // Primero cargar datos sin imágenes pesadas
-    const { data: prop, error } = await supabase
+    const { data: prop, error } = await (db as any)
       .from('propiedades')
       .select('id, titulo, ubicacion, precio, precio_texto, tipo, habitaciones, banos, area, area_texto, descripcion, caracteristicas, status, categoria, fecha_publicacion, tour_virtual, usuario_id, created_at')
       .eq('id', id)
@@ -210,7 +227,7 @@ const fetchPropertyById = async (id: number): Promise<Propiedad | null> => {
     console.log('Property found:', prop.titulo)
 
     // Cargar imagen y galería en consulta separada
-    const { data: mediaData } = await supabase
+    const { data: mediaData } = await (db as any)
       .from('propiedades')
       .select('imagen, galeria')
       .eq('id', id)
@@ -222,7 +239,7 @@ const fetchPropertyById = async (id: number): Promise<Propiedad | null> => {
     // Obtener nombre del usuario si existe
     let agenteNombre = 'Asesor ARKIN'
     if (prop.usuario_id) {
-      const { data: usuario } = await supabase
+      const { data: usuario } = await (db as any)
         .from('usuarios')
         .select('nombre')
         .eq('id', prop.usuario_id)

@@ -1,7 +1,21 @@
 import { Propiedad } from '@/data/propiedades'
 import type { Database } from './supabase/database.types'
+import { createClient, SupabaseClient } from '@supabase/supabase-js'
 
 type PropiedadRow = Database['public']['Tables']['propiedades']['Row']
+
+// Singleton: una sola instancia sin persistSession para queries de datos
+let _dbClient: SupabaseClient | null = null
+function getDbClient(): SupabaseClient {
+  if (!_dbClient) {
+    _dbClient = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false } }
+    )
+  }
+  return _dbClient
+}
 
 export class PropertiesStorage {
   // Convertir de formato DB a formato App
@@ -38,16 +52,10 @@ export class PropertiesStorage {
     try {
       console.log('getByUsuario:', { usuarioId, userEmail, userName })
       
-      // Crear cliente temporal sin persistencia para evitar lock errors
-      const { createClient } = await import('@supabase/supabase-js')
-      const tempClient = createClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-        { auth: { persistSession: false } }
-      )
+      const db = getDbClient()
       
       // Obtener todas las propiedades
-      const { data, error } = await tempClient
+      const { data, error } = await db
         .from('propiedades')
         .select('*')
         .order('created_at', { ascending: false })
@@ -173,14 +181,9 @@ export class PropertiesStorage {
   // Obtener todas las propiedades
   static async getAll(): Promise<Propiedad[]> {
     try {
-      const { createClient } = await import('@supabase/supabase-js')
-      const tempClient = createClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-        { auth: { persistSession: false } }
-      )
+      const db = getDbClient()
 
-      const { data, error } = await tempClient
+      const { data, error } = await db
         .from('propiedades')
         .select('*')
         .order('created_at', { ascending: false })
@@ -196,14 +199,9 @@ export class PropertiesStorage {
   // Obtener una propiedad por ID
   static async getById(id: number): Promise<Propiedad | undefined> {
     try {
-      const { createClient } = await import('@supabase/supabase-js')
-      const tempClient = createClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-        { auth: { persistSession: false } }
-      )
+      const db = getDbClient()
 
-      const { data, error } = await tempClient
+      const { data, error } = await db
         .from('propiedades')
         .select('*')
         .eq('id', id)
@@ -220,14 +218,9 @@ export class PropertiesStorage {
   // Verificar si ya existe una propiedad con el mismo título y ubicación
   static async checkDuplicate(titulo: string, ubicacion: string): Promise<boolean> {
     try {
-      const { createClient } = await import('@supabase/supabase-js')
-      const tempClient = createClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-        { auth: { persistSession: false } }
-      )
+      const db = getDbClient()
       
-      const { data, error } = await tempClient
+      const { data, error } = await db
         .from('propiedades')
         .select('id')
         .ilike('titulo', titulo)
@@ -258,15 +251,10 @@ export class PropertiesStorage {
         return false
       }
 
-      const { createClient } = await import('@supabase/supabase-js')
-      const tempClient = createClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-        { auth: { persistSession: false } }
-      )
+      const db = getDbClient()
 
       // Buscar en imagen principal
-      const { data: mainImage, error: mainError } = await tempClient
+      const { data: mainImage, error: mainError } = await db
         .from('propiedades')
         .select('id')
         .eq('imagen', imageUrl)
@@ -276,7 +264,7 @@ export class PropertiesStorage {
       if ((mainImage?.length || 0) > 0) return true
 
       // Buscar en galería - solo si la URL es corta
-      const { data: gallery, error: galleryError } = await tempClient
+      const { data: gallery, error: galleryError } = await db
         .from('propiedades')
         .select('id, galeria')
 
@@ -324,14 +312,9 @@ export class PropertiesStorage {
 
       const dbData = this.appToDb(property, usuarioId)
 
-      const { createClient } = await import('@supabase/supabase-js')
-      const tempClient = createClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-        { auth: { persistSession: false } }
-      )
+      const db = getDbClient()
 
-      const { data, error } = await tempClient
+      const { data, error } = await db
         .from('propiedades')
         .insert(dbData)
         .select()
@@ -354,14 +337,9 @@ export class PropertiesStorage {
     try {
       const dbData = this.appToDb(updates as any)
 
-      const { createClient } = await import('@supabase/supabase-js')
-      const tempClient = createClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-        { auth: { persistSession: false } }
-      )
+      const db = getDbClient()
 
-      const { data, error } = await tempClient
+      const { data, error } = await db
         .from('propiedades')
         .update(dbData)
         .eq('id', id)
@@ -380,14 +358,9 @@ export class PropertiesStorage {
   // Eliminar propiedad
   static async delete(id: number): Promise<boolean> {
     try {
-      const { createClient } = await import('@supabase/supabase-js')
-      const tempClient = createClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-        { auth: { persistSession: false } }
-      )
+      const db = getDbClient()
 
-      const { error } = await tempClient
+      const { error } = await db
         .from('propiedades')
         .delete()
         .eq('id', id)
@@ -404,15 +377,10 @@ export class PropertiesStorage {
   // Obtener propiedades por asesor
   static async getByAsesor(asesorEmail: string): Promise<Propiedad[]> {
     try {
-      const { createClient } = await import('@supabase/supabase-js')
-      const tempClient = createClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-        { auth: { persistSession: false } }
-      )
+      const db = getDbClient()
 
       // Obtener propiedades por email del asesor en usuario_id
-      const { data, error } = await tempClient
+      const { data, error } = await db
         .from('propiedades')
         .select('*')
         .eq('usuario_id', asesorEmail)
@@ -429,14 +397,9 @@ export class PropertiesStorage {
   // Obtener propiedades por categoría
   static async getByCategoria(categoria: string): Promise<Propiedad[]> {
     try {
-      const { createClient } = await import('@supabase/supabase-js')
-      const tempClient = createClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-        { auth: { persistSession: false } }
-      )
+      const db = getDbClient()
 
-      const { data, error } = await tempClient
+      const { data, error } = await db
         .from('propiedades')
         .select('*')
         .eq('categoria', categoria)
