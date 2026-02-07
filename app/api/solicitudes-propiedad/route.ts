@@ -48,10 +48,15 @@ export async function GET(request: Request) {
   status TEXT DEFAULT 'pendiente',
   notas_fotografo TEXT,
   imagenes JSONB DEFAULT '[]'::jsonb,
+  datos_extra JSONB DEFAULT '{}'::jsonb,
   propiedad_id INTEGER,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
-);`
+);
+
+ALTER TABLE solicitudes_propiedad ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Allow all for service role" ON solicitudes_propiedad
+  FOR ALL USING (true) WITH CHECK (true);`
         })
       }
       console.error('Error fetching solicitudes:', error)
@@ -69,32 +74,55 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { asesor_email, asesor_nombre, titulo, ubicacion, descripcion, precio_estimado, tipo, categoria, habitaciones, banos, area } = body
+    const { asesor_email, asesor_nombre, titulo, ubicacion, descripcion, precio_estimado, tipo, categoria, habitaciones, banos, area, ...extraData } = body
 
     if (!asesor_email || !titulo) {
       return NextResponse.json({ error: 'Se requiere email del asesor y título' }, { status: 400 })
     }
 
+    const insertData: any = {
+      asesor_email,
+      asesor_nombre: asesor_nombre || null,
+      titulo,
+      ubicacion: ubicacion || null,
+      descripcion: descripcion || null,
+      precio_estimado: precio_estimado || null,
+      tipo: tipo || 'Departamento',
+      categoria: categoria || 'venta',
+      habitaciones: habitaciones || null,
+      banos: banos || null,
+      area: area || null,
+      status: 'pendiente'
+    }
+
+    // Guardar datos extra del formulario completo (caracteristicas, amenidades, etc.)
+    if (Object.keys(extraData).length > 0) {
+      insertData.datos_extra = extraData
+    }
+
     const { data, error } = await supabaseAdmin
       .from('solicitudes_propiedad')
-      .insert({
-        asesor_email,
-        asesor_nombre: asesor_nombre || null,
-        titulo,
-        ubicacion: ubicacion || null,
-        descripcion: descripcion || null,
-        precio_estimado: precio_estimado || null,
-        tipo: tipo || 'Departamento',
-        categoria: categoria || 'venta',
-        habitaciones: habitaciones || null,
-        banos: banos || null,
-        area: area || null,
-        status: 'pendiente'
-      })
+      .insert(insertData)
       .select()
       .single()
 
     if (error) {
+      // Si falla por columna datos_extra, intentar sin ella
+      if (error.message.includes('datos_extra')) {
+        delete insertData.datos_extra
+        const { data: data2, error: error2 } = await supabaseAdmin
+          .from('solicitudes_propiedad')
+          .insert(insertData)
+          .select()
+          .single()
+
+        if (error2) {
+          console.error('Error creating solicitud (fallback):', error2)
+          return NextResponse.json({ error: error2.message }, { status: 500 })
+        }
+        return NextResponse.json({ solicitud: data2 })
+      }
+
       console.error('Error creating solicitud:', error)
       return NextResponse.json({ error: error.message }, { status: 500 })
     }
@@ -156,6 +184,7 @@ export async function PATCH(request: Request) {
     if (status === 'completada' && data) {
       try {
         const solicitud = data
+        const extra = solicitud.datos_extra || {}
         const imagenesArr: string[] = solicitud.imagenes || []
         const imagenPrincipal = imagenesArr.length > 0 ? imagenesArr[0] : ''
         const galeria = imagenesArr.length > 1 ? imagenesArr.slice(1) : []
@@ -164,6 +193,8 @@ export async function PATCH(request: Request) {
         const precioTexto = precioNum > 0 
           ? `$${precioNum.toLocaleString('es-MX')}` 
           : 'Consultar precio'
+
+        const areaNum = Math.round(Number(solicitud.area) || 0)
 
         const nuevaPropiedad: any = {
           titulo: solicitud.titulo,
@@ -174,17 +205,26 @@ export async function PATCH(request: Request) {
           categoria: solicitud.categoria || 'venta',
           habitaciones: Math.round(Number(solicitud.habitaciones) || 0),
           banos: Math.round(Number(solicitud.banos) || 0),
-          area: Math.round(Number(solicitud.area) || 0),
-          area_texto: solicitud.area ? `${Math.round(Number(solicitud.area))} m²` : '0 m²',
+          area: areaNum,
+          area_texto: areaNum > 0 ? `${areaNum} m²` : '0 m²',
           imagen: imagenPrincipal,
           galeria: galeria,
           descripcion: solicitud.descripcion || '',
-          caracteristicas: [],
+          caracteristicas: extra.caracteristicas || [],
           status: 'Disponible',
           fecha_publicacion: new Date().toISOString().split('T')[0],
           asesor_email: solicitud.asesor_email,
           usuario_id: solicitud.asesor_email,
         }
+
+        // Agregar campos extra del PropertyForm si existen
+        if (extra.mediosBanos) nuevaPropiedad.medios_banos = Math.round(Number(extra.mediosBanos) || 0)
+        if (extra.areaConstruccion) nuevaPropiedad.area_construccion = Math.round(Number(extra.areaConstruccion) || 0)
+        if (extra.cochera) nuevaPropiedad.cochera = Math.round(Number(extra.cochera) || 0)
+        if (extra.tipoCredito) nuevaPropiedad.tipo_credito = extra.tipoCredito
+        if (extra.tourVirtual) nuevaPropiedad.tour_virtual = extra.tourVirtual
+        if (extra.agente) nuevaPropiedad.agente = extra.agente
+        if (extra.detalles) nuevaPropiedad.detalles = extra.detalles
 
         const { data: propData, error: propError } = await supabaseAdmin
           .from('propiedades')
