@@ -38,8 +38,11 @@ interface PropiedadDB {
   titulo: string
   ubicacion: string
   precio: number
-  precio_texto: string
+  precio_texto?: string
+  precioTexto?: string
   usuario_id?: string
+  usuarioId?: string
+  asesorEmail?: string
   status: string
 }
 
@@ -95,6 +98,9 @@ export default function PanelAdminPage() {
 
   const propiedadesDisponibles = propiedades.filter(p => p.status === 'Disponible').length
   const propiedadesExclusivas = propiedades.filter(p => p.status === 'Exclusiva').length
+
+  // Helper para obtener el email/id del asesor asignado a una propiedad
+  const getPropAsesor = (p: PropiedadDB) => (p.asesorEmail || p.usuarioId || p.usuario_id || '').toLowerCase()
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -259,7 +265,7 @@ export default function PanelAdminPage() {
                   <AlertCircle className="w-5 h-5 text-orange-500" />
                 </div>
                 <p className="text-3xl font-bold text-gray-900 dark:text-white mb-1">
-                  {propiedades.filter(p => !p.usuario_id).length}
+                  {propiedades.filter(p => !getPropAsesor(p)).length}
                 </p>
                 <p className="text-xs text-orange-600 dark:text-orange-400">
                   Propiedades sin asesor
@@ -292,10 +298,10 @@ export default function PanelAdminPage() {
                             {propiedad.titulo}
                           </p>
                           <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
-                            {propiedad.ubicacion} • {propiedad.precio_texto}
+                            {propiedad.ubicacion} • {propiedad.precioTexto || propiedad.precio_texto}
                           </p>
                           <p className="text-xs text-gray-500 mt-1">
-                            Asesor: {getAsesorName(propiedad.usuario_id)}
+                            Asesor: {getAsesorName(getPropAsesor(propiedad) || undefined)}
                           </p>
                         </div>
                         <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(propiedad.status)}`}>
@@ -324,7 +330,11 @@ export default function PanelAdminPage() {
                 ) : (
                   <div className="space-y-4">
                     {asesores.map((asesor) => {
-                      const propiedadesAsesor = propiedades.filter(p => p.usuario_id === asesor.id)
+                      const asesorEmailLower = asesor.email?.toLowerCase() || ''
+                      const propiedadesAsesor = propiedades.filter(p => {
+                        const pa = getPropAsesor(p)
+                        return pa === asesorEmailLower || pa === asesor.id?.toLowerCase()
+                      })
 
                       return (
                         <div key={asesor.id} className="p-4 bg-arkin-secondary/70 dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700">
@@ -381,10 +391,10 @@ export default function PanelAdminPage() {
                             {propiedad.titulo}
                           </h3>
                           <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                            {propiedad.ubicacion} • {propiedad.precio_texto}
+                            {propiedad.ubicacion} • {propiedad.precioTexto || propiedad.precio_texto}
                           </p>
                           <p className="text-xs text-gray-500 dark:text-gray-500">
-                            Asesor: {getAsesorName(propiedad.usuario_id)}
+                            Asesor: {getAsesorName(getPropAsesor(propiedad) || undefined)}
                           </p>
                         </div>
                         <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(propiedad.status)}`}>
@@ -417,11 +427,11 @@ export default function PanelAdminPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {asesores.map((asesor) => {
                     // Contar propiedades por email o ID
-                    const propiedadesAsesor = propiedades.filter(p => 
-                      p.usuario_id === asesor.id || 
-                      p.usuario_id === asesor.email ||
-                      p.usuario_id?.toLowerCase() === asesor.email?.toLowerCase()
-                    )
+                    const asesorEmailLower = asesor.email?.toLowerCase() || ''
+                    const propiedadesAsesor = propiedades.filter(p => {
+                      const pa = getPropAsesor(p)
+                      return pa === asesorEmailLower || pa === asesor.id?.toLowerCase()
+                    })
 
                     return (
                       <div key={asesor.id} className="p-6 bg-arkin-secondary/70 dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700">

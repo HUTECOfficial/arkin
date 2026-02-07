@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/auth-context'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Building2, Trash2, Eye, ArrowLeft, AlertTriangle } from 'lucide-react'
+import { Building2, Trash2, Eye, ArrowLeft, AlertTriangle, Save } from 'lucide-react'
 import { PropertiesStorage } from '@/lib/properties-storage'
 import { Propiedad } from '@/data/propiedades'
 import { toast } from 'sonner'
@@ -24,6 +24,7 @@ export default function AdminPropiedadesPage() {
     const [deleteConfirm, setDeleteConfirm] = useState<number | null>(null)
     const [asesores, setAsesores] = useState<Array<{ id: string; nombre: string; email: string }>>([])
     const [savingOwnerByPropertyId, setSavingOwnerByPropertyId] = useState<Record<number, boolean>>({})
+    const [pendingChanges, setPendingChanges] = useState<Record<number, string | null>>({})
 
     useEffect(() => {
         if (!isAuthenticated || user?.role !== 'admin') {
@@ -91,6 +92,11 @@ export default function AdminPropiedadesPage() {
             }
 
             toast.success('Asesor reasignado exitosamente')
+            setPendingChanges(prev => {
+                const copy = { ...prev }
+                delete copy[propertyId]
+                return copy
+            })
             await loadProperties()
         } catch (error: any) {
             console.error('Error reassigning owner:', error)
@@ -285,26 +291,54 @@ export default function AdminPropiedadesPage() {
                                                     <div className="text-xs font-medium text-gray-500 mb-1">
                                                         Asesor asignado
                                                     </div>
-                                                    <Select
-                                                        value={propiedad.usuarioId ? propiedad.usuarioId : '__unassigned__'}
-                                                        onValueChange={(val) => {
-                                                            const next = val === '__unassigned__' ? null : val
-                                                            void handleReassignOwner(propiedad.id, next)
-                                                        }}
-                                                        disabled={!!savingOwnerByPropertyId[propiedad.id]}
-                                                    >
-                                                        <SelectTrigger className="w-full">
-                                                            <SelectValue placeholder="Seleccionar asesor" />
-                                                        </SelectTrigger>
-                                                        <SelectContent>
-                                                            <SelectItem value="__unassigned__">Sin asignar</SelectItem>
-                                                            {asesores.map((a) => (
-                                                                <SelectItem key={a.email} value={a.email}>
-                                                                    {a.nombre} ({a.email})
-                                                                </SelectItem>
-                                                            ))}
-                                                        </SelectContent>
-                                                    </Select>
+                                                    <div className="flex gap-2">
+                                                        <Select
+                                                            value={
+                                                                pendingChanges[propiedad.id] !== undefined
+                                                                    ? (pendingChanges[propiedad.id] || '__unassigned__')
+                                                                    : (propiedad.usuarioId ? propiedad.usuarioId : '__unassigned__')
+                                                            }
+                                                            onValueChange={(val) => {
+                                                                const next = val === '__unassigned__' ? null : val
+                                                                const current = propiedad.usuarioId || null
+                                                                if (next === current) {
+                                                                    setPendingChanges(prev => {
+                                                                        const copy = { ...prev }
+                                                                        delete copy[propiedad.id]
+                                                                        return copy
+                                                                    })
+                                                                } else {
+                                                                    setPendingChanges(prev => ({ ...prev, [propiedad.id]: next }))
+                                                                }
+                                                            }}
+                                                            disabled={!!savingOwnerByPropertyId[propiedad.id]}
+                                                        >
+                                                            <SelectTrigger className="w-full">
+                                                                <SelectValue placeholder="Seleccionar asesor" />
+                                                            </SelectTrigger>
+                                                            <SelectContent>
+                                                                <SelectItem value="__unassigned__">Sin asignar</SelectItem>
+                                                                {asesores.map((a) => (
+                                                                    <SelectItem key={a.email} value={a.email}>
+                                                                        {a.nombre} ({a.email})
+                                                                    </SelectItem>
+                                                                ))}
+                                                            </SelectContent>
+                                                        </Select>
+                                                        {pendingChanges[propiedad.id] !== undefined && (
+                                                            <Button
+                                                                size="sm"
+                                                                onClick={() => {
+                                                                    void handleReassignOwner(propiedad.id, pendingChanges[propiedad.id])
+                                                                }}
+                                                                disabled={!!savingOwnerByPropertyId[propiedad.id]}
+                                                                className="bg-arkin-gold hover:bg-arkin-gold/90 text-black flex-shrink-0"
+                                                            >
+                                                                <Save className="h-4 w-4 mr-1" />
+                                                                {savingOwnerByPropertyId[propiedad.id] ? 'Guardando...' : 'Guardar'}
+                                                            </Button>
+                                                        )}
+                                                    </div>
                                                 </div>
 
                                                 <div>

@@ -72,10 +72,13 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'propertyId es requerido' }, { status: 400 })
     }
 
-    // Actualizar la propiedad con el email del asesor en la columna asesor_email
+    // Actualizar la propiedad con el email del asesor en ambas columnas
     const { data, error } = await supabaseAdmin
       .from('propiedades')
-      .update({ asesor_email: asesorEmail || null })
+      .update({ 
+        asesor_email: asesorEmail || null,
+        usuario_id: asesorEmail || null 
+      })
       .eq('id', propertyId)
       .select()
       .single()
