@@ -136,13 +136,13 @@ export default function PanelFotografoPage() {
     }
   }
 
-  const updateSolicitud = async (id: string, status: string, notas?: string) => {
+  const updateSolicitud = async (id: string, newStatus: string, notas?: string) => {
     setUpdatingId(id)
     try {
       const res = await fetch('/api/solicitudes-propiedad', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id, status, notas_fotografo: notas || undefined })
+        body: JSON.stringify({ id, status: newStatus, notas_fotografo: notas || undefined })
       })
       if (res.ok) {
         const data = await res.json()
@@ -150,10 +150,19 @@ export default function PanelFotografoPage() {
         if (data.solicitud) {
           setSolicitudDetalle(data.solicitud)
         }
+        // Si se creó una propiedad automáticamente al completar
+        if (data.propiedad_creada) {
+          toast.success(`¡Propiedad creada automáticamente! (ID: ${data.propiedad_id}). Ya aparece en el listado del asesor.`)
+        } else if (newStatus === 'en_proceso') {
+          toast.success('Solicitud aceptada')
+        } else if (newStatus === 'rechazada') {
+          toast.info('Solicitud rechazada')
+        }
         await loadData()
       }
     } catch (error) {
       console.error('Error updating solicitud:', error)
+      toast.error('Error al actualizar solicitud')
     } finally {
       setUpdatingId(null)
     }

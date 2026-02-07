@@ -145,12 +145,75 @@ export async function PATCH(request: Request) {
           console.error('Error updating solicitud (fallback):', error2)
           return NextResponse.json({ error: error2.message }, { status: 500 })
         }
-        // Devolver con imagenes vacío para que el frontend no crashee
         return NextResponse.json({ solicitud: { ...data2, imagenes: [] } })
       }
 
       console.error('Error updating solicitud:', error)
       return NextResponse.json({ error: error.message }, { status: 500 })
+    }
+
+    // === CREAR PROPIEDAD AUTOMÁTICAMENTE AL COMPLETAR ===
+    if (status === 'completada' && data) {
+      try {
+        const solicitud = data
+        const imagenesArr: string[] = solicitud.imagenes || []
+        const imagenPrincipal = imagenesArr.length > 0 ? imagenesArr[0] : ''
+        const galeria = imagenesArr.length > 1 ? imagenesArr.slice(1) : []
+
+        const precioNum = Math.round(Number(solicitud.precio_estimado) || 0)
+        const precioTexto = precioNum > 0 
+          ? `$${precioNum.toLocaleString('es-MX')}` 
+          : 'Consultar precio'
+
+        const nuevaPropiedad: any = {
+          titulo: solicitud.titulo,
+          ubicacion: solicitud.ubicacion || 'Sin ubicación',
+          precio: precioNum,
+          precio_texto: precioTexto,
+          tipo: solicitud.tipo || 'Departamento',
+          categoria: solicitud.categoria || 'venta',
+          habitaciones: Math.round(Number(solicitud.habitaciones) || 0),
+          banos: Math.round(Number(solicitud.banos) || 0),
+          area: Math.round(Number(solicitud.area) || 0),
+          area_texto: solicitud.area ? `${Math.round(Number(solicitud.area))} m²` : '0 m²',
+          imagen: imagenPrincipal,
+          galeria: galeria,
+          descripcion: solicitud.descripcion || '',
+          caracteristicas: [],
+          status: 'Disponible',
+          fecha_publicacion: new Date().toISOString().split('T')[0],
+          asesor_email: solicitud.asesor_email,
+          usuario_id: solicitud.asesor_email,
+        }
+
+        const { data: propData, error: propError } = await supabaseAdmin
+          .from('propiedades')
+          .insert(nuevaPropiedad)
+          .select()
+          .single()
+
+        if (propError) {
+          console.error('Error creando propiedad desde solicitud:', propError)
+          // No fallar el PATCH, solo loguear
+        } else if (propData) {
+          console.log('Propiedad creada automáticamente:', propData.id, propData.titulo)
+          // Vincular propiedad_id en la solicitud
+          await supabaseAdmin
+            .from('solicitudes_propiedad')
+            .update({ propiedad_id: propData.id })
+            .eq('id', id)
+
+          // Devolver solicitud actualizada con propiedad_id
+          return NextResponse.json({ 
+            solicitud: { ...data, propiedad_id: propData.id },
+            propiedad_creada: true,
+            propiedad_id: propData.id
+          })
+        }
+      } catch (propErr) {
+        console.error('Error en creación automática de propiedad:', propErr)
+        // No fallar, la solicitud ya se actualizó
+      }
     }
 
     return NextResponse.json({ solicitud: data })
