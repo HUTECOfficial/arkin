@@ -110,6 +110,21 @@ export default function SolicitudesPropietariosPage() {
     anytime: 'Cualquier horario',
   }
 
+  const promocionLabels: Record<string, string> = {
+    escrituras_gratis: 'Escrituras Gratis',
+    meses_mantenimiento: '3 Meses Mantenimiento Gratis',
+    mudanza_gratis: 'Mudanza Incluida',
+    descuento_5: '5% Descuento Cierre Rápido',
+    descuento_10: '10% Descuento Pago Contado',
+    amueblado: 'Incluye Mobiliario',
+    remodelacion: 'Remodelación Incluida',
+    electrodomesticos: 'Electrodomésticos Incluidos',
+    estacionamiento_extra: 'Estacionamiento Extra Gratis',
+    bodega_extra: 'Bodega Adicional Incluida',
+    comision_reducida: 'Comisión Reducida',
+    personalizada: 'Personalizada',
+  }
+
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'pending':
@@ -377,6 +392,20 @@ export default function SolicitudesPropietariosPage() {
                               {act}
                             </Badge>
                           ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Promoción / Bono */}
+                    {submission.promocion && submission.promocion !== 'ninguna' && (
+                      <div className="mb-4 p-3 bg-gradient-to-r from-[#D4AF37]/20 to-yellow-500/10 rounded-lg border border-[#D4AF37]/40">
+                        <p className="text-gray-400 text-xs mb-2 flex items-center"><Tag className="h-3 w-3 mr-1" />Promoción / Bono</p>
+                        <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#D4AF37] to-yellow-400 text-black px-4 py-2 rounded-full text-sm font-bold shadow-md">
+                          <Tag className="h-4 w-4" />
+                          {submission.promocion === 'personalizada'
+                            ? (submission.promocionPersonalizada || 'Promoción Especial')
+                            : (promocionLabels[submission.promocion] || submission.promocion)
+                          }
                         </div>
                       </div>
                     )}

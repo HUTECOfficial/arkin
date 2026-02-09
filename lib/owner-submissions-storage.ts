@@ -25,6 +25,9 @@ export interface OwnerSubmission {
   phone: string
   email: string
   preferredContact: string
+  // Promoción / Bono
+  promocion?: string
+  promocionPersonalizada?: string
   // Acuerdos
   exclusivity: boolean
   terms: boolean

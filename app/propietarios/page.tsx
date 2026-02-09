@@ -73,6 +73,8 @@ export default function PropietariosPage() {
     phone: '',
     email: '',
     preferredContact: '',
+    promocion: '',
+    promocionPersonalizada: '',
     exclusivity: false,
     terms: false,
     privacy: false
@@ -272,6 +274,8 @@ export default function PropietariosPage() {
         phone: formData.phone,
         email: formData.email,
         preferredContact: formData.preferredContact,
+        promocion: formData.promocion && formData.promocion !== 'ninguna' ? formData.promocion : undefined,
+        promocionPersonalizada: formData.promocion === 'personalizada' ? formData.promocionPersonalizada : undefined,
         exclusivity: formData.exclusivity,
         terms: formData.terms,
         privacy: formData.privacy,
@@ -888,6 +892,87 @@ export default function PropietariosPage() {
                     </div>
                   </div>
                 ))}
+
+                {/* Promoción / Bono */}
+                <div className="mt-8 p-6 bg-gradient-to-br from-arkin-gold/10 via-yellow-50 to-transparent rounded-xl border border-arkin-gold/30">
+                  <div className="flex items-center mb-4">
+                    <div className="w-10 h-10 bg-arkin-gold rounded-full flex items-center justify-center mr-3">
+                      <Star className="h-5 w-5 text-black" />
+                    </div>
+                    <div>
+                      <h3 className="font-serif text-lg font-semibold text-arkin-graphite">
+                        Promoción o Bono Especial
+                      </h3>
+                      <p className="text-xs text-gray-500">Agrega un incentivo para atraer más compradores</p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium text-gray-700">
+                        Selecciona una promoción (opcional)
+                      </Label>
+                      <Select
+                        value={formData.promocion}
+                        onValueChange={(value) => setFormData(prev => ({ ...prev, promocion: value, promocionPersonalizada: value === 'personalizada' ? prev.promocionPersonalizada : '' }))}
+                      >
+                        <SelectTrigger className="border-gray-200 focus:border-arkin-gold focus:ring-arkin-gold/20">
+                          <SelectValue placeholder="Sin promoción" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="ninguna">Sin promoción</SelectItem>
+                          <SelectItem value="escrituras_gratis">Escrituras gratis</SelectItem>
+                          <SelectItem value="meses_mantenimiento">3 meses de mantenimiento gratis</SelectItem>
+                          <SelectItem value="mudanza_gratis">Mudanza incluida</SelectItem>
+                          <SelectItem value="descuento_5">5% de descuento por cierre rápido</SelectItem>
+                          <SelectItem value="descuento_10">10% de descuento por pago de contado</SelectItem>
+                          <SelectItem value="amueblado">Incluye mobiliario / amueblado</SelectItem>
+                          <SelectItem value="remodelacion">Remodelación incluida</SelectItem>
+                          <SelectItem value="electrodomesticos">Electrodomésticos incluidos</SelectItem>
+                          <SelectItem value="estacionamiento_extra">Estacionamiento extra sin costo</SelectItem>
+                          <SelectItem value="bodega_extra">Bodega adicional incluida</SelectItem>
+                          <SelectItem value="comision_reducida">Comisión reducida al comprador</SelectItem>
+                          <SelectItem value="personalizada">Otra promoción (personalizada)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    {formData.promocion === 'personalizada' && (
+                      <div className="space-y-2">
+                        <Label className="text-sm font-medium text-gray-700">
+                          Describe tu promoción personalizada
+                        </Label>
+                        <Input
+                          placeholder="Ej: Regalo de pantalla 65'' al cerrar trato"
+                          value={formData.promocionPersonalizada}
+                          onChange={(e) => setFormData(prev => ({ ...prev, promocionPersonalizada: e.target.value }))}
+                          className="border-gray-200 focus:border-arkin-gold focus:ring-arkin-gold/20"
+                        />
+                      </div>
+                    )}
+
+                    {formData.promocion && formData.promocion !== 'ninguna' && (
+                      <div className="p-3 bg-arkin-gold/20 rounded-lg border border-arkin-gold/40">
+                        <p className="text-xs text-gray-600 mb-1">Vista previa del bono en la publicación:</p>
+                        <div className="inline-flex items-center gap-2 bg-gradient-to-r from-arkin-gold to-yellow-400 text-black px-4 py-2 rounded-full text-sm font-bold shadow-md">
+                          <Star className="h-4 w-4" />
+                          {formData.promocion === 'escrituras_gratis' && 'Escrituras Gratis'}
+                          {formData.promocion === 'meses_mantenimiento' && '3 Meses Mantenimiento Gratis'}
+                          {formData.promocion === 'mudanza_gratis' && 'Mudanza Incluida'}
+                          {formData.promocion === 'descuento_5' && '5% Descuento Cierre Rápido'}
+                          {formData.promocion === 'descuento_10' && '10% Descuento Pago Contado'}
+                          {formData.promocion === 'amueblado' && 'Incluye Mobiliario'}
+                          {formData.promocion === 'remodelacion' && 'Remodelación Incluida'}
+                          {formData.promocion === 'electrodomesticos' && 'Electrodomésticos Incluidos'}
+                          {formData.promocion === 'estacionamiento_extra' && 'Estacionamiento Extra Gratis'}
+                          {formData.promocion === 'bodega_extra' && 'Bodega Adicional Incluida'}
+                          {formData.promocion === 'comision_reducida' && 'Comisión Reducida'}
+                          {formData.promocion === 'personalizada' && (formData.promocionPersonalizada || 'Promoción Especial')}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           )}
