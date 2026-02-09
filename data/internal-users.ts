@@ -130,6 +130,16 @@ export const users: User[] = [
     password: 'liz_2025',
     plan: 'elite'
   },
+  {
+    id: 'asesor-13',
+    nombre: 'Pamela',
+    email: 'pamela@arkin.mx',
+    role: 'asesor',
+    telefono: '+52 477 456 7810',
+    avatar: '/avatars/pamela.jpg',
+    password: 'pamela_arkin2025',
+    plan: 'elite'
+  },
   // Brokers
   {
     id: 'broker-1',
