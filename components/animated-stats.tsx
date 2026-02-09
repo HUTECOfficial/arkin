@@ -125,7 +125,7 @@ export function AnimatedStats() {
         }
       `}</style>
 
-      <section className="py-20 px-4 sm:px-6 relative overflow-hidden">
+      <section className="pt-0 pb-4 px-4 sm:px-6 relative overflow-hidden -mt-4">
         {/* Background */}
         <div className="absolute inset-0 bg-gradient-to-b from-arkin-accent/3 to-transparent" />
 

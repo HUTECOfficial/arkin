@@ -21,7 +21,12 @@ import {
   XCircle,
   Clock,
   Eye,
-  Trash2
+  Trash2,
+  Building2,
+  Ruler,
+  Camera,
+  FileText,
+  Tag
 } from 'lucide-react'
 
 export default function SolicitudesPropietariosPage() {
@@ -61,6 +66,48 @@ export default function SolicitudesPropietariosPage() {
       OwnerSubmissionsStorage.delete(id)
       loadSubmissions()
     }
+  }
+
+  const propertyTypeLabels: Record<string, string> = {
+    departamento: 'Departamento',
+    terreno_lote: 'Terreno / Lote',
+    local_comercial: 'Local Comercial',
+    casa_condominio: 'Casa en Condominio',
+    casa: 'Casa',
+    bodega_comercial: 'Bodega Comercial',
+    edificio: 'Edificio',
+    duplex: 'Dúplex',
+    nave: 'Nave',
+    quinta: 'Quinta',
+    terreno_comercial: 'Terreno Comercial',
+    villa: 'Villa',
+    oficina: 'Oficina',
+    rancho: 'Rancho',
+    terreno_industrial: 'Terreno Industrial',
+    penthouse: 'Penthouse',
+    loft: 'Loft',
+    residencia: 'Residencia',
+  }
+
+  const urgencyLabels: Record<string, string> = {
+    urgent: 'Menos de 3 meses',
+    medium: '3-6 meses',
+    flexible: '6-12 meses',
+    patient: 'Sin prisa',
+  }
+
+  const tipoConsultaLabels: Record<string, string> = {
+    vender: 'Vender',
+    rentar: 'Rentar',
+    comprar: 'Comprar',
+    general: 'Consulta general',
+  }
+
+  const contactLabels: Record<string, string> = {
+    morning: 'Mañana (9-12)',
+    afternoon: 'Tarde (12-18)',
+    evening: 'Noche (18-21)',
+    anytime: 'Cualquier horario',
   }
 
   const getStatusBadge = (status: string) => {
@@ -188,12 +235,26 @@ export default function SolicitudesPropietariosPage() {
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-2">
-                          <h3 className="text-xl font-bold">{submission.propertyType}</h3>
+                          <Building2 className="h-5 w-5 text-[#D4AF37]" />
+                          <h3 className="text-xl font-bold">{propertyTypeLabels[submission.propertyType] || submission.propertyType}</h3>
                           {getStatusBadge(submission.status)}
+                          {submission.tipoConsulta && (
+                            <Badge variant="outline" className="text-xs border-[#D4AF37]/50 text-[#D4AF37]">
+                              {tipoConsultaLabels[submission.tipoConsulta] || submission.tipoConsulta}
+                            </Badge>
+                          )}
                         </div>
-                        <div className="flex items-center text-gray-400 text-sm">
-                          <Calendar className="h-4 w-4 mr-1" />
-                          {formatDate(submission.submittedAt)}
+                        <div className="flex items-center gap-4 text-gray-400 text-sm">
+                          <div className="flex items-center">
+                            <Calendar className="h-4 w-4 mr-1" />
+                            {formatDate(submission.submittedAt)}
+                          </div>
+                          {submission.urgency && (
+                            <div className="flex items-center">
+                              <Clock className="h-4 w-4 mr-1" />
+                              {urgencyLabels[submission.urgency] || submission.urgency}
+                            </div>
+                          )}
                         </div>
                       </div>
                       <div className="text-right">
@@ -208,15 +269,26 @@ export default function SolicitudesPropietariosPage() {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4 text-sm">
+                    {/* Propiedad info grid */}
+                    <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-4 text-sm">
                       <div>
                         <p className="text-gray-400">Ubicación</p>
                         <p className="font-semibold">{submission.neighborhood}, {submission.city}</p>
                       </div>
                       <div>
-                        <p className="text-gray-400">Área</p>
+                        <p className="text-gray-400">Dirección</p>
+                        <p className="font-semibold">{submission.address || '—'}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-400">Área Total</p>
                         <p className="font-semibold">{submission.area} m²</p>
                       </div>
+                      {submission.areaConstruccion && (
+                        <div>
+                          <p className="text-gray-400">Área Construcción</p>
+                          <p className="font-semibold">{submission.areaConstruccion} m²</p>
+                        </div>
+                      )}
                       <div>
                         <p className="text-gray-400">Habitaciones</p>
                         <p className="font-semibold">{submission.bedrooms}</p>
@@ -225,11 +297,30 @@ export default function SolicitudesPropietariosPage() {
                         <p className="text-gray-400">Baños</p>
                         <p className="font-semibold">{submission.bathrooms}</p>
                       </div>
+                      {submission.postalCode && (
+                        <div>
+                          <p className="text-gray-400">C.P.</p>
+                          <p className="font-semibold">{submission.postalCode}</p>
+                        </div>
+                      )}
+                      <div>
+                        <p className="text-gray-400">Fotos</p>
+                        <p className="font-semibold flex items-center"><Camera className="h-3 w-3 mr-1" />{submission.photoCount}</p>
+                      </div>
                     </div>
 
+                    {/* Descripción */}
+                    {submission.description && (
+                      <div className="mb-4 p-3 bg-gray-800/50 rounded-lg">
+                        <p className="text-gray-400 text-xs mb-1 flex items-center"><FileText className="h-3 w-3 mr-1" />Descripción</p>
+                        <p className="text-sm text-gray-200">{submission.description}</p>
+                      </div>
+                    )}
+
+                    {/* Propietario */}
                     <div className="mb-4">
                       <p className="text-gray-400 text-sm mb-1">Propietario</p>
-                      <div className="flex items-center gap-4 text-sm">
+                      <div className="flex flex-wrap items-center gap-4 text-sm">
                         <div className="flex items-center">
                           <User className="h-4 w-4 mr-1 text-gray-400" />
                           {submission.ownerName}
@@ -242,23 +333,50 @@ export default function SolicitudesPropietariosPage() {
                           <Mail className="h-4 w-4 mr-1 text-gray-400" />
                           {submission.email}
                         </div>
+                        {submission.preferredContact && (
+                          <div className="flex items-center">
+                            <Clock className="h-4 w-4 mr-1 text-gray-400" />
+                            {contactLabels[submission.preferredContact] || submission.preferredContact}
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex gap-3 mt-2 text-xs">
+                        {submission.exclusivity && (
+                          <Badge className="bg-[#D4AF37]/20 text-[#D4AF37] border-[#D4AF37]/50 text-xs">Exclusividad aceptada</Badge>
+                        )}
+                        {submission.terms && (
+                          <Badge variant="outline" className="text-xs text-green-400 border-green-500/50">Términos aceptados</Badge>
+                        )}
+                        {submission.privacy && (
+                          <Badge variant="outline" className="text-xs text-green-400 border-green-500/50">Privacidad aceptada</Badge>
+                        )}
                       </div>
                     </div>
 
+                    {/* Amenidades */}
                     {submission.amenities.length > 0 && (
                       <div className="mb-4">
                         <p className="text-gray-400 text-sm mb-2">Amenidades</p>
                         <div className="flex flex-wrap gap-2">
-                          {submission.amenities.slice(0, 5).map((amenity, idx) => (
+                          {submission.amenities.map((amenity, idx) => (
                             <Badge key={idx} variant="outline" className="text-xs">
                               {amenity}
                             </Badge>
                           ))}
-                          {submission.amenities.length > 5 && (
-                            <Badge variant="outline" className="text-xs">
-                              +{submission.amenities.length - 5} más
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Actividades Recreativas */}
+                    {submission.actividadesRecreativas && submission.actividadesRecreativas.length > 0 && (
+                      <div className="mb-4">
+                        <p className="text-gray-400 text-sm mb-2">Actividades Recreativas</p>
+                        <div className="flex flex-wrap gap-2">
+                          {submission.actividadesRecreativas.map((act, idx) => (
+                            <Badge key={idx} variant="outline" className="text-xs border-blue-500/50 text-blue-400">
+                              {act}
                             </Badge>
-                          )}
+                          ))}
                         </div>
                       </div>
                     )}

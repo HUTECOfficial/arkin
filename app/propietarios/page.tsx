@@ -479,13 +479,24 @@ export default function PropietariosPage() {
                       <SelectValue placeholder="Selecciona el tipo" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="penthouse">Penthouse</SelectItem>
+                      <SelectItem value="departamento">Departamento</SelectItem>
+                      <SelectItem value="terreno_lote">Terreno / Lote</SelectItem>
+                      <SelectItem value="local_comercial">Local Comercial</SelectItem>
+                      <SelectItem value="casa_condominio">Casa en Condominio</SelectItem>
+                      <SelectItem value="casa">Casa</SelectItem>
+                      <SelectItem value="bodega_comercial">Bodega Comercial</SelectItem>
+                      <SelectItem value="edificio">Edificio</SelectItem>
+                      <SelectItem value="duplex">Dúplex</SelectItem>
+                      <SelectItem value="nave">Nave</SelectItem>
+                      <SelectItem value="quinta">Quinta</SelectItem>
+                      <SelectItem value="terreno_comercial">Terreno Comercial</SelectItem>
                       <SelectItem value="villa">Villa</SelectItem>
-                      <SelectItem value="casa">Casa de Lujo</SelectItem>
-                      <SelectItem value="departamento">Departamento Premium</SelectItem>
+                      <SelectItem value="oficina">Oficina</SelectItem>
+                      <SelectItem value="rancho">Rancho</SelectItem>
+                      <SelectItem value="terreno_industrial">Terreno Industrial</SelectItem>
+                      <SelectItem value="penthouse">Penthouse</SelectItem>
                       <SelectItem value="loft">Loft</SelectItem>
                       <SelectItem value="residencia">Residencia</SelectItem>
-                      <SelectItem value="condominio">Condominio</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
