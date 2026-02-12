@@ -1,29 +1,20 @@
 "use client"
 
-import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 import { 
-  Building2, 
   Users, 
   FileText, 
   Shield, 
   Handshake, 
   Phone, 
-  Mail, 
   MapPin,
-  CheckCircle,
-  ArrowRight,
   Briefcase,
   Scale,
   Home,
   TrendingUp
 } from "lucide-react"
-import Link from "next/link"
-import Image from "next/image"
 
 const beneficios = [
   {
@@ -97,22 +88,6 @@ const notariasAsociadas = [
 ]
 
 export default function BrokersPage() {
-  const [formData, setFormData] = useState({
-    nombre: "",
-    empresa: "",
-    email: "",
-    telefono: "",
-    experiencia: "",
-    mensaje: ""
-  })
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // Aquí iría la lógica para enviar el formulario
-    console.log("Formulario enviado:", formData)
-    alert("¡Gracias por tu interés! Nos pondremos en contacto contigo pronto.")
-  }
-
   return (
     <div className="min-h-screen bg-arkin-secondary">
       {/* Hero Section */}
@@ -129,14 +104,10 @@ export default function BrokersPage() {
               Brokers y Notarías
             </h1>
             <p className="text-xl text-gray-300 mb-8">
-              Únete a nuestra red de profesionales inmobiliarios. Colaboramos con brokers 
-              independientes y notarías para ofrecer el mejor servicio a nuestros clientes.
+              Contamos con una red consolidada de brokers y notarías de confianza 
+              que garantizan el mejor servicio en cada operación.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-arkin-gold hover:bg-arkin-gold/90 text-black">
-                <Handshake className="mr-2 h-5 w-5" />
-                Únete como Broker
-              </Button>
               <Button size="lg" variant="outline" className="border-arkin-accent text-arkin-accent hover:bg-arkin-accent/10">
                 <Scale className="mr-2 h-5 w-5" />
                 Directorio de Notarías
@@ -228,106 +199,6 @@ export default function BrokersPage() {
         </div>
       </section>
 
-      {/* Formulario de Registro */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-2xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                ¿Quieres ser Broker Asociado?
-              </h2>
-              <p className="text-gray-600">
-                Completa el formulario y nos pondremos en contacto contigo para 
-                discutir las oportunidades de colaboración.
-              </p>
-            </div>
-            
-            <Card className="border border-arkin-primary/30 bg-arkin-secondary/50 shadow-xl">
-              <CardContent className="p-8">
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Nombre Completo
-                      </label>
-                      <Input
-                        value={formData.nombre}
-                        onChange={(e) => setFormData({...formData, nombre: e.target.value})}
-                        placeholder="Tu nombre"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Empresa / Inmobiliaria
-                      </label>
-                      <Input
-                        value={formData.empresa}
-                        onChange={(e) => setFormData({...formData, empresa: e.target.value})}
-                        placeholder="Nombre de tu empresa"
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Email
-                      </label>
-                      <Input
-                        type="email"
-                        value={formData.email}
-                        onChange={(e) => setFormData({...formData, email: e.target.value})}
-                        placeholder="tu@email.com"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Teléfono
-                      </label>
-                      <Input
-                        value={formData.telefono}
-                        onChange={(e) => setFormData({...formData, telefono: e.target.value})}
-                        placeholder="+52 477 123 4567"
-                        required
-                      />
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Años de Experiencia
-                    </label>
-                    <Input
-                      value={formData.experiencia}
-                      onChange={(e) => setFormData({...formData, experiencia: e.target.value})}
-                      placeholder="Ej: 5 años"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Mensaje
-                    </label>
-                    <Textarea
-                      value={formData.mensaje}
-                      onChange={(e) => setFormData({...formData, mensaje: e.target.value})}
-                      placeholder="Cuéntanos sobre tu experiencia y por qué te gustaría colaborar con nosotros..."
-                      rows={4}
-                    />
-                  </div>
-                  
-                  <Button type="submit" className="w-full bg-arkin-gold hover:bg-arkin-gold/90 text-black">
-                    Enviar Solicitud
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </form>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
     </div>
   )
 }
