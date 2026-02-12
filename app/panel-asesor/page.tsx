@@ -27,7 +27,8 @@ import {
   Settings,
   Camera,
   Crown,
-  Zap
+  Zap,
+  Sparkles
 } from 'lucide-react'
 import { getPlanById } from '@/data/subscription-plans'
 
@@ -211,6 +212,17 @@ export default function PanelAsesorPage() {
                 <Camera className="w-5 h-5" />
                 <span className="hidden sm:inline">Solicitudes Fotógrafo</span>
                 <span className="sm:hidden">Fotógrafo</span>
+              </button>
+            )}
+            {/* Botón Publicidad (solo Lizzie) */}
+            {user.email === 'lizzie@arkin.mx' && (
+              <button
+                onClick={() => router.push('/panel-admin/publicidad')}
+                className="flex items-center gap-2 px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-xl transition-all font-semibold shadow-lg hover:shadow-xl whitespace-nowrap"
+              >
+                <Sparkles className="w-5 h-5" />
+                <span className="hidden sm:inline">Publicidad</span>
+                <span className="sm:hidden">Ads</span>
               </button>
             )}
             <button

@@ -22,7 +22,8 @@ import {
   AlertCircle,
   Award,
   ClipboardList,
-  Camera
+  Camera,
+  Sparkles
 } from 'lucide-react'
 import { OwnerSubmissionsStorage } from '@/lib/owner-submissions-storage'
 
@@ -170,6 +171,13 @@ export default function PanelAdminPage() {
                     {submissionsStats.pending}
                   </span>
                 )}
+              </button>
+              <button
+                onClick={() => router.push('/panel-admin/publicidad')}
+                className="flex items-center gap-2 px-4 py-2 bg-purple-50 hover:bg-purple-100 text-purple-600 rounded-xl transition-all font-semibold border border-purple-200"
+              >
+                <Sparkles className="w-4 h-4" />
+                <span className="hidden sm:inline">Publicidad</span>
               </button>
               <button
                 onClick={() => {

@@ -10,6 +10,7 @@ import { FeaturedPropertiesCarousel } from "./featured-properties-carousel"
 import { VirtualToursSection } from "./virtual-tours-section"
 import { AnimatedStats } from "./animated-stats"
 import { CommercialAlliance } from "./commercial-alliance"
+import { HomepageAdSlot } from "./homepage-ads"
 
 export function HomeYellow() {
   const [isCategoriasMenuOpen, setIsCategoriasMenuOpen] = useState(false)
@@ -75,7 +76,7 @@ export function HomeYellow() {
                     variant="outline"
                     className="w-full sm:w-auto border-2 border-arkin-accent text-arkin-accent font-bold px-6 sm:px-10 py-4 sm:py-6 rounded-2xl text-sm sm:text-lg hover:bg-arkin-secondary/50 hover:text-arkin-accent transition-all duration-300 backdrop-blur-sm bg-arkin-secondary/20"
                   >
-                    Rentar/Vender Propiedad
+                    Comprar · Rentar · Vender
                     <ArrowRight className="h-4 w-4 sm:h-6 sm:w-6 ml-2 sm:ml-3" />
                   </Button>
                 </Link>
@@ -96,6 +97,9 @@ export function HomeYellow() {
       {/* Animated Stats Section */}
       <AnimatedStats />
 
+      {/* Ad Slot: Debajo del Hero */}
+      <HomepageAdSlot ubicacion="banner-hero" />
+
       {/* Featured Properties Carousel */}
       <section className="relative py-12 sm:py-16 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto">
@@ -108,6 +112,9 @@ export function HomeYellow() {
           <FeaturedPropertiesCarousel />
         </div>
       </section>
+
+      {/* Ad Slot: Entre Secciones */}
+      <HomepageAdSlot ubicacion="entre-secciones" />
 
       {/* Planes de Pago Section */}
       <section>
@@ -161,6 +168,9 @@ export function HomeYellow() {
 
       {/* Virtual Tours Section */}
       <VirtualToursSection />
+
+      {/* Ad Slot: Antes del Footer */}
+      <HomepageAdSlot ubicacion="footer" />
 
       {/* CTA Section - Bold & Direct */}
       <section className="relative py-12 sm:py-24 px-4 sm:px-6">
