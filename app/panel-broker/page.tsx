@@ -270,7 +270,7 @@ export default function PanelBrokerPage() {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={async () => { await logout(); router.push('/login') }}
+                onClick={async () => { await logout(); router.replace('/login') }}
                 className="text-gray-500 hover:text-red-500"
               >
                 <LogOut className="h-4 w-4 mr-2" />

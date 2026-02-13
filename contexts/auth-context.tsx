@@ -239,11 +239,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       // Limpiar mock user de localStorage
       localStorage.removeItem(MOCK_USER_STORAGE_KEY)
-      await supabase.auth.signOut()
       setUser(null)
+      try {
+        await supabase.auth.signOut()
+      } catch {
+        // Ignorar errores de signOut (puede no haber sesión real)
+      }
     } catch (error: any) {
       console.error('Error en logout:', error)
-      throw new Error(error.message || 'Error al cerrar sesión')
+      // Forzar limpieza aunque falle
+      localStorage.removeItem(MOCK_USER_STORAGE_KEY)
+      setUser(null)
     }
   }
 
