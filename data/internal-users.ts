@@ -259,6 +259,36 @@ export const propertyProgress: PropertyProgress[] = [
     status: 'rentada',
     ultimaActividad: '2025-01-15T12:00:00',
     notas: 'Contrato de renta firmado por 2 años'
+  },
+  {
+    propiedadId: 8,
+    asesorId: 'asesor-1',
+    leads: 34,
+    visitas: 18,
+    ofertas: 7,
+    status: 'vendida',
+    ultimaActividad: '2025-01-22T11:00:00',
+    notas: 'Cierre exitoso con crédito hipotecario'
+  },
+  {
+    propiedadId: 9,
+    asesorId: 'asesor-1',
+    leads: 11,
+    visitas: 5,
+    ofertas: 1,
+    status: 'activa',
+    ultimaActividad: '2025-01-23T09:30:00',
+    notas: 'Propiedad recién listada, buen interés inicial'
+  },
+  {
+    propiedadId: 10,
+    asesorId: 'asesor-1',
+    leads: 42,
+    visitas: 22,
+    ofertas: 8,
+    status: 'en_negociacion',
+    ultimaActividad: '2025-01-24T14:00:00',
+    notas: 'Dos ofertas competitivas, propietario evaluando'
   }
 ]
 
@@ -388,6 +418,86 @@ export const leads: Lead[] = [
     status: 'calificado',
     asesorId: 'asesor-2'
   },
+  // Leads para propiedad 8 (Ana - vendida)
+  {
+    id: 'lead-14',
+    propiedadId: 8,
+    nombre: 'Ricardo Fuentes',
+    email: 'ricardo.f@email.com',
+    telefono: '+52 477 444 1111',
+    mensaje: 'Cerré la compra, excelente servicio',
+    fecha: '2025-01-22T10:00:00',
+    status: 'calificado',
+    asesorId: 'asesor-1'
+  },
+  {
+    id: 'lead-15',
+    propiedadId: 8,
+    nombre: 'Diana Castillo',
+    email: 'diana.c@email.com',
+    telefono: '+52 477 444 2222',
+    mensaje: 'Me interesa mucho, ¿aún está disponible?',
+    fecha: '2025-01-21T16:30:00',
+    status: 'descartado',
+    asesorId: 'asesor-1'
+  },
+  // Leads para propiedad 9 (Ana - activa)
+  {
+    id: 'lead-16',
+    propiedadId: 9,
+    nombre: 'Valeria Ortíz',
+    email: 'valeria.o@email.com',
+    telefono: '+52 477 555 3333',
+    mensaje: '¿Tiene jardín trasero? Busco espacio para mis hijos',
+    fecha: '2025-01-23T08:45:00',
+    status: 'nuevo',
+    asesorId: 'asesor-1'
+  },
+  {
+    id: 'lead-17',
+    propiedadId: 9,
+    nombre: 'Emilio Vargas',
+    email: 'emilio.v@email.com',
+    telefono: '+52 477 555 4444',
+    mensaje: 'Quiero agendar visita para el sábado',
+    fecha: '2025-01-23T11:20:00',
+    status: 'contactado',
+    asesorId: 'asesor-1'
+  },
+  // Leads para propiedad 10 (Ana - en negociación)
+  {
+    id: 'lead-18',
+    propiedadId: 10,
+    nombre: 'Santiago Reyes',
+    email: 'santiago.r@email.com',
+    telefono: '+52 477 666 5555',
+    mensaje: 'Ofrezco $6,500,000 al contado',
+    fecha: '2025-01-24T13:00:00',
+    status: 'calificado',
+    asesorId: 'asesor-1'
+  },
+  {
+    id: 'lead-19',
+    propiedadId: 10,
+    nombre: 'Paulina Méndez',
+    email: 'paulina.m@email.com',
+    telefono: '+52 477 666 6666',
+    mensaje: 'Oferta de $6,200,000 con crédito bancario aprobado',
+    fecha: '2025-01-24T10:15:00',
+    status: 'calificado',
+    asesorId: 'asesor-1'
+  },
+  {
+    id: 'lead-20',
+    propiedadId: 10,
+    nombre: 'Iván Delgado',
+    email: 'ivan.d@email.com',
+    telefono: '+52 477 666 7777',
+    mensaje: 'Me interesa para inversión, ¿cuál es la plusvalía de la zona?',
+    fecha: '2025-01-23T17:00:00',
+    status: 'contactado',
+    asesorId: 'asesor-1'
+  },
   // Otros leads
   {
     id: 'lead-3',
@@ -513,6 +623,81 @@ export const activities: Activity[] = [
     asesorId: 'asesor-2',
     descripcion: 'Documentación lista para cierre, pendiente firma',
     fecha: '2025-01-17T16:00:00'
+  },
+  // Actividades para propiedad 8 (Ana - vendida)
+  {
+    id: 'act-14',
+    tipo: 'oferta',
+    propiedadId: 8,
+    asesorId: 'asesor-1',
+    descripcion: 'Oferta aceptada de Ricardo Fuentes: $5,100,000',
+    fecha: '2025-01-22T11:00:00'
+  },
+  {
+    id: 'act-15',
+    tipo: 'visita',
+    propiedadId: 8,
+    asesorId: 'asesor-1',
+    descripcion: 'Visita final con perito valuador - todo en orden',
+    fecha: '2025-01-21T15:00:00'
+  },
+  {
+    id: 'act-16',
+    tipo: 'nota',
+    propiedadId: 8,
+    asesorId: 'asesor-1',
+    descripcion: 'Documentación completa, firma en notaría programada',
+    fecha: '2025-01-22T09:00:00'
+  },
+  // Actividades para propiedad 9 (Ana - activa)
+  {
+    id: 'act-17',
+    tipo: 'lead',
+    propiedadId: 9,
+    asesorId: 'asesor-1',
+    descripcion: 'Nuevo lead: Valeria Ortíz interesada en visita',
+    fecha: '2025-01-23T08:45:00'
+  },
+  {
+    id: 'act-18',
+    tipo: 'visita',
+    propiedadId: 9,
+    asesorId: 'asesor-1',
+    descripcion: 'Visita programada con Emilio Vargas para el sábado',
+    fecha: '2025-01-23T11:30:00'
+  },
+  // Actividades para propiedad 10 (Ana - en negociación)
+  {
+    id: 'act-19',
+    tipo: 'oferta',
+    propiedadId: 10,
+    asesorId: 'asesor-1',
+    descripcion: 'Oferta de Santiago Reyes: $6,500,000 al contado',
+    fecha: '2025-01-24T13:00:00'
+  },
+  {
+    id: 'act-20',
+    tipo: 'oferta',
+    propiedadId: 10,
+    asesorId: 'asesor-1',
+    descripcion: 'Segunda oferta de Paulina Méndez: $6,200,000 con crédito',
+    fecha: '2025-01-24T10:15:00'
+  },
+  {
+    id: 'act-21',
+    tipo: 'nota',
+    propiedadId: 10,
+    asesorId: 'asesor-1',
+    descripcion: 'Propietario evaluando ambas ofertas, decisión esta semana',
+    fecha: '2025-01-24T16:00:00'
+  },
+  {
+    id: 'act-22',
+    tipo: 'lead',
+    propiedadId: 10,
+    asesorId: 'asesor-1',
+    descripcion: 'Iván Delgado contactado - inversionista serio',
+    fecha: '2025-01-23T17:30:00'
   },
   // Otras actividades
   {
