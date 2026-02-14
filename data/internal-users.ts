@@ -721,17 +721,30 @@ export function authenticateUser(email: string, password: string): User | null {
   return password === 'arkin2025' ? user : null
 }
 
+// Resolver ID real (UUID de Supabase) al mock ID del asesor usando email
+function resolveMockAsesorId(idOrEmail: string, email?: string): string {
+  // Si ya es un mock ID (asesor-X), devolverlo
+  if (idOrEmail.startsWith('asesor-')) return idOrEmail
+  // Buscar por email
+  const emailToSearch = email || idOrEmail
+  const mockUser = users.find(u => u.email === emailToSearch)
+  return mockUser?.id || idOrEmail
+}
+
 // Obtener progreso por asesor
-export function getProgressByAsesor(asesorId: string): PropertyProgress[] {
-  return propertyProgress.filter(p => p.asesorId === asesorId)
+export function getProgressByAsesor(asesorId: string, email?: string): PropertyProgress[] {
+  const mockId = resolveMockAsesorId(asesorId, email)
+  return propertyProgress.filter(p => p.asesorId === mockId)
 }
 
 // Obtener leads por asesor
-export function getLeadsByAsesor(asesorId: string): Lead[] {
-  return leads.filter(l => l.asesorId === asesorId)
+export function getLeadsByAsesor(asesorId: string, email?: string): Lead[] {
+  const mockId = resolveMockAsesorId(asesorId, email)
+  return leads.filter(l => l.asesorId === mockId)
 }
 
 // Obtener actividades por asesor
-export function getActivitiesByAsesor(asesorId: string): Activity[] {
-  return activities.filter(a => a.asesorId === asesorId)
+export function getActivitiesByAsesor(asesorId: string, email?: string): Activity[] {
+  const mockId = resolveMockAsesorId(asesorId, email)
+  return activities.filter(a => a.asesorId === mockId)
 }

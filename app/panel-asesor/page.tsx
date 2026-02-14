@@ -60,9 +60,9 @@ export default function PanelAsesorPage() {
 
     // Cargar datos del asesor
     console.log('🔍 Cargando datos para asesor:', user.id, user.email)
-    const progressData = getProgressByAsesor(user.id)
-    const leadsData = getLeadsByAsesor(user.id)
-    const activitiesData = getActivitiesByAsesor(user.id)
+    const progressData = getProgressByAsesor(user.id, user.email)
+    const leadsData = getLeadsByAsesor(user.id, user.email)
+    const activitiesData = getActivitiesByAsesor(user.id, user.email)
     
     console.log('📊 Progress cargado:', progressData.length, 'propiedades')
     console.log('👥 Leads cargados:', leadsData.length, 'leads')
