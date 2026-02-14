@@ -96,15 +96,26 @@ export function AISearchChat({ isOpen, onClose, properties }: AISearchChatProps)
       'lomas': ['lomas', 'las lomas'],
       'interlomas': ['interlomas'],
       'leon': ['león', 'leon', 'guanajuato', 'gto'],
-      'centro': ['centro', 'downtown']
+      'centro': ['centro', 'downtown'],
+      'valenciana': ['valenciana', 'la valenciana'],
+      'gran jardin': ['gran jardin', 'gran jardín'],
+      'campestre': ['campestre'],
+      'refugio': ['refugio', 'el refugio'],
+      'mayorazgo': ['mayorazgo'],
+      'cañada': ['cañada', 'canada'],
+      'puerta plata': ['puerta plata'],
+      'san isidro': ['san isidro']
     }
 
     const typeKeywords = {
-      'penthouse': ['penthouse', 'ático'],
-      'casa': ['casa', 'villa', 'residencia'],
-      'departamento': ['departamento', 'depto', 'apartamento'],
+      'penthouse': ['penthouse', 'ático', 'pent house'],
+      'casa': ['casa', 'villa', 'residencia', 'vivienda'],
+      'departamento': ['departamento', 'depto', 'apartamento', 'dpto'],
       'loft': ['loft'],
-      'condominio': ['condominio', 'condo']
+      'condominio': ['condominio', 'condo'],
+      'terreno': ['terreno', 'lote', 'predio'],
+      'oficina': ['oficina', 'local', 'comercial'],
+      'bodega': ['bodega', 'nave', 'industrial']
     }
 
     const amenityKeywords = {
@@ -193,6 +204,33 @@ export function AISearchChat({ isOpen, onClose, properties }: AISearchChatProps)
       } else if (normalizedQuery.includes('más') || normalizedQuery.includes('mínimo')) {
         filteredProperties = filteredProperties.filter(prop => prop.area >= area)
       }
+    }
+
+    // Si no se encontraron resultados con filtros específicos, hacer búsqueda por texto libre
+    if (filteredProperties.length === 0 || filteredProperties.length === properties.length) {
+      // Buscar en título, ubicación, descripción y características
+      const words = normalizedQuery.split(/\s+/).filter(w => w.length > 2)
+      if (words.length > 0) {
+        const textMatches = properties.filter(prop => {
+          const searchableText = `${prop.titulo} ${prop.ubicacion} ${prop.descripcion} ${prop.caracteristicas.join(' ')}`.toLowerCase()
+          return words.some(word => searchableText.includes(word))
+        })
+        if (textMatches.length > 0 && textMatches.length < properties.length) {
+          filteredProperties = textMatches
+        }
+      }
+    }
+
+    // Ordenar por relevancia (propiedades con más coincidencias primero)
+    if (filteredProperties.length > 1) {
+      const words = normalizedQuery.split(/\s+/).filter(w => w.length > 2)
+      filteredProperties.sort((a, b) => {
+        const textA = `${a.titulo} ${a.ubicacion} ${a.descripcion}`.toLowerCase()
+        const textB = `${b.titulo} ${b.ubicacion} ${b.descripcion}`.toLowerCase()
+        const matchesA = words.filter(w => textA.includes(w)).length
+        const matchesB = words.filter(w => textB.includes(w)).length
+        return matchesB - matchesA
+      })
     }
 
     // Generar respuesta basada en resultados

@@ -521,7 +521,7 @@ export default function PropiedadesPage() {
       <AISearchChat
         isOpen={isAIChatOpen}
         onClose={() => setIsAIChatOpen(false)}
-        properties={filteredAndSortedProperties}
+        properties={propiedades}
       />
     </div>
   )
