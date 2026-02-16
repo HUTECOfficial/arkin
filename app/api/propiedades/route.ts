@@ -114,7 +114,7 @@ export async function GET(request: Request) {
       caracteristicas: prop.caracteristicas || [],
       status: prop.status,
       categoria: prop.categoria,
-      fechaPublicacion: prop.fecha_publicacion,
+      fechaPublicacion: prop.created_at || prop.fecha_publicacion,
       tourVirtual: prop.tour_virtual || undefined,
       galeria: undefined,
       agente: prop.usuario_id && usuariosMap[prop.usuario_id] ? {
