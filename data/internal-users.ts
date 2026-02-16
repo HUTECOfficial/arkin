@@ -169,7 +169,8 @@ export const users: User[] = [
     role: 'propietario',
     telefono: '+52 477 111 0000',
     avatar: '/avatars/propietario1.jpg',
-    propiedadId: 1
+    propiedadId: 1,
+    password: 'propietario2025'
   },
   {
     id: 'propietario-2',
@@ -178,7 +179,8 @@ export const users: User[] = [
     role: 'propietario',
     telefono: '+52 477 222 0000',
     avatar: '/avatars/propietario2.jpg',
-    propiedadId: 2
+    propiedadId: 2,
+    password: 'propietario2025'
   },
   {
     id: 'propietario-3',
@@ -187,7 +189,8 @@ export const users: User[] = [
     role: 'propietario',
     telefono: '+52 477 333 0000',
     avatar: '/avatars/propietario3.jpg',
-    propiedadId: 4
+    propiedadId: 4,
+    password: 'propietario2025'
   }
 ]
 
