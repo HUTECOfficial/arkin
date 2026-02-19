@@ -5,7 +5,10 @@ import Image from 'next/image'
 
 export default function FichaMarcaPage() {
   return (
-    <div className="min-h-screen bg-arkin-secondary py-8 sm:py-16 md:py-20 px-4">
+    <div
+      className="min-h-screen bg-arkin-secondary py-8 sm:py-16 md:py-20 px-4 bg-cover bg-center bg-fixed"
+      style={{ backgroundImage: "url('https://mnrfsdrjadretxesjxhu.supabase.co/storage/v1/object/sign/arkin/hf_20260219_015208_b75495b2-1016-45df-a1f8-d1160006831b.jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV82ZTg2NjJkMS1lZjIzLTRkZjUtYjAwYy04NjVkOTcwYzljZWMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhcmtpbi9oZl8yMDI2MDIxOV8wMTUyMDhfYjc1NDk1YjItMTAxNi00NWRmLWExZjgtZDExNjAwMDY4MzFiLmpwZWciLCJpYXQiOjE3NzE0NjYyNTQsImV4cCI6MTgwMzAwMjI1NH0.0ew5z0WbvUkHQAwo8zOlhQFyLokmh2PKTqjqBtpxcuc')" }}
+    >
       {/* Contenedor de la ficha */}
       <div className="max-w-5xl mx-auto">
         <div className="bg-arkin-secondary rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden">
