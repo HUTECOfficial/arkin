@@ -70,7 +70,35 @@ export default function PropiedadesAsesorPage() {
       if (res.ok) {
         const data = await res.json()
         console.log('Loaded properties:', data.total, data.debug)
-        setPropiedades(data.propiedades || [])
+        // Mapear campos DB a campos App (snake_case -> camelCase)
+        const mapped = (data.propiedades || []).map((p: any) => ({
+          id: Number(p.id),
+          usuarioId: p.usuario_id || undefined,
+          titulo: p.titulo,
+          ubicacion: p.ubicacion,
+          precio: Number(p.precio),
+          precioTexto: p.precio_texto,
+          tipo: p.tipo,
+          habitaciones: p.habitaciones,
+          banos: p.banos,
+          mediosBanos: p.medios_banos || 0,
+          area: p.area,
+          areaConstruccion: p.area_construccion || 0,
+          cochera: p.cochera || 0,
+          amueblado: p.amueblado || undefined,
+          areaTexto: p.area_texto,
+          imagen: p.imagen || '',
+          descripcion: p.descripcion || '',
+          caracteristicas: p.caracteristicas || [],
+          status: p.status,
+          categoria: p.categoria,
+          fechaPublicacion: p.created_at || p.fecha_publicacion,
+          tourVirtual: p.tour_virtual || undefined,
+          galeria: p.galeria || [],
+          bono: p.bono || undefined,
+          detalles: p.detalles || undefined,
+        }))
+        setPropiedades(mapped)
       } else {
         console.error('Error loading properties:', await res.text())
         setPropiedades([])

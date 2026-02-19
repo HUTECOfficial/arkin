@@ -17,6 +17,20 @@ function getDbClient(): SupabaseClient {
   return _dbClient
 }
 
+// Cliente con service role para operaciones que requieren bypass de RLS
+let _adminClient: SupabaseClient | null = null
+function getAdminClient(): SupabaseClient {
+  if (!_adminClient) {
+    const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    _adminClient = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      serviceKey,
+      { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false } }
+    )
+  }
+  return _adminClient
+}
+
 export class PropertiesStorage {
   // Convertir de formato DB a formato App
   static dbToApp(dbProp: PropiedadRow): Propiedad {
@@ -339,7 +353,7 @@ export class PropertiesStorage {
     try {
       const dbData = this.appToDb(updates as any)
 
-      const db = getDbClient()
+      const db = getAdminClient()
 
       const { data, error } = await db
         .from('propiedades')
