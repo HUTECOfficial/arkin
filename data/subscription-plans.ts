@@ -80,9 +80,9 @@ export const subscriptionPlans: SubscriptionPlan[] = [
     description: 'Para asesores profesionales que buscan maximizar su potencial',
     price: 399,
     priceText: '$399 MXN/mes',
-    maxProperties: -1, // -1 significa ilimitado
+    maxProperties: 40,
     features: [
-      'Propiedades ilimitadas (7+)',
+      'Hasta 40 propiedades activas',
       'Asistente con Inteligencia Artificial',
       'Panel de gestión avanzado',
       'Estadísticas detalladas y reportes',
