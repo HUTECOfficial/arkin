@@ -73,7 +73,7 @@ export async function GET(request: Request) {
     // Listado completo
     const { data: propiedades, error: propError } = await supabaseAdmin
       .from('propiedades')
-      .select('id, titulo, ubicacion, precio, precio_texto, tipo, habitaciones, banos, area, area_texto, imagen, descripcion, caracteristicas, status, categoria, fecha_publicacion, tour_virtual, usuario_id, created_at')
+      .select('id, titulo, ubicacion, precio, precio_texto, tipo, habitaciones, banos, area, area_texto, imagen, descripcion, caracteristicas, status, categoria, fecha_publicacion, tour_virtual, usuario_id, created_at, bono')
       .order('created_at', { ascending: false })
 
     if (propError) {
