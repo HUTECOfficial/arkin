@@ -25,6 +25,14 @@ export async function POST(req: NextRequest) {
       planName = 'Plan Elite - ARKIN SELECT'
       planDescription = 'Propiedades ilimitadas + Asistente con IA'
       unitAmount = 39900 // $399.00 MXN en centavos
+    } else if (planId === 'team-core') {
+      planName = 'Plan Core Equipo - ARKIN SELECT'
+      planDescription = 'Hasta 6 propiedades activas por miembro · Mínimo 2 miembros'
+      unitAmount = 5900 // $59.00 MXN en centavos por miembro
+    } else if (planId === 'team-elite') {
+      planName = 'Plan Elite Equipo - ARKIN SELECT'
+      planDescription = 'Propiedades ilimitadas + IA por miembro · Mínimo 2 miembros'
+      unitAmount = 24900 // $249.00 MXN en centavos por miembro
     } else {
       return NextResponse.json(
         { error: 'Invalid plan' },

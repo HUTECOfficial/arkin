@@ -48,7 +48,17 @@ export function PropertyFilters({ onFiltersChange, isOpen, onToggle }: PropertyF
     "Departamento",
     "Casa",
     "Condominio",
-    "Loft"
+    "Loft",
+    "Edificio",
+    "Bodega",
+    "Nave Industrial",
+    "Terreno (m\u00b2)",
+    "Rancho",
+    "Hect\u00e1reas",
+    "Local Comercial",
+    "Oficina",
+    "Hospital",
+    "Cl\u00ednica"
   ]
 
   const locations = [

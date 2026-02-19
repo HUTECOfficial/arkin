@@ -225,7 +225,9 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
         titulo: formData.titulo || "",
         ubicacion: formData.ubicacion || "",
         precio: formData.precio || 0,
-        precioTexto: `$${(formData.precio || 0).toLocaleString('es-MX')}`,
+        precioTexto: formData.tipo === 'Hectáreas'
+          ? `$${(formData.precio || 0).toLocaleString('es-MX')}/m²`
+          : `$${(formData.precio || 0).toLocaleString('es-MX')}`,
         tipo: formData.tipo || "Departamento",
         habitaciones: formData.habitaciones ?? 0,
         banos: formData.banos ?? 0,
@@ -460,7 +462,9 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="precio">Precio (MXN) *</Label>
+              <Label htmlFor="precio">
+                {formData.tipo === 'Hectáreas' ? 'Precio por m² (MXN) *' : 'Precio (MXN) *'}
+              </Label>
               <Input
                 id="precio"
                 type="text"
@@ -471,11 +475,11 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
                   const numValue = parseInt(rawValue) || 0
                   setFormData({ ...formData, precio: numValue })
                 }}
-                placeholder="18,500,000"
+                placeholder={formData.tipo === 'Hectáreas' ? '150' : '18,500,000'}
               />
               {formData.precio && formData.precio > 0 && (
                 <p className="text-xs text-arkin-gold font-medium">
-                  ${formData.precio.toLocaleString('es-MX')} MXN
+                  ${formData.precio.toLocaleString('es-MX')} MXN{formData.tipo === 'Hectáreas' ? '/m²' : ''}
                 </p>
               )}
             </div>
@@ -504,6 +508,8 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
                   <SelectItem value="Hectáreas">Hectáreas</SelectItem>
                   <SelectItem value="Local Comercial">Local Comercial</SelectItem>
                   <SelectItem value="Oficina">Oficina</SelectItem>
+                  <SelectItem value="Hospital">Hospital</SelectItem>
+                  <SelectItem value="Clínica">Clínica</SelectItem>
                 </SelectContent>
               </Select>
             </div>

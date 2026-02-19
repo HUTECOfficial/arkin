@@ -6,8 +6,8 @@ import { useAuth } from '@/contexts/auth-context'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { subscriptionPlans } from '@/data/subscription-plans'
-import { ArrowLeft, Check, Crown, Zap, Sparkles, Loader2 } from 'lucide-react'
+import { subscriptionPlans, teamPlans } from '@/data/subscription-plans'
+import { ArrowLeft, Check, Crown, Zap, Sparkles, Loader2, Users } from 'lucide-react'
 import { toast } from 'sonner'
 
 export default function PlanesPage() {
@@ -20,7 +20,7 @@ export default function PlanesPage() {
     return null
   }
 
-  const handleSelectPlan = async (planId: 'core' | 'elite') => {
+  const handleSelectPlan = async (planId: string) => {
     if (planId === 'core') {
       toast.info('Ya estás en el Plan Core', {
         description: 'Este es tu plan actual'
@@ -28,7 +28,7 @@ export default function PlanesPage() {
       return
     }
 
-    // Para Plan Elite, crear sesión de pago con Stripe
+    // Para planes de pago, crear sesión de pago con Stripe
     setLoading(true)
     
     try {
@@ -38,7 +38,7 @@ export default function PlanesPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          planId: 'elite',
+          planId,
           userId: user?.id,
           userEmail: user?.email,
         }),
@@ -190,6 +190,114 @@ export default function PlanesPage() {
               </Card>
             )
           })}
+        </div>
+
+        {/* Team Plans Section */}
+        <div className="mt-12 mb-8">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="p-2 bg-purple-600 rounded-xl">
+              <Users className="h-6 w-6 text-white" />
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold text-arkin-graphite">Planes para Equipos</h2>
+              <p className="text-gray-500 text-sm">Para 2 o más miembros · Precio por miembro/mes</p>
+            </div>
+          </div>
+          <p className="text-gray-600 mb-6 ml-1">
+            Ideal para equipos de asesores. Todos los miembros comparten las mismas ventajas a un precio reducido.
+          </p>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            {teamPlans.map((plan) => {
+              const isCurrentPlan = currentPlan === plan.id
+              const isElite = plan.id === 'team-elite'
+
+              return (
+                <Card
+                  key={plan.id}
+                  className={`relative overflow-hidden transition-all duration-300 ${
+                    isElite
+                      ? 'border-purple-400/50 bg-gradient-to-br from-purple-50 to-purple-100/50 shadow-xl'
+                      : 'border-gray-300 bg-arkin-secondary/60'
+                  } ${isCurrentPlan ? 'ring-2 ring-purple-500' : ''}`}
+                >
+                  {isElite && (
+                    <div className="absolute top-0 right-0 bg-purple-600 text-white px-4 py-1 text-xs font-bold">
+                      RECOMENDADO
+                    </div>
+                  )}
+
+                  <CardHeader className="pb-4">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-3">
+                        {isElite ? (
+                          <div className="p-3 bg-purple-600 rounded-xl">
+                            <Crown className="h-8 w-8 text-white" />
+                          </div>
+                        ) : (
+                          <div className="p-3 bg-purple-400 rounded-xl">
+                            <Users className="h-8 w-8 text-white" />
+                          </div>
+                        )}
+                        <div>
+                          <CardTitle className="text-2xl">{plan.displayName}</CardTitle>
+                          {isCurrentPlan && (
+                            <Badge className="mt-1 bg-purple-600 text-white">
+                              Plan Actual
+                            </Badge>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    <CardDescription className="text-base">{plan.description}</CardDescription>
+                  </CardHeader>
+
+                  <CardContent>
+                    <div className="mb-6">
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-4xl font-bold text-arkin-graphite">${plan.price}</span>
+                        <span className="text-gray-500">MXN/mes por miembro</span>
+                      </div>
+                      <p className="text-xs text-purple-600 font-medium mt-1">Mínimo 2 miembros</p>
+                    </div>
+
+                    <div className="space-y-3 mb-6">
+                      {plan.features.map((feature, index) => (
+                        <div key={index} className="flex items-start gap-3">
+                          <div className={`mt-0.5 p-1 rounded-full ${
+                            isElite ? 'bg-purple-600/20' : 'bg-purple-400/20'
+                          }`}>
+                            <Check className={`h-4 w-4 ${
+                              isElite ? 'text-purple-600' : 'text-purple-500'
+                            }`} />
+                          </div>
+                          <span className="text-sm text-gray-700">{feature}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    <Button
+                      onClick={() => handleSelectPlan(plan.id)}
+                      disabled={isCurrentPlan || loading}
+                      className={`w-full ${
+                        isElite
+                          ? 'bg-purple-600 hover:bg-purple-700 text-white'
+                          : 'bg-purple-400 hover:bg-purple-500 text-white'
+                      }`}
+                    >
+                      {loading ? (
+                        <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Procesando...</>
+                      ) : isCurrentPlan ? (
+                        'Plan Actual'
+                      ) : (
+                        <><Users className="h-4 w-4 mr-2" />Seleccionar para Equipo</>
+                      )}
+                    </Button>
+                  </CardContent>
+                </Card>
+              )
+            })}
+          </div>
         </div>
 
         {/* Additional Info */}

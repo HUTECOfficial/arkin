@@ -1,4 +1,4 @@
-export type PlanType = 'core' | 'elite'
+export type PlanType = 'core' | 'elite' | 'team-core' | 'team-elite'
 
 export interface SubscriptionPlan {
   id: PlanType
@@ -11,6 +11,49 @@ export interface SubscriptionPlan {
   features: string[]
   recommended?: boolean
 }
+
+export const teamPlans: SubscriptionPlan[] = [
+  {
+    id: 'team-core',
+    name: 'Plan Core Equipo',
+    displayName: 'Core Equipo',
+    description: 'Plan Core para equipos de 2 o más miembros',
+    price: 59,
+    priceText: '$59 MXN/mes por miembro',
+    maxProperties: 6,
+    features: [
+      'Hasta 6 propiedades activas por miembro',
+      'Panel de gestión básico',
+      'Estadísticas de propiedades',
+      'Gestión de leads',
+      'Soporte por email',
+      'Acceso a la plataforma web',
+      'Mínimo 2 miembros',
+    ]
+  },
+  {
+    id: 'team-elite',
+    name: 'Plan Elite Equipo',
+    displayName: 'Elite Equipo',
+    description: 'Plan Elite para equipos de 2 o más miembros',
+    price: 249,
+    priceText: '$249 MXN/mes por miembro',
+    maxProperties: -1,
+    features: [
+      'Propiedades ilimitadas por miembro',
+      'Asistente con Inteligencia Artificial',
+      'Panel de gestión avanzado',
+      'Estadísticas detalladas y reportes',
+      'Gestión avanzada de leads',
+      'Prioridad en soporte',
+      'Acceso a herramientas premium',
+      'Marketing automatizado',
+      'Análisis predictivo de mercado',
+      'Mínimo 2 miembros',
+    ],
+    recommended: true
+  }
+]
 
 export const subscriptionPlans: SubscriptionPlan[] = [
   {
@@ -54,7 +97,7 @@ export const subscriptionPlans: SubscriptionPlan[] = [
 ]
 
 export function getPlanById(planId: PlanType): SubscriptionPlan | undefined {
-  return subscriptionPlans.find(plan => plan.id === planId)
+  return [...subscriptionPlans, ...teamPlans].find(plan => plan.id === planId)
 }
 
 export function canAddProperty(currentPlan: PlanType, currentPropertyCount: number): boolean {

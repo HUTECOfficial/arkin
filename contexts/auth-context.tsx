@@ -12,7 +12,7 @@ interface User {
   telefono?: string
   avatar?: string
   propiedadId?: number
-  plan?: 'core' | 'elite'
+  plan?: 'core' | 'elite' | 'team-core' | 'team-elite'
 }
 
 interface AuthContextType {
