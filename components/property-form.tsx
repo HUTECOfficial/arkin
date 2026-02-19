@@ -78,6 +78,7 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
   const [imagePreview, setImagePreview] = useState<string>(initialData?.imagen || "")
   const [galleryPreviews, setGalleryPreviews] = useState<string[]>(initialData?.galeria || [])
   const [observaciones, setObservaciones] = useState<string>((initialData as any)?.observaciones || "")
+  const [bono, setBono] = useState<string>((initialData as any)?.bono || "")
   const [isDraggingMain, setIsDraggingMain] = useState(false)
   const [isDraggingGallery, setIsDraggingGallery] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
@@ -269,7 +270,8 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
         galeria: galeriaUrls,
         tourVirtual: undefined,
         tipoCredito: (formData as any).tipoCredito || undefined,
-        observaciones: observaciones || undefined
+        observaciones: observaciones || undefined,
+        bono: bono.trim() || undefined
       } as any
 
       console.log('Enviando propiedad:', propertyData)
@@ -1037,6 +1039,49 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
               </div>
             )}
           </div>
+        </CardContent>
+      </Card>
+
+      {/* Bono / Descuento */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Bono o Descuento</CardTitle>
+          <CardDescription>Opcional — se mostrará como un listón en la esquina de la publicación</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="bono">Texto del bono</Label>
+            <Input
+              id="bono"
+              value={bono}
+              onChange={(e) => setBono(e.target.value)}
+              placeholder="Ej: BONO DE $500,000 PESOS"
+              maxLength={60}
+            />
+            <p className="text-xs text-gray-500">Máximo 60 caracteres. Déjalo vacío si no hay bono.</p>
+          </div>
+          {bono.trim() && (
+            <div className="mt-3">
+              <p className="text-xs text-gray-500 mb-2">Vista previa del listón:</p>
+              <div className="relative inline-block">
+                <div className="overflow-hidden w-40 h-40 relative rounded-lg bg-gray-200">
+                  <div className="absolute top-0 right-0 z-10 overflow-hidden w-full h-full pointer-events-none">
+                    <div
+                      className="absolute top-5 -right-8 w-40 text-center py-1.5 text-[10px] font-black tracking-wide shadow-lg"
+                      style={{
+                        transform: 'rotate(45deg)',
+                        background: 'linear-gradient(135deg, #C9A84C, #f0c040, #C9A84C)',
+                        color: '#1a1a1a',
+                        transformOrigin: 'center',
+                      }}
+                    >
+                      {bono.trim()}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </CardContent>
       </Card>
 

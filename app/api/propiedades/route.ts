@@ -117,6 +117,7 @@ export async function GET(request: Request) {
       fechaPublicacion: prop.created_at || prop.fecha_publicacion,
       tourVirtual: prop.tour_virtual || undefined,
       galeria: undefined,
+      bono: prop.bono || undefined,
       agente: prop.usuario_id && usuariosMap[prop.usuario_id] ? {
         nombre: usuariosMap[prop.usuario_id],
         especialidad: 'Especialista en Propiedades',

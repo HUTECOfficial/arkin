@@ -38,6 +38,7 @@ export interface Propiedad {
     publicado: string
   }
   galeria?: string[]
+  bono?: string
 }
 
 export const propiedades: Propiedad[] = [

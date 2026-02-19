@@ -43,6 +43,7 @@ export class PropertiesStorage {
       fechaPublicacion: dbProp.fecha_publicacion,
       tourVirtual: dbProp.tour_virtual || undefined,
       galeria: dbProp.galeria || undefined,
+      bono: (dbProp as any).bono || undefined,
     }
 
   }
@@ -139,6 +140,7 @@ export class PropertiesStorage {
       fecha_publicacion: appProp.fechaPublicacion,
       tour_virtual: appProp.tourVirtual,
       galeria: appProp.galeria,
+      bono: (appProp as any).bono || null,
     }
     
     // NOTA: Los campos medios_banos, area_construccion, cochera y tipo_credito

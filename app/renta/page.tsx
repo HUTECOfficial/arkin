@@ -61,6 +61,22 @@ export default function RentaPage() {
                     alt={propiedad.titulo}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   />
+                  {(propiedad as any).bono && (
+                    <div className="absolute top-0 right-0 overflow-hidden w-full h-full pointer-events-none z-10">
+                      <div
+                        className="absolute top-6 -right-10 w-44 text-center py-2 text-[10px] font-black tracking-wider shadow-xl uppercase"
+                        style={{
+                          transform: 'rotate(45deg)',
+                          background: 'linear-gradient(135deg, #8B6914, #C9A84C, #f0c040, #C9A84C, #8B6914)',
+                          color: '#1a1a1a',
+                          textShadow: '0 1px 0 rgba(255,255,255,0.3)',
+                          boxShadow: '0 3px 10px rgba(0,0,0,0.3)',
+                        }}
+                      >
+                        {(propiedad as any).bono}
+                      </div>
+                    </div>
+                  )}
                   <div className="absolute top-4 left-4">
                     <Badge className="bg-blue-500/90 text-white backdrop-blur-sm text-xs">
                       En Renta
