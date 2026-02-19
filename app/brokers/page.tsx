@@ -4,50 +4,11 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { 
-  Users, 
   FileText, 
-  Shield, 
-  Handshake, 
   Phone, 
   MapPin,
-  Briefcase,
-  Scale,
-  Home,
-  TrendingUp
+  Scale
 } from "lucide-react"
-
-const beneficios = [
-  {
-    icon: TrendingUp,
-    titulo: "Comisiones Competitivas",
-    descripcion: "Esquema de comisiones atractivo para brokers asociados con pagos puntuales."
-  },
-  {
-    icon: Home,
-    titulo: "Inventario Exclusivo",
-    descripcion: "Acceso a propiedades premium y exclusivas no disponibles en el mercado abierto."
-  },
-  {
-    icon: Users,
-    titulo: "Red de Contactos",
-    descripcion: "Conexión con una amplia red de compradores calificados e inversionistas."
-  },
-  {
-    icon: Shield,
-    titulo: "Respaldo Legal",
-    descripcion: "Asesoría legal completa y documentación profesional en cada operación."
-  },
-  {
-    icon: Briefcase,
-    titulo: "Capacitación Continua",
-    descripcion: "Programas de formación y actualización en el mercado inmobiliario."
-  },
-  {
-    icon: Handshake,
-    titulo: "Alianzas Estratégicas",
-    descripcion: "Colaboración con notarías, bancos y desarrolladores de confianza."
-  }
-]
 
 const notariasAsociadas = [
   {
@@ -113,39 +74,6 @@ export default function BrokersPage() {
                 Directorio de Notarías
               </Button>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Beneficios */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Beneficios de ser Broker Asociado
-            </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Forma parte de ARKIN SELECT y accede a herramientas, recursos y oportunidades 
-              exclusivas para hacer crecer tu negocio inmobiliario.
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {beneficios.map((beneficio, index) => (
-              <Card key={index} className="border border-arkin-primary/30 bg-arkin-secondary/50 shadow-lg hover:shadow-xl transition-shadow">
-                <CardContent className="p-6">
-                  <div className="w-12 h-12 bg-arkin-gold/10 rounded-xl flex items-center justify-center mb-4">
-                    <beneficio.icon className="h-6 w-6 text-arkin-gold" />
-                  </div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                    {beneficio.titulo}
-                  </h3>
-                  <p className="text-gray-600">
-                    {beneficio.descripcion}
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
           </div>
         </div>
       </section>

@@ -22,10 +22,12 @@ import {
   Car,
   Shield,
   Waves,
-  TrendingUp
+  TrendingUp,
+  Map
 } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
+import { Leon3DMap } from "@/components/leon-3d-map"
 
 const desarrollosVerticales = [
   {
@@ -279,6 +281,25 @@ export default function DesarrollosPage() {
               <p className="text-gray-600">Plusvalía Promedio</p>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Mapa 3D de León */}
+      <section className="py-16 bg-slate-950">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-10">
+            <Badge className="bg-arkin-gold/20 text-arkin-gold border-arkin-gold/30 mb-4">
+              <Map className="h-3 w-3 mr-1" />
+              Mapa Interactivo
+            </Badge>
+            <h2 className="text-3xl font-bold text-white mb-3">
+              Desarrollos en León, Guanajuato
+            </h2>
+            <p className="text-slate-400 max-w-2xl mx-auto">
+              Explora nuestros desarrollos por zona. Pasa el cursor o haz clic en un edificio para ver disponibilidad y precios.
+            </p>
+          </div>
+          <Leon3DMap />
         </div>
       </section>
 

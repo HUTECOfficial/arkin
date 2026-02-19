@@ -38,6 +38,7 @@ interface Property {
   descripcion: string
   caracteristicas: string[]
   status: string
+  categoria?: string
   fechaPublicacion?: string
 }
 
@@ -85,183 +86,257 @@ export function AISearchChat({ isOpen, onClose, properties }: AISearchChatProps)
 
   // Sistema de IA interno para procesar consultas
   const processAIQuery = (query: string): { results: Property[], response: string, suggestions?: string[] } => {
-    const normalizedQuery = query.toLowerCase()
-    
-    // Palabras clave para diferentes criterios
-    const locationKeywords = {
-      'polanco': ['polanco'],
-      'roma': ['roma', 'roma norte'],
-      'condesa': ['condesa'],
-      'santa fe': ['santa fe', 'santa'],
-      'lomas': ['lomas', 'las lomas'],
-      'interlomas': ['interlomas'],
-      'leon': ['león', 'leon', 'guanajuato', 'gto'],
-      'centro': ['centro', 'downtown'],
-      'valenciana': ['valenciana', 'la valenciana'],
-      'gran jardin': ['gran jardin', 'gran jardín'],
-      'campestre': ['campestre'],
-      'refugio': ['refugio', 'el refugio'],
-      'mayorazgo': ['mayorazgo'],
-      'cañada': ['cañada', 'canada'],
-      'puerta plata': ['puerta plata'],
-      'san isidro': ['san isidro']
+    const q = query.toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // quitar acentos para comparar
+    const qOrig = query.toLowerCase()
+
+    // ── 1. PARSEAR PRECIO ──────────────────────────────────────────────────────
+    // Detectar números escritos como "5 millones", "5m", "5,000,000", "$5M", "cinco millones"
+    const wordNumbers: Record<string, number> = {
+      'un millon': 1e6, 'uno millon': 1e6, 'dos millones': 2e6, 'tres millones': 3e6,
+      'cuatro millones': 4e6, 'cinco millones': 5e6, 'seis millones': 6e6,
+      'siete millones': 7e6, 'ocho millones': 8e6, 'nueve millones': 9e6,
+      'diez millones': 10e6, 'quince millones': 15e6, 'veinte millones': 20e6
     }
 
-    const typeKeywords = {
-      'penthouse': ['penthouse', 'ático', 'pent house'],
-      'casa': ['casa', 'villa', 'residencia', 'vivienda'],
-      'departamento': ['departamento', 'depto', 'apartamento', 'dpto'],
-      'loft': ['loft'],
-      'condominio': ['condominio', 'condo'],
-      'terreno': ['terreno', 'lote', 'predio'],
-      'oficina': ['oficina', 'local', 'comercial'],
-      'bodega': ['bodega', 'nave', 'industrial']
+    let parsedPrice: number | null = null
+    // Primero intentar palabras escritas
+    for (const [word, val] of Object.entries(wordNumbers)) {
+      if (q.includes(word)) { parsedPrice = val; break }
     }
-
-    const amenityKeywords = {
-      'piscina': ['piscina', 'alberca', 'pool'],
-      'jardin': ['jardín', 'jardin', 'garden'],
-      'terraza': ['terraza', 'balcón', 'balcon'],
-      'gimnasio': ['gimnasio', 'gym'],
-      'seguridad': ['seguridad', 'vigilancia', '24/7'],
-      'vista': ['vista', 'panorámica', 'view']
-    }
-
-    // Extraer números para precio y habitaciones
-    const priceMatch = normalizedQuery.match(/(\d+(?:\.\d+)?)\s*(?:m|mill|millones?|mxn|\$)/i)
-    const roomsMatch = normalizedQuery.match(/(\d+)\s*(?:hab|habitacion|habitaciones|recamara|recamaras|bedroom|bedrooms)/i)
-    const bathsMatch = normalizedQuery.match(/(\d+)\s*(?:baño|baños|bathroom|bathrooms)/i)
-    const areaMatch = normalizedQuery.match(/(\d+)\s*(?:m2|m²|metros|metro)/i)
-
-    let filteredProperties = [...properties]
-
-    // Filtrar por ubicación
-    for (const [location, keywords] of Object.entries(locationKeywords)) {
-      if (keywords.some(keyword => normalizedQuery.includes(keyword))) {
-        filteredProperties = filteredProperties.filter(prop => 
-          prop.ubicacion.toLowerCase().includes(location) ||
-          keywords.some(k => prop.ubicacion.toLowerCase().includes(k))
-        )
-        break
-      }
-    }
-
-    // Filtrar por tipo de propiedad
-    for (const [type, keywords] of Object.entries(typeKeywords)) {
-      if (keywords.some(keyword => normalizedQuery.includes(keyword))) {
-        filteredProperties = filteredProperties.filter(prop => 
-          prop.tipo.toLowerCase().includes(type) ||
-          keywords.some(k => prop.tipo.toLowerCase().includes(k))
-        )
-        break
-      }
-    }
-
-    // Filtrar por amenidades
-    for (const [amenity, keywords] of Object.entries(amenityKeywords)) {
-      if (keywords.some(keyword => normalizedQuery.includes(keyword))) {
-        filteredProperties = filteredProperties.filter(prop => 
-          prop.caracteristicas.some(car => 
-            keywords.some(k => car.toLowerCase().includes(k))
-          ) || prop.descripcion.toLowerCase().includes(amenity)
-        )
-      }
-    }
-
-    // Filtrar por precio
-    if (priceMatch) {
-      const maxPrice = parseFloat(priceMatch[1]) * 1000000 // Convertir millones
-      if (normalizedQuery.includes('menos') || normalizedQuery.includes('máximo') || normalizedQuery.includes('hasta')) {
-        filteredProperties = filteredProperties.filter(prop => prop.precio <= maxPrice)
-      } else if (normalizedQuery.includes('más') || normalizedQuery.includes('mínimo') || normalizedQuery.includes('desde')) {
-        filteredProperties = filteredProperties.filter(prop => prop.precio >= maxPrice)
-      }
-    }
-
-    // Filtrar por habitaciones
-    if (roomsMatch) {
-      const rooms = parseInt(roomsMatch[1])
-      if (normalizedQuery.includes('menos') || normalizedQuery.includes('máximo')) {
-        filteredProperties = filteredProperties.filter(prop => prop.habitaciones <= rooms)
-      } else if (normalizedQuery.includes('más') || normalizedQuery.includes('mínimo')) {
-        filteredProperties = filteredProperties.filter(prop => prop.habitaciones >= rooms)
-      } else {
-        filteredProperties = filteredProperties.filter(prop => prop.habitaciones === rooms)
-      }
-    }
-
-    // Filtrar por baños
-    if (bathsMatch) {
-      const baths = parseInt(bathsMatch[1])
-      filteredProperties = filteredProperties.filter(prop => prop.banos >= baths)
-    }
-
-    // Filtrar por área
-    if (areaMatch) {
-      const area = parseInt(areaMatch[1])
-      if (normalizedQuery.includes('menos') || normalizedQuery.includes('máximo')) {
-        filteredProperties = filteredProperties.filter(prop => prop.area <= area)
-      } else if (normalizedQuery.includes('más') || normalizedQuery.includes('mínimo')) {
-        filteredProperties = filteredProperties.filter(prop => prop.area >= area)
-      }
-    }
-
-    // Si no se encontraron resultados con filtros específicos, hacer búsqueda por texto libre
-    if (filteredProperties.length === 0 || filteredProperties.length === properties.length) {
-      // Buscar en título, ubicación, descripción y características
-      const words = normalizedQuery.split(/\s+/).filter(w => w.length > 2)
-      if (words.length > 0) {
-        const textMatches = properties.filter(prop => {
-          const searchableText = `${prop.titulo} ${prop.ubicacion} ${prop.descripcion} ${prop.caracteristicas.join(' ')}`.toLowerCase()
-          return words.some(word => searchableText.includes(word))
-        })
-        if (textMatches.length > 0 && textMatches.length < properties.length) {
-          filteredProperties = textMatches
+    // Luego patrones numéricos: "5 millones", "5m", "5.5m", "$5,000,000", "5000000"
+    if (!parsedPrice) {
+      const patterns = [
+        /\$?\s*(\d+(?:[.,]\d+)?)\s*(?:millones?|mdp|mdd|m(?=\s|$))/i,
+        /\$?\s*(\d{1,3}(?:[.,]\d{3})+)/,  // 5,000,000 o 5.000.000
+        /presupuesto[^0-9]*(\d+(?:[.,]\d+)?)\s*(?:millones?|m)?/i,
+        /hasta[^0-9]*(\d+(?:[.,]\d+)?)\s*(?:millones?|m)?/i,
+        /maximo[^0-9]*(\d+(?:[.,]\d+)?)\s*(?:millones?|m)?/i,
+        /menos de[^0-9]*(\d+(?:[.,]\d+)?)\s*(?:millones?|m)?/i,
+      ]
+      for (const pat of patterns) {
+        const m = q.match(pat)
+        if (m) {
+          let num = parseFloat(m[1].replace(/,/g, ''))
+          // Si el número es pequeño (< 1000), asumir millones
+          if (num < 1000) num = num * 1e6
+          parsedPrice = num
+          break
         }
       }
     }
 
-    // Ordenar por relevancia (propiedades con más coincidencias primero)
-    if (filteredProperties.length > 1) {
-      const words = normalizedQuery.split(/\s+/).filter(w => w.length > 2)
-      filteredProperties.sort((a, b) => {
-        const textA = `${a.titulo} ${a.ubicacion} ${a.descripcion}`.toLowerCase()
-        const textB = `${b.titulo} ${b.ubicacion} ${b.descripcion}`.toLowerCase()
-        const matchesA = words.filter(w => textA.includes(w)).length
-        const matchesB = words.filter(w => textB.includes(w)).length
-        return matchesB - matchesA
+    // Detectar si es precio máximo o mínimo
+    const isMaxPrice = /presupuesto|maximo|hasta|menos de|no mas de|no pase de|que no sea mas|por menos|economico|barato/i.test(q)
+    const isMinPrice = /minimo|desde|mas de|superior a|por encima/i.test(q)
+
+    // ── 2. PARSEAR HABITACIONES ────────────────────────────────────────────────
+    const roomsMatch = q.match(/(\d+)\s*(?:hab(?:itacion(?:es)?)?|rec(?:amara(?:s)?)?|cuarto(?:s)?|bedroom(?:s)?)/i)
+    const rooms = roomsMatch ? parseInt(roomsMatch[1]) : null
+    const roomsIsMin = /mas de|minimo|al menos|por lo menos/.test(q)
+    const roomsIsMax = /maximo|hasta|menos de/.test(q)
+
+    // ── 3. PARSEAR BAÑOS ──────────────────────────────────────────────────────
+    const bathsMatch = q.match(/(\d+)\s*(?:bano(?:s)?|bathroom(?:s)?)/i)
+    const baths = bathsMatch ? parseInt(bathsMatch[1]) : null
+
+    // ── 4. PARSEAR ÁREA ───────────────────────────────────────────────────────
+    const areaMatch = q.match(/(\d+)\s*(?:m2|m²|metros?(?:\s*cuadrados?)?)/i)
+    const area = areaMatch ? parseInt(areaMatch[1]) : null
+    const areaIsMax = /maximo|hasta|menos de/.test(q)
+    const areaIsMin = /minimo|desde|mas de/.test(q)
+
+    // ── 5. DETECTAR TIPO DE OPERACIÓN ─────────────────────────────────────────
+    const isRenta = /rent(?:a(?:r)?)?|arrendar|alquil/i.test(q)
+    const isVenta = /venta|comprar|compra|adquirir/i.test(q)
+
+    // ── 6. DETECTAR UBICACIÓN ─────────────────────────────────────────────────
+    const locationMap: Record<string, string[]> = {
+      'polanco': ['polanco'],
+      'roma': ['roma norte', 'roma sur', 'roma'],
+      'condesa': ['condesa'],
+      'santa fe': ['santa fe'],
+      'lomas': ['lomas altas', 'lomas de chapultepec', 'lomas'],
+      'interlomas': ['interlomas'],
+      'leon': ['leon', 'guanajuato', 'gto'],
+      'valenciana': ['valenciana'],
+      'gran jardin': ['gran jardin', 'gran jardín'],
+      'campestre': ['campestre'],
+      'refugio': ['refugio'],
+      'mayorazgo': ['mayorazgo'],
+      'canada': ['canada', 'cañada'],
+      'puerta plata': ['puerta plata'],
+      'san isidro': ['san isidro'],
+      'centro': ['centro historico', 'centro'],
+    }
+    let detectedLocation: string | null = null
+    for (const [key, aliases] of Object.entries(locationMap)) {
+      if (aliases.some(a => q.includes(a)) || q.includes(key)) {
+        detectedLocation = key
+        break
+      }
+    }
+
+    // ── 7. DETECTAR TIPO DE PROPIEDAD ─────────────────────────────────────────
+    const typeMap: Record<string, string[]> = {
+      'penthouse': ['penthouse', 'atico', 'pent house'],
+      'casa': ['casa', 'villa', 'residencia', 'vivienda', 'chalet'],
+      'departamento': ['departamento', 'depto', 'apartamento', 'dpto', 'flat'],
+      'loft': ['loft'],
+      'terreno': ['terreno', 'lote', 'predio', 'hectareas', 'hectarea'],
+      'local comercial': ['local', 'comercial', 'negocio'],
+      'oficina': ['oficina'],
+      'bodega': ['bodega', 'nave', 'industrial'],
+      'hospital': ['hospital'],
+      'clinica': ['clinica'],
+    }
+    let detectedType: string | null = null
+    for (const [key, aliases] of Object.entries(typeMap)) {
+      if (aliases.some(a => q.includes(a))) {
+        detectedType = key
+        break
+      }
+    }
+
+    // ── 8. DETECTAR AMENIDADES ────────────────────────────────────────────────
+    const amenityMap: Record<string, string[]> = {
+      'alberca': ['alberca', 'piscina', 'pool'],
+      'jardin': ['jardin', 'garden', 'area verde'],
+      'terraza': ['terraza', 'balcon', 'roof'],
+      'gimnasio': ['gimnasio', 'gym'],
+      'seguridad': ['seguridad', 'vigilancia', 'guardia'],
+      'estacionamiento': ['estacionamiento', 'garage', 'cochera'],
+      'elevador': ['elevador', 'ascensor'],
+    }
+    const detectedAmenities: string[] = []
+    for (const [key, aliases] of Object.entries(amenityMap)) {
+      if (aliases.some(a => q.includes(a))) detectedAmenities.push(key)
+    }
+
+    // ── 9. APLICAR FILTROS ────────────────────────────────────────────────────
+    let filtered = [...properties]
+
+    // Precio
+    if (parsedPrice) {
+      if (isMaxPrice && !isMinPrice) {
+        filtered = filtered.filter(p => p.precio <= parsedPrice!)
+      } else if (isMinPrice && !isMaxPrice) {
+        filtered = filtered.filter(p => p.precio >= parsedPrice!)
+      } else {
+        // Sin contexto claro → asumir máximo (lo más común en búsquedas)
+        filtered = filtered.filter(p => p.precio <= parsedPrice!)
+      }
+    }
+
+    // Operación
+    if (isRenta && !isVenta) {
+      filtered = filtered.filter(p => p.categoria === 'renta')
+    } else if (isVenta && !isRenta) {
+      filtered = filtered.filter(p => p.categoria === 'venta' || p.categoria === 'exclusivo' || p.categoria === 'remate')
+    }
+
+    // Ubicación
+    if (detectedLocation) {
+      const aliases = locationMap[detectedLocation]
+      filtered = filtered.filter(p => {
+        const loc = p.ubicacion.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        return aliases.some(a => loc.includes(a)) || loc.includes(detectedLocation!)
       })
     }
 
-    // Generar respuesta basada en resultados
+    // Tipo
+    if (detectedType) {
+      filtered = filtered.filter(p => {
+        const tipo = p.tipo.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        const aliases = typeMap[detectedType!]
+        return aliases.some(a => tipo.includes(a)) || tipo.includes(detectedType!)
+      })
+    }
+
+    // Habitaciones
+    if (rooms !== null) {
+      if (roomsIsMin) filtered = filtered.filter(p => p.habitaciones >= rooms)
+      else if (roomsIsMax) filtered = filtered.filter(p => p.habitaciones <= rooms)
+      else filtered = filtered.filter(p => p.habitaciones >= rooms) // al menos N
+    }
+
+    // Baños
+    if (baths !== null) {
+      filtered = filtered.filter(p => p.banos >= baths)
+    }
+
+    // Área
+    if (area !== null) {
+      if (areaIsMax) filtered = filtered.filter(p => p.area <= area)
+      else if (areaIsMin) filtered = filtered.filter(p => p.area >= area)
+      else filtered = filtered.filter(p => p.area >= area)
+    }
+
+    // Amenidades
+    for (const amenity of detectedAmenities) {
+      const aliases = amenityMap[amenity]
+      filtered = filtered.filter(p => {
+        const searchable = [...p.caracteristicas, p.descripcion].join(' ').toLowerCase()
+          .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        return aliases.some(a => searchable.includes(a))
+      })
+    }
+
+    // ── 10. FALLBACK: búsqueda por texto libre si no hay resultados ───────────
+    if (filtered.length === 0) {
+      const stopWords = new Set(['que', 'con', 'una', 'para', 'por', 'los', 'las', 'del', 'en', 'de', 'un', 'la', 'el', 'se', 'al', 'mi', 'me'])
+      const words = q.split(/\s+/).filter(w => w.length > 3 && !stopWords.has(w))
+      if (words.length > 0) {
+        const textMatches = properties.filter(p => {
+          const text = `${p.titulo} ${p.ubicacion} ${p.descripcion} ${p.caracteristicas.join(' ')}`.toLowerCase()
+            .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+          return words.some(w => text.includes(w))
+        })
+        if (textMatches.length > 0) filtered = textMatches
+      }
+    }
+
+    // ── 11. ORDENAR POR RELEVANCIA ────────────────────────────────────────────
+    if (filtered.length > 1) {
+      const stopWords = new Set(['que', 'con', 'una', 'para', 'por', 'los', 'las', 'del', 'en', 'de', 'un', 'la', 'el'])
+      const words = q.split(/\s+/).filter(w => w.length > 3 && !stopWords.has(w))
+      filtered.sort((a, b) => {
+        const ta = `${a.titulo} ${a.ubicacion} ${a.descripcion}`.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        const tb = `${b.titulo} ${b.ubicacion} ${b.descripcion}`.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        const ma = words.filter(w => ta.includes(w)).length
+        const mb = words.filter(w => tb.includes(w)).length
+        // Si hay precio máximo, ordenar de menor a mayor precio
+        if (parsedPrice && isMaxPrice) return a.precio - b.precio
+        return mb - ma
+      })
+    }
+
+    // ── 12. GENERAR RESPUESTA ─────────────────────────────────────────────────
+    const criterios: string[] = []
+    if (detectedType) criterios.push(detectedType)
+    if (detectedLocation) criterios.push(`en ${detectedLocation}`)
+    if (parsedPrice) criterios.push(`presupuesto ${isMinPrice ? 'desde' : 'hasta'} $${(parsedPrice/1e6).toFixed(parsedPrice%1e6===0?0:1)}M`)
+    if (rooms) criterios.push(`${rooms}+ recámaras`)
+    if (baths) criterios.push(`${baths}+ baños`)
+    if (isRenta) criterios.push('en renta')
+    if (isVenta) criterios.push('en venta')
+
     let response = ''
     let suggestions: string[] = []
 
-    if (filteredProperties.length === 0) {
-      response = `No encontré propiedades que coincidan exactamente con tu búsqueda "${query}". Pero no te preocupes, nuestro equipo de especialistas puede ayudarte a encontrar opciones personalizadas. Te conectaré con un asesor experto.`
-      suggestions = [
-        'Hablar con un especialista',
-        'Ver todas las propiedades disponibles',
-        'Buscar algo similar'
-      ]
-    } else if (filteredProperties.length === 1) {
-      const prop = filteredProperties[0]
-      response = `¡Perfecto! Encontré una propiedad que coincide con tu búsqueda: **${prop.titulo}** en ${prop.ubicacion}. ${prop.habitaciones} habitaciones, ${prop.banos} baños, ${prop.areaTexto} por ${prop.precioTexto}.`
-      suggestions = [
-        'Ver más detalles de esta propiedad',
-        'Buscar propiedades similares',
-        'Agendar una visita'
-      ]
+    if (filtered.length === 0) {
+      response = `No encontré propiedades con esos criterios${criterios.length ? ` (${criterios.join(', ')})` : ''}. Puedo ampliar la búsqueda o conectarte con un asesor.`
+      suggestions = ['Ampliar presupuesto', 'Ver todas las propiedades', 'Hablar con un asesor']
+    } else if (filtered.length === 1) {
+      const p = filtered[0]
+      response = `Encontré **1 propiedad** que coincide${criterios.length ? ` con: ${criterios.join(', ')}` : ''}: **${p.titulo}** en ${p.ubicacion} — ${p.precioTexto}.`
+      suggestions = ['Ver detalles', 'Buscar similares', 'Agendar visita']
     } else {
-      response = `Excelente! Encontré **${filteredProperties.length} propiedades** que coinciden con tu búsqueda. Aquí tienes las mejores opciones:`
-      suggestions = [
-        'Ver todas las opciones',
-        'Refinar mi búsqueda',
-        'Comparar propiedades'
-      ]
+      response = `Encontré **${filtered.length} propiedades**${criterios.length ? ` con: ${criterios.join(', ')}` : ''}. Aquí están las mejores opciones:`
+      suggestions = ['Refinar búsqueda', 'Ver todas', 'Comparar opciones']
     }
 
-    return { results: filteredProperties, response, suggestions }
+    return { results: filtered, response, suggestions }
   }
 
   const handleSendMessage = async () => {

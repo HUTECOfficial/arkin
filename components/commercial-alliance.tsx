@@ -6,7 +6,7 @@ import { useAuth } from "@/contexts/auth-context"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Check, Building, Star, Zap, Loader2 } from "lucide-react"
+import { Check, Building, Star, Zap, Loader2, Users, Crown } from "lucide-react"
 import Link from "next/link"
 import { toast } from "sonner"
 
@@ -211,6 +211,126 @@ export function CommercialAlliance() {
                                 </Card>
                             )
                         })}
+                    </div>
+
+                    {/* Team Plans Section */}
+                    <div className="mt-16 mb-4">
+                        <div className="flex items-center gap-3 mb-2">
+                            <div className="p-2 bg-purple-600 rounded-xl">
+                                <Users className="h-6 w-6 text-white" />
+                            </div>
+                            <div>
+                                <h2 className="text-2xl font-bold text-arkin-accent">Planes para Equipos</h2>
+                                <p className="text-arkin-accent/60 text-sm">Para 2 o más miembros · Precio por miembro/mes</p>
+                            </div>
+                        </div>
+                        <p className="text-arkin-accent/70 mb-8 ml-1">
+                            Ideal para equipos de asesores. Todos los miembros comparten las mismas ventajas a un precio reducido.
+                        </p>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            {[
+                                {
+                                    id: "team-core",
+                                    name: "Core Equipo",
+                                    price: "$59",
+                                    period: "/mes por miembro",
+                                    properties: "Hasta 6 propiedades por miembro",
+                                    description: "Plan Core para equipos de 2 o más miembros.",
+                                    features: [
+                                        "Hasta 6 propiedades activas por miembro",
+                                        "Panel de gestión básico",
+                                        "Estadísticas de propiedades",
+                                        "Gestión de leads",
+                                        "Soporte por email",
+                                        "Mínimo 2 miembros"
+                                    ],
+                                    icon: Users,
+                                    highlight: false
+                                },
+                                {
+                                    id: "team-elite",
+                                    name: "Elite Equipo",
+                                    price: "$249",
+                                    period: "/mes por miembro",
+                                    properties: "Propiedades ilimitadas por miembro",
+                                    description: "Plan Elite para equipos de 2 o más miembros.",
+                                    features: [
+                                        "Propiedades ilimitadas por miembro",
+                                        "Asistente con Inteligencia Artificial",
+                                        "Panel de gestión avanzado",
+                                        "Estadísticas detalladas y reportes",
+                                        "Gestión avanzada de leads",
+                                        "Marketing automatizado",
+                                        "Análisis predictivo de mercado",
+                                        "Mínimo 2 miembros"
+                                    ],
+                                    icon: Crown,
+                                    highlight: true
+                                }
+                            ].map((plan) => {
+                                const Icon = plan.icon
+                                return (
+                                    <Card
+                                        key={plan.id}
+                                        className={`relative flex flex-col transition-all duration-300 hover:shadow-2xl ${plan.highlight
+                                            ? 'border-purple-400 shadow-xl scale-105 z-10 bg-arkin-secondary/90 backdrop-blur-xl'
+                                            : 'border-arkin-accent/10 hover:-translate-y-1 bg-arkin-secondary/60 backdrop-blur-lg'
+                                        }`}
+                                    >
+                                        {plan.highlight && (
+                                            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                                                <Badge className="bg-purple-600 text-white px-4 py-1 font-bold shadow-lg">Recomendado Equipo</Badge>
+                                            </div>
+                                        )}
+                                        <CardHeader>
+                                            <div className="flex justify-between items-start mb-4">
+                                                <div className={`p-3 rounded-2xl ${plan.highlight ? 'bg-purple-600/20' : 'bg-purple-400/10'}`}>
+                                                    <Icon className={`h-6 w-6 ${plan.highlight ? 'text-purple-500' : 'text-purple-400'}`} />
+                                                </div>
+                                                <Badge variant="secondary" className="font-medium bg-purple-100 text-purple-700">
+                                                    Equipo
+                                                </Badge>
+                                            </div>
+                                            <CardTitle className="text-2xl font-bold text-arkin-accent">{plan.name}</CardTitle>
+                                            <CardDescription className="mt-2 text-arkin-accent/60">{plan.description}</CardDescription>
+                                        </CardHeader>
+                                        <CardContent className="flex-grow">
+                                            <div className="mb-6">
+                                                <span className="text-4xl font-black text-arkin-accent">{plan.price}</span>
+                                                <span className="text-arkin-accent/50 ml-2 font-medium text-sm">{plan.period}</span>
+                                                <div className="mt-2 font-semibold text-arkin-accent/80 text-sm">{plan.properties}</div>
+                                                <p className="text-xs text-purple-500 font-medium mt-1">Mínimo 2 miembros</p>
+                                            </div>
+                                            <ul className="space-y-3">
+                                                {plan.features.map((feature, i) => (
+                                                    <li key={i} className="flex items-start">
+                                                        <Check className={`h-5 w-5 mr-3 flex-shrink-0 ${plan.highlight ? 'text-purple-500' : 'text-purple-400'}`} />
+                                                        <span className="text-sm text-arkin-accent/70">{feature}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </CardContent>
+                                        <CardFooter>
+                                            <Button
+                                                onClick={() => handleSelectPlan(plan.id)}
+                                                disabled={loading}
+                                                className={`w-full py-7 text-lg font-bold rounded-xl transition-all duration-300 ${plan.highlight
+                                                    ? 'bg-purple-600 hover:bg-purple-700 text-white shadow-lg hover:shadow-xl hover:scale-[1.02]'
+                                                    : 'bg-purple-100 hover:bg-purple-200 text-purple-700 hover:scale-[1.02]'
+                                                }`}
+                                            >
+                                                {loading && selectedPlanId === plan.id ? (
+                                                    <><Loader2 className="h-5 w-5 mr-2 animate-spin" />Procesando...</>
+                                                ) : (
+                                                    <><Users className="h-5 w-5 mr-2" />Seleccionar para Equipo</>
+                                                )}
+                                            </Button>
+                                        </CardFooter>
+                                    </Card>
+                                )
+                            })}
+                        </div>
                     </div>
 
                     <div className="mt-20 text-center bg-arkin-accent text-white rounded-[2.5rem] p-8 md:p-16 shadow-2xl relative overflow-hidden group">
