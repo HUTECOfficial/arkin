@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 import { Building2, MapPin, Home, X, ChevronRight } from "lucide-react"
 import { Canvas, useFrame, type ThreeElements } from "@react-three/fiber"
-import { OrbitControls, Environment, ContactShadows, Edges, Html, Grid, Cylinder, Cone, Box } from "@react-three/drei"
+import { OrbitControls, ContactShadows, Edges, Grid, Cylinder, Cone, Box } from "@react-three/drei"
 import * as THREE from "three"
 
 // Fix for React 19 / R3F IntrinsicElements typing
@@ -285,8 +285,6 @@ function Scene({
         resolution={1024} 
         color="#000000"
       />
-
-      <Environment preset="city" />
 
       {/* Map center indicator */}
       <mesh position={[0, 0.1, 0]} rotation={[-Math.PI/2, 0, 0]}>
