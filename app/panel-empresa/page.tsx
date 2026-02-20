@@ -43,9 +43,9 @@ const LEADS = [
   { id:6, nombre:'Lucía Morales', email:'lucia.m@email.com', telefono:'+52 477 666 7777', propiedad:'Residencia Argentum', asesor:'Ana García', status:'Contactado', fecha:'Hace 2 días' },
 ]
 const SC: Record<string,string> = {
-  'Nuevo':'bg-blue-100 text-blue-700','Contactado':'bg-yellow-100 text-yellow-700',
+  'Nuevo':'bg-blue-100 text-blue-700','Contactado':'bg-yellow-100 text-gray-900',
   'Calificado':'bg-green-100 text-green-700','Disponible':'bg-green-100 text-green-700',
-  'En negociación':'bg-yellow-100 text-yellow-700','Vendida':'bg-gray-100 text-gray-600',
+  'En negociación':'bg-yellow-100 text-gray-900','Vendida':'bg-gray-100 text-gray-600',
 }
 type Tab = 'overview'|'asesores'|'propiedades'|'leads'|'actividad'
 type Asesor = typeof ASESORES[0]
