@@ -150,6 +150,17 @@ export const users: User[] = [
     password: 'juan_arkin2025',
     plan: 'elite'
   },
+  // Empresa Demo
+  {
+    id: 'empresa-1',
+    nombre: 'Grupo Inmobiliario Demo S.A.',
+    email: 'empresa@arkin.mx',
+    role: 'empresa' as any,
+    telefono: '+52 477 800 0001',
+    avatar: '/avatars/empresa.jpg',
+    password: 'empresa_arkin2025',
+    plan: 'team-elite' as any
+  },
   // Brokers
   {
     id: 'broker-1',

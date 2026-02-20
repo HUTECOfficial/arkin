@@ -43,6 +43,8 @@ function LoginContent() {
         router.push('/panel-broker')
       } else if (userData?.role === 'asesor') {
         router.push('/panel-asesor')
+      } else if (userData?.role === 'empresa') {
+        router.push('/panel-empresa')
       } else {
         router.push('/')
       }
