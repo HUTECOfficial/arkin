@@ -140,6 +140,16 @@ export const users: User[] = [
     password: 'pamela_arkin2025',
     plan: 'elite'
   },
+  {
+    id: 'asesor-14',
+    nombre: 'Juan Martín Becerra Camacho',
+    email: 'juanbecerra@arkin.mx',
+    role: 'asesor',
+    telefono: '+52 477 456 7811',
+    avatar: '/avatars/juanbecerra.jpg',
+    password: 'juan_arkin2025',
+    plan: 'elite'
+  },
   // Brokers
   {
     id: 'broker-1',
