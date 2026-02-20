@@ -27,7 +27,19 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
-import { Leon3DMap } from "@/components/leon-3d-map"
+import dynamic from "next/dynamic"
+
+const Leon3DMap = dynamic(() => import("@/components/leon-3d-map").then(mod => mod.Leon3DMap), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-[500px] lg:h-[600px] bg-[#080b14] rounded-2xl flex items-center justify-center border border-slate-800 shadow-2xl">
+      <div className="flex flex-col items-center gap-4">
+        <div className="w-8 h-8 border-4 border-arkin-gold border-t-transparent rounded-full animate-spin"></div>
+        <p className="text-slate-400 font-medium">Cargando mapa interactivo 3D...</p>
+      </div>
+    </div>
+  )
+})
 
 const desarrollosVerticales = [
   {
