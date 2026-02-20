@@ -4,9 +4,16 @@ import { useState, useRef, useMemo } from "react"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 import { Building2, MapPin, Home, X, ChevronRight } from "lucide-react"
-import { Canvas, useFrame } from "@react-three/fiber"
-import { OrbitControls, Environment, ContactShadows, Edges, Html, Grid } from "@react-three/drei"
+import { Canvas, useFrame, type ThreeElements } from "@react-three/fiber"
+import { OrbitControls, Environment, ContactShadows, Edges, Html, Grid, Cylinder, Cone, Box } from "@react-three/drei"
 import * as THREE from "three"
+
+// Fix for React 19 / R3F IntrinsicElements typing
+declare global {
+  namespace JSX {
+    interface IntrinsicElements extends ThreeElements {}
+  }
+}
 
 interface Edificio {
   id: number
@@ -37,6 +44,115 @@ const edificios: Edificio[] = [
   { id: 9, nombre: "Centro Histórico Plaza", zona: "Centro", tipo: "Locales Comerciales", disponibles: 9, total: 30, precioDesde: "$2,200,000", pisos: 5, color: "#d946ef", x: 300, y: 310, width: 85, depth: 65, height: 55 },
   { id: 10, nombre: "Arkin Select Tower", zona: "Campestre", tipo: "Departamentos Premium", disponibles: 3, total: 16, precioDesde: "$8,900,000", pisos: 28, color: "#eab308", x: 450, y: 300, width: 48, depth: 40, height: 200 }
 ]
+
+function Tree({ position }: { position: [number, number, number] }) {
+  return (
+    <group position={position}>
+      <Cylinder args={[0.1, 0.1, 0.4, 8]} position={[0, 0.2, 0]} castShadow>
+        <meshStandardMaterial color="#452c1e" />
+      </Cylinder>
+      <Cone args={[0.4, 0.8, 8]} position={[0, 0.8, 0]} castShadow>
+        <meshStandardMaterial color="#10b981" />
+      </Cone>
+    </group>
+  )
+}
+
+function BuildingModel({ 
+  h, w, d, pisos, color, active 
+}: { 
+  h: number, w: number, d: number, pisos: number, color: string, active: boolean 
+}) {
+  const glassMaterial = useMemo(() => (
+    <meshPhysicalMaterial
+      color={active ? color : "#2dd4bf"}
+      metalness={0.9}
+      roughness={0.1}
+      transmission={0.8}
+      thickness={2}
+      envMapIntensity={2}
+      emissive={color}
+      emissiveIntensity={active ? 0.4 : 0.05}
+    />
+  ), [color, active])
+
+  const solidMaterial = useMemo(() => (
+    <meshStandardMaterial
+      color={active ? color : "#1e293b"}
+      roughness={0.7}
+      metalness={0.2}
+      emissive={color}
+      emissiveIntensity={active ? 0.2 : 0}
+    />
+  ), [color, active])
+
+  const whiteMaterial = useMemo(() => (
+    <meshStandardMaterial color="#f8fafc" roughness={0.5} />
+  ), [])
+
+  if (pisos >= 15) {
+    // Skyscraper: Glass tower with structural framing
+    return (
+      <group>
+        {/* Core solid */}
+        <Box args={[w * 0.8, h, d * 0.8]} position={[0, h/2, 0]} castShadow>
+          <meshStandardMaterial color="#0f172a" roughness={0.8} />
+        </Box>
+        {/* Glass exterior */}
+        <Box args={[w, h * 0.98, d]} position={[0, h/2, 0]} castShadow>
+          <primitive object={glassMaterial} attach="material" />
+          <Edges linewidth={active ? 2 : 1} color={active ? "#ffffff" : color} threshold={15} />
+        </Box>
+        {/* Roof structure */}
+        <Box args={[w * 0.9, 0.2, d * 0.9]} position={[0, h, 0]} castShadow>
+          <primitive object={solidMaterial} attach="material" />
+        </Box>
+        <Cylinder args={[w*0.1, w*0.1, h*0.1, 8]} position={[-w*0.2, h + (h*0.1)/2, -d*0.2]} castShadow>
+          <meshStandardMaterial color="#64748b" />
+        </Cylinder>
+      </group>
+    )
+  } else if (pisos <= 3) {
+    // House / Residential: Base with pitched roof and trees
+    const roofH = 1.5
+    return (
+      <group>
+        <Box args={[w, h, d]} position={[0, h/2, 0]} castShadow>
+          <primitive object={solidMaterial} attach="material" />
+          <Edges linewidth={1} color={color} />
+        </Box>
+        <Cone args={[Math.max(w,d)/1.2, roofH, 4]} position={[0, h + roofH/2, 0]} rotation={[0, Math.PI/4, 0]} castShadow>
+          <meshStandardMaterial color={active ? color : "#334155"} roughness={0.9} />
+          <Edges linewidth={1} color={active ? "#ffffff" : color} />
+        </Cone>
+        {/* Random trees around */}
+        <Tree position={[w/2 + 0.5, 0, d/2 + 0.5]} />
+        <Tree position={[-w/2 - 0.5, 0, -d/2 - 0.2]} />
+      </group>
+    )
+  } else {
+    // Mid-rise / Office / Lofts: Stacked blocks with windows
+    const sectionH = h / 3
+    return (
+      <group>
+        {/* Base */}
+        <Box args={[w, sectionH, d]} position={[0, sectionH/2, 0]} castShadow>
+          <primitive object={solidMaterial} attach="material" />
+          <Edges linewidth={1} color={color} />
+        </Box>
+        {/* Middle Glass */}
+        <Box args={[w * 0.9, sectionH, d * 0.9]} position={[0, sectionH * 1.5, 0]} castShadow>
+          <primitive object={glassMaterial} attach="material" />
+        </Box>
+        {/* Top */}
+        <Box args={[w, sectionH, d]} position={[0, sectionH * 2.5, 0]} castShadow>
+          <primitive object={solidMaterial} attach="material" />
+          <Edges linewidth={1} color={color} />
+        </Box>
+      </group>
+    )
+  }
+}
 
 function BuildingMesh({
   edificio,
@@ -73,25 +189,6 @@ function BuildingMesh({
     }
   })
 
-  // Determine building geometry blocks based on height
-  const blocks = useMemo(() => {
-    const parts = []
-    if (h > 6) {
-      // Skyscraper: Base, main tower, top
-      parts.push({ y: h * 0.1, h: h * 0.2, w: w, d: d })
-      parts.push({ y: h * 0.5, h: h * 0.6, w: w * 0.8, d: d * 0.8 })
-      parts.push({ y: h * 0.9, h: h * 0.2, w: w * 0.6, d: d * 0.6 })
-    } else if (h > 3) {
-      // Mid-rise
-      parts.push({ y: h * 0.5, h: h, w: w, d: d })
-      parts.push({ y: h + 0.25, h: 0.5, w: w * 0.5, d: d * 0.5 })
-    } else {
-      // Low-rise / houses
-      parts.push({ y: h * 0.5, h: h, w: w, d: d })
-    }
-    return parts
-  }, [w, h, d])
-
   return (
     <group 
       position={[px + w/2, 0, pz + d/2]}
@@ -112,26 +209,7 @@ function BuildingMesh({
       </mesh>
 
       <group ref={meshRef}>
-        {blocks.map((b, i) => (
-          <mesh key={i} position={[0, b.y, 0]} castShadow receiveShadow>
-            <boxGeometry args={[b.w, b.h, b.d]} />
-            <meshPhysicalMaterial
-              color={active ? edificio.color : "#1e293b"}
-              metalness={0.8}
-              roughness={0.2}
-              transmission={0.5}
-              thickness={1.5}
-              envMapIntensity={2}
-              emissive={edificio.color}
-              emissiveIntensity={active ? 0.5 : 0.1}
-            />
-            <Edges
-              linewidth={active ? 2 : 1}
-              threshold={15}
-              color={active ? "#ffffff" : edificio.color}
-            />
-          </mesh>
-        ))}
+        <BuildingModel h={h} w={w} d={d} pisos={edificio.pisos} color={edificio.color} active={active} />
 
         {/* Floating Label */}
         {active && (
