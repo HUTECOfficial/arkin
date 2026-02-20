@@ -48,11 +48,11 @@ const edificios: Edificio[] = [
 function Tree({ position }: { position: [number, number, number] }) {
   return (
     <group position={position}>
-      <Cylinder args={[0.1, 0.1, 0.4, 8]} position={[0, 0.2, 0]} castShadow>
+      <Cylinder args={[0.05, 0.05, 0.4, 8]} position={[0, 0.2, 0]} castShadow>
         <meshStandardMaterial color="#452c1e" />
       </Cylinder>
-      <Cone args={[0.4, 0.8, 8]} position={[0, 0.8, 0]} castShadow>
-        <meshStandardMaterial color="#10b981" />
+      <Cone args={[0.3, 0.6, 8]} position={[0, 0.6, 0]} castShadow>
+        <meshStandardMaterial color="#059669" roughness={0.9} />
       </Cone>
     </group>
   )
@@ -63,92 +63,100 @@ function BuildingModel({
 }: { 
   h: number, w: number, d: number, pisos: number, color: string, active: boolean 
 }) {
-  const glassMaterial = useMemo(() => (
-    <meshPhysicalMaterial
-      color={active ? color : "#2dd4bf"}
-      metalness={0.9}
-      roughness={0.1}
-      transmission={0.8}
-      thickness={2}
-      envMapIntensity={2}
-      emissive={color}
-      emissiveIntensity={active ? 0.4 : 0.05}
-    />
-  ), [color, active])
-
-  const solidMaterial = useMemo(() => (
-    <meshStandardMaterial
-      color={active ? color : "#1e293b"}
-      roughness={0.7}
-      metalness={0.2}
-      emissive={color}
-      emissiveIntensity={active ? 0.2 : 0}
-    />
-  ), [color, active])
-
-  const whiteMaterial = useMemo(() => (
-    <meshStandardMaterial color="#f8fafc" roughness={0.5} />
-  ), [])
-
   if (pisos >= 15) {
     // Skyscraper: Glass tower with structural framing
     return (
       <group>
-        {/* Core solid */}
-        <Box args={[w * 0.8, h, d * 0.8]} position={[0, h/2, 0]} castShadow>
-          <meshStandardMaterial color="#0f172a" roughness={0.8} />
+        {/* Podium */}
+        <Box args={[w * 1.2, h * 0.05, d * 1.2]} position={[0, h * 0.025, 0]} castShadow receiveShadow>
+          <meshStandardMaterial color="#0f172a" />
         </Box>
-        {/* Glass exterior */}
-        <Box args={[w, h * 0.98, d]} position={[0, h/2, 0]} castShadow>
-          <primitive object={glassMaterial} attach="material" />
-          <Edges linewidth={active ? 2 : 1} color={active ? "#ffffff" : color} threshold={15} />
+        {/* Inner Core */}
+        <Box args={[w * 0.4, h * 0.95, d * 0.4]} position={[0, h * 0.05 + (h * 0.95)/2, 0]}>
+          <meshStandardMaterial color={active ? color : "#334155"} emissive={active ? color : "#000000"} emissiveIntensity={active ? 0.5 : 0} />
         </Box>
-        {/* Roof structure */}
-        <Box args={[w * 0.9, 0.2, d * 0.9]} position={[0, h, 0]} castShadow>
-          <primitive object={solidMaterial} attach="material" />
+        {/* Main Tower Glass */}
+        <Box args={[w, h * 0.9, d]} position={[0, h * 0.05 + (h * 0.9)/2, 0]} castShadow>
+          <meshPhysicalMaterial color={active ? color : "#e0f2fe"} transmission={0.9} roughness={0.1} metalness={0.8} />
+          <Edges linewidth={1} color={active ? "#ffffff" : "#38bdf8"} opacity={0.3} transparent />
         </Box>
-        <Cylinder args={[w*0.1, w*0.1, h*0.1, 8]} position={[-w*0.2, h + (h*0.1)/2, -d*0.2]} castShadow>
+        {/* Horizontal Louvers */}
+        {Array.from({ length: Math.min(20, Math.floor(h / 0.5)) }).map((_, i) => (
+          <Box key={i} args={[w * 1.05, 0.02, d * 1.05]} position={[0, h * 0.1 + i * 0.5, 0]}>
+            <meshStandardMaterial color="#f8fafc" roughness={0.2} metalness={0.8} />
+          </Box>
+        ))}
+        {/* Roof Helipad / Spire */}
+        <Cylinder args={[w*0.3, w*0.3, 0.1, 16]} position={[0, h * 0.95 + 0.05, 0]} castShadow>
           <meshStandardMaterial color="#64748b" />
+        </Cylinder>
+        <Cylinder args={[0.02, 0.05, h*0.15, 8]} position={[w*0.3, h + (h*0.15)/2, -d*0.3]} castShadow>
+          <meshStandardMaterial color="#ef4444" />
         </Cylinder>
       </group>
     )
   } else if (pisos <= 3) {
-    // House / Residential: Base with pitched roof and trees
-    const roofH = 1.5
+    // House / Residential Villa
     return (
       <group>
-        <Box args={[w, h, d]} position={[0, h/2, 0]} castShadow>
-          <primitive object={solidMaterial} attach="material" />
-          <Edges linewidth={1} color={color} />
+        {/* Platform */}
+        <Box args={[w*1.2, 0.1, d*1.2]} position={[0, 0.05, 0]} receiveShadow>
+          <meshStandardMaterial color="#e2e8f0" />
         </Box>
-        <Cone args={[Math.max(w,d)/1.2, roofH, 4]} position={[0, h + roofH/2, 0]} rotation={[0, Math.PI/4, 0]} castShadow>
-          <meshStandardMaterial color={active ? color : "#334155"} roughness={0.9} />
-          <Edges linewidth={1} color={active ? "#ffffff" : color} />
-        </Cone>
-        {/* Random trees around */}
-        <Tree position={[w/2 + 0.5, 0, d/2 + 0.5]} />
-        <Tree position={[-w/2 - 0.5, 0, -d/2 - 0.2]} />
+        {/* Pool */}
+        <Box args={[w*0.5, 0.11, d*0.4]} position={[w*0.25, 0.05, d*0.3]}>
+          <meshPhysicalMaterial color="#38bdf8" transmission={0.9} roughness={0.1} />
+        </Box>
+        {/* Ground Floor Glass */}
+        <Box args={[w*0.7, h*0.4, d*0.7]} position={[-w*0.1, 0.1 + (h*0.4)/2, -d*0.1]} castShadow>
+          <meshPhysicalMaterial color="#e0f2fe" transmission={0.7} roughness={0.1} />
+        </Box>
+        {/* Stone Wall */}
+        <Box args={[0.2, h*0.9, d*0.8]} position={[-w*0.4, 0.1 + (h*0.9)/2, -d*0.1]} castShadow>
+          <meshStandardMaterial color="#475569" roughness={0.9} />
+        </Box>
+        {/* Second Floor Cantilever */}
+        <Box args={[w*0.9, h*0.5, d*0.6]} position={[w*0.05, 0.1 + h*0.4 + (h*0.5)/2, -d*0.15]} castShadow>
+          <meshStandardMaterial color={active ? color : "#f8fafc"} roughness={0.3} emissive={active ? color : "#000000"} emissiveIntensity={active ? 0.2 : 0} />
+        </Box>
+        {/* Wood Slats */}
+        {Array.from({length: 6}).map((_, i) => (
+          <Box key={i} args={[0.05, h*0.5, 0.05]} position={[w*0.45, 0.1 + h*0.4 + (h*0.5)/2, -d*0.25 + i*0.1]}>
+            <meshStandardMaterial color="#b45309" roughness={0.7} />
+          </Box>
+        ))}
+        <Tree position={[w*0.4, 0, -d*0.4]} />
+        <Tree position={[-w*0.4, 0, d*0.4]} />
       </group>
     )
   } else {
-    // Mid-rise / Office / Lofts: Stacked blocks with windows
-    const sectionH = h / 3
+    // Mid-rise / Office
     return (
       <group>
-        {/* Base */}
-        <Box args={[w, sectionH, d]} position={[0, sectionH/2, 0]} castShadow>
-          <primitive object={solidMaterial} attach="material" />
-          <Edges linewidth={1} color={color} />
+        {/* Base Commercial */}
+        <Box args={[w, h*0.2, d]} position={[0, (h*0.2)/2, 0]} castShadow>
+          <meshStandardMaterial color="#1e293b" />
         </Box>
-        {/* Middle Glass */}
-        <Box args={[w * 0.9, sectionH, d * 0.9]} position={[0, sectionH * 1.5, 0]} castShadow>
-          <primitive object={glassMaterial} attach="material" />
+        {/* Main Glass Body */}
+        <Box args={[w*0.8, h*0.8, d*0.8]} position={[-w*0.1, h*0.2 + (h*0.8)/2, -d*0.1]} castShadow>
+          <meshPhysicalMaterial color={active ? color : "#bae6fd"} transmission={0.7} roughness={0.2} metalness={0.5} />
         </Box>
-        {/* Top */}
-        <Box args={[w, sectionH, d]} position={[0, sectionH * 2.5, 0]} castShadow>
-          <primitive object={solidMaterial} attach="material" />
-          <Edges linewidth={1} color={color} />
+        {/* Secondary Solid Volume */}
+        <Box args={[w*0.5, h*0.6, d*0.9]} position={[w*0.25, h*0.2 + (h*0.6)/2, 0]} castShadow>
+          <meshStandardMaterial color={active ? color : "#f1f5f9"} roughness={0.8} emissive={active ? color : "#000000"} emissiveIntensity={active ? 0.2 : 0} />
+          <Edges linewidth={1} color="#cbd5e1" />
         </Box>
+        {/* Balconies */}
+        {Array.from({ length: Math.max(1, Math.floor(h*0.6 / 0.6)) }).map((_, i) => (
+          <Box key={i} args={[w*0.55, 0.05, d*0.95]} position={[w*0.25, h*0.2 + i*0.6, 0]}>
+            <meshStandardMaterial color="#94a3b8" />
+          </Box>
+        ))}
+        {/* Green Roof */}
+        <Box args={[w*0.8, 0.05, d*0.8]} position={[-w*0.1, h, -d*0.1]}>
+          <meshStandardMaterial color="#10b981" />
+        </Box>
+        <Tree position={[w*0.5, 0, -d*0.5]} />
       </group>
     )
   }
