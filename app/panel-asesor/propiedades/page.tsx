@@ -524,9 +524,9 @@ export default function PropiedadesAsesorPage() {
 
         {/* Dialog de Confirmación de Eliminación */}
         <Dialog open={deleteConfirm !== null} onOpenChange={() => setDeleteConfirm(null)}>
-          <DialogContent className="bg-arkin-secondary/50 border-arkin-gold/20">
+          <DialogContent className="bg-white dark:bg-arkin-graphite border-arkin-gold/20">
             <DialogHeader>
-              <DialogTitle className="text-arkin-graphite">¿Eliminar propiedad?</DialogTitle>
+              <DialogTitle className="text-arkin-graphite dark:text-white">¿Eliminar propiedad?</DialogTitle>
               <DialogDescription className="text-gray-600">
                 Esta acción no se puede deshacer. La propiedad será eliminada permanentemente.
               </DialogDescription>
@@ -547,9 +547,9 @@ export default function PropiedadesAsesorPage() {
 
         {/* Dialog de Notificación de Baja */}
         <Dialog open={bajaConfirm !== null} onOpenChange={() => { setBajaConfirm(null); setMotivoBaja(''); }}>
-          <DialogContent className="bg-arkin-secondary/50 border-arkin-gold/20">
+          <DialogContent className="bg-white dark:bg-arkin-graphite border-arkin-gold/20">
             <DialogHeader>
-              <DialogTitle className="text-arkin-graphite flex items-center gap-2">
+              <DialogTitle className="text-arkin-graphite dark:text-white flex items-center gap-2">
                 <AlertTriangle className="h-5 w-5 text-orange-500" />
                 Notificar Baja de Propiedad
               </DialogTitle>

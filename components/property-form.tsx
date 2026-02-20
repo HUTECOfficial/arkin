@@ -661,7 +661,6 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
                 <SelectContent>
                   <SelectItem value="Disponible">Disponible</SelectItem>
                   <SelectItem value="Exclusiva">Exclusiva</SelectItem>
-                  <SelectItem value="Reservada">Reservada</SelectItem>
                 </SelectContent>
               </Select>
             </div>
