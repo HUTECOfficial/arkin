@@ -210,28 +210,13 @@ function BuildingMesh({
         <meshBasicMaterial 
           color={edificio.color} 
           transparent 
-          opacity={active ? 0.4 : 0.1} 
-          blending={THREE.AdditiveBlending}
+          opacity={active ? 0.4 : 0.0} 
           depthWrite={false}
         />
       </mesh>
 
       <group ref={meshRef}>
         <BuildingModel h={h} w={w} d={d} pisos={edificio.pisos} color={edificio.color} active={active} />
-
-        {/* Floating Label */}
-        {active && (
-          <Html position={[0, h + 1, 0]} center zIndexRange={[100, 0]} className="pointer-events-none transition-opacity duration-300">
-            <div 
-              className="bg-slate-900/90 backdrop-blur-md px-3 py-1.5 rounded-lg border shadow-[0_0_15px_rgba(0,0,0,0.5)] flex flex-col items-center animate-in fade-in zoom-in duration-200"
-              style={{ borderColor: `${edificio.color}80` }}
-            >
-              <span className="text-xs font-bold text-white whitespace-nowrap">{edificio.nombre}</span>
-              <span className="text-[10px] text-slate-300 font-medium">{edificio.disponibles} disp.</span>
-              <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 rotate-45 bg-slate-900/90 border-r border-b" style={{ borderColor: `${edificio.color}80` }} />
-            </div>
-          </Html>
-        )}
       </group>
     </group>
   )
