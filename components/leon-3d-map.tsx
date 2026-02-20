@@ -387,7 +387,7 @@ export function Leon3DMap() {
           </Badge>
         </div>
 
-        {/* Info panel overlay */}
+        {/* Info panel overlay - MOVED OUTSIDE CANVAS */}
         {activeEdificio && (
           <div className="absolute top-6 right-6 w-72 transition-all duration-300 animate-in fade-in slide-in-from-right-4 z-10">
             <Card className="bg-[#0f172a]/90 backdrop-blur-md border border-slate-700/50 shadow-2xl overflow-hidden">
