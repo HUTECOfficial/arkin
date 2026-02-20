@@ -93,7 +93,7 @@ export default function PanelEmpresaPage() {
         </div>
         <div className="max-w-7xl mx-auto px-4 flex overflow-x-auto">
           {([['overview','Resumen',BarChart3],['asesores','Asesores',Users],['propiedades','Propiedades',Building2],['leads','Leads',Target],['actividad','Actividad',Activity]] as [Tab,string,any][]).map(([k,l,I])=>(
-            <button key={k} onClick={()=>go(k)} className={`flex items-center gap-1.5 px-4 py-3 text-xs font-medium border-b-2 transition-colors whitespace-nowrap ${tab===k?'border-arkin-gold text-arkin-gold':'border-transparent text-white/60 hover:text-white'}`}>
+            <button key={k} onClick={()=>go(k)} className={`flex items-center gap-1.5 px-4 py-3 text-xs font-medium border-b-2 transition-colors whitespace-nowrap ${tab===k?'border-black text-black font-bold':'border-transparent text-black/60 hover:text-black'}`}>
               <I className="h-3.5 w-3.5"/>{l}
             </button>
           ))}
