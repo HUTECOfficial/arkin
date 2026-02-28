@@ -12,7 +12,7 @@ export default function OfertasPage() {
   // Hook optimizado - carga instantánea desde JSON + realtime
   const { properties } = usePropertiesStatic()
   const propiedades = useMemo(() => 
-    properties.filter(p => p.categoria === 'remate'), 
+    properties.filter(p => (p as any).bono || p.categoria === 'remate'), 
     [properties]
   )
 

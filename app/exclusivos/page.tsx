@@ -14,6 +14,13 @@ export default function ExclusivosPage() {
     [properties]
   )
 
+  const ejemplos = [
+    { id: 9001, titulo: 'Residencia Exclusiva', ubicacion: 'Lomas de Querétaro, Querétaro', tipo: 'Casa', imagen: '', categoria: 'exclusivo' },
+    { id: 9002, titulo: 'Penthouse de Lujo', ubicacion: 'Jurica, Querétaro', tipo: 'Departamento', imagen: '', categoria: 'exclusivo' },
+  ]
+
+  const propiedadesDisplay = propiedades.length > 0 ? propiedades : ejemplos
+
   const handleContacto = (ubicacion: string) => {
     const mensaje = `Hola, estoy interesado en una propiedad exclusiva en ${ubicacion}. Me gustaría recibir más información.`
     const whatsappUrl = `https://wa.me/5214774756951?text=${encodeURIComponent(mensaje)}`
@@ -23,34 +30,38 @@ export default function ExclusivosPage() {
   return (
     <div className="min-h-screen bg-arkin-secondary transition-colors duration-500">
       {/* Hero Section */}
-      <section className="relative pt-0 pb-12 sm:pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden min-h-[400px] sm:min-h-[500px] flex items-center">
-        <div className="absolute inset-0 bg-gradient-to-r from-arkin-accent/90 via-arkin-accent/70 to-transparent"></div>
+      <section className="relative overflow-hidden min-h-[320px] sm:min-h-[420px]">
         <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-30"
-          style={{
-            backgroundImage: "url('https://mnrfsdrjadretxesjxhu.supabase.co/storage/v1/object/sign/arkin/hf_20260219_015208_b75495b2-1016-45df-a1f8-d1160006831b.jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV82ZTg2NjJkMS1lZjIzLTRkZjUtYjAwYy04NjVkOTcwYzljZWMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhcmtpbi9oZl8yMDI2MDIxOV8wMTUyMDhfYjc1NDk1YjItMTAxNi00NWRmLWExZjgtZDExNjAwMDY4MzFiLmpwZWciLCJpYXQiOjE3NzE0NjYyNTQsImV4cCI6MTgwMzAwMjI1NH0.0ew5z0WbvUkHQAwo8zOlhQFyLokmh2PKTqjqBtpxcuc')",
-          }}
-        ></div>
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: "url('https://mnrfsdrjadretxesjxhu.supabase.co/storage/v1/object/sign/arkin/hf_20260219_015208_b75495b2-1016-45df-a1f8-d1160006831b.jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV82ZTg2NjJkMS1lZjIzLTRkZjUtYjAwYy04NjVkOTcwYzljZWMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhcmtpbi9oZl8yMDI2MDIxOV8wMTUyMDhfYjc1NDk1YjItMTAxNi00NWRmLWExZjgtZDExNjAwMDY4MzFiLmpwZWciLCJpYXQiOjE3NzE0NjYyNTQsImV4cCI6MTgwMzAwMjI1NH0.0ew5z0WbvUkHQAwo8zOlhQFyLokmh2PKTqjqBtpxcuc')" }}
+        />
+        <div className="absolute inset-0 bg-black/70" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent" />
 
-        <div className="relative max-w-7xl mx-auto text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-arkin-primary rounded-full mb-6">
-            <Shield className="h-8 w-8 text-arkin-accent" />
-          </div>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-serif font-bold text-white mb-4 sm:mb-6 text-balance px-4">
-            Propiedades
-            <span className="block text-arkin-primary">Exclusivas</span>
-          </h1>
-          <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 mb-6 sm:mb-8 max-w-3xl mx-auto text-pretty px-4">
-            Propiedades de máxima privacidad. Por discreción, solo mostramos ubicaciones generales
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
-            <Badge className="bg-arkin-primary/20 text-arkin-primary border-arkin-primary/30 px-4 py-2 text-sm">
-              {propiedades.length} Propiedades Disponibles
-            </Badge>
-            <Badge className="bg-arkin-secondary/50/20 text-white border-white/30 px-4 py-2 text-sm flex items-center gap-2">
-              <Lock className="h-3 w-3" />
-              Información Protegida
-            </Badge>
+        <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10 py-16 sm:py-24 flex items-center">
+          <div className="max-w-xl">
+            <div className="flex items-center gap-3 mb-5">
+              <div className="w-12 h-12 bg-arkin-primary rounded-2xl flex items-center justify-center shadow-lg">
+                <Shield className="h-6 w-6 text-arkin-accent" />
+              </div>
+              <span className="text-arkin-primary text-sm font-semibold uppercase tracking-widest">Arkin Select</span>
+            </div>
+            <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl font-black text-white leading-tight mb-4">
+              Propiedades<br/>
+              <span className="text-arkin-primary">Exclusivas</span>
+            </h1>
+            <p className="text-white/80 text-base sm:text-lg mb-6 leading-relaxed">
+              Propiedades de máxima privacidad. Por discreción, solo mostramos ubicaciones generales
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <Badge className="bg-arkin-primary text-arkin-accent border-0 px-4 py-2 text-sm font-semibold shadow-lg">
+                {propiedadesDisplay.length} Propiedades Disponibles
+              </Badge>
+              <Badge className="bg-white/10 text-white border-white/20 px-4 py-2 text-sm flex items-center gap-2 backdrop-blur-sm">
+                <Lock className="h-3 w-3" />
+                Información Protegida
+              </Badge>
+            </div>
           </div>
         </div>
       </section>
@@ -82,7 +93,7 @@ export default function ExclusivosPage() {
       <section className="py-8 sm:py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {propiedades.map((propiedad) => (
+            {propiedadesDisplay.map((propiedad) => (
               <div
                 key={propiedad.id}
                 className="group bg-arkin-secondary/50 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-arkin-primary/20"
@@ -169,7 +180,7 @@ export default function ExclusivosPage() {
             ))}
           </div>
 
-          {propiedades.length === 0 && (
+          {propiedadesDisplay.length === 0 && (
             <div className="text-center py-16">
               <Shield className="h-16 w-16 mx-auto mb-4 text-gray-400" />
               <h3 className="text-xl font-semibold text-arkin-accent mb-2">No hay propiedades exclusivas disponibles</h3>
