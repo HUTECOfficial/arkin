@@ -243,23 +243,6 @@ export default function PropiedadesPage() {
                           alt={propiedad.titulo}
                           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                         />
-                        {/* Ribbon bono */}
-                        {(propiedad as any).bono && (
-                          <div className="absolute top-0 right-0 overflow-hidden w-full h-full pointer-events-none z-10">
-                            <div
-                              className="absolute top-6 -right-10 w-44 text-center py-2 text-[10px] font-black tracking-wider shadow-xl uppercase"
-                              style={{
-                                transform: 'rotate(45deg)',
-                                background: 'linear-gradient(135deg, #8B6914, #C9A84C, #f0c040, #C9A84C, #8B6914)',
-                                color: '#1a1a1a',
-                                textShadow: '0 1px 0 rgba(255,255,255,0.3)',
-                                boxShadow: '0 3px 10px rgba(0,0,0,0.3)',
-                              }}
-                            >
-                              {(propiedad as any).bono}
-                            </div>
-                          </div>
-                        )}
                         <div className="absolute top-3 sm:top-4 left-3 sm:left-4">
                           <Badge
                             className={`${propiedad.status === "Disponible"
@@ -298,6 +281,15 @@ export default function PropiedadesPage() {
                           <Badge className="bg-arkin-accent/10 text-arkin-accent text-[10px] sm:text-xs">{propiedad.tipo}</Badge>
                           <span className="text-lg sm:text-xl md:text-2xl font-bold text-arkin-primary">{propiedad.precioTexto}</span>
                         </div>
+
+                        {/* Bono debajo del precio */}
+                        {(propiedad as any).bono && (
+                          <div className="mb-3">
+                            <div className="inline-block bg-black text-white px-3 py-1.5 rounded-lg text-xs font-bold uppercase shadow-md">
+                              {(propiedad as any).bono}
+                            </div>
+                          </div>
+                        )}
 
                         <h3 className="text-base sm:text-lg md:text-xl font-serif font-bold text-arkin-accent mb-1.5 sm:mb-2 line-clamp-2 uppercase">{propiedad.titulo}</h3>
 

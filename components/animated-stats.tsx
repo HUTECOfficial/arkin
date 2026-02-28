@@ -1,142 +1,134 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
-import { Building2, Key, Shield, Sparkles } from "lucide-react"
-
-interface FeatureCardProps {
-  icon: React.ElementType
-  title: string
-  description: string
-  delay: number
-  gradient: string
-}
-
-function FeatureCard({ icon: Icon, title, description, delay, gradient }: FeatureCardProps) {
-  const [isVisible, setIsVisible] = useState(false)
-  const ref = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true)
-        }
-      },
-      { threshold: 0.3 }
-    )
-
-    if (ref.current) {
-      observer.observe(ref.current)
-    }
-
-    return () => observer.disconnect()
-  }, [])
-
-  return (
-    <div
-      ref={ref}
-      className="group relative"
-      style={{
-        animation: isVisible ? `slideUp 0.8s ease-out ${delay}ms both` : 'none'
-      }}
-    >
-      <div className="relative h-full p-8 rounded-3xl bg-arkin-secondary/30 backdrop-blur-sm border-2 border-arkin-accent/10 hover:border-arkin-primary transition-all duration-500 hover:shadow-2xl hover:shadow-arkin-primary/20 overflow-hidden">
-        {/* Gradient Background */}
-        <div className={`absolute inset-0 ${gradient} opacity-5 group-hover:opacity-10 transition-opacity duration-500`} />
-        
-        {/* Decorative Circle */}
-        <div className="absolute -right-8 -top-8 w-32 h-32 bg-arkin-primary/5 rounded-full blur-2xl group-hover:bg-arkin-primary/10 transition-all duration-500" />
-
-        {/* Content */}
-        <div className="relative z-10 space-y-6">
-          {/* Icon Container */}
-          <div className="relative">
-            <div className="w-20 h-20 bg-gradient-to-br from-arkin-primary to-arkin-primary/70 rounded-2xl flex items-center justify-center shadow-lg shadow-arkin-primary/30 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
-              <Icon className="h-10 w-10 text-arkin-accent" strokeWidth={2.5} />
-            </div>
-            {/* Glow effect */}
-            <div className="absolute inset-0 w-20 h-20 bg-arkin-primary rounded-2xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-500" />
-          </div>
-
-          {/* Text Content */}
-          <div className="space-y-3">
-            <h3 className="text-2xl font-bold text-arkin-accent group-hover:text-arkin-primary transition-colors duration-300">
-              {title}
-            </h3>
-            <p className="text-arkin-accent/70 leading-relaxed">
-              {description}
-            </p>
-          </div>
-        </div>
-
-        {/* Animated Border */}
-        <div className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-          <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-arkin-primary/20 via-transparent to-arkin-primary/20 animate-pulse-slow" />
-        </div>
-      </div>
-    </div>
-  )
-}
+import { useState, useEffect } from 'react'
+import { Building2, Key, Shield, Sparkles, ChevronLeft, ChevronRight } from "lucide-react"
 
 export function AnimatedStats() {
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true)
+
   const features = [
     { 
       icon: Building2, 
       title: 'Transparencia Total', 
       description: 'Información clara y completa de cada propiedad para tu tranquilidad y confianza',
-      delay: 0,
-      gradient: 'bg-gradient-to-br from-blue-500 to-purple-500'
+      gradient: 'from-blue-500 to-purple-500'
     },
     { 
       icon: Key, 
       title: 'Acceso Inmediato', 
       description: 'Visitas programadas en 24 horas y proceso de compra ágil y transparente',
-      delay: 100,
-      gradient: 'bg-gradient-to-br from-arkin-primary to-yellow-500'
+      gradient: 'from-arkin-primary to-yellow-500'
     },
     { 
       icon: Shield, 
       title: 'Confianza Total', 
       description: 'Asesoría legal completa y garantía en cada transacción inmobiliaria',
-      delay: 200,
-      gradient: 'bg-gradient-to-br from-green-500 to-emerald-500'
+      gradient: 'from-green-500 to-emerald-500'
     },
     { 
       icon: Sparkles, 
       title: 'Experiencia Única', 
       description: 'Atención personalizada y servicio de lujo en cada etapa del proceso',
-      delay: 300,
-      gradient: 'bg-gradient-to-br from-orange-500 to-red-500'
+      gradient: 'from-orange-500 to-red-500'
     },
   ]
 
+  useEffect(() => {
+    if (!isAutoPlaying) return
+
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % features.length)
+    }, 4000)
+
+    return () => clearInterval(interval)
+  }, [isAutoPlaying, features.length])
+
+  const nextSlide = () => {
+    setCurrentIndex((prev) => (prev + 1) % features.length)
+    setIsAutoPlaying(false)
+  }
+
+  const prevSlide = () => {
+    setCurrentIndex((prev) => (prev - 1 + features.length) % features.length)
+    setIsAutoPlaying(false)
+  }
+
+  const goToSlide = (index: number) => {
+    setCurrentIndex(index)
+    setIsAutoPlaying(false)
+  }
+
+  const currentFeature = features[currentIndex]
+  const Icon = currentFeature.icon
+
   return (
-    <>
-      <style jsx global>{`
-        @keyframes slideUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-      `}</style>
+    <section className="pt-0 pb-8 px-4 sm:px-6 relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-b from-arkin-accent/3 to-transparent" />
 
-      <section className="pt-0 pb-4 px-4 sm:px-6 relative overflow-hidden -mt-4">
-        {/* Background */}
-        <div className="absolute inset-0 bg-gradient-to-b from-arkin-accent/3 to-transparent" />
+      <div className="max-w-4xl mx-auto relative z-10">
+        <div className="relative group">
+          {/* Card */}
+          <div className="relative h-[320px] sm:h-[280px] p-8 sm:p-10 rounded-3xl bg-arkin-secondary/30 backdrop-blur-sm border-2 border-arkin-accent/10 shadow-2xl overflow-hidden transition-all duration-500">
+            {/* Gradient Background */}
+            <div className={`absolute inset-0 bg-gradient-to-br ${currentFeature.gradient} opacity-5 transition-opacity duration-700`} />
+            
+            {/* Decorative Circle */}
+            <div className="absolute -right-8 -top-8 w-32 h-32 bg-arkin-primary/5 rounded-full blur-2xl" />
 
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {features.map((feature, index) => (
-              <FeatureCard key={index} {...feature} />
-            ))}
+            {/* Content */}
+            <div className="relative z-10 h-full flex flex-col items-center justify-center text-center space-y-6">
+              {/* Icon Container */}
+              <div className="relative">
+                <div className="w-20 h-20 bg-gradient-to-br from-arkin-primary to-arkin-primary/70 rounded-2xl flex items-center justify-center shadow-lg shadow-arkin-primary/30 transition-transform duration-500">
+                  <Icon className="h-10 w-10 text-arkin-accent" strokeWidth={2.5} />
+                </div>
+                <div className="absolute inset-0 w-20 h-20 bg-arkin-primary rounded-2xl blur-xl opacity-30" />
+              </div>
+
+              {/* Text Content */}
+              <div className="space-y-3 max-w-2xl">
+                <h3 className="text-3xl sm:text-4xl font-bold text-arkin-primary transition-all duration-500">
+                  {currentFeature.title}
+                </h3>
+                <p className="text-arkin-accent/70 text-base sm:text-lg leading-relaxed transition-all duration-500">
+                  {currentFeature.description}
+                </p>
+              </div>
+            </div>
           </div>
+
+          {/* Navigation Arrows */}
+          <button
+            onClick={prevSlide}
+            className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 bg-arkin-secondary/80 hover:bg-arkin-secondary backdrop-blur-sm rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 opacity-0 group-hover:opacity-100 border border-arkin-accent/20"
+          >
+            <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6 text-arkin-accent" />
+          </button>
+
+          <button
+            onClick={nextSlide}
+            className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 bg-arkin-secondary/80 hover:bg-arkin-secondary backdrop-blur-sm rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 opacity-0 group-hover:opacity-100 border border-arkin-accent/20"
+          >
+            <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6 text-arkin-accent" />
+          </button>
         </div>
-      </section>
-    </>
+
+        {/* Dots Navigation */}
+        <div className="flex items-center justify-center gap-2 mt-6">
+          {features.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => goToSlide(index)}
+              className={`transition-all duration-300 rounded-full ${
+                index === currentIndex
+                  ? 'w-10 h-3 bg-arkin-primary'
+                  : 'w-3 h-3 bg-arkin-accent/30 hover:bg-arkin-accent/50'
+              }`}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
   )
 }

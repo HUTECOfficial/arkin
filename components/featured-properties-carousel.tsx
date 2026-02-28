@@ -80,7 +80,7 @@ export function FeaturedPropertiesCarousel() {
           </div>
 
           {/* Title */}
-          <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-arkin-secondary leading-tight uppercase">
+          <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-arkin-secondary leading-tight uppercase">
             {currentProperty.titulo}
           </h2>
 

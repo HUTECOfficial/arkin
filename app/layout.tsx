@@ -19,7 +19,7 @@ const playfair = Playfair_Display({
 })
 
 export const metadata: Metadata = {
-  title: "ARKIN SELECT - Tu Inmobiliaria de Confianza",
+  title: "ARKIN SELECT - Tu Plataforma Inmobiliaria de Confianza",
   description: "Exclusividad, Conexión y Confianza. Confía tu propiedad a ARKIN SELECT.",
   generator: "v0.app",
 }

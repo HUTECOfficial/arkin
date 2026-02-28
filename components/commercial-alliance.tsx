@@ -323,24 +323,6 @@ export function CommercialAlliance() {
                             )
                         })}
                     </div>
-
-                    {/* CTA bottom */}
-                    <div className="mt-20 text-center bg-arkin-accent text-white rounded-[2.5rem] p-8 md:p-16 shadow-2xl relative overflow-hidden group">
-                        <div className="absolute inset-0 bg-gradient-to-br from-arkin-accent to-black" />
-                        <div className="relative z-10">
-                            <h2 className="font-serif text-3xl md:text-4xl font-bold mb-6">¿Tienes más de 40 propiedades?</h2>
-                            <p className="text-lg text-white/70 mb-10 max-w-2xl mx-auto font-light">
-                                Contáctanos para diseñar un plan personalizado que se ajuste perfectamente a las necesidades de tu inmobiliaria.
-                            </p>
-                            <Link href="/contacto">
-                                <Button size="lg" variant="outline" className="bg-transparent border-arkin-primary text-arkin-primary hover:bg-arkin-primary hover:text-arkin-accent transition-all duration-300 px-8 py-6 text-lg font-bold rounded-xl">
-                                    Contactar Ventas
-                                </Button>
-                            </Link>
-                        </div>
-                        <div className="absolute top-0 right-0 -mt-20 -mr-20 w-80 h-80 bg-arkin-primary/10 rounded-full blur-3xl group-hover:bg-arkin-primary/20 transition-all duration-500" />
-                        <div className="absolute bottom-0 left-0 -mb-20 -ml-20 w-80 h-80 bg-arkin-primary/5 rounded-full blur-3xl group-hover:bg-arkin-primary/10 transition-all duration-500" />
-                    </div>
                 </div>
             </div>
         </div>

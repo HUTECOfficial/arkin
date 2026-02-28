@@ -11,6 +11,7 @@ import { VirtualToursSection } from "./virtual-tours-section"
 import { AnimatedStats } from "./animated-stats"
 import { CommercialAlliance } from "./commercial-alliance"
 import { HomepageAdSlot } from "./homepage-ads"
+import { WhyArkinCarousel } from "./why-arkin-carousel"
 
 export function HomeYellow() {
   const [isCategoriasMenuOpen, setIsCategoriasMenuOpen] = useState(false)
@@ -38,7 +39,7 @@ export function HomeYellow() {
           <div className="text-center pt-4">
             <div className="inline-flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-arkin-secondary/50/10 border-2 border-arkin-primary rounded-full backdrop-blur-md mb-4">
               <span className="text-xs sm:text-sm font-bold text-white uppercase tracking-wider">
-                Tu Inmobiliaria de Confianza
+                Tu Plataforma Inmobiliaria de Confianza
               </span>
             </div>
             <div className="px-4">
@@ -94,9 +95,6 @@ export function HomeYellow() {
         </div>
       </section>
 
-      {/* Animated Stats Section */}
-      <AnimatedStats />
-
       {/* Ad Slot: Debajo del Hero */}
       <HomepageAdSlot ubicacion="banner-hero" />
 
@@ -121,50 +119,24 @@ export function HomeYellow() {
         <CommercialAlliance />
       </section>
 
-      {/* Features Section - Card Grid */}
-      <section className="relative py-12 sm:py-20 px-4 sm:px-6 bg-arkin-accent/3">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-10 sm:mb-16">
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-black text-arkin-accent mb-4">
-              ¿Por qué ARKIN SELECT?
-            </h2>
-            <div className="w-20 sm:w-24 h-1.5 sm:h-2 bg-arkin-primary mx-auto rounded-full"></div>
-          </div>
-
-          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
-            {[
-              {
-                icon: Shield,
-                title: "Confianza Total",
-                desc: "Proceso transparente y directo. Sin letra pequeña.",
-              },
-              {
-                icon: Star,
-                title: "Exclusividad",
-                desc: "Acceso a propiedades únicas y premium.",
-              },
-              {
-                icon: Users,
-                title: "Red Selecta",
-                desc: "Conexión directa.",
-              },
-            ].map((feature, i) => (
-              <Card
-                key={i}
-                className="p-6 sm:p-8 bg-arkin-secondary border-2 border-arkin-accent/10 hover:border-arkin-primary rounded-3xl hover:shadow-2xl hover:shadow-arkin-primary/20 transition-all duration-300 hover:-translate-y-2 group"
-              >
-                <div className="w-14 h-14 sm:w-16 sm:h-16 bg-arkin-primary rounded-2xl flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform duration-300">
-                  <feature.icon className="h-7 w-7 sm:h-8 sm:w-8 text-arkin-accent" />
-                </div>
-                <h3 className="font-serif text-xl sm:text-2xl font-bold text-arkin-accent mb-3 sm:mb-4">
-                  {feature.title}
-                </h3>
-                <p className="text-sm sm:text-base text-arkin-accent/70 leading-relaxed">{feature.desc}</p>
-              </Card>
-            ))}
+      {/* Mensaje para Desarrolladores/Inmobiliarias */}
+      <section className="relative py-8 px-4 sm:px-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-gradient-to-r from-arkin-accent to-arkin-accent/90 rounded-2xl p-6 sm:p-8 text-center border-2 border-arkin-primary/20 shadow-xl">
+            <p className="text-arkin-secondary text-base sm:text-lg font-medium">
+              ¿Eres <span className="font-bold text-arkin-primary">Desarrollador</span> o <span className="font-bold text-arkin-primary">Inmobiliaria</span> y tienes más de <span className="font-bold text-arkin-primary">40 propiedades</span>?
+            </p>
+            <Link href="/contacto" className="inline-block mt-4">
+              <Button className="bg-arkin-primary hover:bg-arkin-primary/90 text-arkin-accent font-bold px-6 py-3 rounded-xl shadow-lg hover:scale-105 transition-all duration-300">
+                Contáctanos
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
+
+      {/* Features Section - Carousel */}
+      <WhyArkinCarousel />
 
       {/* Virtual Tours Section */}
       <VirtualToursSection />
@@ -205,6 +177,9 @@ export function HomeYellow() {
           </div>
         </div>
       </section>
+
+      {/* Animated Stats Section */}
+      <AnimatedStats />
 
       {/* Modal de Categorías */}
       {isCategoriasMenuOpen && (

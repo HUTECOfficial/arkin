@@ -61,22 +61,6 @@ export default function OfertasPage() {
                     alt={propiedad.titulo}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   />
-                  {(propiedad as any).bono && (
-                    <div className="absolute top-0 right-0 overflow-hidden w-full h-full pointer-events-none z-10">
-                      <div
-                        className="absolute top-6 -right-10 w-44 text-center py-2 text-[10px] font-black tracking-wider shadow-xl uppercase"
-                        style={{
-                          transform: 'rotate(45deg)',
-                          background: 'linear-gradient(135deg, #8B6914, #C9A84C, #f0c040, #C9A84C, #8B6914)',
-                          color: '#1a1a1a',
-                          textShadow: '0 1px 0 rgba(255,255,255,0.3)',
-                          boxShadow: '0 3px 10px rgba(0,0,0,0.3)',
-                        }}
-                      >
-                        {(propiedad as any).bono}
-                      </div>
-                    </div>
-                  )}
                   <div className="absolute top-4 left-4">
                     <Badge className="bg-red-500/90 text-white backdrop-blur-sm text-xs">
                       Oferta
@@ -105,11 +89,19 @@ export default function OfertasPage() {
                 {/* Content */}
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-3">
-                    <Badge className="bg-arkin-secondary text-gray-700 text-xs">{propiedad.tipo}</Badge>
+                    <Badge className="bg-red-500/10 text-red-600">{propiedad.tipo}</Badge>
                     <span className="text-2xl font-bold text-red-600">{propiedad.precioTexto}</span>
                   </div>
 
-                  <h3 className="text-xl font-serif font-bold text-gray-900 mb-2 line-clamp-2">{propiedad.titulo}</h3>
+                  {(propiedad as any).bono && (
+                    <div className="mb-3">
+                      <div className="inline-block bg-black text-white px-3 py-1.5 rounded-lg text-xs font-bold uppercase shadow-md">
+                        {(propiedad as any).bono}
+                      </div>
+                    </div>
+                  )}
+
+                  <h3 className="text-xl font-serif font-bold text-arkin-graphite mb-2 line-clamp-2">{propiedad.titulo}</h3>
 
                   <div className="flex items-center text-gray-600 mb-4">
                     <MapPin className="h-4 w-4 mr-2 flex-shrink-0" />
