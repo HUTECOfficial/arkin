@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/contexts/auth-context"
-import { supabase } from "@/lib/supabase/client"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
@@ -64,13 +63,11 @@ export default function SolicitudesFotografoAsesorPage() {
   const loadSolicitudes = async () => {
     setLoading(true)
     try {
-      const { data, error } = await supabase
-        .from('solicitudes_fotografo')
-        .select('*')
-        .order('created_at', { ascending: false })
-
-      if (error) throw error
-      setSolicitudes(data || [])
+      const res = await fetch('/api/solicitudes-fotografo')
+      if (!res.ok) throw new Error('Error al cargar solicitudes')
+      
+      const data = await res.json()
+      setSolicitudes(data.solicitudes || [])
     } catch (error) {
       console.error('Error loading requests:', error)
     } finally {
@@ -83,15 +80,16 @@ export default function SolicitudesFotografoAsesorPage() {
 
     setProcessingId(solicitud.id)
     try {
-      // Actualizar el estado de la solicitud con la confirmación del asesor
-      const { error } = await supabase
-        .from('solicitudes_fotografo')
-        .update({
+      const res = await fetch('/api/solicitudes-fotografo', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: solicitud.id,
           notas_admin: `[Confirmado por ${user?.nombre}] ${notasAsesor || 'Solicitud verificada y confirmada'}`
         })
-        .eq('id', solicitud.id)
+      })
 
-      if (error) throw error
+      if (!res.ok) throw new Error('Error al confirmar')
 
       alert('Solicitud confirmada. El administrador será notificado.')
       setNotasAsesor("")
@@ -116,14 +114,16 @@ export default function SolicitudesFotografoAsesorPage() {
       const notaActual = solicitud.notas_admin || ''
       const nuevaNota = `${notaActual}\n[Observación de ${user?.nombre}]: ${notasAsesor}`
       
-      const { error } = await supabase
-        .from('solicitudes_fotografo')
-        .update({
+      const res = await fetch('/api/solicitudes-fotografo', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: solicitud.id,
           notas_admin: nuevaNota.trim()
         })
-        .eq('id', solicitud.id)
+      })
 
-      if (error) throw error
+      if (!res.ok) throw new Error('Error al agregar observación')
 
       alert('Observación agregada')
       setNotasAsesor("")
