@@ -1,8 +1,8 @@
 "use client"
 
-import { useState, useRef, useCallback, Suspense } from "react"
+import { useState, useRef, useCallback, Suspense, useEffect } from "react"
 import { Canvas, useFrame, useThree } from "@react-three/fiber"
-import { OrbitControls, ContactShadows, Grid } from "@react-three/drei"
+import { OrbitControls, ContactShadows } from "@react-three/drei"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 import { Building2, MapPin, Home, X, ChevronRight } from "lucide-react"
@@ -174,6 +174,152 @@ function Building({ ed, active, onHover, onClick }: {
   )
 }
 
+// León, Gto centro: 21.1236, -101.6824
+const MAP_CENTER_LAT = 21.1236
+const MAP_CENTER_LNG = -101.6824
+const MAP_ZOOM = 14
+const TILE_SIZE = 256
+
+function latLngToTile(lat: number, lng: number, zoom: number) {
+  const n = Math.pow(2, zoom)
+  const x = Math.floor((lng + 180) / 360 * n)
+  const latRad = lat * Math.PI / 180
+  const y = Math.floor((1 - Math.log(Math.tan(latRad) + 1 / Math.cos(latRad)) / Math.PI) / 2 * n)
+  return { x, y }
+}
+
+async function buildMapTexture(): Promise<THREE.CanvasTexture> {
+  const GRID = 4
+  const canvas = document.createElement('canvas')
+  canvas.width = TILE_SIZE * GRID
+  canvas.height = TILE_SIZE * GRID
+  const ctx = canvas.getContext('2d')!
+
+  ctx.fillStyle = '#c8d8c8'
+  ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+  const center = latLngToTile(MAP_CENTER_LAT, MAP_CENTER_LNG, MAP_ZOOM)
+  const offset = Math.floor(GRID / 2)
+
+  const loads: Promise<void>[] = []
+  for (let dy = 0; dy < GRID; dy++) {
+    for (let dx = 0; dx < GRID; dx++) {
+      const tx = center.x - offset + dx
+      const ty = center.y - offset + dy
+      const url = `https://tile.openstreetmap.org/${MAP_ZOOM}/${tx}/${ty}.png`
+      loads.push(
+        new Promise<void>((resolve) => {
+          const img = new Image()
+          img.crossOrigin = 'anonymous'
+          img.onload = () => {
+            ctx.drawImage(img, dx * TILE_SIZE, dy * TILE_SIZE, TILE_SIZE, TILE_SIZE)
+            resolve()
+          }
+          img.onerror = () => resolve()
+          img.src = url
+        })
+      )
+    }
+  }
+
+  await Promise.all(loads)
+
+  const texture = new THREE.CanvasTexture(canvas)
+  texture.needsUpdate = true
+  return texture
+}
+
+function MapPlane() {
+  const meshRef = useRef<THREE.Mesh>(null)
+  const [mapTexture, setMapTexture] = useState<THREE.CanvasTexture | null>(null)
+  const [fallback, setFallback] = useState(false)
+
+  useEffect(() => {
+    buildMapTexture()
+      .then(tex => setMapTexture(tex))
+      .catch(() => setFallback(true))
+  }, [])
+
+  if (!mapTexture && !fallback) {
+    return (
+      <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+        <planeGeometry args={[30, 30]} />
+        <meshStandardMaterial color="#2d4a2d" roughness={1} />
+      </mesh>
+    )
+  }
+
+  return (
+    <group>
+      {/* Plano base con textura OSM */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+        <planeGeometry args={[30, 30]} />
+        <meshStandardMaterial
+          map={mapTexture ?? undefined}
+          color={fallback ? '#3a5a3a' : '#ffffff'}
+          roughness={0.95}
+          metalness={0}
+        />
+      </mesh>
+
+      {/* Calles secundarias superpuestas (líneas blancas finas) */}
+      {[...Array(8)].map((_, i) => (
+        <mesh key={`h${i}`} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.005, -13 + i * 3.7]}>
+          <planeGeometry args={[30, 0.06]} />
+          <meshBasicMaterial color="#ffffff" transparent opacity={0.18} />
+        </mesh>
+      ))}
+      {[...Array(8)].map((_, i) => (
+        <mesh key={`v${i}`} rotation={[-Math.PI / 2, 0, 0]} position={[-13 + i * 3.7, 0.005, 0]}>
+          <planeGeometry args={[0.06, 30]} />
+          <meshBasicMaterial color="#ffffff" transparent opacity={0.18} />
+        </mesh>
+      ))}
+
+      {/* Avenidas principales (más anchas) */}
+      {[-4, 0, 4].map((pos, i) => (
+        <mesh key={`av${i}`} rotation={[-Math.PI / 2, 0, 0]} position={[pos, 0.006, 0]}>
+          <planeGeometry args={[0.18, 30]} />
+          <meshBasicMaterial color="#ffffff" transparent opacity={0.28} />
+        </mesh>
+      ))}
+      {[-4, 0, 4].map((pos, i) => (
+        <mesh key={`ah${i}`} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.006, pos]}>
+          <planeGeometry args={[30, 0.18]} />
+          <meshBasicMaterial color="#ffffff" transparent opacity={0.28} />
+        </mesh>
+      ))}
+
+      {/* Parques / zonas verdes */}
+      {[
+        { x: -8, z: -7, w: 4.5, d: 3.5 },
+        { x:  7, z:  6, w: 3,   d: 4   },
+        { x: -5, z:  8, w: 2.5, d: 2.5 },
+      ].map((p, i) => (
+        <mesh key={`park${i}`} rotation={[-Math.PI / 2, 0, 0]} position={[p.x, 0.004, p.z]}>
+          <planeGeometry args={[p.w, p.d]} />
+          <meshStandardMaterial color="#4a8c4a" roughness={0.95} transparent opacity={0.7} />
+        </mesh>
+      ))}
+
+      {/* Bloques de manzanas (edificios genéricos de fondo) */}
+      {[
+        { x:-10, z:-10, w:2.5, d:2.5, h:0.12 }, { x:-6,  z:-10, w:3,   d:2,   h:0.08 },
+        { x: 2,  z:-10, w:2,   d:2.5, h:0.14 }, { x: 8,  z:-10, w:3.5, d:2,   h:0.09 },
+        { x:-10, z: -4, w:2,   d:3,   h:0.11 }, { x: 9,  z: -4, w:2.5, d:2.5, h:0.13 },
+        { x:-10, z:  4, w:3,   d:2,   h:0.10 }, { x: 8,  z:  4, w:2,   d:3,   h:0.12 },
+        { x:-10, z: 10, w:2.5, d:2.5, h:0.09 }, { x:-4,  z: 10, w:2,   d:2,   h:0.11 },
+        { x: 3,  z: 10, w:3,   d:2.5, h:0.10 }, { x: 9,  z: 10, w:2,   d:2,   h:0.08 },
+      ].map((b, i) => (
+        <mesh key={`block${i}`} position={[b.x, b.h / 2, b.z]} castShadow receiveShadow>
+          <boxGeometry args={[b.w, b.h, b.d]} />
+          <meshStandardMaterial color="#b0a898" roughness={0.9} />
+        </mesh>
+      ))}
+    </group>
+  )
+}
+
 function Scene({ hoveredId, selectedId, onHover, onSelect }: {
   hoveredId: number | null
   selectedId: number | null
@@ -182,13 +328,13 @@ function Scene({ hoveredId, selectedId, onHover, onSelect }: {
 }) {
   return (
     <>
-      <color attach="background" args={["#080b14"]} />
-      <fog attach="fog" args={["#080b14", 22, 58]} />
+      <color attach="background" args={["#e8f0e8"]} />
+      <fog attach="fog" args={["#d4e4d4", 28, 65]} />
 
-      <ambientLight intensity={1.5} color="#334155" />
+      <ambientLight intensity={2.2} color="#f0f4f0" />
       <directionalLight
         position={[12, 22, 12]}
-        intensity={2.5}
+        intensity={2.8}
         castShadow
         shadow-mapSize={[2048, 2048]}
         shadow-camera-near={0.5}
@@ -198,23 +344,13 @@ function Scene({ hoveredId, selectedId, onHover, onSelect }: {
         shadow-camera-top={25}
         shadow-camera-bottom={-25}
         shadow-bias={-0.001}
+        color="#fff8e8"
       />
-      <pointLight position={[-12, 8, -12]} intensity={2} distance={30} color="#3b82f6" />
-      <pointLight position={[12, 5, 12]} intensity={1.5} distance={25} color="#eab308" />
+      <pointLight position={[-12, 8, -12]} intensity={1.2} distance={30} color="#a8d8a8" />
+      <pointLight position={[12, 5, 12]} intensity={1.0} distance={25} color="#ffe4a0" />
 
-      <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-        <planeGeometry args={[60, 60]} />
-        <meshStandardMaterial color="#0a0f1e" roughness={1} />
-      </mesh>
-      <Grid
-        args={[60, 60]}
-        position={[0, 0.01, 0]}
-        cellColor="#1e293b"
-        sectionColor="#1e293b"
-        fadeDistance={50}
-        infiniteGrid={false}
-      />
-      <ContactShadows position={[0, 0.02, 0]} opacity={0.6} scale={50} blur={2} far={10} />
+      <MapPlane />
+      <ContactShadows position={[0, 0.02, 0]} opacity={0.4} scale={50} blur={3} far={10} />
 
       {edificios.map(ed => (
         <Building
