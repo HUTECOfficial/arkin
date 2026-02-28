@@ -35,7 +35,7 @@ export default function DashboardPage() {
               <div className="font-serif text-2xl font-bold text-arkin-graphite">ARKIN</div>
             </Link>
             <div className="flex items-center space-x-4">
-              <Badge variant="outline" className="border-arkin-gold text-arkin-gold">
+              <Badge variant="outline" className="border-arkin-gold text-black">
                 Propietario Exclusivo
               </Badge>
               <Button variant="outline" size="sm">

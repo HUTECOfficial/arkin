@@ -271,7 +271,7 @@ export default function PropiedadesAsesorPage() {
             <Button
               onClick={() => router.push('/panel-asesor/solicitud-propiedad')}
               variant="outline"
-              className="border-arkin-gold text-arkin-gold hover:bg-arkin-gold/10 font-semibold w-full sm:w-auto"
+              className="border-arkin-gold text-black hover:bg-arkin-gold/10 font-semibold w-full sm:w-auto"
             >
               <Camera className="h-4 w-4 mr-2" />
               Solicitar Propiedad

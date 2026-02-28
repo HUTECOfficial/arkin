@@ -367,7 +367,7 @@ export default function PropietariosPage() {
               <Button
                 onClick={() => router.push('/propiedades')}
                 variant="outline"
-                className="border-arkin-gold text-arkin-gold hover:bg-arkin-gold/10"
+                className="border-arkin-gold text-black hover:bg-arkin-gold/10"
               >
                 Ver Propiedades
               </Button>
@@ -1206,7 +1206,7 @@ export default function PropietariosPage() {
                 variant="outline"
                 onClick={prevStep}
                 disabled={currentStep === 1}
-                className="border-gray-200 hover:border-arkin-gold hover:text-arkin-gold"
+                className="border-gray-200 hover:border-arkin-gold hover:text-black"
               >
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Anterior
