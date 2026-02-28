@@ -19,29 +19,35 @@ export default function RentaPage() {
   return (
     <div className="min-h-screen bg-arkin-secondary transition-colors duration-500">
       {/* Hero Section */}
-      <section className="relative pt-0 pb-12 sm:pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden min-h-[400px] sm:min-h-[500px] flex items-center">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-900/80 via-blue-800/60 to-transparent"></div>
+      <section className="relative overflow-hidden min-h-[320px] sm:min-h-[420px]">
+        {/* Imagen de fondo con overlay oscuro fuerte */}
         <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40"
-          style={{
-            backgroundImage: "url('https://mnrfsdrjadretxesjxhu.supabase.co/storage/v1/object/sign/arkin/hf_20260219_015208_b75495b2-1016-45df-a1f8-d1160006831b.jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV82ZTg2NjJkMS1lZjIzLTRkZjUtYjAwYy04NjVkOTcwYzljZWMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhcmtpbi9oZl8yMDI2MDIxOV8wMTUyMDhfYjc1NDk1YjItMTAxNi00NWRmLWExZjgtZDExNjAwMDY4MzFiLmpwZWciLCJpYXQiOjE3NzE0NjYyNTQsImV4cCI6MTgwMzAwMjI1NH0.0ew5z0WbvUkHQAwo8zOlhQFyLokmh2PKTqjqBtpxcuc')",
-          }}
-        ></div>
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: "url('https://mnrfsdrjadretxesjxhu.supabase.co/storage/v1/object/sign/arkin/hf_20260219_015208_b75495b2-1016-45df-a1f8-d1160006831b.jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV82ZTg2NjJkMS1lZjIzLTRkZjUtYjAwYy04NjVkOTcwYzljZWMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhcmtpbi9oZl8yMDI2MDIxOV8wMTUyMDhfYjc1NDk1YjItMTAxNi00NWRmLWExZjgtZDExNjAwMDY4MzFiLmpwZWciLCJpYXQiOjE3NzE0NjYyNTQsImV4cCI6MTgwMzAwMjI1NH0.0ew5z0WbvUkHQAwo8zOlhQFyLokmh2PKTqjqBtpxcuc')" }}
+        />
+        <div className="absolute inset-0 bg-black/70" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent" />
 
-        <div className="relative max-w-7xl mx-auto text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-500 rounded-full mb-6">
-            <Key className="h-8 w-8 text-white" />
+        {/* Contenido */}
+        <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10 py-16 sm:py-24 flex items-center">
+          <div className="max-w-xl">
+            <div className="flex items-center gap-3 mb-5">
+              <div className="w-12 h-12 bg-blue-500 rounded-2xl flex items-center justify-center shadow-lg">
+                <Key className="h-6 w-6 text-white" />
+              </div>
+              <span className="text-blue-400 text-sm font-semibold uppercase tracking-widest">Arkin Select</span>
+            </div>
+            <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl font-black text-white leading-tight mb-4">
+              Propiedades<br/>
+              <span className="text-blue-400">en Renta</span>
+            </h1>
+            <p className="text-white/80 text-base sm:text-lg mb-6 leading-relaxed">
+              Encuentra el espacio perfecto para vivir con la flexibilidad que necesitas
+            </p>
+            <Badge className="bg-blue-500 text-white border-0 px-4 py-2 text-sm font-semibold shadow-lg">
+              {propiedades.length} Propiedades Disponibles
+            </Badge>
           </div>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-serif font-bold text-white mb-4 sm:mb-6 text-balance px-4">
-            Propiedades en
-            <span className="block text-blue-400">Renta</span>
-          </h1>
-          <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 mb-6 sm:mb-8 max-w-3xl mx-auto text-pretty px-4">
-            Encuentra el espacio perfecto para vivir con la flexibilidad que necesitas
-          </p>
-          <Badge className="bg-blue-500/20 text-blue-300 border-blue-400/30 px-4 py-2 text-sm">
-            {propiedades.length} Propiedades Disponibles
-          </Badge>
         </div>
       </section>
 
@@ -61,6 +67,11 @@ export default function RentaPage() {
                     alt={propiedad.titulo}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   />
+                  <div className="absolute top-4 left-4">
+                    <Badge className="bg-blue-500/90 text-white backdrop-blur-sm text-xs">
+                      En Renta
+                    </Badge>
+                  </div>
                   <div className="absolute top-4 right-4 flex space-x-2">
                     <WishlistButton 
                       property={{

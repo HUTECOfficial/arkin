@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { PropertyFilters } from "@/components/property-filters"
 import { AISearchChat } from "@/components/ai-search-chat"
-import { MapPin, Bed, Bath, Square, Eye, Calendar, Grid, List, Map, Search, Sparkles, MessageSquare, RefreshCw } from "lucide-react"
+import { MapPin, Bed, Bath, Square, Eye, Calendar, Grid, List, Map, Search, Sparkles, MessageSquare, RefreshCw, Building } from "lucide-react"
 import Link from "next/link"
 import { WishlistButton } from "@/components/wishlist-button"
 import { Propiedad } from "@/data/propiedades"
@@ -109,22 +109,30 @@ export default function PropiedadesPage() {
   return (
     <div className="min-h-screen bg-arkin-secondary transition-colors duration-500">
       {/* Hero Section */}
-      <section className="relative pt-0 pb-12 sm:pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden min-h-[400px] sm:min-h-[600px] flex items-center">
+      <section className="relative overflow-hidden min-h-[320px] sm:min-h-[420px]">
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{
-            backgroundImage: "url('/fondoarkin.jpg')",
-          }}
-        ></div>
-        <div className="absolute inset-0 bg-black/60"></div>
+          style={{ backgroundImage: "url('/fondoarkin.jpg')" }}
+        />
+        <div className="absolute inset-0 bg-black/70" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent" />
 
-        <div className="relative max-w-7xl mx-auto text-center">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-serif font-bold text-white mb-4 sm:mb-6 text-balance px-4">
-            Propiedades
-            <span className="block text-arkin-primary">Exclusivas</span>
-          </h1>
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center px-4">
-            <Badge className="bg-arkin-primary/20 text-arkin-primary border-arkin-primary/30 px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10 py-16 sm:py-24 flex items-center">
+          <div className="max-w-xl">
+            <div className="flex items-center gap-3 mb-5">
+              <div className="w-12 h-12 bg-arkin-primary rounded-2xl flex items-center justify-center shadow-lg">
+                <Building className="h-6 w-6 text-arkin-accent" />
+              </div>
+              <span className="text-arkin-primary text-sm font-semibold uppercase tracking-widest">Arkin Select</span>
+            </div>
+            <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl font-black text-white leading-tight mb-4">
+              Propiedades<br/>
+              <span className="text-arkin-primary">Exclusivas</span>
+            </h1>
+            <p className="text-white/80 text-base sm:text-lg mb-6 leading-relaxed">
+              Descubre nuestra selección de propiedades únicas y premium
+            </p>
+            <Badge className="bg-arkin-primary text-arkin-accent border-0 px-4 py-2 text-sm font-semibold shadow-lg">
               {isLoading ? 'Cargando...' : `${filteredAndSortedProperties.length} de ${propiedades.length} Propiedades`}
             </Badge>
           </div>
