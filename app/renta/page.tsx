@@ -61,11 +61,6 @@ export default function RentaPage() {
                     alt={propiedad.titulo}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   />
-                  <div className="absolute top-4 left-4">
-                    <Badge className="bg-blue-500/90 text-white backdrop-blur-sm text-xs">
-                      En Renta
-                    </Badge>
-                  </div>
                   <div className="absolute top-4 right-4 flex space-x-2">
                     <WishlistButton 
                       property={{
