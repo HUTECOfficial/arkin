@@ -1,6 +1,5 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { 
@@ -52,61 +51,34 @@ export default function BrokersPage() {
   return (
     <div className="min-h-screen bg-arkin-secondary">
       {/* Hero Section */}
-      <section className="relative min-h-[480px] flex items-stretch overflow-hidden">
-        {/* Panel izquierdo: contenido de texto */}
-        <div className="relative z-10 flex flex-col justify-center w-full lg:w-1/2 bg-arkin-dark px-10 py-16 lg:px-16">
-          {/* Acento decorativo gold */}
-          <div className="absolute top-0 left-0 w-1 h-full bg-arkin-gold" />
-          <div className="absolute -top-10 -left-10 w-48 h-48 rounded-full bg-arkin-gold/5 blur-3xl pointer-events-none" />
+      <section className="relative overflow-hidden min-h-[320px] sm:min-h-[420px]">
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: "url('https://mnrfsdrjadretxesjxhu.supabase.co/storage/v1/object/sign/arkin/hf_20260219_015208_b75495b2-1016-45df-a1f8-d1160006831b.jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV82ZTg2NjJkMS1lZjIzLTRkZjUtYjAwYy04NjVkOTcwYzljZWMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhcmtpbi9oZl8yMDI2MDIxOV8wMTUyMDhfYjc1NDk1YjItMTAxNi00NWRmLWExZjgtZDExNjAwMDY4MzFiLmpwZWciLCJpYXQiOjE3NzE0NjYyNTQsImV4cCI6MTgwMzAwMjI1NH0.0ew5z0WbvUkHQAwo8zOlhQFyLokmh2PKTqjqBtpxcuc')" }}
+        />
+        <div className="absolute inset-0 bg-black/70" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent" />
 
-          <Badge className="self-start bg-arkin-gold/15 text-arkin-gold border-arkin-gold/40 mb-5 text-xs tracking-widest uppercase">
-            Red de Profesionales
-          </Badge>
-
-          <h1 className="text-4xl md:text-5xl font-bold text-white leading-tight mb-4">
-            Brokers<br />
-            <span className="text-arkin-gold">&amp; Notarías</span>
-          </h1>
-
-          <p className="text-gray-300 text-base max-w-md mb-8 leading-relaxed">
-            Red consolidada de brokers y notarías de confianza que garantizan 
-            seguridad jurídica en cada operación inmobiliaria.
-          </p>
-
-          {/* Stats rápidos */}
-          <div className="flex gap-8 mb-8">
-            <div>
-              <p className="text-2xl font-bold text-arkin-gold">5+</p>
-              <p className="text-xs text-gray-400 uppercase tracking-wide">Notarías</p>
+        <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10 py-16 sm:py-24 flex items-center">
+          <div className="max-w-xl">
+            <div className="flex items-center gap-3 mb-5">
+              <div className="w-12 h-12 bg-arkin-gold rounded-2xl flex items-center justify-center shadow-lg">
+                <Scale className="h-6 w-6 text-black" />
+              </div>
+              <span className="text-arkin-gold text-sm font-semibold uppercase tracking-widest">Arkin Select</span>
             </div>
-            <div className="w-px bg-arkin-gold/20" />
-            <div>
-              <p className="text-2xl font-bold text-arkin-gold">100%</p>
-              <p className="text-xs text-gray-400 uppercase tracking-wide">Confiables</p>
-            </div>
-            <div className="w-px bg-arkin-gold/20" />
-            <div>
-              <p className="text-2xl font-bold text-arkin-gold">León</p>
-              <p className="text-xs text-gray-400 uppercase tracking-wide">Guanajuato</p>
-            </div>
+            <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl font-black text-white leading-tight mb-4">
+              Brokers<br/>
+              <span className="text-arkin-gold">&amp; Notarías</span>
+            </h1>
+            <p className="text-white/80 text-base sm:text-lg mb-6 leading-relaxed">
+              Red consolidada de brokers y notarías de confianza que garantizan
+              seguridad jurídica en cada operación inmobiliaria.
+            </p>
+            <Badge className="bg-arkin-gold text-black border-0 px-4 py-2 text-sm font-semibold shadow-lg">
+              5 Notarías Asociadas
+            </Badge>
           </div>
-
-          <Button size="lg" className="self-start bg-arkin-gold hover:bg-arkin-gold/90 text-black font-bold">
-            <Scale className="mr-2 h-5 w-5" />
-            Directorio de Notarías
-          </Button>
-        </div>
-
-        {/* Panel derecho: imagen */}
-        <div className="hidden lg:block lg:w-1/2 relative">
-          <div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: "url('https://mnrfsdrjadretxesjxhu.supabase.co/storage/v1/object/sign/arkin/hf_20260219_015208_b75495b2-1016-45df-a1f8-d1160006831b.jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV82ZTg2NjJkMS1lZjIzLTRkZjUtYjAwYy04NjVkOTcwYzljZWMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhcmtpbi9oZl8yMDI2MDIxOV8wMTUyMDhfYjc1NDk1YjItMTAxNi00NWRmLWExZjgtZDExNjAwMDY4MzFiLmpwZWciLCJpYXQiOjE3NzE0NjYyNTQsImV4cCI6MTgwMzAwMjI1NH0.0ew5z0WbvUkHQAwo8zOlhQFyLokmh2PKTqjqBtpxcuc')" }}
-          />
-          {/* Degradado de transición izq→der */}
-          <div className="absolute inset-0 bg-gradient-to-r from-arkin-dark via-arkin-dark/30 to-transparent" />
-          {/* Overlay gold sutil */}
-          <div className="absolute inset-0 bg-arkin-gold/5" />
         </div>
       </section>
 
