@@ -527,7 +527,7 @@ export default function PropietariosPage() {
                     id="area-construccion"
                     type="number"
                     min="0"
-                    placeholder="Ej: 350"
+                    placeholder="Ej: 350 (opcional)"
                     value={formData.areaConstruccion}
                     onChange={(e) => setFormData(prev => ({ ...prev, areaConstruccion: e.target.value }))}
                     className="border-gray-200 focus:border-arkin-gold focus:ring-arkin-gold/20"
