@@ -525,6 +525,8 @@ export default function PropietariosPage() {
                   </Label>
                   <Input
                     id="area-construccion"
+                    type="number"
+                    min="0"
                     placeholder="Ej: 350"
                     value={formData.areaConstruccion}
                     onChange={(e) => setFormData(prev => ({ ...prev, areaConstruccion: e.target.value }))}

@@ -620,9 +620,10 @@ export function PropertyForm({ initialData, asesorEmail, asesorNombre, onSubmit,
               <Input
                 id="areaConstruccion"
                 type="number"
-                value={formData.areaConstruccion || ''}
+                value={formData.areaConstruccion ?? ''}
                 onChange={(e) => setFormData({ ...formData, areaConstruccion: Number(e.target.value) })}
                 placeholder="350"
+                min="0"
                 className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
               />
             </div>
