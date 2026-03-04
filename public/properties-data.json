@@ -1,6 +1,684 @@
 {
   "properties": [
     {
+      "id": 94,
+      "titulo": "Casa la Campiña",
+      "ubicacion": "Leon, Gto.",
+      "precio": 9800000,
+      "precioTexto": "$9,800,000",
+      "tipo": "Casa",
+      "habitaciones": 4,
+      "banos": 4,
+      "area": 410,
+      "areaTexto": "410 m²",
+      "imagen": "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/principal/1772043182015-d8q0m9.jpeg",
+      "descripcion": "✨ No es solo una casa… es el estilo de vida que mereces. ✨\n\nImagina despertar en una residencia donde cada espacio fue diseñado para inspirar, para disfrutar, para vivir en grande.\n\nDesde su imponente fachada contemporánea hasta su sala de doble altura bañada en luz natural, esta propiedad transmite elegancia, amplitud y exclusividad en cada rincón.\n\n📐 410 m² de terreno\n🏗 343.81 m² de construcción\n\nEn planta baja, la cocina con isla se convierte en el corazón del hogar, perfecta para reuniones inolvidables. El jardín interior aporta armonía y frescura, mientras el estudio o recámara completa brinda versatilidad y comodidad.\n\nEn planta alta, la recámara principal con vestidor y baño privado es tu refugio personal. Las recámaras secundarias con baño propio garantizan privacidad y confort para toda la familia. Además, una acogedora sala de TV para compartir momentos únicos.\n\n🌿 Vive dentro de un entorno exclusivo con casa club, alberca, canchas deportivas e ingreso controlado. Seguridad, tranquilidad y plusvalía en un mismo lugar.\n\nEsta es la casa donde tus metas toman forma.\nDonde el éxito se vive todos los días.\n\n📩 Agenda tu cita y da el siguiente paso hacia la vida que estás construyendo.",
+      "caracteristicas": [
+        "Cuarto de servicio",
+        "Bodega",
+        "Jardin Interior"
+      ],
+      "status": "Disponible",
+      "categoria": "venta",
+      "fechaPublicacion": "2026-02-25T00:00:00+00:00",
+      "tourVirtual": null,
+      "galeria": [
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1772043183067-r782kx.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1772043183474-enfd5.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1772043183885-zmaqzt.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1772043184294-t3kc7l.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1772043184598-64grkw.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1772043185064-ioq3gr.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1772043185462-76155s.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1772043185874-48okj9.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1772043186231-9uct1g.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1772043186687-0r0ren.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1772043563831-j1juq.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1772043564322-nerv3.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1772043564694-w6mzs.jpeg"
+      ],
+      "createdAt": "2026-02-25T18:13:12.399383+00:00",
+      "updatedAt": "2026-02-25T18:19:26.241607+00:00"
+    },
+    {
+      "id": 93,
+      "titulo": "96 Hectáreas en VENTA, cerca de GM ",
+      "ubicacion": "Silao",
+      "precio": 900,
+      "precioTexto": "$900",
+      "tipo": "Terreno (m²)",
+      "habitaciones": 0,
+      "banos": 0,
+      "area": 960000,
+      "areaTexto": "960000 m²",
+      "imagen": "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/principal/1771799897222-qcfvul.jpeg",
+      "descripcion": "Título de propiedad, factibilidad de servicios, etc",
+      "caracteristicas": [],
+      "status": "Disponible",
+      "categoria": "venta",
+      "fechaPublicacion": "2026-02-22T00:00:00+00:00",
+      "tourVirtual": null,
+      "galeria": [],
+      "createdAt": "2026-02-22T22:38:19.171845+00:00",
+      "updatedAt": "2026-02-22T22:43:59.19931+00:00"
+    },
+    {
+      "id": 92,
+      "titulo": "Terreno en VENTA, ubicado en Prolongación López Mateos ",
+      "ubicacion": "León ",
+      "precio": 3000,
+      "precioTexto": "$3,000",
+      "tipo": "Terreno (m²)",
+      "habitaciones": 0,
+      "banos": 0,
+      "area": 48582,
+      "areaTexto": "48582 m²",
+      "imagen": "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/principal/1771792264572-0qimft.jpeg",
+      "descripcion": "Zona H4 (Habitacional Densidad Media)\n\nPredominante:\nIII.- Habitacional Densidad Media\n\nCompatible:\nI.- Habitacional Densidad Mínima\nII.- Habitacional Densidad Baja\nD.- Conservación Ecológica\nVI.- Comercio de Intensidad Mínima\nVII.- Comercio de Intensidad Baja\nX.- Servicios de Intensidad Mínima\nXI.- Servicios de Intensidad Baja\n\nCondicionado (Sujeto a Normas de Condicionamiento):\nIV.- Habitacional Densidad Alta\nXII.- Servicios de Intensidad Media\nVIII.- Comercio de Intensidad Media\nXV.- Taller Familiar\nA.- Equipamiento Urbano Vecinal\nB.- Equipamiento Zonal\nC.- Equipamiento Especializado",
+      "caracteristicas": [],
+      "status": "Disponible",
+      "categoria": "venta",
+      "fechaPublicacion": "2026-02-22T00:00:00+00:00",
+      "tourVirtual": null,
+      "galeria": [],
+      "createdAt": "2026-02-22T20:31:07.28611+00:00",
+      "updatedAt": "2026-02-22T22:46:33.834361+00:00"
+    },
+    {
+      "id": 91,
+      "titulo": "Clinica Viure",
+      "ubicacion": "Leon, Gto.",
+      "precio": 20000000,
+      "precioTexto": "$20,000,000",
+      "tipo": "Clínica",
+      "habitaciones": 5,
+      "banos": 0,
+      "area": 669,
+      "areaTexto": "668.92 m²",
+      "imagen": "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/principal/1771630486392-q4r573j.jpeg",
+      "descripcion": "Descubre una propiedad única en León, diseñada para proyectos médicos, corporativos o comerciales que buscan presencia, comodidad y funcionalidad en una de las zonas con mayor plusvalía.\n\nEsta imponente propiedad cuenta con 668.92 m² de terreno y 686.01 m² de construcción con acabados de lujo, distribuidos en 2 plantas, ofreciendo espacios amplios, modernos y listos para operar o adaptar a tus necesidades.\n\nDesde el primer momento destaca su doble acceso por dos vialidades principales, facilitando el flujo de clientes, pacientes o personal.\n\n✨ Planta Baja\n\nCochera para 5 autos (2 por Calle del Fuego y 3 por Paseo de los Insurgentes)\n\n2 recepciones amplias ideales para alto flujo de atención\n\nSala principal de gran tamaño\n\n2 consultorios (uno con baño privado)\n\n2 baños comunes, uno adaptado para personas con discapacidad\n\nÁrea independiente ideal para farmacia o toma de muestras\n\nEspacio adicional de 200 m² sin acabados para personalizar a tu proyecto\n\n✨ Planta Alta\n\nRecepción amplia y funcional\n\n6 consultorios perfectamente distribuidos\n\n4 baños\n\nOficina administrativa con salita privada, baño propio y terraza\n\n🚗 Estacionamiento\n\n8 cajones techados dentro de un área de estacionamiento de 242.42 m²\n\n💎 Ideal para clínicas, hospitales, laboratorios, corporativos médicos o centros de especialidades.\n💎 Ubicación estratégica, alta visibilidad y excelente conectividad.\n💎 Espacios listos para crecimiento y expansión.",
+      "caracteristicas": [],
+      "status": "Disponible",
+      "categoria": "venta",
+      "fechaPublicacion": "2026-02-20T00:00:00+00:00",
+      "tourVirtual": null,
+      "galeria": [
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771630487616-i360l.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771630488122-09pqd.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771630488533-ugujb.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771630488946-qixuo.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771630489248-f3dfoj.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771630489653-o03tmn.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771630490004-3ei3mm.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771630490345-crpxnu.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771630490705-rslx1g.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771630491061-xr4scki.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771630491478-qsl4su.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771630491769-1rpoxo.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771630492079-f3z4p.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771630492417-omxrqn.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771630492699-p31vxy.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771630493036-3wetrj.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771630493355-fgzeak.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771630493640-72xqud.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771630493977-drdjg.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771630494325-23rfbr.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771630494770-8xw1b.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771630495364-if3ln.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771630495763-3i2tbl.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771630496181-7hcebp.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771630496519-rv6xs.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771630496803-j4ppk.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771630497206-pqqd.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771630497552-v7bhj.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771630497968-ntcwm.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771630498262-hq32bp.jpeg"
+      ],
+      "createdAt": "2026-02-20T23:35:10.484761+00:00",
+      "updatedAt": "2026-02-20T23:35:10.484761+00:00"
+    },
+    {
+      "id": 90,
+      "titulo": "CASA EN VENTA MAYORCA RESIDENCIAL",
+      "ubicacion": "leon guanajuato",
+      "precio": 3900000,
+      "precioTexto": "$3,900,000",
+      "tipo": "Casa",
+      "habitaciones": 3,
+      "banos": 3,
+      "area": 179,
+      "areaTexto": "179 m²",
+      "imagen": "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/principal/1771613381607-c3o7zvi.jpeg",
+      "descripcion": "CASA EN VENTA MAYORCA RESIDENCIAL \nUNA CASA MODERNA CON ACABADOS DE LUJO Y ESPACIOS MUY AMPLIOS\nQUE TE OFRECE UN DISEÑO MODERNO Y FUNCIONAL DISTRIBUIDA EN \n3 RECAMARAS, 3 BAÑOS COMPLETOS, COCHERA PARA 2 AUTOS \nJARDIN LATERAL QUE RECORRE TODA LA CASA HACIA LA PARTE TRASERA DE LA CASA GENERANDO UN ESPACIO DE BUEN AMBIENTE CON LA NATURALEZA",
+      "caracteristicas": [
+        "Tinaco",
+        "Hidroneumático",
+        "Cuarto de servicio",
+        "Sala de televisión",
+        "Cuarto de lavado",
+        "Jardín privado",
+        "Cocina equipada",
+        "TERRAZA",
+        "MUCHA LUZ NATURAL",
+        "FACHADA CON PRIVACIDAD AL INTERIOR"
+      ],
+      "status": "Disponible",
+      "categoria": "venta",
+      "fechaPublicacion": "2026-02-20T00:00:00+00:00",
+      "tourVirtual": null,
+      "galeria": [
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771613382645-0bnem.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771613383216-1thsf2.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771613383973-w7fdc.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771613384372-6qb95.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771613384787-pz3v6l.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771613385206-cctpol.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771613385888-fo97hb.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771613386678-cj8sp.jpeg"
+      ],
+      "createdAt": "2026-02-20T18:49:54.179547+00:00",
+      "updatedAt": "2026-02-20T18:56:05.897878+00:00"
+    },
+    {
+      "id": 89,
+      "titulo": "Nave en VENTA (oficinas, bodegas) ",
+      "ubicacion": "Mariano Escobedo",
+      "precio": 27000000,
+      "precioTexto": "$27,000,000",
+      "tipo": "Nave Industrial",
+      "habitaciones": 0,
+      "banos": 0,
+      "area": 2674,
+      "areaTexto": "2674 m²",
+      "imagen": "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/solicitudes/f6c565c7-4905-4de8-bf51-ccd43aec2e4e/1771364246776-gg5cdj.JPG",
+      "descripcion": "1.- Oficina / 367.36 m2.   54 años de antigüedad.\n2.- Nave industrial / 1,130.22 m2. 54 años de antigüedad.\n3.- Bodega industrial / 1,154.60 m2. 54 años de antigüedad.\n4.- Oficina / 92.55 m2.  41 años de antigüedad.",
+      "caracteristicas": [],
+      "status": "Disponible",
+      "categoria": "venta",
+      "fechaPublicacion": "2026-02-22T00:00:00+00:00",
+      "tourVirtual": null,
+      "galeria": [
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/solicitudes/f6c565c7-4905-4de8-bf51-ccd43aec2e4e/1771364250486-f7obel.JPG",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/solicitudes/f6c565c7-4905-4de8-bf51-ccd43aec2e4e/1771364251799-qptrte.jpg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/solicitudes/f6c565c7-4905-4de8-bf51-ccd43aec2e4e/1771364252901-o5w3r6.JPG"
+      ],
+      "createdAt": "2026-02-17T21:38:17.954869+00:00",
+      "updatedAt": "2026-02-22T22:47:20.635431+00:00"
+    },
+    {
+      "id": 88,
+      "titulo": "casa San isidro",
+      "ubicacion": "leon, gto",
+      "precio": 1785000,
+      "precioTexto": "$1,785,000",
+      "tipo": "Casa",
+      "habitaciones": 2,
+      "banos": 1,
+      "area": 68,
+      "areaTexto": "68 m²",
+      "imagen": "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/principal/1771348868946-l2huej.png",
+      "descripcion": "SE VENDE CASA \nSAN ISIDRO \n$1,785,000\n\n1 PLANTA \nSALA\nCOMEDOR \nBAÑO\nCOCINA\nPATIO\nCOCHERA\n2 PLANTA \n2 HABITACIONES \nBAÑO\nLIBRE DE GRAVAMEN \n68m2",
+      "caracteristicas": [],
+      "status": "Disponible",
+      "categoria": "venta",
+      "fechaPublicacion": "2026-02-17T00:00:00+00:00",
+      "tourVirtual": null,
+      "galeria": [
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771348871763-q7n2he.png",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771348873544-ehg52.png",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771348875803-rc5kct.png",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771348877333-7objv.png",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771348879009-kvrbmd.png",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771348880382-oqesel.png",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771348882051-cq7vfe.png",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771348883217-bchr6c.png",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771348884805-qdxwu9.png"
+      ],
+      "createdAt": "2026-02-17T17:21:31.272085+00:00",
+      "updatedAt": "2026-02-17T17:21:31.272085+00:00"
+    },
+    {
+      "id": 87,
+      "titulo": "Terreno Tzinacua",
+      "ubicacion": "León ",
+      "precio": 350000,
+      "precioTexto": "$350,000",
+      "tipo": "Terreno (m²)",
+      "habitaciones": 0,
+      "banos": 0,
+      "area": 160,
+      "areaTexto": "160 m²",
+      "imagen": "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/principal/1771343950123-9nm3z5.jpeg",
+      "descripcion": "Solo contado",
+      "caracteristicas": [],
+      "status": "Disponible",
+      "categoria": "venta",
+      "fechaPublicacion": "2026-02-17T00:00:00+00:00",
+      "tourVirtual": null,
+      "galeria": [
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771343951256-m9jbwq.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771343952071-3uuxlr.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771343952582-kg9ilc.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771343953097-d0ofkg.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771343953608-ty6nn.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771343954119-qmf39mk.jpeg"
+      ],
+      "createdAt": "2026-02-17T15:59:18.143339+00:00",
+      "updatedAt": "2026-02-17T15:59:18.143339+00:00"
+    },
+    {
+      "id": 86,
+      "titulo": "Terreno en VENTA ",
+      "ubicacion": "Guanajuato",
+      "precio": 1700000,
+      "precioTexto": "$1,700,000",
+      "tipo": "Terreno (m²)",
+      "habitaciones": 0,
+      "banos": 0,
+      "area": 200,
+      "areaTexto": "200 m²",
+      "imagen": "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/principal/1771184596829-sdpzvp.jpeg",
+      "descripcion": "Venta de Terreno en Zona Residencial Marfil\nCercano a escuelas, Comercios, restaurantes, a 10 minutos del centro histórico de Guanajuato Capital y plazas comerciales.\n\nSuperficie de 200 m2 \nMedidas 10 metros lineales hacia la calle por 20 metros lineales de fondo.\n\n.- Se acepta recurso propio y créditos \n.- Cuenta con los servicios de agua y luz a pie de calle, en zona privada.",
+      "caracteristicas": [],
+      "status": "Disponible",
+      "categoria": "venta",
+      "fechaPublicacion": "2026-02-15T00:00:00+00:00",
+      "tourVirtual": null,
+      "galeria": [
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771184597674-wcnxt7.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771184598389-gecap.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771184599003-omfztb.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771184599618-0erjq.jpeg"
+      ],
+      "createdAt": "2026-02-15T19:43:22.58688+00:00",
+      "updatedAt": "2026-02-15T19:45:46.709522+00:00"
+    },
+    {
+      "id": 85,
+      "titulo": "Casa en VENTA PUNTA DEL ESTE ",
+      "ubicacion": "Punta del Este, León,Gto",
+      "precio": 4980000,
+      "precioTexto": "$4,980,000",
+      "tipo": "Casa",
+      "habitaciones": 3,
+      "banos": 3,
+      "area": 180,
+      "areaTexto": "180 m²",
+      "imagen": "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/principal/1771007548390-yv7zej.jpeg",
+      "descripcion": "OFREZCO \nCASA EN VENTA \nPUNTA DEL ESTE \n\n$4,980,000\n\n\n 240 m² de construcción | 180 m² de terreno\n\n Cochera techada para 2 autos \n\n Sala doble altura y comedor con excelente iluminación natural \n\n Cocina integral con isla y alacena espaciosa \n\nMedio baño para visitas \n\n Entrada de servicio \nindependiente \n\nPatio posterior para momentos de relajación \n\n Recámara principal con vestidor, baño completo. \n\n 2 recámaras secundarias cada con balcón closets y baño\n\n Sala de TV para disfrutar en familia \n\n Vertedero funcional para mayor practicidad",
+      "caracteristicas": [
+        "Hidroneumático",
+        "Tinaco",
+        "Aljibe",
+        "Sala de televisión"
+      ],
+      "status": "Disponible",
+      "categoria": "venta",
+      "fechaPublicacion": "2026-02-13T00:00:00+00:00",
+      "tourVirtual": null,
+      "galeria": [
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771007549670-wcotpk.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771007550117-bbcgoh.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771007551088-b0hoo.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771007551876-6zbe9e.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771007552294-jmuvms.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771007553012-9fg09m.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771007553965-fyj13a.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771007555072-y5f0e.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771007555723-x0ftt9.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771007556512-4sk5wwb.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771007557323-f6o9pp.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771007559086-fc801g.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771007560603-qzq37.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771007561473-nxfi4.jpeg"
+      ],
+      "createdAt": "2026-02-13T18:32:50.578021+00:00",
+      "updatedAt": "2026-02-13T18:32:50.578021+00:00"
+    },
+    {
+      "id": 84,
+      "titulo": "Casa en VENTA SAN JORGE ",
+      "ubicacion": "Zona sur. León, Gto. ",
+      "precio": 6250000,
+      "precioTexto": "$6,250,000",
+      "tipo": "Casa",
+      "habitaciones": 4,
+      "banos": 2,
+      "area": 500,
+      "areaTexto": "500 m²",
+      "imagen": "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/principal/1771006325386-tfuk5.jpeg",
+      "descripcion": "CASA EN VENTA \n\nSAN JORGE RESIDENCIAL \n\n500 mts de terreno \n\nEspacio para 7 autos \nSala comedor\nJardín \n1/2 baño \n\n3recámaras \nPrincipal muy grande con baño secundarias comparten baño\n4ta recámara para oficina sin clóset \n1 salón de juegos conectado a la terraza \n2 baños completos \n1/2 baño \n\n$6,250,000",
+      "caracteristicas": [
+        "Bodega",
+        "Hidroneumático",
+        "Aljibe",
+        "Tinaco",
+        "Cuarto de servicio",
+        "Cuarto de lavado",
+        "Sala de televisión",
+        "Jardín privado"
+      ],
+      "status": "Disponible",
+      "categoria": "venta",
+      "fechaPublicacion": "2026-02-13T00:00:00+00:00",
+      "tourVirtual": null,
+      "galeria": [
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771006327123-nzdgu.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771006327940-akpv4j.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771006328877-cn2srs.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771006329517-iyoyt.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771006330163-5y0chr.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771006330799-0ksoii.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771006331437-0efbxn.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771006332080-34dazj.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771006332582-6usz3.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771006333365-3q1jlb.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771006333869-t3t6lk.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1771006334397-t75vqe.jpeg"
+      ],
+      "createdAt": "2026-02-13T18:12:21.504212+00:00",
+      "updatedAt": "2026-02-13T18:12:21.504212+00:00"
+    },
+    {
+      "id": 82,
+      "titulo": "Departamento en Planta Baja ",
+      "ubicacion": "Mariano Escobedo ",
+      "precio": 1700000,
+      "precioTexto": "$1,700,000",
+      "tipo": "Departamento",
+      "habitaciones": 3,
+      "banos": 1,
+      "area": 0,
+      "areaTexto": "0 m²",
+      "imagen": "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/principal/1770395210058-wu5gbg.jpeg",
+      "descripcion": "Departamento en venta \nJaime Nuno \nPlanta baja \nFrente a k2\nSobre Mariano Escobedo \n3 recámaras \nPrincipal con baño \n2 secundarias comparten baño \n$1,700,000",
+      "caracteristicas": [],
+      "status": "Disponible",
+      "categoria": "venta",
+      "fechaPublicacion": "2026-02-06T00:00:00+00:00",
+      "tourVirtual": null,
+      "galeria": [
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770395210771-5nxqct.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770395211180-02kp1.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770395211590-x0nm9l.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770395211936-qdwg1.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770395212308-k23ufm.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770395212715-v2v5za.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770395213129-xj8cn.jpeg"
+      ],
+      "createdAt": "2026-02-06T16:26:56.989627+00:00",
+      "updatedAt": "2026-02-06T16:26:56.989627+00:00"
+    },
+    {
+      "id": 81,
+      "titulo": "En venta MAYORKA ",
+      "ubicacion": "MAYORKA León Gto zona este ",
+      "precio": 4300000,
+      "precioTexto": "$4,300,000",
+      "tipo": "Casa",
+      "habitaciones": 3,
+      "banos": 2,
+      "area": 160,
+      "areaTexto": "160 m²",
+      "imagen": "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/principal/1770142643634-uiofvh.jpeg",
+      "descripcion": "3 habitaciones \n2 baños 1/2 \nSala de\nComedor \nJardín \nBodega",
+      "caracteristicas": [
+        "Tinaco",
+        "Calentador solar"
+      ],
+      "status": "Disponible",
+      "categoria": "venta",
+      "fechaPublicacion": "2026-02-03T00:00:00+00:00",
+      "tourVirtual": null,
+      "galeria": [
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770142644530-whchzk.jpeg"
+      ],
+      "createdAt": "2026-02-03T18:17:26.712483+00:00",
+      "updatedAt": "2026-02-03T18:17:26.712483+00:00"
+    },
+    {
+      "id": 80,
+      "titulo": "OFERTA Departamento en venta RESIDENCIAL RUBI ",
+      "ubicacion": "Residencial Rubi, León,Gto",
+      "precio": 1450000,
+      "precioTexto": "$1,450,000",
+      "tipo": "Departamento",
+      "habitaciones": 2,
+      "banos": 2,
+      "area": 92,
+      "areaTexto": "92 m²",
+      "imagen": "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/principal/1770142250160-3325hq.jpeg",
+      "descripcion": "Rubi\n\nDepartamento en VENTA \n2 Recámaras \n2.5 Baños \nSala\nComedor \nCocina",
+      "caracteristicas": [
+        "Tinaco",
+        "Sala de televisión"
+      ],
+      "status": "Disponible",
+      "categoria": "venta",
+      "fechaPublicacion": "2026-02-03T00:00:00+00:00",
+      "tourVirtual": null,
+      "galeria": [
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770142250978-qlnwpv.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770142251667-ahkb6u.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770142252808-xbk25q.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770142253705-gtcpah.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770142254334-pzwrbw.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770142255058-m0rhpp.jpeg"
+      ],
+      "createdAt": "2026-02-03T18:10:58.923015+00:00",
+      "updatedAt": "2026-02-03T18:10:58.923015+00:00"
+    },
+    {
+      "id": 79,
+      "titulo": "Casa en Venta ",
+      "ubicacion": "El Molino IV",
+      "precio": 7600000,
+      "precioTexto": "$7,600,000",
+      "tipo": "Casa",
+      "habitaciones": 3,
+      "banos": 4,
+      "area": 256,
+      "areaTexto": "256 m²",
+      "imagen": "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/principal/1770141648595-xtt0x.jpeg",
+      "descripcion": "PLANTA BAJA:\nCochera para 3 autos \nAcceso a doble altura \nRecibidor 1/2 baño \nSala \nComedor \nCocina con isla totalmente equipada. \nCuarto de lavado \nCuarto de servicio con baño completo. \nJardín  \n\nPLANTA ALTA:\nAmplio family room \nVertedero \n2 habitaciones secundarias con clóset y baño completo cada una. \nHabitación principal con vestidor, lavamanos para 2, regadera y wc.  \n\nTERCER NIVEL:\n1/2 baño \nBarra de servicio techada",
+      "caracteristicas": [
+        "Aljibe",
+        "Tinaco",
+        "Cuarto de servicio",
+        "Cuarto de lavado",
+        "Sala de televisión"
+      ],
+      "status": "Disponible",
+      "categoria": "venta",
+      "fechaPublicacion": "2026-02-22T00:00:00+00:00",
+      "tourVirtual": null,
+      "galeria": [
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770141649725-w1oxg.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770141650236-dqcwi.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770141650667-zv9x5s.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770141651469-secbvd.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770141652000-r35g72h.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770141652593-1nkxv5.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770141656079-0n78yb.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770141656695-c3nohg.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770141658118-t03b25.jpeg"
+      ],
+      "createdAt": "2026-02-03T18:01:04.245195+00:00",
+      "updatedAt": "2026-02-22T19:45:26.506128+00:00"
+    },
+    {
+      "id": 78,
+      "titulo": "Casa en PREVENTA REAL DEL BOSQUE ",
+      "ubicacion": "Real del bosque, León, Gto. ",
+      "precio": 3200000,
+      "precioTexto": "$3,200,000",
+      "tipo": "Casa",
+      "habitaciones": 3,
+      "banos": 2,
+      "area": 90,
+      "areaTexto": "90 m²",
+      "imagen": "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/principal/1770141378668-1fq23c.jpeg",
+      "descripcion": "3 recámaras \n2 baños completos \n1/2 baño \nSala \nComedor\nCocina \nJardín",
+      "caracteristicas": [
+        "Tinaco",
+        "Jardín privado",
+        "Cocina equipada"
+      ],
+      "status": "Disponible",
+      "categoria": "venta",
+      "fechaPublicacion": "2026-02-03T00:00:00+00:00",
+      "tourVirtual": null,
+      "galeria": [
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770141380437-c273gq.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770141381135-onmvw.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770141382122-xxmmub.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770141383256-n8vm6l.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770141384422-8m1k3m.jpeg"
+      ],
+      "createdAt": "2026-02-03T17:56:28.401893+00:00",
+      "updatedAt": "2026-02-03T17:56:28.401893+00:00"
+    },
+    {
+      "id": 77,
+      "titulo": "Casa en Renta ",
+      "ubicacion": "Portones del Campestre ",
+      "precio": 20500,
+      "precioTexto": "$20,500",
+      "tipo": "Casa",
+      "habitaciones": 4,
+      "banos": 4,
+      "area": 288,
+      "areaTexto": "288 m²",
+      "imagen": "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/principal/1770140641651-ce54zj.jpeg",
+      "descripcion": "(Incluye pago de mantenimiento)\nT. 288 m2\nC. 289 m2 \n—————————————————\n\nPLANTA BAJA \n\n- Habitación con closet y vista al jardín \n- ⁠Baño completo \n- Medio baño\n- ⁠Oficina\n- ⁠Terraza\n- ⁠Sala\n- ⁠Comedor\n- ⁠Cocina integral \n- ⁠Cuarto de lavado \n- ⁠Cuarto de servicio y baño completo \n\n—————————————————-\n\nPLANTA ALTA \n\n- Sala de TV Ó cuarto de estudio \n- Baño completo \n- Dos habitaciones con clóset\n- Closet de blancos\n- Vertedero\n- Habitación principal con clóset , baño completo y jacuzzi",
+      "caracteristicas": [
+        "Tinaco",
+        "Aljibe",
+        "Cuarto de servicio",
+        "Cuarto de lavado",
+        "Sala de televisión",
+        "Bodega",
+        "Jardín privado",
+        "Balcón",
+        "Jacuzzi"
+      ],
+      "status": "Disponible",
+      "categoria": "renta",
+      "fechaPublicacion": "2026-03-03T00:00:00+00:00",
+      "tourVirtual": null,
+      "galeria": [],
+      "createdAt": "2026-02-03T17:44:04.307513+00:00",
+      "updatedAt": "2026-03-03T22:26:46.105701+00:00"
+    },
+    {
+      "id": 76,
+      "titulo": "Casa en Venta ZANDA.",
+      "ubicacion": "León, Gto",
+      "precio": 5700000,
+      "precioTexto": "$5,700,000",
+      "tipo": "Casa",
+      "habitaciones": 2,
+      "banos": 2,
+      "area": 261,
+      "areaTexto": "261.1 m²",
+      "imagen": "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/principal/1770140178086-s1k8jr.jpeg",
+      "descripcion": "ZANDA : \n\n2 recámaras \n2 baños completos \n1/2 baño \nRecibidor \nSala \nComedor\nCocina \nTerraza \nJardín \nBodega muy grande\nCochera 4 autos",
+      "caracteristicas": [
+        "Aljibe",
+        "Cuarto de lavado"
+      ],
+      "status": "Disponible",
+      "categoria": "venta",
+      "fechaPublicacion": "2026-02-03T00:00:00+00:00",
+      "tourVirtual": null,
+      "galeria": [
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770140179785-uku9n.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770140180504-2mth39.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770140181539-kk58vi.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770140182224-30hiqc.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770140182816-9xnhxp.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770140183454-f7xtce.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770140184093-hyhcl.jpeg"
+      ],
+      "createdAt": "2026-02-03T17:36:28.904415+00:00",
+      "updatedAt": "2026-02-03T17:36:28.904415+00:00"
+    },
+    {
+      "id": 75,
+      "titulo": "Casa en Venta ",
+      "ubicacion": "Gran Jardín ",
+      "precio": 6500000,
+      "precioTexto": "$6,500,000",
+      "tipo": "Casa",
+      "habitaciones": 4,
+      "banos": 5,
+      "area": 288,
+      "areaTexto": "288 m²",
+      "imagen": "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/principal/1770138923297-xvffwe.jpeg",
+      "descripcion": "CASA EN VENTA \nGRAN JARDÍN\nZona baja \n\n288 m2 de Terreno \n400.50 m2 de Construccion \n\n4 habitaciones con baño completo\nGimnasio\nSala de TV\nBaños 5 1/2 con el de cuarto de servicio\nCocina Equipada \nSala \nComedor \nJardín \nTerraza \nCochera para 3 Autos \nJardín",
+      "caracteristicas": [
+        "Calentador solar",
+        "Aljibe",
+        "Cuarto de servicio",
+        "Sala de televisión",
+        "Cuarto de lavado",
+        "Bodega",
+        "Hidroneumático",
+        "Panel solar",
+        "Jardín privado",
+        "Mini split",
+        "Cocina equipada"
+      ],
+      "status": "Disponible",
+      "categoria": "venta",
+      "fechaPublicacion": "2026-02-23T00:00:00+00:00",
+      "tourVirtual": null,
+      "galeria": [
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770138924720-m5t92f.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770138925432-akex9e.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770138926048-82pe3.jpeg"
+      ],
+      "createdAt": "2026-02-03T17:15:29.263955+00:00",
+      "updatedAt": "2026-02-23T00:30:52.822289+00:00"
+    },
+    {
+      "id": 74,
+      "titulo": "Casa en VENTA ",
+      "ubicacion": "Cumbres de la Pradera, León Gto. ",
+      "precio": 2350000,
+      "precioTexto": "$2,350,000",
+      "tipo": "Casa",
+      "habitaciones": 3,
+      "banos": 2,
+      "area": 105,
+      "areaTexto": "105.4 m²",
+      "imagen": "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/principal/1770138037055-63moyu.jpeg",
+      "descripcion": "Clúster y/o Coto Privado\n\n3 Recámaras \n\n2 Baños completos \n\n Sala / Comedor \n\nCocina integral y alacena \n\nCochera 3 autos \n\nPatio de Servicio \n\nCalentador solar y Boiler \n\nTanque estacionario de gas \n\nPortones eléctricos con control remoto \n\n Caseta de de vigilancia 24 horas  y cámaras de vigilancia \n\nTorre de ingreso con cámara para verificación de rostro para acceso \n\n Malla electrificada en todo el circuito\n\nProtección en puertas y ventanas \n Palapa usos múltiples / juegos infantiles y áreas verdes . \n A 8 minutos de poliforum / instalaciones de la feria/ centro comercial Altacia.\nLibre de gravamen lista para escriturar \n\nExcelente  oportunidad de inversión plusvalía muy alta \n\nse muestra  previa cita .\n\n avalúo hecho por perito certificado \n\n✅💲2,350,000",
+      "caracteristicas": [
+        "Calentador solar",
+        "Tinaco",
+        "Celda eléctrica"
+      ],
+      "status": "Disponible",
+      "categoria": "venta",
+      "fechaPublicacion": "2026-02-03T00:00:00+00:00",
+      "tourVirtual": null,
+      "galeria": [
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770138038000-b70qrb.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770138039333-aerdwr.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770138039844-qwm4ql.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770138040358-rpr66.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770138040967-n5x3ya.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770138042207-zydtb.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770138042708-vtf4we.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770138043328-e9de7g.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770138044654-xsg4r4.jpeg",
+        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1770138045152-kd3ewl.jpeg"
+      ],
+      "createdAt": "2026-02-03T17:00:50.853503+00:00",
+      "updatedAt": "2026-02-03T17:00:50.853503+00:00"
+    },
+    {
       "id": 72,
       "titulo": "Residencia en La Valenciana Residencial",
       "ubicacion": "La Valenciana Residencial",
@@ -54,7 +732,7 @@
         "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1769733500521-e06mes.jpeg"
       ],
       "createdAt": "2026-01-30T00:38:31.920385+00:00",
-      "updatedAt": "2026-01-30T00:38:31.920385+00:00"
+      "updatedAt": "2026-02-07T00:54:01.844156+00:00"
     },
     {
       "id": 71,
@@ -112,7 +790,7 @@
         "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1769731479629-l2cx8o.jpeg"
       ],
       "createdAt": "2026-01-30T00:04:51.401503+00:00",
-      "updatedAt": "2026-01-30T00:04:51.401503+00:00"
+      "updatedAt": "2026-02-07T00:54:11.17431+00:00"
     },
     {
       "id": 70,
@@ -163,7 +841,7 @@
         "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1769731123786-y6cfr.jpeg"
       ],
       "createdAt": "2026-01-29T23:58:51.528001+00:00",
-      "updatedAt": "2026-01-29T23:58:51.528001+00:00"
+      "updatedAt": "2026-02-07T00:54:15.472527+00:00"
     },
     {
       "id": 69,
@@ -190,7 +868,7 @@
         "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1769233117674-covz97.jpeg"
       ],
       "createdAt": "2026-01-24T05:38:41.352367+00:00",
-      "updatedAt": "2026-01-24T05:38:41.352367+00:00"
+      "updatedAt": "2026-02-07T00:54:24.972336+00:00"
     },
     {
       "id": 68,
@@ -214,7 +892,7 @@
         "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1769232183275-kzx5i8.jpeg"
       ],
       "createdAt": "2026-01-24T05:23:05.020126+00:00",
-      "updatedAt": "2026-01-24T05:23:05.020126+00:00"
+      "updatedAt": "2026-02-07T00:54:30.749069+00:00"
     },
     {
       "id": 67,
@@ -251,7 +929,7 @@
         "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1769230526064-nx8e67.jpeg"
       ],
       "createdAt": "2026-01-24T04:55:30.980234+00:00",
-      "updatedAt": "2026-01-24T04:55:30.980234+00:00"
+      "updatedAt": "2026-02-07T00:54:36.804669+00:00"
     },
     {
       "id": 66,
@@ -282,7 +960,7 @@
         "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1769229555852-qordg.jpeg"
       ],
       "createdAt": "2026-01-24T04:39:20.452516+00:00",
-      "updatedAt": "2026-01-24T04:39:20.452516+00:00"
+      "updatedAt": "2026-02-07T00:54:41.443401+00:00"
     },
     {
       "id": 65,
@@ -314,7 +992,7 @@
         "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1769109858151-ve04nv.jpeg"
       ],
       "createdAt": "2026-01-22T19:24:26.903275+00:00",
-      "updatedAt": "2026-01-22T19:24:26.903275+00:00"
+      "updatedAt": "2026-02-07T00:54:45.808833+00:00"
     },
     {
       "id": 64,
@@ -353,7 +1031,7 @@
         "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1769103110285-grjjor.jpeg"
       ],
       "createdAt": "2026-01-22T17:31:58.040242+00:00",
-      "updatedAt": "2026-01-22T17:31:58.040242+00:00"
+      "updatedAt": "2026-02-07T00:54:50.117635+00:00"
     },
     {
       "id": 63,
@@ -392,56 +1070,7 @@
         "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1767028364945-2opmg9.jpeg"
       ],
       "createdAt": "2025-12-29T17:12:49.404538+00:00",
-      "updatedAt": "2025-12-29T17:12:49.404538+00:00"
-    },
-    {
-      "id": 62,
-      "titulo": "Departamento en renta ",
-      "ubicacion": "Torre Adamant",
-      "precio": 19000,
-      "precioTexto": "$19,000",
-      "tipo": "Departamento",
-      "habitaciones": 2,
-      "banos": 1,
-      "area": 75,
-      "areaTexto": "75 m²",
-      "imagen": "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/principal/1767028246363-9wu5q.jpeg",
-      "descripcion": "Se renta departamento en torre Adamant , cuenta con dos recamaras , baño completo en recamara principal y un medio baño para visitas,  amueblado o sin amueblar , cajón de estacionamiento.\n\nActividades recreativas: Alberca y gimnasio",
-      "caracteristicas": [
-        "Tinaco",
-        "Elevador",
-        "Sala de televisión",
-        "Penthouse",
-        "Cámara de vigilancia",
-        "Mini split"
-      ],
-      "status": "Disponible",
-      "categoria": "renta",
-      "fechaPublicacion": "2025-12-29T00:00:00+00:00",
-      "tourVirtual": null,
-      "galeria": [
-        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1767028247887-7q6uvp.jpeg",
-        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1767028248517-4jwjbs.jpeg",
-        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1767028249159-ttqnny.jpeg",
-        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1767028249797-kov3qp.jpeg",
-        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1767028250440-2da2ti.jpeg",
-        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1767028250988-73j5r9.jpeg",
-        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1767028251503-vxbq3.jpeg",
-        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1767028252084-21695k.jpeg",
-        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1767028252985-4aadxm.jpeg",
-        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1767028253558-78aux9.jpeg",
-        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1767028254262-606rc4.jpeg",
-        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1767028254910-6zhddd.jpeg",
-        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1767028255546-mjehov.jpeg",
-        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1767028256110-fiule.jpeg",
-        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1767028256637-04p3y.jpeg",
-        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1767028257403-krlvg4.jpeg",
-        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1767028258113-cpuilo.jpeg",
-        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1767028258593-dixzec.jpeg",
-        "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1767028259110-4ohk4l.jpeg"
-      ],
-      "createdAt": "2025-12-29T17:11:08.807016+00:00",
-      "updatedAt": "2025-12-29T17:11:08.807016+00:00"
+      "updatedAt": "2026-02-07T00:55:01.818436+00:00"
     },
     {
       "id": 61,
@@ -453,20 +1082,22 @@
       "habitaciones": 3,
       "banos": 2,
       "area": 131,
-      "areaTexto": "131.25 m²",
+      "areaTexto": "131 m²",
       "imagen": "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/principal/1766259145100-vye0j.jpeg",
-      "descripcion": "Casa en PREVENTA en el nuevo desarrollo de VILLA VALBUENA. Estará ubicado atrás de Hacienda Valbuena. Cuenta con 3 recámaras, cada una con su baño completo. Amplia cocina con despensa. Cochera trasera para 2 autos. Entrega 12 meses.\n\nActividades recreativas: Amplias áreas verdes, canchas de pádel, cancha de fútbol rápido, pet park y comercio.",
-      "caracteristicas": [],
+      "descripcion": "Casa en PREVENTA en el nuevo desarrollo de VILLA VALBUENA. Estará ubicado atrás de Hacienda Valbuena. Cuenta con 3 recámaras, cada una con su baño completo. Amplia cocina con despensa. Cochera trasera para 2 autos. Entrega 12 meses.\n\nActividades recreativas: Amplias áreas verdes, canchas de pádel, cancha de fútbol rápido, pet park y comercio.\n\nActividades recreativas: Amplias áreas verdes, canchas de pádel, cancha de fútbol rápido, pet park y comercio.\n\nActividades recreativas: Amplias áreas verdes, canchas de pádel, cancha de fútbol rápido, pet park y comercio.\n\nActividades recreativas: Amplias áreas verdes, canchas de pádel, cancha de fútbol rápido, pet park y comercio.\n\nActividades recreativas: Amplias áreas verdes, canchas de pádel, cancha de fútbol rápido, pet park y comercio.\n\nActividades recreativas: Amplias áreas verdes, canchas de pádel, cancha de fútbol rápido, pet park y comercio.",
+      "caracteristicas": [
+        "Cocina equipada"
+      ],
       "status": "Disponible",
       "categoria": "venta",
-      "fechaPublicacion": "2025-12-20T00:00:00+00:00",
+      "fechaPublicacion": "2026-02-20T00:00:00+00:00",
       "tourVirtual": null,
       "galeria": [
         "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1766259146514-utr4bd.jpeg",
         "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1766259147016-ialdvk.jpeg"
       ],
       "createdAt": "2025-12-20T19:32:29.502687+00:00",
-      "updatedAt": "2025-12-20T19:32:29.502687+00:00"
+      "updatedAt": "2026-02-20T21:49:59.420355+00:00"
     },
     {
       "id": 60,
@@ -491,7 +1122,7 @@
         "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1766257835983-4mx83p.jpeg"
       ],
       "createdAt": "2025-12-20T19:10:38.927616+00:00",
-      "updatedAt": "2025-12-20T19:10:38.927616+00:00"
+      "updatedAt": "2026-02-07T00:55:52.80563+00:00"
     },
     {
       "id": 59,
@@ -516,7 +1147,7 @@
         "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1766256733897-t739jq.jpeg"
       ],
       "createdAt": "2025-12-20T18:52:16.61123+00:00",
-      "updatedAt": "2025-12-20T18:52:16.61123+00:00"
+      "updatedAt": "2026-02-07T00:55:59.605461+00:00"
     },
     {
       "id": 58,
@@ -541,7 +1172,7 @@
         "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1765946763662-6a8gna.png"
       ],
       "createdAt": "2025-12-17T04:43:12.050996+00:00",
-      "updatedAt": "2025-12-20T17:39:35.787765+00:00"
+      "updatedAt": "2026-02-07T00:56:01.705632+00:00"
     },
     {
       "id": 57,
@@ -574,7 +1205,7 @@
         "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1765849874750-1qjmfq.jpeg"
       ],
       "createdAt": "2025-12-16T01:51:18.490228+00:00",
-      "updatedAt": "2025-12-16T20:22:13.102488+00:00"
+      "updatedAt": "2026-02-07T00:56:21.554135+00:00"
     },
     {
       "id": 56,
@@ -605,7 +1236,7 @@
         "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1765824491465-hvg0m5o.jpeg"
       ],
       "createdAt": "2025-12-15T18:48:16.09891+00:00",
-      "updatedAt": "2025-12-20T19:22:52.333625+00:00"
+      "updatedAt": "2026-02-07T00:56:18.393526+00:00"
     },
     {
       "id": 55,
@@ -636,7 +1267,7 @@
         "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1765598235971-5hda2e.jpeg"
       ],
       "createdAt": "2025-12-13T03:57:19.305581+00:00",
-      "updatedAt": "2025-12-20T19:19:01.037779+00:00"
+      "updatedAt": "2026-02-07T00:56:29.195592+00:00"
     },
     {
       "id": 54,
@@ -679,11 +1310,11 @@
         "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1765421256716-kinzoe.jpeg"
       ],
       "createdAt": "2025-12-11T02:47:41.433472+00:00",
-      "updatedAt": "2025-12-18T04:34:27.991299+00:00"
+      "updatedAt": "2026-02-07T00:57:16.28782+00:00"
     },
     {
       "id": 53,
-      "titulo": "Con Alberca",
+      "titulo": "Casa en VENTA con alberca",
       "ubicacion": "La Campiña",
       "precio": 12500000,
       "precioTexto": "$12,500,000",
@@ -693,7 +1324,7 @@
       "area": 300,
       "areaTexto": "300 m²",
       "imagen": "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/principal/1765420927673-b4bfnx.jpeg",
-      "descripcion": ".- Tiene 3 niveles\nPB, cochera con portón eléctrico para 2 vehículos, cuarto de servicio con baño completo y cuarto de lavado.\n\n.- Primer nivel: \nSala - Comedor\nCocina equipada\nHabitación principal tiene baño completo, jacuzzi y terraza.\n\n.- Segundo nivel \n4 habitaciones y cada una con baño completo.",
+      "descripcion": ".- Tiene 3 niveles\nPB, cochera con portón eléctrico para 2 vehículos, cuarto de servicio con baño completo y cuarto de lavado.\n\n.- Primer nivel: \nSala - Comedor\nCocina equipada\nHabitación principal tiene baño completo, jacuzzi y terraza.\n\n.- Segundo nivel \n4 habitaciones y cada una con baño completo.\n\nActividades recreativas: Talleres\n\nActividades recreativas: Talleres",
       "caracteristicas": [
         "Recamara Principal con Jacuzzi",
         "3 pisos",
@@ -701,7 +1332,7 @@
       ],
       "status": "Disponible",
       "categoria": "venta",
-      "fechaPublicacion": "2025-12-23T00:00:00+00:00",
+      "fechaPublicacion": "2026-02-22T00:00:00+00:00",
       "tourVirtual": null,
       "galeria": [
         "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1765420928475-zo3hx.jpeg",
@@ -729,7 +1360,7 @@
         "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1765420936865-rp2wjka.jpeg"
       ],
       "createdAt": "2025-12-11T02:42:23.68457+00:00",
-      "updatedAt": "2025-12-23T04:10:04.76681+00:00"
+      "updatedAt": "2026-02-22T22:45:48.083659+00:00"
     },
     {
       "id": 52,
@@ -769,7 +1400,7 @@
         "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1765420463237-e358oo.jpeg"
       ],
       "createdAt": "2025-12-11T02:34:29.405194+00:00",
-      "updatedAt": "2025-12-16T20:22:25.330404+00:00"
+      "updatedAt": "2026-02-07T00:57:39.322977+00:00"
     },
     {
       "id": 51,
@@ -826,7 +1457,7 @@
         "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/1765419996967-wz42c.jpeg"
       ],
       "createdAt": "2025-12-11T02:26:45.887601+00:00",
-      "updatedAt": "2025-12-16T20:22:28.77901+00:00"
+      "updatedAt": "2026-02-07T00:58:04.348488+00:00"
     },
     {
       "id": 50,
@@ -863,7 +1494,7 @@
         "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/50-1765404604223-c45p4.jpeg"
       ],
       "createdAt": "2025-12-10T21:15:46.13023+00:00",
-      "updatedAt": "2025-12-23T04:07:49.103593+00:00"
+      "updatedAt": "2026-02-07T00:58:10.216683+00:00"
     },
     {
       "id": 49,
@@ -891,7 +1522,7 @@
         "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/49-1765404595225-ukaqlj.jpeg"
       ],
       "createdAt": "2025-12-10T21:10:25.231706+00:00",
-      "updatedAt": "2025-12-23T04:07:01.11951+00:00"
+      "updatedAt": "2026-02-07T00:58:13.432942+00:00"
     },
     {
       "id": 48,
@@ -919,7 +1550,7 @@
         "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/48-1765404591871-x6uy2a.jpeg"
       ],
       "createdAt": "2025-12-10T21:05:42.535487+00:00",
-      "updatedAt": "2025-12-23T04:09:41.279036+00:00"
+      "updatedAt": "2026-02-07T00:58:16.311817+00:00"
     },
     {
       "id": 47,
@@ -947,7 +1578,7 @@
         "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/47-1765404587936-87f53k.jpeg"
       ],
       "createdAt": "2025-12-10T21:02:32.469757+00:00",
-      "updatedAt": "2025-12-23T04:09:24.539644+00:00"
+      "updatedAt": "2026-02-07T00:58:19.44902+00:00"
     },
     {
       "id": 46,
@@ -992,14 +1623,14 @@
         "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/46-1765404585173-l5dzf4.jpeg"
       ],
       "createdAt": "2025-12-10T20:56:16.436585+00:00",
-      "updatedAt": "2025-12-23T04:08:19.672606+00:00"
+      "updatedAt": "2026-02-07T00:58:22.127505+00:00"
     },
     {
       "id": 44,
-      "titulo": "VENTA",
+      "titulo": "OFERTA VENTA",
       "ubicacion": "Residencial el Molino Club & Golf ",
-      "precio": 10500000,
-      "precioTexto": "$10,500,000",
+      "precio": 9000000,
+      "precioTexto": "$9,000,000",
       "tipo": "Casa",
       "habitaciones": 4,
       "banos": 4,
@@ -1010,7 +1641,7 @@
       "caracteristicas": [],
       "status": "Disponible",
       "categoria": "venta",
-      "fechaPublicacion": "2025-12-13T00:00:00+00:00",
+      "fechaPublicacion": "2026-02-15T00:00:00+00:00",
       "tourVirtual": null,
       "galeria": [
         "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/44-1765404568707-0v40s.jpeg",
@@ -1029,14 +1660,14 @@
         "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/44-1765404574217-twc7z5.jpeg"
       ],
       "createdAt": "2025-12-10T20:44:54.886046+00:00",
-      "updatedAt": "2025-12-16T20:22:46.990462+00:00"
+      "updatedAt": "2026-02-15T12:58:42.506846+00:00"
     },
     {
       "id": 43,
       "titulo": "EDIFICIO EN VENTA ",
       "ubicacion": "Colonia CENTRO",
-      "precio": 6000000,
-      "precioTexto": "$6,000,000",
+      "precio": 5200000,
+      "precioTexto": "$5,200,000",
       "tipo": "Edificio",
       "habitaciones": 0,
       "banos": 0,
@@ -1047,7 +1678,7 @@
       "caracteristicas": [],
       "status": "Disponible",
       "categoria": "venta",
-      "fechaPublicacion": "2025-12-23T00:00:00+00:00",
+      "fechaPublicacion": "2026-02-22T00:00:00+00:00",
       "tourVirtual": null,
       "galeria": [
         "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/43-1765404561522-tq14s9.jpeg",
@@ -1068,7 +1699,7 @@
         "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/43-1765404567153-10y5at.jpeg"
       ],
       "createdAt": "2025-12-10T20:41:42.072144+00:00",
-      "updatedAt": "2025-12-23T04:08:52.59095+00:00"
+      "updatedAt": "2026-02-22T20:40:27.443841+00:00"
     },
     {
       "id": 42,
@@ -1120,21 +1751,21 @@
         "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/42-1765404559238-vmu4i8.jpeg"
       ],
       "createdAt": "2025-12-10T20:36:25.45763+00:00",
-      "updatedAt": "2025-12-16T20:22:59.294643+00:00"
+      "updatedAt": "2026-02-07T00:59:07.747144+00:00"
     },
     {
       "id": 23,
       "titulo": "VENTA. Modelo Milán",
       "ubicacion": "León, Gto. Zona Norte",
-      "precio": 3738000,
-      "precioTexto": "$3,738,000",
+      "precio": 3858000,
+      "precioTexto": "$3,858,000",
       "tipo": "Departamento",
       "habitaciones": 1,
       "banos": 2,
       "area": 94,
       "areaTexto": "94 m²",
       "imagen": "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/principal/23-1765404542461-nr2zbv.jpeg",
-      "descripcion": "Amplio departamento de 94 mt2. Con 1 ó 2 recámaras  Linda vista, ya sea a amenidades o a las montañas. Derecho a 2 cajones de estacionamiento. A 2 minutos de Walmart La Antorcha.",
+      "descripcion": "Amplio departamento de 94 mt2. Con 1 ó 2 recámaras  Derecho a 2 cajones de estacionamiento. A 2 minutos de Walmart La Antorcha.",
       "caracteristicas": [
         "Canchas de Padel",
         "Golfito",
@@ -1146,7 +1777,7 @@
       ],
       "status": "Disponible",
       "categoria": "venta",
-      "fechaPublicacion": "2025-12-13T00:00:00+00:00",
+      "fechaPublicacion": "2026-02-20T00:00:00+00:00",
       "tourVirtual": null,
       "galeria": [
         "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/23-1765404542776-rh7d6a.jpeg",
@@ -1159,21 +1790,21 @@
         "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/23-1765404546056-m0tc1.jpeg"
       ],
       "createdAt": "2025-12-03T04:09:37.611582+00:00",
-      "updatedAt": "2025-12-16T20:23:03.659242+00:00"
+      "updatedAt": "2026-02-20T22:04:52.030887+00:00"
     },
     {
       "id": 22,
       "titulo": "VENTA. Modelo Londres",
       "ubicacion": "León, Gto. Zona Norte",
-      "precio": 4268000,
-      "precioTexto": "$4,268,000",
+      "precio": 4654300,
+      "precioTexto": "$4,654,300",
       "tipo": "Departamento",
       "habitaciones": 2,
       "banos": 2,
-      "area": 110,
-      "areaTexto": "110 m²",
+      "area": 147,
+      "areaTexto": "146.63 m²",
       "imagen": "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/principal/22-1765404537149-zv05yj.jpeg",
-      "descripcion": "Departamento de lujo, con 110 mt2. Excelente ubicación en el piso 13, si lo que buscas es una hermosa vista del atardecer.",
+      "descripcion": "Departamento de lujo, con 110 mt2. Más  36.63 mt2 de excedente.",
       "caracteristicas": [
         "Canchas de Padel",
         "Golfito",
@@ -1181,11 +1812,12 @@
         "Pet Park",
         "2 cajones de estacionamiento",
         "Vista panóramica",
-        "Elevador"
+        "Elevador",
+        "Cocina equipada"
       ],
       "status": "Disponible",
       "categoria": "venta",
-      "fechaPublicacion": "2025-12-13T00:00:00+00:00",
+      "fechaPublicacion": "2026-02-20T00:00:00+00:00",
       "tourVirtual": null,
       "galeria": [
         "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/22-1765404537484-7f9x0f.jpeg",
@@ -1198,14 +1830,14 @@
         "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/22-1765404540936-u9mszc.jpeg"
       ],
       "createdAt": "2025-12-02T16:41:02.863313+00:00",
-      "updatedAt": "2025-12-16T20:23:05.768518+00:00"
+      "updatedAt": "2026-02-20T22:01:57.164808+00:00"
     },
     {
       "id": 21,
       "titulo": "VENTA. Modelo Montecarlo",
       "ubicacion": "León, Gto, Zona Norte",
-      "precio": 5158000,
-      "precioTexto": "$5,158,000",
+      "precio": 5268000,
+      "precioTexto": "$5,268,000",
       "tipo": "Departamento",
       "habitaciones": 3,
       "banos": 3,
@@ -1221,7 +1853,7 @@
       ],
       "status": "Disponible",
       "categoria": "venta",
-      "fechaPublicacion": "2025-12-13T00:00:00+00:00",
+      "fechaPublicacion": "2026-02-20T00:00:00+00:00",
       "tourVirtual": null,
       "galeria": [
         "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/21-1765404532539-o857x.jpeg",
@@ -1234,9 +1866,9 @@
         "https://jwevnxyvrktqmzlgfzqj.supabase.co/storage/v1/object/public/propiedades/galeria/21-1765404535614-ziwf8.jpeg"
       ],
       "createdAt": "2025-12-02T15:34:51.390852+00:00",
-      "updatedAt": "2025-12-16T20:23:08.129401+00:00"
+      "updatedAt": "2026-02-20T21:53:11.843684+00:00"
     }
   ],
-  "lastUpdated": "2026-02-03T02:08:14.112Z",
-  "count": 33
+  "lastUpdated": "2026-03-04T16:09:49.690Z",
+  "count": 52
 }

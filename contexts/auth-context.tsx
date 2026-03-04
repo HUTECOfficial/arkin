@@ -201,7 +201,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             plan: (mockUser as any).plan || undefined,
           }
           setUser(userData)
-          localStorage.setItem(MOCK_USER_STORAGE_KEY, JSON.stringify(userData))
+          try {
+            localStorage.setItem(MOCK_USER_STORAGE_KEY, JSON.stringify(userData))
+          } catch (e) {
+            // Si localStorage está lleno, limpiar y reintentar
+            console.warn('localStorage lleno, limpiando...')
+            localStorage.clear()
+            try {
+              localStorage.setItem(MOCK_USER_STORAGE_KEY, JSON.stringify(userData))
+            } catch (e2) {
+              console.error('No se pudo guardar usuario en localStorage:', e2)
+            }
+          }
           return userData
         } else {
           // Si es usuario mock pero contraseña incorrecta, NO intentar con Supabase
