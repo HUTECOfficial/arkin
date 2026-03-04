@@ -52,30 +52,61 @@ export default function BrokersPage() {
   return (
     <div className="min-h-screen bg-arkin-secondary">
       {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-to-r from-arkin-dark to-gray-900 text-white overflow-hidden">
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40"
-          style={{ backgroundImage: "url('https://mnrfsdrjadretxesjxhu.supabase.co/storage/v1/object/sign/arkin/hf_20260219_015208_b75495b2-1016-45df-a1f8-d1160006831b.jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV82ZTg2NjJkMS1lZjIzLTRkZjUtYjAwYy04NjVkOTcwYzljZWMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhcmtpbi9oZl8yMDI2MDIxOV8wMTUyMDhfYjc1NDk1YjItMTAxNi00NWRmLWExZjgtZDExNjAwMDY4MzFiLmpwZWciLCJpYXQiOjE3NzE0NjYyNTQsImV4cCI6MTgwMzAwMjI1NH0.0ew5z0WbvUkHQAwo8zOlhQFyLokmh2PKTqjqBtpxcuc')" }}
-        />
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-3xl mx-auto text-center">
-            <Badge className="bg-arkin-gold/20 text-arkin-gold border-arkin-gold/30 mb-6">
-              Red de Profesionales
-            </Badge>
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Brokers y Notarías
-            </h1>
-            <p className="text-xl text-gray-300 mb-8">
-              Contamos con una red consolidada de brokers y notarías de confianza 
-              que garantizan el mejor servicio en cada operación.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" variant="outline" className="border-arkin-accent text-arkin-accent hover:bg-arkin-accent/10">
-                <Scale className="mr-2 h-5 w-5" />
-                Directorio de Notarías
-              </Button>
+      <section className="relative min-h-[480px] flex items-stretch overflow-hidden">
+        {/* Panel izquierdo: contenido de texto */}
+        <div className="relative z-10 flex flex-col justify-center w-full lg:w-1/2 bg-arkin-dark px-10 py-16 lg:px-16">
+          {/* Acento decorativo gold */}
+          <div className="absolute top-0 left-0 w-1 h-full bg-arkin-gold" />
+          <div className="absolute -top-10 -left-10 w-48 h-48 rounded-full bg-arkin-gold/5 blur-3xl pointer-events-none" />
+
+          <Badge className="self-start bg-arkin-gold/15 text-arkin-gold border-arkin-gold/40 mb-5 text-xs tracking-widest uppercase">
+            Red de Profesionales
+          </Badge>
+
+          <h1 className="text-4xl md:text-5xl font-bold text-white leading-tight mb-4">
+            Brokers<br />
+            <span className="text-arkin-gold">&amp; Notarías</span>
+          </h1>
+
+          <p className="text-gray-300 text-base max-w-md mb-8 leading-relaxed">
+            Red consolidada de brokers y notarías de confianza que garantizan 
+            seguridad jurídica en cada operación inmobiliaria.
+          </p>
+
+          {/* Stats rápidos */}
+          <div className="flex gap-8 mb-8">
+            <div>
+              <p className="text-2xl font-bold text-arkin-gold">5+</p>
+              <p className="text-xs text-gray-400 uppercase tracking-wide">Notarías</p>
+            </div>
+            <div className="w-px bg-arkin-gold/20" />
+            <div>
+              <p className="text-2xl font-bold text-arkin-gold">100%</p>
+              <p className="text-xs text-gray-400 uppercase tracking-wide">Confiables</p>
+            </div>
+            <div className="w-px bg-arkin-gold/20" />
+            <div>
+              <p className="text-2xl font-bold text-arkin-gold">León</p>
+              <p className="text-xs text-gray-400 uppercase tracking-wide">Guanajuato</p>
             </div>
           </div>
+
+          <Button size="lg" className="self-start bg-arkin-gold hover:bg-arkin-gold/90 text-black font-bold">
+            <Scale className="mr-2 h-5 w-5" />
+            Directorio de Notarías
+          </Button>
+        </div>
+
+        {/* Panel derecho: imagen */}
+        <div className="hidden lg:block lg:w-1/2 relative">
+          <div
+            className="absolute inset-0 bg-cover bg-center"
+            style={{ backgroundImage: "url('https://mnrfsdrjadretxesjxhu.supabase.co/storage/v1/object/sign/arkin/hf_20260219_015208_b75495b2-1016-45df-a1f8-d1160006831b.jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV82ZTg2NjJkMS1lZjIzLTRkZjUtYjAwYy04NjVkOTcwYzljZWMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhcmtpbi9oZl8yMDI2MDIxOV8wMTUyMDhfYjc1NDk1YjItMTAxNi00NWRmLWExZjgtZDExNjAwMDY4MzFiLmpwZWciLCJpYXQiOjE3NzE0NjYyNTQsImV4cCI6MTgwMzAwMjI1NH0.0ew5z0WbvUkHQAwo8zOlhQFyLokmh2PKTqjqBtpxcuc')" }}
+          />
+          {/* Degradado de transición izq→der */}
+          <div className="absolute inset-0 bg-gradient-to-r from-arkin-dark via-arkin-dark/30 to-transparent" />
+          {/* Overlay gold sutil */}
+          <div className="absolute inset-0 bg-arkin-gold/5" />
         </div>
       </section>
 
