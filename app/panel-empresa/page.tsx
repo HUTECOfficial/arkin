@@ -73,7 +73,7 @@ export default function PanelEmpresaPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="bg-arkin-dark text-white shadow-lg sticky top-0 z-40 pt-16 sm:pt-0">
+      <header className="bg-arkin-dark text-white shadow-lg">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-arkin-gold flex items-center justify-center flex-shrink-0">
@@ -104,13 +104,17 @@ export default function PanelEmpresaPage() {
 
         {tab==='overview'&&<>
           <div><h2 className="text-2xl font-bold text-gray-900">Resumen del Equipo</h2><p className="text-gray-500 text-sm mt-1">Vista consolidada de todos tus asesores y operaciones</p></div>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
             {([{l:'Asesores Activos',v:ASESORES.length,I:Users,c:'text-blue-600',b:'bg-blue-50'},{l:'Propiedades Activas',v:tP,I:Building2,c:'text-green-600',b:'bg-green-50'},{l:'Leads Totales',v:tL,I:Target,c:'text-yellow-600',b:'bg-yellow-50'},{l:'Ventas del Mes',v:tVt,I:TrendingUp,c:'text-purple-600',b:'bg-purple-50'}] as any[]).map(({l,v,I,c,b})=>(
               <Card key={l} className="border-0 shadow-sm"><CardContent className="p-5 flex items-center gap-4">
                 <div className={`w-12 h-12 rounded-xl ${b} flex items-center justify-center flex-shrink-0`}><I className={`h-6 w-6 ${c}`}/></div>
                 <div><p className="text-2xl font-bold text-gray-900">{v}</p><p className="text-xs text-gray-500">{l}</p></div>
               </CardContent></Card>
             ))}
+            <Card className="border-0 shadow-sm col-span-2 lg:col-span-1"><CardContent className="p-5 flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-arkin-gold/15 flex items-center justify-center flex-shrink-0"><DollarSign className="h-6 w-6 text-arkin-primary"/></div>
+              <div><p className="text-lg font-bold text-green-700">${(ASESORES.reduce((s,a)=>s+parseInt(a.cartera.replace(/[$,]/g,'')),0)/1000000).toFixed(1)}M</p><p className="text-xs text-gray-500">Valor Total Cartera</p></div>
+            </CardContent></Card>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Card className="border-0 shadow-sm">
@@ -177,9 +181,19 @@ export default function PanelEmpresaPage() {
                       <div key={l} className="text-center p-2 rounded-lg bg-gray-50"><p className="text-lg font-bold text-gray-900">{v}</p><p className="text-xs text-gray-500">{l}</p></div>
                     ))}
                   </div>
+                  {/* Barra progreso ventas */}
+                  <div className="mb-3">
+                    <div className="flex justify-between text-xs text-gray-500 mb-1">
+                      <span>Progreso de ventas</span>
+                      <span className="font-semibold text-gray-700">{a.propVendidas} vendidas / {a.propActivas + a.propVendidas} total</span>
+                    </div>
+                    <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                      <div className="h-2 bg-arkin-gold rounded-full transition-all" style={{width:`${Math.round(a.propVendidas/(a.propActivas+a.propVendidas)*100)}%`}}/>
+                    </div>
+                  </div>
                   <div className="flex items-center justify-between text-xs text-gray-500 border-t pt-3">
                     <span className="flex items-center gap-1"><Clock className="h-3 w-3"/>{a.ultimaAct}</span>
-                    <span className="text-arkin-primary font-semibold">{a.propActivas} propiedades</span>
+                    <span className="text-arkin-primary font-semibold">{a.propActivas} activas</span>
                   </div>
                 </CardContent>
               </Card>
