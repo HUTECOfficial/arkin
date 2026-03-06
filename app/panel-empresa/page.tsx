@@ -72,7 +72,7 @@ export default function PanelEmpresaPage() {
   const go = (t:Tab) => { setTab(t); setSelected(null) }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-arkin-dark">
       <header className="bg-arkin-dark text-white shadow-lg">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -100,6 +100,7 @@ export default function PanelEmpresaPage() {
         </div>
       </header>
 
+      <div className="bg-gray-50">
       <main className="max-w-7xl mx-auto px-4 py-8 space-y-8">
 
         {tab==='overview'&&<>
@@ -381,6 +382,7 @@ export default function PanelEmpresaPage() {
         </>}
 
       </main>
+      </div>
     </div>
   )
 }
