@@ -25,3 +25,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# 3D model files (served from Supabase Storage)
+*.obj
+*.mtl

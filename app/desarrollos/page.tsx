@@ -128,6 +128,98 @@ export default function DesarrollosPage() {
         </div>
       </section>
 
+      {/* Unidades Section */}
+      <section id="unidades-section" className="py-16 bg-slate-900">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-10">
+            <Badge className="bg-arkin-gold/20 text-arkin-gold border-arkin-gold/30 mb-4">
+              <Building2 className="h-3 w-3 mr-1" />
+              Torre Arkin Campestre
+            </Badge>
+            <h2 className="text-3xl font-bold text-white mb-3">Disponibilidad de Unidades</h2>
+            <p className="text-slate-400 max-w-xl mx-auto">
+              Selecciona el piso y departamento de tu interés. Precios desde $4,200,000 MXN.
+            </p>
+          </div>
+
+          {/* Legend */}
+          <div className="flex justify-center gap-6 mb-8">
+            {[
+              { color: 'bg-[#e8ff50]', label: 'Disponible' },
+              { color: 'bg-orange-500', label: 'Reservado' },
+              { color: 'bg-slate-700', label: 'Vendido' },
+            ].map(({ color, label }) => (
+              <span key={label} className="flex items-center gap-2 text-sm text-slate-300">
+                <span className={`w-4 h-4 rounded-sm ${color} inline-block`} />
+                {label}
+              </span>
+            ))}
+          </div>
+
+          {/* Floor grid — top floor first */}
+          <div className="max-w-2xl mx-auto space-y-2">
+            {[
+              { piso: 18, depas: ['disponible','disponible','disponible'] },
+              { piso: 17, depas: ['disponible','disponible','disponible'] },
+              { piso: 16, depas: ['disponible','disponible','disponible'] },
+              { piso: 15, depas: ['disponible','disponible','disponible'] },
+              { piso: 14, depas: ['disponible','disponible','disponible'] },
+              { piso: 13, depas: ['reservado','disponible','disponible'] },
+              { piso: 12, depas: ['vendido','disponible','disponible'] },
+              { piso: 11, depas: ['vendido','vendido','disponible'] },
+              { piso: 10, depas: ['vendido','reservado','disponible'] },
+              { piso:  9, depas: ['vendido','vendido','disponible'] },
+              { piso:  8, depas: ['vendido','vendido','reservado'] },
+              { piso:  7, depas: ['vendido','vendido','vendido'] },
+              { piso:  6, depas: ['vendido','vendido','vendido'] },
+              { piso:  5, depas: ['vendido','vendido','vendido'] },
+              { piso:  4, depas: ['vendido','vendido','vendido'] },
+              { piso:  3, depas: ['vendido','vendido','vendido'] },
+              { piso:  2, depas: ['vendido','vendido','vendido'] },
+              { piso:  1, depas: ['vendido','vendido','vendido'] },
+            ].map(({ piso, depas }) => (
+              <div key={piso} className="flex items-center gap-3">
+                <span className="text-xs text-slate-500 w-16 text-right shrink-0">Piso {piso}</span>
+                <div className="flex gap-2 flex-1">
+                  {depas.map((status, di) => {
+                    const isDisp = status === 'disponible'
+                    const isRes  = status === 'reservado'
+                    return (
+                      <button
+                        key={di}
+                        disabled={!isDisp}
+                        className="flex-1 py-2.5 rounded-lg text-xs font-semibold transition-all border"
+                        style={{
+                          backgroundColor: isDisp ? '#e8ff5015' : isRes ? '#f9731615' : '#1e293b',
+                          borderColor:     isDisp ? '#e8ff5060' : isRes ? '#f9731650' : '#334155',
+                          color:           isDisp ? '#e8ff50'   : isRes ? '#f97316'   : '#475569',
+                          cursor:          isDisp ? 'pointer'   : 'default',
+                        }}
+                      >
+                        {isDisp ? `Depa ${di + 1}` : isRes ? 'Reservado' : 'Vendido'}
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center mt-10">
+            <p className="text-slate-400 text-sm mb-4">¿Te interesa alguna unidad? Contáctanos para apartar tu departamento.</p>
+            <a
+              href="https://wa.me/524774756951"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 bg-arkin-gold hover:bg-arkin-gold/90 text-black font-semibold px-6 py-3 rounded-lg transition-all"
+            >
+              <Phone className="h-4 w-4" />
+              Apartar por WhatsApp
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* Tabs de Desarrollos */}
       <section className="py-16">
         <div className="container mx-auto px-4">
