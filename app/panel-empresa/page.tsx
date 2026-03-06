@@ -72,15 +72,15 @@ export default function PanelEmpresaPage() {
   const go = (t:Tab) => { setTab(t); setSelected(null) }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-arkin-primary text-white shadow-lg sticky top-0 z-40">
+    <div className="min-h-screen bg-gray-50 pt-safe">
+      <header className="bg-arkin-dark text-white shadow-lg sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-arkin-gold flex items-center justify-center flex-shrink-0">
               <Briefcase className="h-5 w-5 text-black"/>
             </div>
             <div>
-              <p className="font-bold text-sm">{user.nombre}</p>
+              <p className="font-bold text-sm text-white">{user.nombre}</p>
               <p className="text-xs text-arkin-gold">Panel Empresa · Team Elite</p>
             </div>
           </div>
@@ -91,9 +91,9 @@ export default function PanelEmpresaPage() {
             </Button>
           </div>
         </div>
-        <div className="max-w-7xl mx-auto px-4 flex overflow-x-auto">
+        <div className="max-w-7xl mx-auto px-4 flex overflow-x-auto border-t border-white/10">
           {([['overview','Resumen',BarChart3],['asesores','Asesores',Users],['propiedades','Propiedades',Building2],['leads','Leads',Target],['actividad','Actividad',Activity]] as [Tab,string,any][]).map(([k,l,I])=>(
-            <button key={k} onClick={()=>go(k)} className={`flex items-center gap-1.5 px-4 py-3 text-xs font-medium border-b-2 transition-colors whitespace-nowrap ${tab===k?'border-black text-black font-bold':'border-transparent text-black/60 hover:text-black'}`}>
+            <button key={k} onClick={()=>go(k)} className={`flex items-center gap-1.5 px-4 py-3 text-xs font-medium border-b-2 transition-colors whitespace-nowrap ${tab===k?'border-arkin-gold text-white font-bold':'border-transparent text-white/60 hover:text-white'}`}>
               <I className="h-3.5 w-3.5"/>{l}
             </button>
           ))}
