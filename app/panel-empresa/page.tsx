@@ -72,8 +72,8 @@ export default function PanelEmpresaPage() {
   const go = (t:Tab) => { setTab(t); setSelected(null) }
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-safe">
-      <header className="bg-arkin-dark text-white shadow-lg sticky top-0 z-40">
+    <div className="min-h-screen bg-gray-50">
+      <header className="bg-arkin-dark text-white shadow-lg sticky top-0 z-40 pt-16 sm:pt-0">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-arkin-gold flex items-center justify-center flex-shrink-0">
