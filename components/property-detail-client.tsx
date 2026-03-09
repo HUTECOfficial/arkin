@@ -205,15 +205,15 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
                   <TabsContent value="caracteristicas" className="mt-4 space-y-4">
                     <div>
                       <h3 className="font-semibold text-lg mb-3 text-arkin-accent">Amenidades y Características</h3>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-2">
                         {propertyData.caracteristicas?.map((car, i) => {
                           const Icon = amenityIcons[car] || Shield
                           return (
-                            <div key={i} className="flex items-center gap-3 p-3 rounded-lg bg-gray-50 border border-gray-200 hover:border-arkin-gold/50 transition-colors">
-                              <div className="w-10 h-10 rounded-full bg-arkin-gold/10 flex items-center justify-center flex-shrink-0">
-                                <Icon className="h-5 w-5 text-arkin-gold" />
+                            <div key={i} className="flex items-center gap-2 p-2.5 rounded-lg bg-gray-50 border border-gray-200 hover:border-arkin-gold/50 transition-colors">
+                              <div className="w-8 h-8 rounded-full bg-arkin-gold/10 flex items-center justify-center flex-shrink-0">
+                                <Icon className="h-4 w-4 text-arkin-gold" />
                               </div>
-                              <span className="text-sm font-medium text-gray-700">{car}</span>
+                              <span className="text-xs font-medium text-gray-700 leading-tight">{car}</span>
                             </div>
                           )
                         })}
@@ -221,31 +221,31 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
                     </div>
 
                     {/* Información adicional de espacios */}
-                    <div className="pt-4 border-t space-y-3">
-                      <h4 className="font-semibold text-gray-700">Espacios</h4>
-                      <div className="grid grid-cols-2 gap-4">
+                    <div className="pt-4 border-t">
+                      <h4 className="font-semibold text-gray-700 mb-3">Espacios Adicionales</h4>
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                         {propertyData.cochera && (
-                          <div className="flex items-center gap-2 text-sm">
-                            <Car className="h-4 w-4 text-gray-500" />
-                            <span className="text-gray-600">{propertyData.cochera} Cochera{propertyData.cochera > 1 ? 's' : ''}</span>
+                          <div className="flex items-center gap-2 p-2.5 rounded-lg bg-blue-50 border border-blue-200">
+                            <Car className="h-4 w-4 text-blue-600 flex-shrink-0" />
+                            <span className="text-xs font-medium text-blue-700">{propertyData.cochera} Cochera{propertyData.cochera > 1 ? 's' : ''}</span>
                           </div>
                         )}
                         {propertyData.mediosBanos && (
-                          <div className="flex items-center gap-2 text-sm">
-                            <Bath className="h-4 w-4 text-gray-500" />
-                            <span className="text-gray-600">{propertyData.mediosBanos} Medio{propertyData.mediosBanos > 1 ? 's' : ''} Baño{propertyData.mediosBanos > 1 ? 's' : ''}</span>
+                          <div className="flex items-center gap-2 p-2.5 rounded-lg bg-purple-50 border border-purple-200">
+                            <Bath className="h-4 w-4 text-purple-600 flex-shrink-0" />
+                            <span className="text-xs font-medium text-purple-700">{propertyData.mediosBanos} Medio Baño{propertyData.mediosBanos > 1 ? 's' : ''}</span>
                           </div>
                         )}
                         {propertyData.areaConstruccion && (
-                          <div className="flex items-center gap-2 text-sm">
-                            <Square className="h-4 w-4 text-gray-500" />
-                            <span className="text-gray-600">{propertyData.areaConstruccion} m² construidos</span>
+                          <div className="flex items-center gap-2 p-2.5 rounded-lg bg-green-50 border border-green-200">
+                            <Square className="h-4 w-4 text-green-600 flex-shrink-0" />
+                            <span className="text-xs font-medium text-green-700">{propertyData.areaConstruccion} m² const.</span>
                           </div>
                         )}
                         {propertyData.amueblado && (
-                          <div className="flex items-center gap-2 text-sm">
-                            <Users className="h-4 w-4 text-gray-500" />
-                            <span className="text-gray-600 capitalize">{propertyData.amueblado.replace(/_/g, ' ')}</span>
+                          <div className="flex items-center gap-2 p-2.5 rounded-lg bg-orange-50 border border-orange-200">
+                            <Users className="h-4 w-4 text-orange-600 flex-shrink-0" />
+                            <span className="text-xs font-medium text-orange-700 capitalize">{propertyData.amueblado.replace(/_/g, ' ')}</span>
                           </div>
                         )}
                       </div>
