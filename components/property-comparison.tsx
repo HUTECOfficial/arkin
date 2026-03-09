@@ -203,7 +203,7 @@ export function PropertyComparison({
                       </div>
                     </div>
 
-                    <h3 className="font-semibold text-gray-900 mb-2 line-clamp-1">
+                    <h3 className="font-semibold text-gray-900 mb-2 line-clamp-1 uppercase">
                       {property.titulo}
                     </h3>
 

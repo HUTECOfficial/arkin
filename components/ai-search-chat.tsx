@@ -22,6 +22,7 @@ import {
   Square
 } from "lucide-react"
 import Link from "next/link"
+import Image from "next/image"
 
 interface Property {
   id: number
@@ -394,18 +395,24 @@ export function AISearchChat({ isOpen, onClose, properties }: AISearchChatProps)
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm">
-      <div className="fixed right-4 top-4 bottom-4 w-96 bg-arkin-secondary/50 rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+    <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+      <div className="w-full max-w-2xl h-[90vh] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden">
         {/* Header */}
-        <CardHeader className="bg-gradient-to-r from-arkin-gold to-yellow-400 text-black p-4">
+        <CardHeader className="bg-gradient-to-r from-arkin-gold to-yellow-400 text-black p-4 border-b">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-black/10 rounded-full flex items-center justify-center">
-                <Sparkles className="h-5 w-5" />
+              <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center p-2 shadow-md">
+                <Image
+                  src="/arkinlogo.jpg"
+                  alt="ARKIN SELECT"
+                  width={48}
+                  height={48}
+                  className="w-full h-full object-contain"
+                />
               </div>
               <div>
-                <CardTitle className="text-lg font-semibold">Búsqueda con IA</CardTitle>
-                <p className="text-sm opacity-90">Asistente inteligente ARKIN</p>
+                <CardTitle className="text-lg font-bold">Búsqueda con IA</CardTitle>
+                <p className="text-sm font-medium opacity-90">Asistente inteligente ARKIN</p>
               </div>
             </div>
             <Button
@@ -460,35 +467,37 @@ export function AISearchChat({ isOpen, onClose, properties }: AISearchChatProps)
                               className="w-16 h-12 object-cover rounded-lg"
                             />
                             <div className="flex-1 min-w-0">
-                              <h4 className="font-medium text-sm truncate">{property.titulo}</h4>
+                              <h4 className="font-bold text-sm truncate uppercase">{property.titulo}</h4>
                               <div className="flex items-center space-x-2 text-xs text-gray-600 mt-1">
                                 <MapPin className="h-3 w-3" />
-                                <span>{property.ubicacion}</span>
+                                <span className="truncate">{property.ubicacion}</span>
+                              </div>
+                              <div className="flex items-center space-x-2 text-xs text-gray-600 mt-1.5">
+                                <span className="flex items-center gap-1">
+                                  <Bed className="h-3 w-3" />
+                                  <span>{property.habitaciones} hab</span>
+                                </span>
+                                <span>•</span>
+                                <span className="flex items-center gap-1">
+                                  <Bath className="h-3 w-3" />
+                                  <span>{property.banos} baños</span>
+                                </span>
+                                <span>•</span>
+                                <span className="flex items-center gap-1">
+                                  <Square className="h-3 w-3" />
+                                  <span>{property.area}m²</span>
+                                </span>
                               </div>
                               <div className="flex items-center justify-between mt-2">
-                                <div className="flex items-center space-x-3 text-xs text-gray-600">
-                                  <span className="flex items-center space-x-1">
-                                    <Bed className="h-3 w-3" />
-                                    <span>{property.habitaciones}</span>
-                                  </span>
-                                  <span className="flex items-center space-x-1">
-                                    <Bath className="h-3 w-3" />
-                                    <span>{property.banos}</span>
-                                  </span>
-                                  <span className="flex items-center space-x-1">
-                                    <Square className="h-3 w-3" />
-                                    <span>{property.area}m²</span>
-                                  </span>
-                                </div>
+                                <p className="text-sm font-bold text-arkin-gold">
+                                  {formatPrice(property.precio)}
+                                </p>
                                 <Link href={`/propiedades/${property.id}`}>
-                                  <Button size="sm" className="bg-arkin-gold hover:bg-arkin-gold/90 text-black text-xs h-6 px-2">
-                                    Ver
+                                  <Button size="sm" className="bg-arkin-gold hover:bg-arkin-gold/90 text-black text-xs h-7 px-3 font-semibold">
+                                    Ver Detalles
                                   </Button>
                                 </Link>
                               </div>
-                              <p className="text-sm font-semibold text-arkin-gold mt-1">
-                                {formatPrice(property.precio)}
-                              </p>
                             </div>
                           </div>
                         </CardContent>

@@ -137,7 +137,7 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
                       <Badge className="bg-arkin-gold text-black">{propertyData.status}</Badge>
                       <Badge variant="outline">{propertyData.tipo}</Badge>
                     </div>
-                    <CardTitle className="text-3xl mb-2">{propertyData.titulo}</CardTitle>
+                    <CardTitle className="text-3xl mb-2 uppercase">{propertyData.titulo}</CardTitle>
                     <div className="flex items-center text-gray-600">
                       <MapPin className="h-4 w-4 mr-1" />
                       {propertyData.ubicacion}
