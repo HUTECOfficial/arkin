@@ -1,6 +1,6 @@
 'use client'
 
-import React, { createContext, useContext, useState, useEffect } from 'react'
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react'
 import { supabase } from '@/lib/supabase/client'
 import { users as mockUsers } from '@/data/internal-users'
 
@@ -28,18 +28,56 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 const MOCK_USER_STORAGE_KEY = 'arkin_mock_user'
 
+interface AuthUserFallback {
+  id: string
+  email?: string | null
+}
+
+function isAbortLikeError(error: unknown) {
+  if (!error || typeof error !== 'object') return false
+
+  const candidate = error as {
+    name?: string
+    message?: string
+    details?: string
+    code?: string
+  }
+
+  const normalizedMessage = `${candidate.message ?? ''} ${candidate.details ?? ''}`.toLowerCase()
+
+  return (
+    candidate.name === 'AbortError' ||
+    normalizedMessage.includes('aborted') ||
+    normalizedMessage.includes('lock broken by another request')
+  )
+}
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
+  const profileRequestIdRef = useRef(0)
+  const mountedRef = useRef(true)
 
   useEffect(() => {
+    mountedRef.current = true
+
     // Verificar sesión activa al cargar
     checkUser()
 
     // Escuchar cambios de autenticación
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'TOKEN_REFRESHED') {
+        if (mountedRef.current) {
+          setLoading(false)
+        }
+        return
+      }
+
       if (session?.user) {
-        await loadUserProfile(session.user.id)
+        await loadUserProfile(session.user.id, {
+          id: session.user.id,
+          email: session.user.email,
+        })
       } else {
         // Solo limpiar si no hay mock user guardado
         const savedMockUser = localStorage.getItem(MOCK_USER_STORAGE_KEY)
@@ -47,10 +85,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           setUser(null)
         }
       }
-      setLoading(false)
+      if (mountedRef.current) {
+        setLoading(false)
+      }
     })
 
-    return () => subscription.unsubscribe()
+    return () => {
+      mountedRef.current = false
+      subscription.unsubscribe()
+    }
   }, [])
 
   const checkUser = async () => {
@@ -71,16 +114,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // Si no hay mock user, verificar sesión de Supabase
       const { data: { session } } = await supabase.auth.getSession()
       if (session?.user) {
-        await loadUserProfile(session.user.id)
+        await loadUserProfile(session.user.id, {
+          id: session.user.id,
+          email: session.user.email,
+        })
       }
     } catch (error) {
-      console.error('Error checking user:', error)
+      if (!isAbortLikeError(error)) {
+        console.error('Error checking user:', error)
+      }
     } finally {
-      setLoading(false)
+      if (mountedRef.current) {
+        setLoading(false)
+      }
     }
   }
 
-  const loadUserProfile = async (userId: string) => {
+  const loadUserProfile = async (userId: string, fallbackAuthUser?: AuthUserFallback) => {
+    const requestId = ++profileRequestIdRef.current
+
     try {
       const { data: profile, error } = await supabase
         .from('usuarios')
@@ -88,17 +140,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         .eq('id', userId)
         .single()
 
+      if (requestId !== profileRequestIdRef.current || !mountedRef.current) {
+        return
+      }
+
       if (error) {
+        if (isAbortLikeError(error)) {
+          return
+        }
+
         console.error('Error loading profile:', error)
-        // Si no hay perfil en usuarios, usar datos básicos de auth
-        const { data: { user: authUser } } = await supabase.auth.getUser()
-        if (authUser) {
+
+        if (fallbackAuthUser) {
           setUser({
-            id: authUser.id,
-            email: authUser.email || '',
+            id: fallbackAuthUser.id,
+            email: fallbackAuthUser.email || '',
             role: 'cliente',
           })
         }
+
         return
       }
 
@@ -111,7 +171,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         avatar: profile.avatar || undefined,
       })
     } catch (error) {
-      console.error('Error loading user profile:', error)
+      if (!isAbortLikeError(error)) {
+        console.error('Error loading user profile:', error)
+      }
     }
   }
 
@@ -237,7 +299,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
 
       // Cargar perfil del usuario desde Supabase
-      await loadUserProfile(data.user.id)
+      await loadUserProfile(data.user.id, {
+        id: data.user.id,
+        email: data.user.email,
+      })
       
       return user
     } catch (error: any) {

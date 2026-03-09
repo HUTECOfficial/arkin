@@ -1,7 +1,7 @@
 "use client"
 
-import { useRef, useState, Suspense, useEffect, Component, ReactNode, useCallback } from "react"
-import { Canvas, useLoader, useFrame } from "@react-three/fiber"
+import { useRef, useState, Suspense, useEffect, Component, ReactNode, useCallback, useMemo } from "react"
+import { Canvas, useLoader } from "@react-three/fiber"
 import { OrbitControls } from "@react-three/drei"
 import { MapPin, X, ChevronRight, Building2, Home } from "lucide-react"
 import * as THREE from "three"
@@ -37,8 +37,8 @@ function latLngToTile(lat: number, lng: number, zoom: number) {
   return { x, y }
 }
 
-async function buildMapTexture(): Promise<THREE.CanvasTexture> {
-  const GRID = 4
+async function buildMapTexture(tileGrid: number): Promise<THREE.CanvasTexture> {
+  const GRID = tileGrid
   const canvas = document.createElement('canvas')
   canvas.width = TILE_SIZE * GRID
   canvas.height = TILE_SIZE * GRID
@@ -74,19 +74,56 @@ async function buildMapTexture(): Promise<THREE.CanvasTexture> {
   await Promise.all(loads)
 
   const texture = new THREE.CanvasTexture(canvas)
+  texture.generateMipmaps = false
+  texture.minFilter = THREE.LinearFilter
+  texture.magFilter = THREE.LinearFilter
   texture.needsUpdate = true
   return texture
 }
 
-function MapPlane() {
+const BACKGROUND_BLOCKS = [
+  { x:-10, z:-10, w:2.5, d:2.5, h:0.12 }, { x:-6,  z:-10, w:3,   d:2,   h:0.08 },
+  { x: 2,  z:-10, w:2,   d:2.5, h:0.14 }, { x: 8,  z:-10, w:3.5, d:2,   h:0.09 },
+  { x:-10, z: -4, w:2,   d:3,   h:0.11 }, { x: 9,  z: -4, w:2.5, d:2.5, h:0.13 },
+  { x:-10, z:  4, w:3,   d:2,   h:0.10 }, { x: 8,  z:  4, w:2,   d:3,   h:0.12 },
+  { x:-10, z: 10, w:2.5, d:2.5, h:0.09 }, { x:-4,  z: 10, w:2,   d:2,   h:0.11 },
+  { x: 3,  z: 10, w:3,   d:2.5, h:0.10 }, { x: 9,  z: 10, w:2,   d:2,   h:0.08 },
+]
+
+function MapPlane({ lowPowerMode }: { lowPowerMode: boolean }) {
   const [mapTexture, setMapTexture] = useState<THREE.CanvasTexture | null>(null)
   const [fallback, setFallback] = useState(false)
 
   useEffect(() => {
-    buildMapTexture()
-      .then(tex => setMapTexture(tex))
-      .catch(() => setFallback(true))
-  }, [])
+    let cancelled = false
+
+    buildMapTexture(lowPowerMode ? 3 : 4)
+      .then((tex) => {
+        if (cancelled) {
+          tex.dispose()
+          return
+        }
+        setMapTexture(tex)
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setFallback(true)
+        }
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [lowPowerMode])
+
+  useEffect(() => {
+    return () => {
+      mapTexture?.dispose()
+    }
+  }, [mapTexture])
+
+  const avenuePositions = lowPowerMode ? [-4, 4] : [-4, 0, 4]
+  const backgroundBlocks = lowPowerMode ? BACKGROUND_BLOCKS.slice(0, 8) : BACKGROUND_BLOCKS
 
   if (!mapTexture && !fallback) {
     return (
@@ -111,13 +148,13 @@ function MapPlane() {
       </mesh>
 
       {/* Avenidas principales — solo 6 meshes en lugar de 22 */}
-      {[-4, 0, 4].map((pos, i) => (
+      {avenuePositions.map((pos, i) => (
         <mesh key={`av${i}`} rotation={[-Math.PI / 2, 0, 0]} position={[pos, 0.005, 0]}>
           <planeGeometry args={[0.18, 30]} />
           <meshBasicMaterial color="#ffffff" transparent opacity={0.22} />
         </mesh>
       ))}
-      {[-4, 0, 4].map((pos, i) => (
+      {avenuePositions.map((pos, i) => (
         <mesh key={`ah${i}`} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.005, pos]}>
           <planeGeometry args={[30, 0.18]} />
           <meshBasicMaterial color="#ffffff" transparent opacity={0.22} />
@@ -137,14 +174,7 @@ function MapPlane() {
       ))}
 
       {/* Bloques de manzanas (edificios genéricos de fondo) */}
-      {[
-        { x:-10, z:-10, w:2.5, d:2.5, h:0.12 }, { x:-6,  z:-10, w:3,   d:2,   h:0.08 },
-        { x: 2,  z:-10, w:2,   d:2.5, h:0.14 }, { x: 8,  z:-10, w:3.5, d:2,   h:0.09 },
-        { x:-10, z: -4, w:2,   d:3,   h:0.11 }, { x: 9,  z: -4, w:2.5, d:2.5, h:0.13 },
-        { x:-10, z:  4, w:3,   d:2,   h:0.10 }, { x: 8,  z:  4, w:2,   d:3,   h:0.12 },
-        { x:-10, z: 10, w:2.5, d:2.5, h:0.09 }, { x:-4,  z: 10, w:2,   d:2,   h:0.11 },
-        { x: 3,  z: 10, w:3,   d:2.5, h:0.10 }, { x: 9,  z: 10, w:2,   d:2,   h:0.08 },
-      ].map((b, i) => (
+      {backgroundBlocks.map((b, i) => (
         <mesh key={`block${i}`} position={[b.x, b.h / 2, b.z]}>
           <boxGeometry args={[b.w, b.h, b.d]} />
           <meshStandardMaterial color="#b0a898" roughness={0.9} />
@@ -289,11 +319,10 @@ function GLBBuilding({ url, position, onHover, onClick, active }: {
     }
   }
 
-  useFrame(() => {
+  useEffect(() => {
     if (!groupRef.current) return
-    const targetY = active ? 0.4 : 0
-    groupRef.current.position.y += (targetY - groupRef.current.position.y) * 0.1
-  })
+    groupRef.current.position.y = active ? 0.32 : 0
+  }, [active])
 
   return (
     <group
@@ -307,21 +336,22 @@ function GLBBuilding({ url, position, onHover, onClick, active }: {
   )
 }
 
-function Scene({ activeIndex, onHover, onClick }: {
+function Scene({ activeIndex, onHover, onClick, lowPowerMode }: {
   activeIndex: number | null
   onHover: (idx: number | null) => void
   onClick: (idx: number) => void
+  lowPowerMode: boolean
 }) {
   return (
     <>
       <color attach="background" args={["#0a0f1e"]} />
       <fog attach="fog" args={["#0a0f1e", 30, 70]} />
 
-      <ambientLight intensity={2.5} color="#e8f0ff" />
-      <directionalLight position={[12, 20, 12]} intensity={2.5} color="#fff8e8" />
+      <ambientLight intensity={lowPowerMode ? 2.1 : 2.5} color="#e8f0ff" />
+      <directionalLight position={[12, 20, 12]} intensity={lowPowerMode ? 2 : 2.5} color="#fff8e8" />
       <pointLight position={[-8, 8, -8]} intensity={1.0} distance={35} color="#ffffff" />
 
-      <MapPlane />
+      <MapPlane lowPowerMode={lowPowerMode} />
 
       {PROYECTOS.map((proyecto, idx) => (
         <OBJErrorBoundary key={idx}>
@@ -343,80 +373,152 @@ function Scene({ activeIndex, onHover, onClick }: {
       ))}
 
       <OrbitControls
-        enableDamping
+        enableDamping={!lowPowerMode}
         dampingFactor={0.06}
         minPolarAngle={Math.PI / 8}
         maxPolarAngle={Math.PI / 2.15}
         minDistance={5}
         maxDistance={45}
-        autoRotate={activeIndex === null}
+        autoRotate={activeIndex === null && !lowPowerMode}
         autoRotateSpeed={0.4}
       />
     </>
   )
 }
 
+function useMapDeviceProfile() {
+  const [profile, setProfile] = useState({ lowPowerMode: true, touchDevice: true })
+
+  useEffect(() => {
+    const nav = navigator as Navigator & { deviceMemory?: number }
+    const touchDevice = navigator.maxTouchPoints > 0 || 'ontouchstart' in window
+    const lowPowerMode =
+      window.matchMedia('(max-width: 1024px)').matches ||
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      touchDevice ||
+      (nav.deviceMemory ?? 4) <= 4 ||
+      (navigator.hardwareConcurrency ?? 4) <= 6
+
+    setProfile({ lowPowerMode, touchDevice })
+  }, [])
+
+  return profile
+}
+
 export function Leon3DMap() {
+  const mapWrapperRef = useRef<HTMLDivElement>(null)
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null)
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null)
+  const [isInViewport, setIsInViewport] = useState(false)
+  const { lowPowerMode, touchDevice } = useMapDeviceProfile()
   const activeIndex = selectedIdx ?? hoveredIdx
 
   const handleClick = useCallback((idx: number) => {
     setSelectedIdx(prev => prev === idx ? null : idx)
   }, [])
 
+  useEffect(() => {
+    const node = mapWrapperRef.current
+    if (!node) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) {
+          setIsInViewport(true)
+          observer.disconnect()
+        }
+      },
+      { rootMargin: '220px 0px' }
+    )
+
+    observer.observe(node)
+    return () => observer.disconnect()
+  }, [])
+
   const proyecto = selectedIdx !== null ? PROYECTOS[selectedIdx] : null
+  const availabilityTotals = useMemo(() => {
+    if (!proyecto) return null
+    const flat = proyecto.unidades.flat()
+    return {
+      disp: flat.filter((status) => status === 'disponible').length,
+      res: flat.filter((status) => status === 'reservado').length,
+      vend: flat.filter((status) => status === 'vendido').length,
+    }
+  }, [proyecto])
 
   return (
     <div className="relative w-full">
-      <div className="relative bg-[#080b14] rounded-2xl overflow-hidden border border-slate-800 shadow-2xl h-[500px] lg:h-[600px]">
-        <Canvas
-          camera={{ position: [0, 14, 22], fov: 45 }}
-          gl={{ antialias: true, alpha: false, powerPreference: 'high-performance' }}
-          frameloop="demand"
-          onPointerMissed={() => setSelectedIdx(null)}
-        >
-          <Suspense fallback={null}>
-            <Scene activeIndex={activeIndex} onHover={setHoveredIdx} onClick={handleClick} />
-          </Suspense>
-        </Canvas>
+      <div
+        ref={mapWrapperRef}
+        className="relative bg-[#080b14] rounded-2xl overflow-hidden border border-slate-800 shadow-2xl h-[430px] sm:h-[500px] lg:h-[600px]"
+      >
+        {isInViewport ? (
+          <Canvas
+            camera={{ position: [0, 14, 22], fov: 45 }}
+            dpr={lowPowerMode ? [1, 1.25] : [1, 1.75]}
+            gl={{
+              antialias: !lowPowerMode,
+              alpha: false,
+              powerPreference: lowPowerMode ? 'low-power' : 'high-performance',
+            }}
+            performance={{ min: lowPowerMode ? 0.5 : 0.75 }}
+            frameloop="demand"
+            onPointerMissed={() => setSelectedIdx(null)}
+          >
+            <Suspense fallback={null}>
+              <Scene
+                activeIndex={activeIndex}
+                onHover={setHoveredIdx}
+                onClick={handleClick}
+                lowPowerMode={lowPowerMode}
+              />
+            </Suspense>
+          </Canvas>
+        ) : (
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-[#080b14]">
+            <div className="w-8 h-8 border-4 border-[#e8ff50] border-t-transparent rounded-full animate-spin" />
+            <p className="text-xs text-slate-400 font-medium">Preparando experiencia 3D...</p>
+          </div>
+        )}
 
         {/* Hint */}
         <div className="absolute top-4 left-4 pointer-events-none z-10">
           <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-slate-900/80 border border-slate-700 backdrop-blur-md text-slate-300">
             <MapPin className="w-3 h-3" />
-            Toca el edificio para ver info · Arrastra para rotar
+            {touchDevice
+              ? 'Toca el edificio para ver info · Arrastra para rotar'
+              : 'Pasa el cursor o da clic · Arrastra para rotar'}
           </div>
         </div>
 
         {/* Info panel */}
         {proyecto && (
-          <div className="absolute top-4 right-2 sm:right-4 w-[calc(100%-1rem)] max-w-[17rem] z-10 animate-in fade-in slide-in-from-right-4 duration-300" style={{ maxHeight: 'calc(100% - 3.5rem)' }}>
-            <div className="bg-[#0f172a]/95 backdrop-blur-md border border-slate-700/50 shadow-2xl rounded-xl overflow-hidden flex flex-col" style={{ maxHeight: 'inherit' }}>
+          <div className="absolute top-4 right-2 sm:right-4 w-[calc(100%-1rem)] max-w-[18.5rem] z-10 animate-in fade-in slide-in-from-right-4 duration-300" style={{ maxHeight: 'calc(100% - 3.5rem)' }}>
+            <div className="bg-gradient-to-b from-[#111c35]/95 to-[#0b1222]/95 backdrop-blur-xl border border-slate-600/60 shadow-[0_18px_50px_rgba(2,6,23,0.7)] rounded-2xl overflow-hidden flex flex-col" style={{ maxHeight: 'inherit' }}>
               <div className="h-1 w-full bg-[#e8ff50]" />
-              <div className="p-5 overflow-y-auto flex-1">
+              <div className="p-4 sm:p-5 overflow-y-auto flex-1">
                 <div className="flex items-start justify-between mb-3">
                   <div>
-                    <span className="text-[10px] uppercase tracking-wider font-semibold text-slate-400 border border-slate-600 bg-slate-800/50 px-2 py-0.5 rounded-full">
+                    <span className="text-[10px] uppercase tracking-wider font-semibold text-slate-300 border border-slate-500/70 bg-slate-800/70 px-2 py-0.5 rounded-full">
                       {proyecto.zona}
                     </span>
-                    <h3 className="font-bold text-white text-base leading-tight mt-2">{proyecto.nombre}</h3>
-                    <p className="text-xs text-slate-400 mt-0.5">{proyecto.tipo}</p>
+                    <h3 className="font-bold text-white text-[1.02rem] leading-tight mt-2">{proyecto.nombre}</h3>
+                    <p className="text-xs text-slate-300/80 mt-0.5">{proyecto.tipo}</p>
                   </div>
                   <button
                     onClick={() => setSelectedIdx(null)}
-                    className="text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 p-1.5 rounded-full transition-colors"
+                    className="text-slate-400 hover:text-white bg-slate-800/90 hover:bg-slate-700 p-1.5 rounded-full transition-colors"
                   >
                     <X className="h-4 w-4" />
                   </button>
                 </div>
 
                 <div className="grid grid-cols-2 gap-2 mb-4">
-                  <div className="bg-slate-800/50 p-2.5 rounded-lg border border-slate-700/50">
+                  <div className="bg-slate-800/60 p-2.5 rounded-lg border border-slate-600/60">
                     <p className="text-[10px] text-slate-400 uppercase tracking-wide mb-1">Pisos</p>
                     <p className="text-sm text-white font-semibold">{proyecto.pisos} niveles</p>
                   </div>
-                  <div className="bg-slate-800/50 p-2.5 rounded-lg border border-slate-700/50">
+                  <div className="bg-slate-800/60 p-2.5 rounded-lg border border-slate-600/60">
                     <p className="text-[10px] text-slate-400 uppercase tracking-wide mb-1">Entrega</p>
                     <p className="text-sm text-white font-semibold">{proyecto.entrega}</p>
                   </div>
@@ -441,33 +543,27 @@ export function Leon3DMap() {
                 </div>
 
                 {/* Availability summary — compact 3-column */}
-                {(() => {
-                  const flat = proyecto.unidades.flat()
-                  const disp = flat.filter(s => s === 'disponible').length
-                  const res  = flat.filter(s => s === 'reservado').length
-                  const vend = flat.filter(s => s === 'vendido').length
-                  return (
-                    <div className="grid grid-cols-3 gap-2 mb-4">
-                      <div className="bg-[#e8ff5012] border border-[#e8ff5030] rounded-lg p-2.5 text-center">
-                        <p className="text-lg font-bold text-[#e8ff50]">{disp}</p>
-                        <p className="text-[10px] text-slate-400 mt-0.5">Disponibles</p>
-                      </div>
-                      <div className="bg-orange-500/10 border border-orange-500/20 rounded-lg p-2.5 text-center">
-                        <p className="text-lg font-bold text-orange-400">{res}</p>
-                        <p className="text-[10px] text-slate-400 mt-0.5">Reservados</p>
-                      </div>
-                      <div className="bg-slate-800/60 border border-slate-700/50 rounded-lg p-2.5 text-center">
-                        <p className="text-lg font-bold text-slate-400">{vend}</p>
-                        <p className="text-[10px] text-slate-400 mt-0.5">Vendidos</p>
-                      </div>
+                {availabilityTotals && (
+                  <div className="grid grid-cols-3 gap-2 mb-4">
+                    <div className="bg-[#e8ff5012] border border-[#e8ff5045] rounded-lg p-2.5 text-center">
+                      <p className="text-lg font-bold text-[#e8ff50]">{availabilityTotals.disp}</p>
+                      <p className="text-[10px] text-slate-400 mt-0.5">Disponibles</p>
                     </div>
-                  )
-                })()}
+                    <div className="bg-orange-500/10 border border-orange-400/35 rounded-lg p-2.5 text-center">
+                      <p className="text-lg font-bold text-orange-300">{availabilityTotals.res}</p>
+                      <p className="text-[10px] text-slate-400 mt-0.5">Reservados</p>
+                    </div>
+                    <div className="bg-slate-800/70 border border-slate-600/60 rounded-lg p-2.5 text-center">
+                      <p className="text-lg font-bold text-slate-300">{availabilityTotals.vend}</p>
+                      <p className="text-[10px] text-slate-400 mt-0.5">Vendidos</p>
+                    </div>
+                  </div>
+                )}
 
                 <button
                   onClick={() => {
                     const section = document.getElementById('unidades-section')
-                    if (section) {
+                    if (section && selectedIdx !== null) {
                       section.scrollIntoView({ behavior: 'smooth' })
                       section.dispatchEvent(new CustomEvent('selectProyecto', { detail: selectedIdx, bubbles: true }))
                     }

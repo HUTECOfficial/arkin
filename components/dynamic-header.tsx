@@ -331,45 +331,36 @@ export function DynamicHeader() {
           {/* Mobile Navigation */}
           <div className="md:hidden">
             {!isMobileMenuOpen ? (
-              <div className="flex items-center justify-between w-full pl-3 pr-1">
+              <div className="flex items-center gap-2 px-1">
                 {/* Mobile Logo */}
-                <Link href="/" className="flex items-center flex-shrink-0 mr-4">
+                <Link href="/" className="flex items-center flex-shrink-0">
                   <Image
                     src="/arkinlogo.jpg"
                     alt="ARKIN SELECT"
                     width={120}
                     height={35}
-                    className="h-6 w-auto object-contain transition-all duration-300"
+                    className="h-7 w-auto object-contain transition-all duration-300"
                   />
                 </Link>
 
-                {/* Mobile Action Icons */}
-                <div className="flex items-center gap-1 flex-shrink-0">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="rounded-full w-6 h-6 p-0 flex items-center justify-center hover:bg-arkin-primary/10 hover:text-arkin-primary transition-all duration-300 hover:scale-110"
-                  >
-                    <Search className="h-3.5 w-3.5" />
-                  </Button>
-                  <Link href="/favoritos">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="rounded-full w-6 h-6 p-0 flex items-center justify-center hover:bg-arkin-primary/10 hover:text-arkin-primary transition-all duration-300 hover:scale-110"
-                    >
-                      <Heart className="h-3.5 w-3.5" />
-                    </Button>
-                  </Link>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setIsMobileMenuOpen(true)}
-                    className="rounded-full w-6 h-6 p-0 flex items-center justify-center hover:bg-arkin-primary/10 transition-all duration-300 hover:scale-110"
-                  >
-                    <Menu className="h-3.5 w-3.5" />
-                  </Button>
-                </div>
+                {/* Divider */}
+                <div className="w-px h-5 bg-arkin-accent/25 mx-1 flex-shrink-0" />
+
+                {/* Menú button — grande y visible */}
+                <button
+                  onClick={() => setIsMobileMenuOpen(true)}
+                  className="flex items-center gap-2 px-4 py-2 rounded-full bg-arkin-primary/15 hover:bg-arkin-primary/25 active:scale-95 border border-arkin-primary/30 transition-all duration-200"
+                >
+                  <Menu className="h-4 w-4 text-arkin-primary flex-shrink-0" />
+                  <span className="text-sm font-semibold text-arkin-primary whitespace-nowrap tracking-wide">Menú</span>
+                </button>
+
+                {/* Heart icon */}
+                <Link href="/favoritos" className="flex-shrink-0">
+                  <button className="flex items-center justify-center w-9 h-9 rounded-full hover:bg-arkin-primary/10 hover:text-arkin-primary transition-all duration-200 hover:scale-110 active:scale-95 text-arkin-accent/70">
+                    <Heart className="h-4 w-4" />
+                  </button>
+                </Link>
               </div>
             ) : (
               <div className="space-y-4 w-full transition-all duration-300 ease-out">
