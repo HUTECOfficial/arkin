@@ -5,11 +5,12 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { 
   MapPin, Bed, Bath, Square, Calendar, Heart, Share2, Phone, Mail, MessageCircle,
   Car, Wifi, Shield, TreePine, Waves, Dumbbell, ChefHat, Wind, Sun, Camera, Play,
-  ArrowLeft, ArrowRight, Maximize, X, Star, Clock, Calculator, Loader2, Users
+  ArrowLeft, ArrowRight, Maximize, X, Star, Clock, Calculator, Loader2, Users, FileText, Sparkles, Info, ChevronDown
 } from "lucide-react"
 import Link from "next/link"
 import { WishlistButton } from "@/components/wishlist-button"
@@ -175,11 +176,23 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
                 </div>
 
                 <Tabs defaultValue="descripcion" className="w-full">
-                  <TabsList className="grid w-full grid-cols-4 gap-1">
-                    <TabsTrigger value="descripcion" className="text-xs sm:text-sm">Descripción</TabsTrigger>
-                    <TabsTrigger value="caracteristicas" className="text-xs sm:text-sm">Características</TabsTrigger>
-                    <TabsTrigger value="detalles" className="text-xs sm:text-sm">Detalles</TabsTrigger>
-                    <TabsTrigger value="ubicacion" className="text-xs sm:text-sm">Ubicación</TabsTrigger>
+                  <TabsList className="grid w-full grid-cols-4 gap-0.5">
+                    <TabsTrigger value="descripcion" className="flex-col gap-1 py-2 px-1">
+                      <FileText className="h-4 w-4" />
+                      <span className="text-[10px] sm:text-xs">Descripción</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="caracteristicas" className="flex-col gap-1 py-2 px-1">
+                      <Sparkles className="h-4 w-4" />
+                      <span className="text-[10px] sm:text-xs">Amenidades</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="detalles" className="flex-col gap-1 py-2 px-1">
+                      <Info className="h-4 w-4" />
+                      <span className="text-[10px] sm:text-xs">Detalles</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="ubicacion" className="flex-col gap-1 py-2 px-1">
+                      <MapPin className="h-4 w-4" />
+                      <span className="text-[10px] sm:text-xs">Ubicación</span>
+                    </TabsTrigger>
                   </TabsList>
 
                   {/* Descripción */}
@@ -201,55 +214,70 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
                     )}
                   </TabsContent>
 
-                  {/* Características y Amenidades */}
-                  <TabsContent value="caracteristicas" className="mt-4 space-y-4">
-                    <div>
-                      <h3 className="font-semibold text-lg mb-3 text-arkin-accent">Amenidades y Características</h3>
-                      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-2">
-                        {propertyData.caracteristicas?.map((car, i) => {
-                          const Icon = amenityIcons[car] || Shield
-                          return (
-                            <div key={i} className="flex items-center gap-2 p-2.5 rounded-lg bg-gray-50 border border-gray-200 hover:border-arkin-gold/50 transition-colors">
-                              <div className="w-8 h-8 rounded-full bg-arkin-gold/10 flex items-center justify-center flex-shrink-0">
-                                <Icon className="h-4 w-4 text-arkin-gold" />
-                              </div>
-                              <span className="text-xs font-medium text-gray-700 leading-tight">{car}</span>
-                            </div>
-                          )
-                        })}
-                      </div>
-                    </div>
+                  {/* Características y Amenidades - Expandible */}
+                  <TabsContent value="caracteristicas" className="mt-4">
+                    <Accordion type="single" collapsible className="w-full space-y-2">
+                      <AccordionItem value="amenidades" className="border rounded-lg px-4 bg-white">
+                        <AccordionTrigger className="hover:no-underline py-3">
+                          <div className="flex items-center gap-2">
+                            <Sparkles className="h-5 w-5 text-arkin-gold" />
+                            <span className="font-semibold text-arkin-accent">Amenidades y Características</span>
+                          </div>
+                        </AccordionTrigger>
+                        <AccordionContent className="pb-4">
+                          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-2 mt-2">
+                            {propertyData.caracteristicas?.map((car, i) => {
+                              const Icon = amenityIcons[car] || Shield
+                              return (
+                                <div key={i} className="flex items-center gap-2 p-2.5 rounded-lg bg-gray-50 border border-gray-200 hover:border-arkin-gold/50 transition-colors">
+                                  <div className="w-8 h-8 rounded-full bg-arkin-gold/10 flex items-center justify-center flex-shrink-0">
+                                    <Icon className="h-4 w-4 text-arkin-gold" />
+                                  </div>
+                                  <span className="text-xs font-medium text-gray-700 leading-tight">{car}</span>
+                                </div>
+                              )
+                            })}
+                          </div>
+                        </AccordionContent>
+                      </AccordionItem>
 
-                    {/* Información adicional de espacios */}
-                    <div className="pt-4 border-t">
-                      <h4 className="font-semibold text-gray-700 mb-3">Espacios Adicionales</h4>
-                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                        {propertyData.cochera && (
-                          <div className="flex items-center gap-2 p-2.5 rounded-lg bg-blue-50 border border-blue-200">
-                            <Car className="h-4 w-4 text-blue-600 flex-shrink-0" />
-                            <span className="text-xs font-medium text-blue-700">{propertyData.cochera} Cochera{propertyData.cochera > 1 ? 's' : ''}</span>
+                      <AccordionItem value="espacios" className="border rounded-lg px-4 bg-white">
+                        <AccordionTrigger className="hover:no-underline py-3">
+                          <div className="flex items-center gap-2">
+                            <Square className="h-5 w-5 text-arkin-gold" />
+                            <span className="font-semibold text-arkin-accent">Espacios Adicionales</span>
                           </div>
-                        )}
-                        {propertyData.mediosBanos && (
-                          <div className="flex items-center gap-2 p-2.5 rounded-lg bg-purple-50 border border-purple-200">
-                            <Bath className="h-4 w-4 text-purple-600 flex-shrink-0" />
-                            <span className="text-xs font-medium text-purple-700">{propertyData.mediosBanos} Medio Baño{propertyData.mediosBanos > 1 ? 's' : ''}</span>
+                        </AccordionTrigger>
+                        <AccordionContent className="pb-4">
+                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-2">
+                            {propertyData.cochera && (
+                              <div className="flex items-center gap-2 p-2.5 rounded-lg bg-blue-50 border border-blue-200">
+                                <Car className="h-4 w-4 text-blue-600 flex-shrink-0" />
+                                <span className="text-xs font-medium text-blue-700">{propertyData.cochera} Cochera{propertyData.cochera > 1 ? 's' : ''}</span>
+                              </div>
+                            )}
+                            {propertyData.mediosBanos && (
+                              <div className="flex items-center gap-2 p-2.5 rounded-lg bg-purple-50 border border-purple-200">
+                                <Bath className="h-4 w-4 text-purple-600 flex-shrink-0" />
+                                <span className="text-xs font-medium text-purple-700">{propertyData.mediosBanos} Medio Baño{propertyData.mediosBanos > 1 ? 's' : ''}</span>
+                              </div>
+                            )}
+                            {propertyData.areaConstruccion && (
+                              <div className="flex items-center gap-2 p-2.5 rounded-lg bg-green-50 border border-green-200">
+                                <Square className="h-4 w-4 text-green-600 flex-shrink-0" />
+                                <span className="text-xs font-medium text-green-700">{propertyData.areaConstruccion} m² const.</span>
+                              </div>
+                            )}
+                            {propertyData.amueblado && (
+                              <div className="flex items-center gap-2 p-2.5 rounded-lg bg-orange-50 border border-orange-200">
+                                <Users className="h-4 w-4 text-orange-600 flex-shrink-0" />
+                                <span className="text-xs font-medium text-orange-700 capitalize">{propertyData.amueblado.replace(/_/g, ' ')}</span>
+                              </div>
+                            )}
                           </div>
-                        )}
-                        {propertyData.areaConstruccion && (
-                          <div className="flex items-center gap-2 p-2.5 rounded-lg bg-green-50 border border-green-200">
-                            <Square className="h-4 w-4 text-green-600 flex-shrink-0" />
-                            <span className="text-xs font-medium text-green-700">{propertyData.areaConstruccion} m² const.</span>
-                          </div>
-                        )}
-                        {propertyData.amueblado && (
-                          <div className="flex items-center gap-2 p-2.5 rounded-lg bg-orange-50 border border-orange-200">
-                            <Users className="h-4 w-4 text-orange-600 flex-shrink-0" />
-                            <span className="text-xs font-medium text-orange-700 capitalize">{propertyData.amueblado.replace(/_/g, ' ')}</span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
+                        </AccordionContent>
+                      </AccordionItem>
+                    </Accordion>
                   </TabsContent>
 
                   {/* Detalles Técnicos */}
@@ -336,45 +364,6 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
                       </div>
                     </div>
 
-                    {/* Información del Agente */}
-                    {propertyData.agente && (
-                      <div className="pt-4 border-t">
-                        <h4 className="font-semibold text-gray-700 mb-3">Asesor Asignado</h4>
-                        <div className="p-4 rounded-lg bg-gradient-to-br from-arkin-gold/10 to-arkin-gold/5 border border-arkin-gold/30">
-                          <div className="flex items-start gap-3 mb-3">
-                            <Avatar className="h-12 w-12 border-2 border-arkin-gold">
-                              <AvatarImage src="/arkin-select-white.png" />
-                              <AvatarFallback className="bg-arkin-gold text-black font-bold">
-                                {propertyData.agente.nombre.split(' ').map(n => n[0]).join('')}
-                              </AvatarFallback>
-                            </Avatar>
-                            <div className="flex-1">
-                              <p className="font-semibold text-gray-900">{propertyData.agente.nombre}</p>
-                              <p className="text-sm text-gray-600">{propertyData.agente.especialidad}</p>
-                              <div className="flex items-center gap-3 mt-2">
-                                <div className="flex items-center gap-1">
-                                  <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
-                                  <span className="text-sm font-medium">{propertyData.agente.rating}</span>
-                                </div>
-                                <div className="text-sm text-gray-600">
-                                  {propertyData.agente.ventas} ventas
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="space-y-2 text-sm">
-                            <div className="flex items-center gap-2 text-gray-700">
-                              <Phone className="h-4 w-4 text-arkin-gold" />
-                              <span>{propertyData.agente.telefono}</span>
-                            </div>
-                            <div className="flex items-center gap-2 text-gray-700">
-                              <Mail className="h-4 w-4 text-arkin-gold" />
-                              <span className="truncate">{propertyData.agente.email}</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
                   </TabsContent>
                 </Tabs>
               </CardContent>
