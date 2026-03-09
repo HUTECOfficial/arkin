@@ -13,8 +13,15 @@ function getSupabase() {
   )
 }
 
-// In-memory conversation history per chat (resets on server restart)
+// In-memory conversation history per chat
 const conversationHistory = new Map<number, Array<{ role: 'user' | 'assistant'; content: string }>>()
+
+// Admin whitelist - solo estos Telegram IDs tienen acceso total
+const ADMIN_IDS = [1322017996]
+
+function isAdmin(userId: number): boolean {
+  return ADMIN_IDS.includes(userId)
+}
 
 function getTelegramAPI() {
   const token = process.env.TELEGRAM_BOT_TOKEN
@@ -63,31 +70,37 @@ async function getProperties() {
   }
 }
 
-function buildSystemPrompt(properties: any[]) {
+function buildSystemPrompt(properties: any[], admin: boolean) {
   const propSummary = properties.map(p =>
-    `[ID:${p.id}] ${p.titulo} | ${p.ubicacion} | ${p.precio_texto || p.precio} | ${p.tipo} | ${p.habitaciones}hab ${p.banos}baños ${p.area}m² | ${p.categoria || 'venta'}`
+    `[ID:${p.id}] ${p.titulo} | ${p.ubicacion} | ${p.precio_texto || p.precio} | ${p.tipo} | ${p.habitaciones}hab ${p.banos}baños ${p.area}m² | ${p.categoria || 'venta'} | status:${p.status}`
   ).join('\n')
 
-  return `Eres ARKIN AI, el asistente virtual de ARKIN SELECT — plataforma inmobiliaria premium en León, Guanajuato, México.
-Estás respondiendo a través de Telegram.
+  const adminContext = admin ? `
 
-PROPIEDADES DISPONIBLES:
-${propSummary || 'No hay propiedades disponibles en este momento.'}
+ACCESO ADMIN TOTAL — eres el asistente del dueño de la plataforma.
+Puedes ejecutar cualquier operación administrativa:
+- Crear asesores: responde con JSON {"accion":"crear_asesor","nombre":"...","email":"...","telefono":"...","password":"..."}
+- Cambiar status de propiedad: {"accion":"cambiar_status","id":123,"status":"Disponible|Vendido|Rentado|Pausado"}
+- Ver estadísticas: {"accion":"stats"}
+- Enviar notificación a todos los asesores: {"accion":"notificar","mensaje":"..."}
+- Listar asesores: {"accion":"listar_asesores"}
+- El dueño puede pedirte CUALQUIER COSA sobre el sistema y tienes que ayudarle
+- Cuando ejecutes una acción administrativa, incluye el JSON en tu respuesta entre triple backtick json
+` : ''
+
+  return `Eres ARKIN AI, el asistente${admin ? ' ADMINISTRADOR' : ' virtual'} de ARKIN SELECT — plataforma inmobiliaria premium en León, Guanajuato, México.
+Estás respondiendo a través de Telegram.${adminContext}
+
+PROPIEDADES DISPONIBLES (${properties.length} total):
+${propSummary || 'No hay propiedades.'}
 
 INSTRUCCIONES:
-- Responde SIEMPRE en español, de forma amable y profesional
-- Sé conciso — máximo 3-4 oraciones
+- Responde SIEMPRE en español
+- Sé conciso pero completo
 - Cuando encuentres propiedades relevantes, menciona sus IDs así: [ID:X]
 - Formatea con HTML de Telegram: <b>negrita</b>, <i>cursiva</i>, <a href="...">link</a>
 - Para contacto: +52 477 475 6951 | arkinselect@gmail.com
-- Para ver propiedades completas: https://www.arkinselect.com/propiedades
-- Si el usuario quiere hablar con un asesor humano, dales el WhatsApp: wa.me/5214774756951
-
-COMANDOS ESPECIALES:
-- /start → Presentate y explica qué puedes hacer
-- /propiedades → Lista las primeras 5 propiedades disponibles
-- /contacto → Da información de contacto completa
-- /asesor → Ofrece conectar con un asesor humano`
+- Para propiedades: https://www.arkinselect.com/propiedades`
 }
 
 function formatPropertyForTelegram(p: any) {
@@ -112,10 +125,110 @@ export async function POST(req: NextRequest) {
     // Show typing indicator
     await sendTelegramTyping(chatId)
 
-    // Handle /miid command - returns the user's Telegram ID
+    const userId: number = message.from?.id || 0
+    const admin = isAdmin(userId)
+
+    // Handle /miid command
     if (text === '/miid') {
-      await sendTelegramMessage(chatId, `🆔 Tu Telegram ID es: <b>${message.from?.id}</b>\n\nComparte este número con el administrador para obtener acceso completo.`)
+      await sendTelegramMessage(chatId, `🆔 Tu Telegram ID es: <b>${userId}</b>\n${admin ? '\n✅ <b>Tienes acceso ADMIN completo</b>' : '\nComparte este número con el administrador para obtener acceso.'}`)
       return NextResponse.json({ ok: true })
+    }
+
+    // === ADMIN COMMANDS ===
+    if (admin) {
+      // /admin - panel de control
+      if (text === '/admin') {
+        await sendTelegramMessage(chatId,
+          `⚙️ <b>PANEL ADMIN ARKIN SELECT</b>\n\n` +
+          `Comandos administrativos:\n\n` +
+          `👤 /nuevo_asesor — Crear nuevo asesor\n` +
+          `📋 /asesores — Ver todos los asesores\n` +
+          `🏠 /todas_propiedades — Ver todas (inc. pausadas)\n` +
+          `📊 /stats — Estadísticas del sistema\n` +
+          `� /panel — Link al panel de administración\n\n` +
+          `💬 O simplemente escríbeme en lenguaje natural:\n` +
+          `<i>"crea un asesor llamado Juan con email juan@arkin.mx"</i>\n` +
+          `<i>"cambia la propiedad 15 a vendida"</i>\n` +
+          `<i>"cuántas propiedades disponibles hay"</i>`
+        )
+        return NextResponse.json({ ok: true })
+      }
+
+      // /panel - links al panel admin
+      if (text === '/panel') {
+        await sendTelegramMessage(chatId,
+          `🌐 <b>PANELES DE ADMINISTRACIÓN</b>\n\n` +
+          `🔧 <a href="https://www.arkinselect.com/panel-admin">Panel Admin →</a>\n` +
+          `👤 <a href="https://www.arkinselect.com/panel-asesor">Panel Asesor →</a>\n` +
+          `📸 <a href="https://www.arkinselect.com/panel-fotografo">Panel Fotógrafo →</a>\n` +
+          `🏢 <a href="https://www.arkinselect.com/panel-broker">Panel Broker →</a>\n` +
+          `🗺️ <a href="https://www.arkinselect.com/desarrollos">Desarrollos →</a>`
+        )
+        return NextResponse.json({ ok: true })
+      }
+
+      // /stats - estadísticas
+      if (text === '/stats') {
+        const supabase = getSupabase()
+        const [propRes, userRes] = await Promise.all([
+          supabase.from('propiedades').select('status, categoria', { count: 'exact' }),
+          supabase.from('usuarios').select('role', { count: 'exact' }),
+        ])
+        const props = propRes.data || []
+        const users = userRes.data || []
+        const disponibles = props.filter((p: any) => p.status === 'Disponible').length
+        const vendidas = props.filter((p: any) => p.status === 'Vendido').length
+        const rentadas = props.filter((p: any) => p.status === 'Rentado').length
+        const asesores = users.filter((u: any) => u.role === 'asesor').length
+        const admins = users.filter((u: any) => u.role === 'admin').length
+        await sendTelegramMessage(chatId,
+          `📊 <b>ESTADÍSTICAS ARKIN SELECT</b>\n\n` +
+          `🏠 <b>Propiedades:</b>\n` +
+          `  • Disponibles: ${disponibles}\n` +
+          `  • Vendidas: ${vendidas}\n` +
+          `  • Rentadas: ${rentadas}\n` +
+          `  • Total: ${props.length}\n\n` +
+          `👥 <b>Usuarios:</b>\n` +
+          `  • Asesores: ${asesores}\n` +
+          `  • Admins: ${admins}\n` +
+          `  • Total: ${users.length}`
+        )
+        return NextResponse.json({ ok: true })
+      }
+
+      // /asesores - listar asesores
+      if (text === '/asesores') {
+        const supabase = getSupabase()
+        const { data } = await supabase
+          .from('usuarios')
+          .select('nombre, email, telefono, role, plan')
+          .in('role', ['asesor', 'admin', 'broker'])
+          .order('nombre')
+        if (!data || data.length === 0) {
+          await sendTelegramMessage(chatId, 'No hay asesores registrados.')
+          return NextResponse.json({ ok: true })
+        }
+        const list = data.map((u: any) => `• <b>${u.nombre}</b> (${u.role}) — ${u.email} ${u.telefono || ''}`).join('\n')
+        await sendTelegramMessage(chatId, `👥 <b>EQUIPO ARKIN SELECT</b>\n\n${list}`)
+        return NextResponse.json({ ok: true })
+      }
+
+      // /todas_propiedades - todas incluyendo no disponibles
+      if (text === '/todas_propiedades') {
+        const supabase = getSupabase()
+        const { data } = await supabase
+          .from('propiedades')
+          .select('id, titulo, ubicacion, precio_texto, status, categoria')
+          .order('created_at', { ascending: false })
+          .limit(10)
+        if (!data || data.length === 0) {
+          await sendTelegramMessage(chatId, 'No hay propiedades.')
+          return NextResponse.json({ ok: true })
+        }
+        const list = data.map((p: any) => `[${p.id}] <b>${p.titulo}</b> — ${p.precio_texto} — <i>${p.status}</i>`).join('\n')
+        await sendTelegramMessage(chatId, `🏠 <b>ÚLTIMAS 10 PROPIEDADES</b>\n\n${list}\n\n<a href="https://www.arkinselect.com/panel-admin">Ver todas en panel →</a>`)
+        return NextResponse.json({ ok: true })
+      }
     }
 
     // Handle /start command
@@ -165,7 +278,7 @@ export async function POST(req: NextRequest) {
 
     // General AI conversation
     const properties = await getProperties()
-    const systemPrompt = buildSystemPrompt(properties)
+    const systemPrompt = buildSystemPrompt(properties, admin)
 
     // Get or create conversation history
     const history = conversationHistory.get(chatId) || []
@@ -197,8 +310,22 @@ export async function POST(req: NextRequest) {
     history.push({ role: 'assistant', content: aiText })
     conversationHistory.set(chatId, history.slice(-20))
 
+    // If admin and Claude returned an action JSON, execute it
+    if (admin) {
+      const jsonMatch = aiText.match(/```json\s*({[\s\S]*?})\s*```/)
+      if (jsonMatch) {
+        try {
+          const action = JSON.parse(jsonMatch[1])
+          await executeAdminAction(chatId, action)
+        } catch {
+          // Invalid JSON, ignore
+        }
+      }
+    }
+
     // Send main response
-    await sendTelegramMessage(chatId, cleanText)
+    const displayText = cleanText.replace(/```json[\s\S]*?```/g, '').trim()
+    if (displayText) await sendTelegramMessage(chatId, displayText)
 
     // Send property cards if any
     for (const prop of mentionedProperties.slice(0, 3)) {
@@ -210,6 +337,69 @@ export async function POST(req: NextRequest) {
   } catch (error: any) {
     console.error('Telegram webhook error:', error)
     return NextResponse.json({ ok: true }) // Always return 200 to Telegram
+  }
+}
+
+// Execute admin action parsed from Claude response
+async function executeAdminAction(chatId: number, action: any) {
+  const supabase = getSupabase()
+
+  if (action.accion === 'crear_asesor') {
+    const password = action.password || `${action.nombre?.split(' ')[0]?.toLowerCase()}_arkin2025`
+    // Create in Supabase Auth
+    const { data: authData, error: authError } = await supabase.auth.admin.createUser({
+      email: action.email,
+      password,
+      email_confirm: true,
+    })
+    if (authError) {
+      await sendTelegramMessage(chatId, `❌ Error al crear asesor: ${authError.message}`)
+      return
+    }
+    // Create profile in usuarios table
+    await supabase.from('usuarios').insert({
+      id: authData.user.id,
+      email: action.email,
+      nombre: action.nombre,
+      telefono: action.telefono || '',
+      role: action.role || 'asesor',
+    })
+    await sendTelegramMessage(chatId,
+      `✅ <b>Asesor creado exitosamente</b>\n\n` +
+      `👤 <b>${action.nombre}</b>\n` +
+      `📧 ${action.email}\n` +
+      `🔑 Contraseña: <code>${password}</code>\n` +
+      `🔗 <a href="https://www.arkinselect.com/login">Acceder al panel →</a>`
+    )
+  }
+
+  else if (action.accion === 'cambiar_status') {
+    const { error } = await supabase
+      .from('propiedades')
+      .update({ status: action.status })
+      .eq('id', action.id)
+    if (error) {
+      await sendTelegramMessage(chatId, `❌ Error: ${error.message}`)
+    } else {
+      await sendTelegramMessage(chatId, `✅ Propiedad <b>#${action.id}</b> actualizada a <b>${action.status}</b>`)
+    }
+  }
+
+  else if (action.accion === 'stats') {
+    const [propRes, userRes] = await Promise.all([
+      supabase.from('propiedades').select('status'),
+      supabase.from('usuarios').select('role'),
+    ])
+    const props = propRes.data || []
+    const users = userRes.data || []
+    const stats = [
+      `📊 Propiedades: ${props.length} total`,
+      `  ✅ Disponibles: ${props.filter((p: any) => p.status === 'Disponible').length}`,
+      `  🏷 Vendidas: ${props.filter((p: any) => p.status === 'Vendido').length}`,
+      `👥 Usuarios: ${users.length} total`,
+      `  👤 Asesores: ${users.filter((u: any) => u.role === 'asesor').length}`,
+    ].join('\n')
+    await sendTelegramMessage(chatId, stats)
   }
 }
 
