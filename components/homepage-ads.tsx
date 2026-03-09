@@ -1,18 +1,29 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { AdsStorage, Ad } from '@/lib/ads-storage'
 import { ArrowRight, Sparkles } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import Image from 'next/image'
+
+interface Ad {
+  id: string
+  titulo: string
+  descripcion: string
+  imagen: string
+  enlace: string
+  texto_boton: string
+  ubicacion: string
+  estilo: string
+  activo: boolean
+  estado: string
+}
 
 function AdBanner({ ad }: { ad: Ad }) {
   useEffect(() => {
-    AdsStorage.trackImpression(ad.id)
+    fetch('/api/anuncios', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: ad.id, tipo: 'impresion' }) }).catch(() => {})
   }, [ad.id])
 
   const handleClick = () => {
-    AdsStorage.trackClick(ad.id)
+    fetch('/api/anuncios', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: ad.id, tipo: 'click' }) }).catch(() => {})
     if (ad.enlace) {
       window.open(ad.enlace, '_blank', 'noopener,noreferrer')
     }
@@ -45,12 +56,12 @@ function AdBanner({ ad }: { ad: Ad }) {
             <p className="text-sm text-arkin-accent/60 mb-4 line-clamp-2">
               {ad.descripcion}
             </p>
-            {ad.textoBoton && (
+            {ad.texto_boton && (
               <Button
                 size="sm"
                 className="bg-arkin-primary hover:bg-arkin-primary/90 text-arkin-accent font-semibold rounded-xl text-xs px-5"
               >
-                {ad.textoBoton}
+                {ad.texto_boton}
                 <ArrowRight className="h-3 w-3 ml-1.5" />
               </Button>
             )}
@@ -87,10 +98,10 @@ function AdBanner({ ad }: { ad: Ad }) {
           <p className="text-sm sm:text-base text-gray-300 mb-5 max-w-md line-clamp-2">
             {ad.descripcion}
           </p>
-          {ad.textoBoton && (
+          {ad.texto_boton && (
             <div>
               <Button className="bg-arkin-primary hover:bg-arkin-primary/90 text-arkin-accent font-bold rounded-2xl px-8 py-3 shadow-lg hover:scale-105 transition-all duration-300">
-                {ad.textoBoton}
+                {ad.texto_boton}
                 <ArrowRight className="h-4 w-4 ml-2" />
               </Button>
             </div>
@@ -127,9 +138,9 @@ function AdBanner({ ad }: { ad: Ad }) {
           <p className="text-sm text-arkin-accent/60 mb-5 line-clamp-2">
             {ad.descripcion}
           </p>
-          {ad.textoBoton && (
+          {ad.texto_boton && (
             <Button className="bg-arkin-primary hover:bg-arkin-primary/90 text-arkin-accent font-semibold rounded-xl px-6 py-2.5 shadow-md hover:scale-105 transition-all duration-300">
-              {ad.textoBoton}
+              {ad.texto_boton}
               <ArrowRight className="h-4 w-4 ml-2" />
             </Button>
           )}
@@ -139,12 +150,14 @@ function AdBanner({ ad }: { ad: Ad }) {
   )
 }
 
-export function HomepageAdSlot({ ubicacion }: { ubicacion: Ad['ubicacion'] }) {
+export function HomepageAdSlot({ ubicacion }: { ubicacion: string }) {
   const [ads, setAds] = useState<Ad[]>([])
 
   useEffect(() => {
-    const active = AdsStorage.getActiveByUbicacion(ubicacion)
-    setAds(active)
+    fetch(`/api/anuncios?ubicacion=${ubicacion}`)
+      .then(r => r.json())
+      .then(data => setAds(data.anuncios || []))
+      .catch(() => {})
   }, [ubicacion])
 
   if (ads.length === 0) return null

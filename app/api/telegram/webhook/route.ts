@@ -86,6 +86,14 @@ Puedes ejecutar cualquier operación administrativa:
 - Listar asesores: {"accion":"listar_asesores"}
 - El dueño puede pedirte CUALQUIER COSA sobre el sistema y tienes que ayudarle
 - Cuando ejecutes una acción administrativa, incluye el JSON en tu respuesta entre triple backtick json
+
+GESTIÓN DE ANUNCIOS (reconoce frases en lenguaje natural):
+- "pausa el anuncio [nombre]" → pausa el anuncio que contenga ese nombre
+- "reanuda el anuncio [nombre]" / "reactiva el anuncio [nombre]" → lo activa de nuevo
+- "suspende el anuncio [nombre]" → lo suspende completamente
+- "elimina el anuncio [nombre]" / "borra el anuncio [nombre]" → lo elimina permanentemente
+- Usa /anuncios para ver todos los anuncios con su estado actual
+- Los cambios se reflejan en tiempo real en el homepage del sitio
 ` : ''
 
   return `Eres ARKIN AI, el asistente${admin ? ' ADMINISTRADOR' : ' virtual'} de ARKIN SELECT — plataforma inmobiliaria premium en León, Guanajuato, México.
@@ -164,8 +172,8 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ ok: true })
       }
 
-      // "elimina/borra el anuncio X" or "borra propiedad X"
-      const eliminarPropMatch = tl.match(/(?:elim[ií]na?|borra?)\s+(?:la\s+)?(?:propiedad\s+)?#?(\d+)/i)
+      // "elimina/borra la propiedad X"
+      const eliminarPropMatch = tl.match(/(?:elim[ií]na?|borra?)\s+(?:la\s+)?propiedad\s+#?(\d+)/i)
       if (eliminarPropMatch) {
         const id = parseInt(eliminarPropMatch[1])
         const supabase = getSupabase()
@@ -175,6 +183,39 @@ export async function POST(req: NextRequest) {
         } else {
           await sendTelegramMessage(chatId, `✅ Propiedad <b>#${id}</b> marcada como <b>Pausada</b> (ocultada del sitio)`)
         }
+        return NextResponse.json({ ok: true })
+      }
+
+      // === ANUNCIOS / ADS MANAGEMENT ===
+      // "pausa el anuncio X" / "pausa anuncio casapersonalidad"
+      const pausarAnuncioMatch = tl.match(/paus[ae]r?\s+(?:el\s+)?anuncio\s+(.+)/i)
+      if (pausarAnuncioMatch) {
+        const query = pausarAnuncioMatch[1].trim()
+        await executeAdAction(chatId, 'pausado', query)
+        return NextResponse.json({ ok: true })
+      }
+
+      // "reactiva / reanuda el anuncio X"
+      const reanudarAnuncioMatch = tl.match(/(?:reactiv[ae]r?|reanud[ae]r?)\s+(?:el\s+)?anuncio\s+(.+)/i)
+      if (reanudarAnuncioMatch) {
+        const query = reanudarAnuncioMatch[1].trim()
+        await executeAdAction(chatId, 'activo', query)
+        return NextResponse.json({ ok: true })
+      }
+
+      // "suspende el anuncio X"
+      const suspenderAnuncioMatch = tl.match(/suspend[eé]r?\s+(?:el\s+)?anuncio\s+(.+)/i)
+      if (suspenderAnuncioMatch) {
+        const query = suspenderAnuncioMatch[1].trim()
+        await executeAdAction(chatId, 'suspendido', query)
+        return NextResponse.json({ ok: true })
+      }
+
+      // "elimina el anuncio X"
+      const eliminarAnuncioMatch = tl.match(/(?:elim[ií]na?|borra?)\s+(?:el\s+)?anuncio\s+(.+)/i)
+      if (eliminarAnuncioMatch) {
+        const query = eliminarAnuncioMatch[1].trim()
+        await executeAdDelete(chatId, query)
         return NextResponse.json({ ok: true })
       }
     }
@@ -190,11 +231,13 @@ export async function POST(req: NextRequest) {
           `📋 /asesores — Ver todos los asesores\n` +
           `🏠 /todas_propiedades — Ver todas (inc. pausadas)\n` +
           `📊 /stats — Estadísticas del sistema\n` +
-          `� /panel — Link al panel de administración\n\n` +
+          `📢 /anuncios — Ver y gestionar anuncios\n` +
+          `🌐 /panel — Link al panel de administración\n\n` +
           `💬 O simplemente escríbeme en lenguaje natural:\n` +
           `<i>"crea un asesor llamado Juan con email juan@arkin.mx"</i>\n` +
           `<i>"cambia la propiedad 15 a vendida"</i>\n` +
-          `<i>"cuántas propiedades disponibles hay"</i>`
+          `<i>"pausa el anuncio casa personalidad"</i>\n` +
+          `<i>"elimina el anuncio casa personalidad"</i>`
         )
         return NextResponse.json({ ok: true })
       }
@@ -255,6 +298,43 @@ export async function POST(req: NextRequest) {
         }
         const list = data.map((u: any) => `• <b>${u.nombre}</b> (${u.role}) — ${u.email} ${u.telefono || ''}`).join('\n')
         await sendTelegramMessage(chatId, `👥 <b>EQUIPO ARKIN SELECT</b>\n\n${list}`)
+        return NextResponse.json({ ok: true })
+      }
+
+      // /anuncios - listar y gestionar anuncios
+      if (text === '/anuncios') {
+        const supabase = getSupabase()
+        const { data } = await supabase
+          .from('anuncios')
+          .select('id, titulo, estado, ubicacion, clicks, impresiones')
+          .order('creado_en', { ascending: false })
+          .limit(10)
+        if (!data || data.length === 0) {
+          await sendTelegramMessage(chatId,
+            `📢 <b>ANUNCIOS</b>\n\nNo hay anuncios creados.\n\n` +
+            `<a href="https://www.arkinselect.com/panel-admin/publicidad">Crear anuncio →</a>`
+          )
+          return NextResponse.json({ ok: true })
+        }
+        const ubicLabels: Record<string, string> = {
+          'banner-hero': 'Hero', 'entre-secciones': 'Entre secciones',
+          'lateral': 'Lateral', 'footer': 'Footer',
+        }
+        const estadoEmoji: Record<string, string> = { activo: '🟢', pausado: '🟡', suspendido: '🔴' }
+        const list = data.map((a: any) =>
+          `${estadoEmoji[a.estado] || '⚪'} <b>${a.titulo}</b> (${ubicLabels[a.ubicacion] || a.ubicacion})\n` +
+          `   👁 ${a.impresiones || 0} impresiones · 🖱 ${a.clicks || 0} clicks\n` +
+          `   Estado: <i>${a.estado}</i>`
+        ).join('\n\n')
+        await sendTelegramMessage(chatId,
+          `📢 <b>ANUNCIOS (${data.length})</b>\n\n${list}\n\n` +
+          `💬 Comandos:\n` +
+          `<i>"pausa el anuncio [nombre]"</i>\n` +
+          `<i>"reanuda el anuncio [nombre]"</i>\n` +
+          `<i>"suspende el anuncio [nombre]"</i>\n` +
+          `<i>"elimina el anuncio [nombre]"</i>\n\n` +
+          `<a href="https://www.arkinselect.com/panel-admin/publicidad">Ver todos →</a>`
+        )
         return NextResponse.json({ ok: true })
       }
 
@@ -445,6 +525,75 @@ async function executeAdminAction(chatId: number, action: any) {
       `  👤 Asesores: ${users.filter((u: any) => u.role === 'asesor').length}`,
     ].join('\n')
     await sendTelegramMessage(chatId, stats)
+  }
+}
+
+// Find ad by partial title match and update estado
+async function executeAdAction(chatId: number, estado: string, query: string) {
+  const supabase = getSupabase()
+  const { data, error } = await supabase
+    .from('anuncios')
+    .select('id, titulo, estado')
+    .ilike('titulo', `%${query}%`)
+    .limit(5)
+
+  if (error || !data || data.length === 0) {
+    await sendTelegramMessage(chatId, `❌ No encontré ningún anuncio con el nombre <b>"${query}"</b>.\n\nUsa /anuncios para ver todos los anuncios.`)
+    return
+  }
+
+  const activo = estado === 'activo'
+  const labels: Record<string, string> = { activo: '🟢 Activo', pausado: '🟡 Pausado', suspendido: '🔴 Suspendido' }
+
+  if (data.length === 1) {
+    const ad = data[0]
+    await supabase.from('anuncios').update({ estado, activo }).eq('id', ad.id)
+    await sendTelegramMessage(chatId,
+      `✅ Anuncio actualizado\n\n` +
+      `📢 <b>${ad.titulo}</b>\n` +
+      `Estado: ${labels[estado]}\n\n` +
+      `<a href="https://www.arkinselect.com/panel-admin/publicidad">Ver panel →</a>`
+    )
+  } else {
+    // Multiple matches — update all and list them
+    const ids = data.map((a: any) => a.id)
+    await supabase.from('anuncios').update({ estado, activo }).in('id', ids)
+    const list = data.map((a: any) => `• <b>${a.titulo}</b>`).join('\n')
+    await sendTelegramMessage(chatId,
+      `✅ ${data.length} anuncios actualizados a ${labels[estado]}\n\n${list}\n\n` +
+      `<a href="https://www.arkinselect.com/panel-admin/publicidad">Ver panel →</a>`
+    )
+  }
+}
+
+// Find ad by partial title and delete it
+async function executeAdDelete(chatId: number, query: string) {
+  const supabase = getSupabase()
+  const { data, error } = await supabase
+    .from('anuncios')
+    .select('id, titulo')
+    .ilike('titulo', `%${query}%`)
+    .limit(5)
+
+  if (error || !data || data.length === 0) {
+    await sendTelegramMessage(chatId, `❌ No encontré ningún anuncio con el nombre <b>"${query}"</b>.\n\nUsa /anuncios para ver todos los anuncios.`)
+    return
+  }
+
+  if (data.length === 1) {
+    const ad = data[0]
+    await supabase.from('anuncios').delete().eq('id', ad.id)
+    await sendTelegramMessage(chatId,
+      `🗑 Anuncio eliminado\n\n` +
+      `📢 <b>${ad.titulo}</b>\n\n` +
+      `<a href="https://www.arkinselect.com/panel-admin/publicidad">Ver panel →</a>`
+    )
+  } else {
+    const list = data.map((a: any) => `• <b>${a.titulo}</b>`).join('\n')
+    await sendTelegramMessage(chatId,
+      `⚠️ Encontré ${data.length} anuncios con ese nombre:\n\n${list}\n\n` +
+      `Sé más específico, por ejemplo: <i>"elimina el anuncio ${data[0].titulo}"</i>`
+    )
   }
 }
 
