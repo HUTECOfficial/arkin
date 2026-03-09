@@ -66,7 +66,7 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-arkin-secondary">
       <div className="max-w-7xl mx-auto px-4 py-8">
         <Link href="/propiedades" className="inline-flex items-center text-arkin-gold hover:text-arkin-gold/80 mb-6">
           <ArrowLeft className="h-4 w-4 mr-2" />
