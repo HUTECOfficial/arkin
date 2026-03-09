@@ -2,8 +2,7 @@
 
 import { useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useAuth } from '@/contexts/auth-context'
-import { User, Lock, Mail, Phone, AlertCircle, CheckCircle2, Sparkles, Crown } from 'lucide-react'
+import { User, Mail, Phone, AlertCircle, CheckCircle2, Crown, MessageSquare } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -12,13 +11,11 @@ function RegistroContent() {
     nombre: '',
     email: '',
     telefono: '',
-    password: '',
-    confirmPassword: ''
+    mensaje: ''
   })
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
   const [loading, setLoading] = useState(false)
-  const { signup } = useAuth()
   const router = useRouter()
   const searchParams = useSearchParams()
   const fromPlans = searchParams.get('from') === 'planes'
@@ -35,32 +32,28 @@ function RegistroContent() {
     setError('')
     setLoading(true)
 
-    // Validaciones
-    if (formData.password !== formData.confirmPassword) {
-      setError('Las contraseñas no coinciden')
-      setLoading(false)
-      return
-    }
-
-    if (formData.password.length < 6) {
-      setError('La contraseña debe tener al menos 6 caracteres')
-      setLoading(false)
-      return
-    }
-
     try {
-      await signup(formData.email, formData.password, {
-        nombre: formData.nombre,
-        telefono: formData.telefono
+      // Enviar datos a API para guardar solicitud de contacto
+      const response = await fetch('/api/contacto-asesor', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nombre: formData.nombre,
+          email: formData.email,
+          telefono: formData.telefono,
+          mensaje: formData.mensaje || 'Solicitud de información para ser asesor ARKIN SELECT',
+          tipo: 'solicitud_asesor',
+          fecha: new Date().toISOString()
+        })
       })
+
+      if (!response.ok) {
+        throw new Error('Error al enviar la solicitud')
+      }
       
       setSuccess(true)
-      // Redirigir después de 2 segundos a elegir plan
-      setTimeout(() => {
-        router.push('/alianza-comercial')
-      }, 2000)
     } catch (err: any) {
-      setError(err.message || 'Error al crear la cuenta')
+      setError(err.message || 'Error al enviar la solicitud. Por favor intenta de nuevo.')
     } finally {
       setLoading(false)
     }
@@ -73,11 +66,20 @@ function RegistroContent() {
           <div className="bg-green-50 dark:bg-green-900/20 rounded-3xl shadow-xl p-8 border border-green-200 dark:border-green-800">
             <CheckCircle2 className="w-16 h-16 text-green-500 mx-auto mb-4" />
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-              ¡Bienvenido a ARKIN SELECT!
+              ¡Solicitud Enviada!
             </h2>
-            <p className="text-gray-600 dark:text-gray-400">
-              Tu cuenta está lista. Ahora elige el plan perfecto para ti...
+            <p className="text-gray-600 dark:text-gray-400 mb-4">
+              Gracias por tu interés en unirte a ARKIN SELECT.
             </p>
+            <p className="text-gray-700 dark:text-gray-300 font-medium">
+              Nuestro equipo te contactará en menos de 24 horas para brindarte toda la información sobre nuestros planes y beneficios.
+            </p>
+            <button
+              onClick={() => router.push('/')}
+              className="mt-6 px-6 py-3 bg-arkin-gold hover:bg-arkin-gold/90 text-gray-800 font-semibold rounded-xl transition-all"
+            >
+              Volver al Inicio
+            </button>
           </div>
         </div>
       </div>
@@ -107,15 +109,15 @@ function RegistroContent() {
                 <span className="text-sm font-medium text-arkin-gold">Únete a la élite inmobiliaria</span>
               </div>
               <h2 className="text-2xl font-bold text-gray-800 mb-2">
-                Crea tu cuenta de asesor
+                Únete como Asesor
               </h2>
               <p className="text-gray-600 text-sm">
-                El primer paso hacia el éxito. Tu carrera inmobiliaria comienza aquí.
+                Déjanos tus datos y te contactaremos para brindarte toda la información.
               </p>
             </div>
           ) : (
             <p className="text-gray-600 dark:text-gray-400 text-lg font-medium">
-              Crear Cuenta
+              Solicitar Información
             </p>
           )}
         </div>
@@ -178,51 +180,30 @@ function RegistroContent() {
                   onChange={handleChange}
                   className="w-full pl-11 pr-4 py-3 bg-arkin-secondary/70 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-arkin-gold focus:border-transparent outline-none transition-all text-gray-900 dark:text-white"
                   placeholder="+52 1 477 123 4567"
+                  required
                 />
               </div>
             </div>
 
-            {/* Password */}
+            {/* Mensaje opcional */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Contraseña
+              <label htmlFor="mensaje" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Mensaje (opcional)
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  className="w-full pl-11 pr-4 py-3 bg-arkin-secondary/70 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-arkin-gold focus:border-transparent outline-none transition-all text-gray-900 dark:text-white"
-                  placeholder="••••••••"
-                  required
-                  minLength={6}
+                <MessageSquare className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+                <textarea
+                  id="mensaje"
+                  name="mensaje"
+                  value={formData.mensaje}
+                  onChange={(e) => setFormData({ ...formData, mensaje: e.target.value })}
+                  className="w-full pl-11 pr-4 py-3 bg-arkin-secondary/70 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-arkin-gold focus:border-transparent outline-none transition-all text-gray-900 dark:text-white resize-none"
+                  placeholder="Cuéntanos sobre tu experiencia o interés..."
+                  rows={3}
                 />
               </div>
             </div>
 
-            {/* Confirmar Password */}
-            <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Confirmar contraseña
-              </label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  type="password"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  className="w-full pl-11 pr-4 py-3 bg-arkin-secondary/70 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-arkin-gold focus:border-transparent outline-none transition-all text-gray-900 dark:text-white"
-                  placeholder="••••••••"
-                  required
-                  minLength={6}
-                />
-              </div>
-            </div>
 
             {/* Error */}
             {error && (
@@ -238,20 +219,14 @@ function RegistroContent() {
               disabled={loading}
               className="w-full py-3 bg-arkin-gold hover:bg-arkin-gold/90 text-gray-800 font-semibold rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-arkin-gold/20"
             >
-              {loading ? 'Creando cuenta...' : 'Crear Cuenta'}
+              {loading ? 'Enviando solicitud...' : 'Enviar Solicitud'}
             </button>
           </form>
 
-          {/* Link a login */}
-          <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700 text-center">
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              ¿Ya tienes cuenta?{' '}
-              <Link 
-                href={fromPlans ? "/login?from=planes&redirect=/alianza-comercial" : "/login"} 
-                className="text-arkin-gold hover:underline font-medium"
-              >
-                Iniciar sesión
-              </Link>
+          {/* Info adicional */}
+          <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+            <p className="text-xs text-center text-gray-500 dark:text-gray-400">
+              Al enviar este formulario, aceptas que ARKIN SELECT te contacte para brindarte información sobre nuestros servicios y planes.
             </p>
           </div>
         </div>
