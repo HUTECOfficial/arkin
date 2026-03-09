@@ -102,8 +102,21 @@ export async function POST(req: NextRequest) {
 
     // Handle /start command
     if (text === '/start') {
-      await sendTelegramMessage(chatId, `¡Hola <b>${firstName}</b>! 👋\n\nSoy <b>ARKIN AI</b>, tu asistente inmobiliario inteligente de ARKIN SELECT.\n\nPuedo ayudarte a:\n🏡 Buscar propiedades por zona, precio y características\n💡 Responder dudas sobre compra/venta\n📋 Explicar el proceso inmobiliario\n\n¿Qué tipo de propiedad estás buscando?`)
       conversationHistory.delete(chatId)
+      await sendTelegramMessage(chatId,
+        `🏠 <b>¡Bienvenido a ARKIN SELECT!</b>\n\n` +
+        `Hola <b>${firstName}</b>, soy <b>ARKIN AI</b> 🤖, tu asistente inmobiliario inteligente.\n\n` +
+        `Puedo ayudarte a:\n` +
+        `🔍 Buscar propiedades por zona, precio y características\n` +
+        `� Asesorarte sobre precios y zonas de León, Gto.\n` +
+        `📋 Explicar el proceso de compra o renta\n` +
+        `📞 Conectarte con un asesor ARKIN\n\n` +
+        `<b>Comandos disponibles:</b>\n` +
+        `/propiedades — Ver propiedades disponibles\n` +
+        `/contacto — Información de contacto\n` +
+        `/asesor — Hablar con un asesor humano\n\n` +
+        `¿Qué tipo de propiedad estás buscando? 🏡`
+      )
       return NextResponse.json({ ok: true })
     }
 
