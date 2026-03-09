@@ -175,25 +175,206 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
                 </div>
 
                 <Tabs defaultValue="descripcion" className="w-full">
-                  <TabsList className="grid w-full grid-cols-2">
-                    <TabsTrigger value="descripcion">Descripción</TabsTrigger>
-                    <TabsTrigger value="caracteristicas">Características</TabsTrigger>
+                  <TabsList className="grid w-full grid-cols-4 gap-1">
+                    <TabsTrigger value="descripcion" className="text-xs sm:text-sm">Descripción</TabsTrigger>
+                    <TabsTrigger value="caracteristicas" className="text-xs sm:text-sm">Características</TabsTrigger>
+                    <TabsTrigger value="detalles" className="text-xs sm:text-sm">Detalles</TabsTrigger>
+                    <TabsTrigger value="ubicacion" className="text-xs sm:text-sm">Ubicación</TabsTrigger>
                   </TabsList>
-                  <TabsContent value="descripcion" className="mt-4">
-                    <p className="text-gray-600 leading-relaxed">{propertyData.descripcion}</p>
-                  </TabsContent>
-                  <TabsContent value="caracteristicas" className="mt-4">
-                    <div className="grid grid-cols-2 gap-3">
-                      {propertyData.caracteristicas?.map((car, i) => {
-                        const Icon = amenityIcons[car] || Shield
-                        return (
-                          <div key={i} className="flex items-center gap-2 text-sm">
-                            <Icon className="h-4 w-4 text-arkin-gold" />
-                            <span>{car}</span>
-                          </div>
-                        )
-                      })}
+
+                  {/* Descripción */}
+                  <TabsContent value="descripcion" className="mt-4 space-y-4">
+                    <div>
+                      <h3 className="font-semibold text-lg mb-2 text-arkin-accent">Acerca de esta propiedad</h3>
+                      <p className="text-gray-600 leading-relaxed">{propertyData.descripcion}</p>
                     </div>
+                    
+                    {propertyData.tourVirtual && (
+                      <div className="pt-4 border-t">
+                        <Button variant="outline" className="w-full" asChild>
+                          <a href={propertyData.tourVirtual} target="_blank" rel="noopener noreferrer">
+                            <Play className="h-4 w-4 mr-2" />
+                            Ver Tour Virtual 360°
+                          </a>
+                        </Button>
+                      </div>
+                    )}
+                  </TabsContent>
+
+                  {/* Características y Amenidades */}
+                  <TabsContent value="caracteristicas" className="mt-4 space-y-4">
+                    <div>
+                      <h3 className="font-semibold text-lg mb-3 text-arkin-accent">Amenidades y Características</h3>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {propertyData.caracteristicas?.map((car, i) => {
+                          const Icon = amenityIcons[car] || Shield
+                          return (
+                            <div key={i} className="flex items-center gap-3 p-3 rounded-lg bg-gray-50 border border-gray-200 hover:border-arkin-gold/50 transition-colors">
+                              <div className="w-10 h-10 rounded-full bg-arkin-gold/10 flex items-center justify-center flex-shrink-0">
+                                <Icon className="h-5 w-5 text-arkin-gold" />
+                              </div>
+                              <span className="text-sm font-medium text-gray-700">{car}</span>
+                            </div>
+                          )
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Información adicional de espacios */}
+                    <div className="pt-4 border-t space-y-3">
+                      <h4 className="font-semibold text-gray-700">Espacios</h4>
+                      <div className="grid grid-cols-2 gap-4">
+                        {propertyData.cochera && (
+                          <div className="flex items-center gap-2 text-sm">
+                            <Car className="h-4 w-4 text-gray-500" />
+                            <span className="text-gray-600">{propertyData.cochera} Cochera{propertyData.cochera > 1 ? 's' : ''}</span>
+                          </div>
+                        )}
+                        {propertyData.mediosBanos && (
+                          <div className="flex items-center gap-2 text-sm">
+                            <Bath className="h-4 w-4 text-gray-500" />
+                            <span className="text-gray-600">{propertyData.mediosBanos} Medio{propertyData.mediosBanos > 1 ? 's' : ''} Baño{propertyData.mediosBanos > 1 ? 's' : ''}</span>
+                          </div>
+                        )}
+                        {propertyData.areaConstruccion && (
+                          <div className="flex items-center gap-2 text-sm">
+                            <Square className="h-4 w-4 text-gray-500" />
+                            <span className="text-gray-600">{propertyData.areaConstruccion} m² construidos</span>
+                          </div>
+                        )}
+                        {propertyData.amueblado && (
+                          <div className="flex items-center gap-2 text-sm">
+                            <Users className="h-4 w-4 text-gray-500" />
+                            <span className="text-gray-600 capitalize">{propertyData.amueblado.replace(/_/g, ' ')}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </TabsContent>
+
+                  {/* Detalles Técnicos */}
+                  <TabsContent value="detalles" className="mt-4 space-y-4">
+                    <div>
+                      <h3 className="font-semibold text-lg mb-3 text-arkin-accent">Información Detallada</h3>
+                      <div className="space-y-3">
+                        <div className="flex justify-between items-center py-2 border-b border-gray-200">
+                          <span className="text-gray-600 text-sm">Tipo de Propiedad</span>
+                          <span className="font-medium text-gray-900">{propertyData.detalles?.tipoPropiedad || propertyData.tipo}</span>
+                        </div>
+                        <div className="flex justify-between items-center py-2 border-b border-gray-200">
+                          <span className="text-gray-600 text-sm">Área Total</span>
+                          <span className="font-medium text-gray-900">{propertyData.areaTexto}</span>
+                        </div>
+                        {propertyData.detalles?.areaTerreno && (
+                          <div className="flex justify-between items-center py-2 border-b border-gray-200">
+                            <span className="text-gray-600 text-sm">Área de Terreno</span>
+                            <span className="font-medium text-gray-900">{propertyData.detalles.areaTerreno}</span>
+                          </div>
+                        )}
+                        {propertyData.detalles?.antiguedad && (
+                          <div className="flex justify-between items-center py-2 border-b border-gray-200">
+                            <span className="text-gray-600 text-sm">Antigüedad</span>
+                            <span className="font-medium text-gray-900">{propertyData.detalles.antiguedad}</span>
+                          </div>
+                        )}
+                        <div className="flex justify-between items-center py-2 border-b border-gray-200">
+                          <span className="text-gray-600 text-sm">Estado</span>
+                          <Badge className="bg-arkin-gold text-black">{propertyData.status}</Badge>
+                        </div>
+                        <div className="flex justify-between items-center py-2 border-b border-gray-200">
+                          <span className="text-gray-600 text-sm">Categoría</span>
+                          <Badge variant="outline" className="capitalize">{propertyData.categoria}</Badge>
+                        </div>
+                        {propertyData.detalles?.publicado && (
+                          <div className="flex justify-between items-center py-2 border-b border-gray-200">
+                            <span className="text-gray-600 text-sm flex items-center gap-1">
+                              <Calendar className="h-4 w-4" />
+                              Fecha de Publicación
+                            </span>
+                            <span className="font-medium text-gray-900">{propertyData.detalles.publicado}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Estadísticas */}
+                    {propertyData.detalles && (
+                      <div className="pt-4 border-t">
+                        <h4 className="font-semibold text-gray-700 mb-3">Estadísticas</h4>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="p-3 rounded-lg bg-blue-50 border border-blue-200">
+                            <div className="flex items-center gap-2 mb-1">
+                              <Camera className="h-4 w-4 text-blue-600" />
+                              <span className="text-xs text-blue-600 font-medium">Vistas</span>
+                            </div>
+                            <p className="text-2xl font-bold text-blue-700">{propertyData.detalles.vistas?.toLocaleString()}</p>
+                          </div>
+                          <div className="p-3 rounded-lg bg-red-50 border border-red-200">
+                            <div className="flex items-center gap-2 mb-1">
+                              <Heart className="h-4 w-4 text-red-600" />
+                              <span className="text-xs text-red-600 font-medium">Favoritos</span>
+                            </div>
+                            <p className="text-2xl font-bold text-red-700">{propertyData.detalles.favoritos?.toLocaleString()}</p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </TabsContent>
+
+                  {/* Ubicación */}
+                  <TabsContent value="ubicacion" className="mt-4 space-y-4">
+                    <div>
+                      <h3 className="font-semibold text-lg mb-3 text-arkin-accent">Ubicación</h3>
+                      <div className="flex items-start gap-3 p-4 rounded-lg bg-gray-50 border border-gray-200">
+                        <MapPin className="h-5 w-5 text-arkin-gold flex-shrink-0 mt-0.5" />
+                        <div>
+                          <p className="font-medium text-gray-900">{propertyData.ubicacion}</p>
+                          <p className="text-sm text-gray-600 mt-1">
+                            Esta propiedad se encuentra en una ubicación privilegiada con fácil acceso a servicios, transporte y amenidades.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Información del Agente */}
+                    {propertyData.agente && (
+                      <div className="pt-4 border-t">
+                        <h4 className="font-semibold text-gray-700 mb-3">Asesor Asignado</h4>
+                        <div className="p-4 rounded-lg bg-gradient-to-br from-arkin-gold/10 to-arkin-gold/5 border border-arkin-gold/30">
+                          <div className="flex items-start gap-3 mb-3">
+                            <Avatar className="h-12 w-12 border-2 border-arkin-gold">
+                              <AvatarImage src="/arkin-select-white.png" />
+                              <AvatarFallback className="bg-arkin-gold text-black font-bold">
+                                {propertyData.agente.nombre.split(' ').map(n => n[0]).join('')}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div className="flex-1">
+                              <p className="font-semibold text-gray-900">{propertyData.agente.nombre}</p>
+                              <p className="text-sm text-gray-600">{propertyData.agente.especialidad}</p>
+                              <div className="flex items-center gap-3 mt-2">
+                                <div className="flex items-center gap-1">
+                                  <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
+                                  <span className="text-sm font-medium">{propertyData.agente.rating}</span>
+                                </div>
+                                <div className="text-sm text-gray-600">
+                                  {propertyData.agente.ventas} ventas
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="space-y-2 text-sm">
+                            <div className="flex items-center gap-2 text-gray-700">
+                              <Phone className="h-4 w-4 text-arkin-gold" />
+                              <span>{propertyData.agente.telefono}</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-gray-700">
+                              <Mail className="h-4 w-4 text-arkin-gold" />
+                              <span className="truncate">{propertyData.agente.email}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </TabsContent>
                 </Tabs>
               </CardContent>
