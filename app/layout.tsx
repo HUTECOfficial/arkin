@@ -22,6 +22,31 @@ export const metadata: Metadata = {
   title: "ARKIN SELECT - Tu Plataforma Inmobiliaria de Confianza",
   description: "Exclusividad, Conexión y Confianza. Confía tu propiedad a ARKIN SELECT.",
   generator: "v0.app",
+  icons: {
+    icon: "/arkinlogo.jpg",
+    apple: "/arkinlogo.jpg",
+  },
+  openGraph: {
+    title: "ARKIN SELECT - Tu Plataforma Inmobiliaria de Confianza",
+    description: "Exclusividad, Conexión y Confianza. Confía tu propiedad a ARKIN SELECT.",
+    images: [
+      {
+        url: "/arkinlogo.jpg",
+        width: 1200,
+        height: 630,
+        alt: "ARKIN SELECT Logo",
+      },
+    ],
+    type: "website",
+    locale: "es_MX",
+    siteName: "ARKIN SELECT",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "ARKIN SELECT - Tu Plataforma Inmobiliaria de Confianza",
+    description: "Exclusividad, Conexión y Confianza. Confía tu propiedad a ARKIN SELECT.",
+    images: ["/arkinlogo.jpg"],
+  },
 }
 
 export const viewport: Viewport = {

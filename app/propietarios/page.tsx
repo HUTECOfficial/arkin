@@ -35,8 +35,11 @@ import {
   Plus,
   Eye,
   Sparkles,
-  ChevronsUpDown
+  ChevronsUpDown,
+  ChevronLeft,
+  ChevronRight
 } from "lucide-react"
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
 import Link from "next/link"
 import { OwnerSubmissionsStorage } from "@/lib/owner-submissions-storage"
 import { toast } from "sonner"
@@ -429,29 +432,30 @@ export default function PropietariosPage() {
           </div>
         </div>
 
-        {/* Benefits Banner */}
-        <div className="grid md:grid-cols-4 gap-4 mb-8">
-          <Card className="p-4 text-center border-arkin-gold/20 bg-gradient-to-br from-arkin-gold/5 to-transparent">
-            <Shield className="h-6 w-6 text-arkin-gold mx-auto mb-2" />
-            <h3 className="font-semibold text-sm text-arkin-graphite mb-1">Exclusividad</h3>
-            <p className="text-xs text-gray-600">Sin competencia</p>
-          </Card>
-          <Card className="p-4 text-center border-arkin-gold/20 bg-gradient-to-br from-arkin-gold/5 to-transparent">
-            <TrendingUp className="h-6 w-6 text-arkin-gold mx-auto mb-2" />
-            <h3 className="font-semibold text-sm text-arkin-graphite mb-1">Valoración IA</h3>
-            <p className="text-xs text-gray-600">Precio óptimo</p>
-          </Card>
-          <Card className="p-4 text-center border-arkin-gold/20 bg-gradient-to-br from-arkin-gold/5 to-transparent">
-            <Star className="h-6 w-6 text-arkin-gold mx-auto mb-2" />
-            <h3 className="font-semibold text-sm text-arkin-graphite mb-1">Marketing Premium</h3>
-            <p className="text-xs text-gray-600">Máxima exposición</p>
-          </Card>
-          <Card className="p-4 text-center border-arkin-gold/20 bg-gradient-to-br from-arkin-gold/5 to-transparent">
-            <Calendar className="h-6 w-6 text-arkin-gold mx-auto mb-2" />
-            <h3 className="font-semibold text-sm text-arkin-graphite mb-1">Venta Rápida</h3>
-            <p className="text-xs text-gray-600">Promedio 45 días</p>
-          </Card>
-        </div>
+        {/* Benefits Carousel */}
+        <Carousel
+          opts={{ align: 'start', loop: true }}
+          className="mb-8"
+        >
+          <CarouselContent className="-ml-3">
+            {[
+              { icon: <Shield className="h-6 w-6 text-arkin-gold" />, title: 'Exclusividad', desc: 'Sin competencia' },
+              { icon: <TrendingUp className="h-6 w-6 text-arkin-gold" />, title: 'Valoración IA', desc: 'Precio óptimo' },
+              { icon: <Star className="h-6 w-6 text-arkin-gold" />, title: 'Marketing Premium', desc: 'Máxima exposición' },
+              { icon: <Calendar className="h-6 w-6 text-arkin-gold" />, title: 'Venta Rápida', desc: 'Promedio 45 días' },
+            ].map((item, i) => (
+              <CarouselItem key={i} className="pl-3 basis-3/4 sm:basis-1/2 md:basis-1/4">
+                <Card className="p-4 text-center border-arkin-gold/20 bg-gradient-to-br from-arkin-gold/5 to-transparent h-full">
+                  <div className="flex justify-center mb-2">{item.icon}</div>
+                  <h3 className="font-semibold text-sm text-arkin-graphite mb-1">{item.title}</h3>
+                  <p className="text-xs text-gray-600">{item.desc}</p>
+                </Card>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious className="-left-3 sm:-left-4" />
+          <CarouselNext className="-right-3 sm:-right-4" />
+        </Carousel>
 
         {/* Multi-Step Form */}
         <Card className="border-0 shadow-xl overflow-hidden">

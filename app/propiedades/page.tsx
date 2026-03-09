@@ -23,6 +23,8 @@ export default function PropiedadesPage() {
   const [viewMode, setViewMode] = useState<'grid' | 'list' | 'map'>('grid')
   const [sortBy, setSortBy] = useState('fecha-desc')
   const [isAIChatOpen, setIsAIChatOpen] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
+  const PAGE_SIZE = 12
 
   // El hook usePropertiesStatic ya maneja realtime automáticamente
 
@@ -102,8 +104,20 @@ export default function PropiedadesPage() {
     return filtered
   }, [propiedades, filters, sortBy])
 
+  const totalPages = Math.ceil(filteredAndSortedProperties.length / PAGE_SIZE)
+  const paginatedProperties = filteredAndSortedProperties.slice(
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE
+  )
+
   const handleFiltersChange = (newFilters: any) => {
     setFilters(newFilters)
+    setCurrentPage(1)
+  }
+
+  const handleSortChange = (value: string) => {
+    setSortBy(value)
+    setCurrentPage(1)
   }
 
   return (
@@ -192,7 +206,7 @@ export default function PropiedadesPage() {
 
                 <div className="flex items-center space-x-2 sm:space-x-4 w-full sm:w-auto">
                   {/* Sort Dropdown */}
-                  <Select value={sortBy} onValueChange={setSortBy}>
+                  <Select value={sortBy} onValueChange={handleSortChange}>
                     <SelectTrigger className="w-full sm:w-48 border-arkin-accent/20 focus:border-arkin-primary text-sm">
                       <SelectValue placeholder="Ordenar por" />
                     </SelectTrigger>
@@ -239,7 +253,7 @@ export default function PropiedadesPage() {
               {/* Properties Grid/List */}
               {viewMode === 'grid' && (
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
-                  {filteredAndSortedProperties.map((propiedad) => (
+                  {paginatedProperties.map((propiedad) => (
                     <div
                       key={propiedad.id}
                       className="group bg-arkin-secondary/80 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-arkin-accent/10 hover:border-arkin-primary/30"
@@ -370,7 +384,7 @@ export default function PropiedadesPage() {
               {/* List View */}
               {viewMode === 'list' && (
                 <div className="space-y-6">
-                  {filteredAndSortedProperties.map((propiedad) => (
+                  {paginatedProperties.map((propiedad) => (
                     <div
                       key={propiedad.id}
                       className="group bg-arkin-secondary/50 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-arkin-gold/20"
@@ -510,6 +524,51 @@ export default function PropiedadesPage() {
                       <p className="text-sm mt-2">Próximamente disponible</p>
                     </div>
                   </div>
+                </div>
+              )}
+
+              {/* Pagination */}
+              {totalPages > 1 && viewMode !== 'map' && (
+                <div className="flex items-center justify-center gap-2 mt-10">
+                  <button
+                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                    disabled={currentPage === 1}
+                    className="px-4 py-2 rounded-xl border border-arkin-accent/20 text-sm font-medium text-arkin-accent disabled:opacity-30 hover:border-arkin-primary hover:text-arkin-primary transition-colors"
+                  >
+                    ← Anterior
+                  </button>
+                  {Array.from({ length: totalPages }, (_, i) => i + 1)
+                    .filter(p => p === 1 || p === totalPages || Math.abs(p - currentPage) <= 2)
+                    .reduce<(number | '...')[]>((acc, p, idx, arr) => {
+                      if (idx > 0 && p - (arr[idx - 1] as number) > 1) acc.push('...')
+                      acc.push(p)
+                      return acc
+                    }, [])
+                    .map((item, i) =>
+                      item === '...' ? (
+                        <span key={`ellipsis-${i}`} className="px-2 text-arkin-accent/40 text-sm">…</span>
+                      ) : (
+                        <button
+                          key={item}
+                          onClick={() => setCurrentPage(item as number)}
+                          className={`w-9 h-9 rounded-xl text-sm font-semibold transition-colors ${
+                            currentPage === item
+                              ? 'bg-arkin-primary text-arkin-accent'
+                              : 'border border-arkin-accent/20 text-arkin-accent hover:border-arkin-primary hover:text-arkin-primary'
+                          }`}
+                        >
+                          {item}
+                        </button>
+                      )
+                    )
+                  }
+                  <button
+                    onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                    disabled={currentPage === totalPages}
+                    className="px-4 py-2 rounded-xl border border-arkin-accent/20 text-sm font-medium text-arkin-accent disabled:opacity-30 hover:border-arkin-primary hover:text-arkin-primary transition-colors"
+                  >
+                    Siguiente →
+                  </button>
                 </div>
               )}
 
