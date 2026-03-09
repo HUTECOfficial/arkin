@@ -112,6 +112,12 @@ export async function POST(req: NextRequest) {
     // Show typing indicator
     await sendTelegramTyping(chatId)
 
+    // Handle /miid command - returns the user's Telegram ID
+    if (text === '/miid') {
+      await sendTelegramMessage(chatId, `🆔 Tu Telegram ID es: <b>${message.from?.id}</b>\n\nComparte este número con el administrador para obtener acceso completo.`)
+      return NextResponse.json({ ok: true })
+    }
+
     // Handle /start command
     if (text === '/start') {
       conversationHistory.delete(chatId)
