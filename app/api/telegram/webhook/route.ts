@@ -2,22 +2,29 @@ import { NextRequest, NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
 import { createClient } from '@supabase/supabase-js'
 
-const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY!,
-})
+function getAnthropic() {
+  return new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY! })
+}
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
-
-const TELEGRAM_API = `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}`
+function getSupabase() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  )
+}
 
 // In-memory conversation history per chat (resets on server restart)
 const conversationHistory = new Map<number, Array<{ role: 'user' | 'assistant'; content: string }>>()
 
+function getTelegramAPI() {
+  const token = process.env.TELEGRAM_BOT_TOKEN
+  if (!token) throw new Error('TELEGRAM_BOT_TOKEN not set')
+  return `https://api.telegram.org/bot${token}`
+}
+
 async function sendTelegramMessage(chatId: number, text: string, parseMode = 'HTML') {
-  await fetch(`${TELEGRAM_API}/sendMessage`, {
+  const api = getTelegramAPI()
+  const res = await fetch(`${api}/sendMessage`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -27,10 +34,15 @@ async function sendTelegramMessage(chatId: number, text: string, parseMode = 'HT
       disable_web_page_preview: false,
     }),
   })
+  if (!res.ok) {
+    const err = await res.text()
+    console.error('Telegram sendMessage error:', err)
+  }
 }
 
 async function sendTelegramTyping(chatId: number) {
-  await fetch(`${TELEGRAM_API}/sendChatAction`, {
+  const api = getTelegramAPI()
+  await fetch(`${api}/sendChatAction`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ chat_id: chatId, action: 'typing' }),
@@ -39,7 +51,7 @@ async function sendTelegramTyping(chatId: number) {
 
 async function getProperties() {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await getSupabase()
       .from('propiedades')
       .select('id, titulo, ubicacion, precio, precio_texto, tipo, habitaciones, banos, area, categoria, status')
       .eq('status', 'Disponible')
@@ -158,7 +170,7 @@ export async function POST(req: NextRequest) {
     // Keep last 20 messages for context
     const recentHistory = history.slice(-20)
 
-    const response = await anthropic.messages.create({
+    const response = await getAnthropic().messages.create({
       model: 'claude-haiku-4-5',
       max_tokens: 1024,
       system: systemPrompt,
