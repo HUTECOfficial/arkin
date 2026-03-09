@@ -66,7 +66,7 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-100">
       <div className="max-w-7xl mx-auto px-4 py-8">
         <Link href="/propiedades" className="inline-flex items-center text-arkin-gold hover:text-arkin-gold/80 mb-6">
           <ArrowLeft className="h-4 w-4 mr-2" />
@@ -232,31 +232,6 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
               </CardContent>
             </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Calculadora de Hipoteca</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Precio</span>
-                    <span className="font-medium">{propertyData.precioTexto}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Enganche (20%)</span>
-                    <span className="font-medium">${(propertyData.precio * 0.2).toLocaleString('es-MX')}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Mensualidad estimada</span>
-                    <span className="font-medium text-arkin-gold">${((propertyData.precio * 0.8) / 240).toLocaleString('es-MX')}</span>
-                  </div>
-                  <Button variant="outline" className="w-full mt-4">
-                    <Calculator className="h-4 w-4 mr-2" />
-                    Calcular Hipoteca
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
           </div>
         </div>
       </div>
