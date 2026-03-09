@@ -22,8 +22,7 @@ import {
   Percent,
   Palette,
   Camera,
-  Briefcase,
-  GraduationCap
+  Briefcase
 } from "lucide-react"
 import { WishlistCounter } from "./wishlist-button"
 import Link from "next/link"
@@ -495,18 +494,6 @@ export function DynamicHeader() {
                       <span className="text-sm">Favoritos</span>
                     </Button>
                   </Link>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="flex items-center space-x-2 px-4 py-2 rounded-xl hover:bg-arkin-primary/10 transition-all duration-300 hover:scale-105 active:scale-95 text-arkin-primary"
-                    onClick={() => {
-                      setIsMobileMenuOpen(false)
-                      setTimeout(() => window.dispatchEvent(new Event("arkin-start-tour")), 300)
-                    }}
-                  >
-                    <GraduationCap className="h-4 w-4" />
-                    <span className="text-sm font-medium">Tutorial</span>
-                  </Button>
                 </div>
 
                 {/* Primary Action - Combined Button */}

@@ -7,7 +7,6 @@ import "./globals.css"
 import { Footer } from "@/components/footer"
 import { DynamicHeader } from "@/components/dynamic-header"
 import { WishlistProvider } from "@/components/wishlist-provider"
-import { ShepherdTour } from "@/components/shepherd-tour"
 import { AuthProvider } from "@/contexts/auth-context"
 import { SWRProvider } from "@/components/swr-provider"
 import { Toaster } from "sonner"
@@ -69,7 +68,6 @@ export default function RootLayout({
               <DynamicHeader />
               {children}
               <Footer />
-              <ShepherdTour />
               <Toaster position="top-right" richColors />
             </WishlistProvider>
           </AuthProvider>
