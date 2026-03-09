@@ -190,7 +190,14 @@ export default function PropietariosPage() {
 
   const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || [])
-    setUploadedPhotos(prev => [...prev, ...files as File[]])
+    setUploadedPhotos(prev => {
+      const combined = [...prev, ...files as File[]]
+      if (combined.length > 30) {
+        alert('Máximo 30 fotos permitidas')
+        return combined.slice(0, 30)
+      }
+      return combined
+    })
   }
 
   const removePhoto = (index: number) => {
@@ -1029,7 +1036,7 @@ export default function PropietariosPage() {
                     </Button>
                   </label>
                   <p className="text-xs text-gray-500 mt-2">
-                    Máximo 20 fotos • JPG, PNG • Máximo 10MB por foto
+                    Máximo 30 fotos • JPG, PNG • Máximo 10MB por foto
                   </p>
                 </div>
 

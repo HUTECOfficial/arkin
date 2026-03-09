@@ -170,6 +170,17 @@ export default function PanelFotografoPage() {
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || [])
+    const currentImages = solicitudDetalle?.imagenes?.length || 0
+    const totalAfter = selectedFiles.length + files.length + currentImages
+    if (totalAfter > 30) {
+      toast.error(`Máximo 30 fotos por propiedad. Ya tienes ${currentImages + selectedFiles.length}, solo puedes agregar ${30 - currentImages - selectedFiles.length} más.`)
+      const allowed = files.slice(0, Math.max(0, 30 - currentImages - selectedFiles.length))
+      if (allowed.length === 0) return
+      setSelectedFiles(prev => [...prev, ...allowed])
+      const newPreviews = allowed.map(file => URL.createObjectURL(file))
+      setPreviewUrls(prev => [...prev, ...newPreviews])
+      return
+    }
     setSelectedFiles(prev => [...prev, ...files])
     const newPreviews = files.map(file => URL.createObjectURL(file))
     setPreviewUrls(prev => [...prev, ...newPreviews])
@@ -582,7 +593,7 @@ export default function PanelFotografoPage() {
                     <label htmlFor="solicitud-file-upload" className="cursor-pointer">
                       <ImageIcon className="h-10 w-10 text-gray-400 mx-auto mb-2" />
                       <p className="text-sm font-semibold text-gray-700">Selecciona imágenes</p>
-                      <p className="text-xs text-gray-500">Haz clic para subir fotos de esta propiedad</p>
+                      <p className="text-xs text-gray-500">Haz clic para subir fotos de esta propiedad (máximo 30)</p>
                     </label>
                   </div>
 
