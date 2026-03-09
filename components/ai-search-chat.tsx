@@ -76,6 +76,12 @@ export function AISearchChat({ isOpen, onClose, properties }: AISearchChatProps)
   const [inputValue, setInputValue] = useState('')
   const [isTyping, setIsTyping] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const conversationHistory = useRef<Array<{ type: 'user' | 'ai'; content: string }>>([
+    {
+      type: 'ai',
+      content: '¡Hola! Soy tu asistente de búsqueda inteligente de ARKIN. Puedo ayudarte a encontrar la propiedad perfecta. ¿Qué tipo de propiedad estás buscando?'
+    }
+  ])
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -351,25 +357,57 @@ export function AISearchChat({ isOpen, onClose, properties }: AISearchChatProps)
     }
 
     setMessages(prev => [...prev, userMessage])
+    const currentInput = inputValue
     setInputValue('')
     setIsTyping(true)
 
-    // Simular delay de procesamiento
-    setTimeout(() => {
-      const aiResult = processAIQuery(inputValue)
-      
+    // Add to conversation history
+    conversationHistory.current.push({ type: 'user', content: currentInput })
+
+    try {
+      const response = await fetch('/api/ai/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: [{ content: currentInput }],
+          conversationHistory: conversationHistory.current.slice(-12),
+        }),
+      })
+
+      if (!response.ok) throw new Error('Error en la respuesta de IA')
+
+      const data = await response.json()
+
+      // Add AI response to history
+      conversationHistory.current.push({ type: 'ai', content: data.response })
+
+      const aiMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        type: 'ai',
+        content: data.response,
+        timestamp: new Date(),
+        properties: data.properties?.length > 0 ? data.properties : undefined,
+        suggestions: data.properties?.length > 0
+          ? ['Refinar búsqueda', 'Ver todas las propiedades', 'Hablar con un asesor']
+          : ['Ver propiedades disponibles', 'Hablar con un asesor', 'Más información'],
+      }
+
+      setMessages(prev => [...prev, aiMessage])
+    } catch (error) {
+      // Fallback to local search on error
+      const aiResult = processAIQuery(currentInput)
       const aiMessage: Message = {
         id: (Date.now() + 1).toString(),
         type: 'ai',
         content: aiResult.response,
         timestamp: new Date(),
         properties: aiResult.results,
-        suggestions: aiResult.suggestions
+        suggestions: aiResult.suggestions,
       }
-
       setMessages(prev => [...prev, aiMessage])
+    } finally {
       setIsTyping(false)
-    }, 1500)
+    }
   }
 
   const handleSuggestionClick = (suggestion: string) => {
@@ -572,7 +610,7 @@ export function AISearchChat({ isOpen, onClose, properties }: AISearchChatProps)
             </Button>
           </div>
           <p className="text-xs text-gray-500 mt-2 text-center">
-            Powered by ARKIN AI • Respuestas instantáneas
+            Powered by Claude AI • ARKIN SELECT
           </p>
         </div>
       </div>
