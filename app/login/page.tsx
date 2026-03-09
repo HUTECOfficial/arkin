@@ -3,20 +3,45 @@
 import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useAuth } from '@/contexts/auth-context'
-import { Lock, Mail, AlertCircle, Sparkles } from 'lucide-react'
+import { Lock, Mail, AlertCircle, Sparkles, Fingerprint, ScanFace, CheckCircle2 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import {
+  isBiometricAvailable,
+  isPlatformAuthenticatorAvailable,
+  hasBiometricCredentials,
+  getBiometricUser,
+  registerBiometric,
+  authenticateWithBiometric,
+  storeBiometricLoginData,
+  getBiometricLoginData,
+} from '@/lib/biometric-auth'
 
 function LoginContent() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [biometricSupported, setBiometricSupported] = useState(false)
+  const [hasBiometric, setHasBiometric] = useState(false)
+  const [biometricUser, setBiometricUser] = useState<{ email: string; nombre?: string } | null>(null)
+  const [biometricLoading, setBiometricLoading] = useState(false)
+  const [biometricRegistered, setBiometricRegistered] = useState(false)
   const { login } = useAuth()
   const router = useRouter()
   const searchParams = useSearchParams()
   const redirectTo = searchParams.get('redirect') || null
   const fromPlans = searchParams.get('from') === 'planes'
+
+  useEffect(() => {
+    const checkBiometric = async () => {
+      const available = await isPlatformAuthenticatorAvailable()
+      setBiometricSupported(available)
+      setHasBiometric(hasBiometricCredentials())
+      setBiometricUser(getBiometricUser())
+    }
+    checkBiometric()
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -26,32 +51,64 @@ function LoginContent() {
     try {
       const userData = await login(email, password)
 
-      // Si viene de planes, redirigir de vuelta
-      if (redirectTo) {
-        router.push(redirectTo)
-        return
+      // After successful login, offer to register biometric if supported and not yet registered
+      if (biometricSupported && !hasBiometricCredentials()) {
+        try {
+          await registerBiometric(email, userData?.nombre)
+          storeBiometricLoginData(email, password)
+          setBiometricRegistered(true)
+          setHasBiometric(true)
+        } catch {
+          // Silently fail — biometric registration is optional
+        }
+      } else if (biometricSupported && hasBiometricCredentials()) {
+        // Update stored credentials on every successful login
+        storeBiometricLoginData(email, password)
       }
 
-      // Redirigir según el rol del usuario
-      if (userData?.role === 'admin') {
-        router.push('/panel-admin')
-      } else if (userData?.role === 'propietario') {
-        router.push('/panel-propietario')
-      } else if (userData?.role === 'fotografo') {
-        router.push('/panel-fotografo')
-      } else if (userData?.role === 'broker') {
-        router.push('/panel-broker')
-      } else if (userData?.role === 'asesor') {
-        router.push('/panel-asesor')
-      } else if (userData?.role === 'empresa') {
-        router.push('/panel-empresa')
-      } else {
-        router.push('/')
-      }
+      redirectAfterLogin(userData)
     } catch (err: any) {
       setError(err.message || 'Credenciales incorrectas')
     } finally {
       setLoading(false)
+    }
+  }
+
+  const redirectAfterLogin = (userData: any) => {
+    if (redirectTo) {
+      router.push(redirectTo)
+      return
+    }
+    if (userData?.role === 'admin') router.push('/panel-admin')
+    else if (userData?.role === 'propietario') router.push('/panel-propietario')
+    else if (userData?.role === 'fotografo') router.push('/panel-fotografo')
+    else if (userData?.role === 'broker') router.push('/panel-broker')
+    else if (userData?.role === 'asesor') router.push('/panel-asesor')
+    else if (userData?.role === 'empresa') router.push('/panel-empresa')
+    else router.push('/')
+  }
+
+  const handleBiometricLogin = async () => {
+    setError('')
+    setBiometricLoading(true)
+    try {
+      // Step 1: Verify biometric (Face ID / Fingerprint)
+      await authenticateWithBiometric()
+
+      // Step 2: Get stored login credentials
+      const loginData = getBiometricLoginData()
+      if (!loginData) {
+        setError('Credenciales expiradas. Por favor inicia sesión con tu contraseña para reactivar el acceso biométrico.')
+        return
+      }
+
+      // Step 3: Login with stored credentials
+      const userData = await login(loginData.email, loginData.password)
+      redirectAfterLogin(userData)
+    } catch (err: any) {
+      setError(err.message || 'Error en autenticación biométrica')
+    } finally {
+      setBiometricLoading(false)
     }
   }
 
@@ -149,6 +206,37 @@ function LoginContent() {
               {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
             </button>
           </form>
+
+          {/* Biometric Login */}
+          {biometricSupported && hasBiometric && biometricUser && (
+            <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+              <button
+                onClick={handleBiometricLogin}
+                disabled={biometricLoading}
+                className="w-full flex items-center justify-center gap-3 py-3.5 bg-gradient-to-r from-gray-800 to-gray-900 hover:from-gray-700 hover:to-gray-800 text-white font-semibold rounded-xl transition-all duration-300 disabled:opacity-50 shadow-lg"
+              >
+                {biometricLoading ? (
+                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                ) : (
+                  <>
+                    <Fingerprint className="w-5 h-5" />
+                    <span>Acceder con Face ID / Huella</span>
+                  </>
+                )}
+              </button>
+              <p className="text-xs text-center text-gray-500 mt-2">
+                Acceso rápido como <strong>{biometricUser.nombre || biometricUser.email}</strong>
+              </p>
+            </div>
+          )}
+
+          {/* Biometric registration success */}
+          {biometricRegistered && (
+            <div className="mt-4 flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-xl text-green-700 text-sm">
+              <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
+              <span>Face ID / Huella configurado. La próxima vez podrás acceder más rápido.</span>
+            </div>
+          )}
 
           {/* Link a registro */}
           <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700 text-center">
