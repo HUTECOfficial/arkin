@@ -134,6 +134,51 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: true })
     }
 
+    // === NATURAL LANGUAGE ADMIN ACTIONS (execute directly, no Claude needed) ===
+    if (admin) {
+      const tl = text.toLowerCase()
+
+      // "crea un asesor llamado X, email Y@z.com, tel 123"
+      const crearAsesorMatch = tl.match(/crea(?:r)?\s+(?:un\s+)?asesor\s+(?:llamado\s+)?(.+?)\s*,?\s*email\s+([\w.+-]+@[\w.-]+\.\w+)/i)
+      if (crearAsesorMatch) {
+        const nombre = crearAsesorMatch[1].trim()
+        const email = crearAsesorMatch[2].trim()
+        const telMatch = text.match(/tel(?:[eé]fono)?[:\s]*([\d\s+()-]{7,})/i)
+        const telefono = telMatch ? telMatch[1].trim() : ''
+        const password = `${nombre.split(' ')[0].toLowerCase()}_arkin${new Date().getFullYear()}`
+        await executeAdminAction(chatId, { accion: 'crear_asesor', nombre, email, telefono, password })
+        return NextResponse.json({ ok: true })
+      }
+
+      // "cambia (la propiedad) 15 a vendida/disponible/rentada/pausada"
+      const cambiarStatusMatch = tl.match(/cambia(?:r)?\s+(?:la\s+)?(?:propiedad\s+)?#?(\d+)\s+a\s+(disponible|vendid[ao]|rentad[ao]|pausad[ao])/i)
+      if (cambiarStatusMatch) {
+        const id = parseInt(cambiarStatusMatch[1])
+        const rawStatus = cambiarStatusMatch[2].toLowerCase()
+        const statusMap: Record<string, string> = {
+          disponible: 'Disponible', vendida: 'Vendido', vendido: 'Vendido',
+          rentada: 'Rentado', rentado: 'Rentado', pausada: 'Pausado', pausado: 'Pausado'
+        }
+        const status = statusMap[rawStatus] || 'Disponible'
+        await executeAdminAction(chatId, { accion: 'cambiar_status', id, status })
+        return NextResponse.json({ ok: true })
+      }
+
+      // "elimina/borra el anuncio X" or "borra propiedad X"
+      const eliminarPropMatch = tl.match(/(?:elim[ií]na?|borra?)\s+(?:la\s+)?(?:propiedad\s+)?#?(\d+)/i)
+      if (eliminarPropMatch) {
+        const id = parseInt(eliminarPropMatch[1])
+        const supabase = getSupabase()
+        const { error } = await supabase.from('propiedades').update({ status: 'Pausado' }).eq('id', id)
+        if (error) {
+          await sendTelegramMessage(chatId, `❌ Error: ${error.message}`)
+        } else {
+          await sendTelegramMessage(chatId, `✅ Propiedad <b>#${id}</b> marcada como <b>Pausada</b> (ocultada del sitio)`)
+        }
+        return NextResponse.json({ ok: true })
+      }
+    }
+
     // === ADMIN COMMANDS ===
     if (admin) {
       // /admin - panel de control

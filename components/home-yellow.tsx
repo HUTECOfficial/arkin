@@ -95,9 +95,6 @@ export function HomeYellow() {
         </div>
       </section>
 
-      {/* Ad Slot: Debajo del Hero */}
-      <HomepageAdSlot ubicacion="banner-hero" />
-
       {/* Featured Properties Carousel */}
       <section className="relative py-12 sm:py-16 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto">
@@ -111,29 +108,11 @@ export function HomeYellow() {
         </div>
       </section>
 
-      {/* Ad Slot: Entre Secciones */}
-      <HomepageAdSlot ubicacion="entre-secciones" />
-
       {/* Planes de Pago Section */}
       <section>
         <CommercialAlliance />
       </section>
 
-      {/* Mensaje para Desarrolladores/Inmobiliarias */}
-      <section className="relative py-8 px-4 sm:px-6">
-        <div className="max-w-4xl mx-auto">
-          <div className="bg-gradient-to-r from-arkin-accent to-arkin-accent/90 rounded-2xl p-6 sm:p-8 text-center border-2 border-arkin-primary/20 shadow-xl">
-            <p className="text-arkin-secondary text-base sm:text-lg font-medium">
-              ¿Eres <span className="font-bold text-arkin-primary">Desarrollador</span> o <span className="font-bold text-arkin-primary">Inmobiliaria</span> y tienes más de <span className="font-bold text-arkin-primary">40 propiedades</span>?
-            </p>
-            <Link href="/contacto" className="inline-block mt-4">
-              <Button className="bg-arkin-primary hover:bg-arkin-primary/90 text-arkin-accent font-bold px-6 py-3 rounded-xl shadow-lg hover:scale-105 transition-all duration-300">
-                Contáctanos
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
 
       {/* Features Section - Carousel */}
       <WhyArkinCarousel />

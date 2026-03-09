@@ -3,11 +3,10 @@
 import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useAuth } from '@/contexts/auth-context'
-import { Lock, Mail, AlertCircle, Sparkles, Fingerprint, ScanFace, CheckCircle2 } from 'lucide-react'
+import { Lock, Mail, AlertCircle, Sparkles, Fingerprint, Trash2, CheckCircle2 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import {
-  isBiometricAvailable,
   isPlatformAuthenticatorAvailable,
   hasBiometricCredentials,
   getBiometricUser,
@@ -15,6 +14,7 @@ import {
   authenticateWithBiometric,
   storeBiometricLoginData,
   getBiometricLoginData,
+  removeBiometricCredentials,
 } from '@/lib/biometric-auth'
 
 function LoginContent() {
@@ -224,9 +224,23 @@ function LoginContent() {
                   </>
                 )}
               </button>
-              <p className="text-xs text-center text-gray-500 mt-2">
-                Acceso rápido como <strong>{biometricUser.nombre || biometricUser.email}</strong>
-              </p>
+              <div className="flex items-center justify-between mt-2">
+                <p className="text-xs text-gray-500">
+                  Acceso rápido como <strong>{biometricUser.nombre || biometricUser.email}</strong>
+                </p>
+                <button
+                  onClick={() => {
+                    removeBiometricCredentials()
+                    setHasBiometric(false)
+                    setBiometricUser(null)
+                  }}
+                  className="flex items-center gap-1 text-xs text-red-400 hover:text-red-600 transition-colors"
+                  title="Borrar datos biométricos guardados"
+                >
+                  <Trash2 className="w-3 h-3" />
+                  Borrar biométrico
+                </button>
+              </div>
             </div>
           )}
 
