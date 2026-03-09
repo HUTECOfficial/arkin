@@ -100,18 +100,18 @@ export function NotificationToast({
               por WhatsApp para obtener más información y agendar una cita?
             </p>
 
-            <div className="flex gap-3">
+            <div className="flex flex-col sm:flex-row gap-3">
               <Button
                 onClick={handleWhatsAppClick}
-                className="flex-1 bg-green-600 hover:bg-green-700 text-white font-medium rounded-xl transition-all duration-200 hover:scale-[1.02] shadow-md"
+                className="flex-1 bg-green-600 hover:bg-green-700 text-white font-medium rounded-xl transition-all duration-200 hover:scale-[1.02] shadow-md whitespace-nowrap"
               >
-                <MessageCircle className="h-4 w-4 mr-2" />
+                <MessageCircle className="h-4 w-4 mr-2 shrink-0" />
                 Contactar por WhatsApp
               </Button>
               <Button
                 variant="outline"
                 onClick={handleClose}
-                className="px-5 font-medium rounded-xl border-gray-300 text-gray-600 hover:bg-gray-50 transition-colors"
+                className="shrink-0 px-5 font-medium rounded-xl border-gray-300 text-gray-600 hover:bg-gray-50 transition-colors whitespace-nowrap"
               >
                 Ahora no
               </Button>

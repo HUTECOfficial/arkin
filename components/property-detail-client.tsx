@@ -142,7 +142,16 @@ export function PropertyDetailClient({ propertyData: initialData, propertyId }: 
                       {propertyData.ubicacion}
                     </div>
                   </div>
-                  <WishlistButton propertyId={propertyData.id} />
+                  <WishlistButton property={{
+                    id: String(propertyData.id),
+                    title: propertyData.titulo,
+                    price: propertyData.precioTexto,
+                    location: propertyData.ubicacion,
+                    image: propertyData.imagen,
+                    bedrooms: propertyData.habitaciones,
+                    bathrooms: propertyData.banos,
+                    area: propertyData.area,
+                  }} />
                 </div>
               </CardHeader>
               <CardContent>
