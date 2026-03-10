@@ -153,7 +153,7 @@ function buildProceduralCityTexture(lowPower: boolean): THREE.CanvasTexture {
 
 // Runtime GLB optimization: downscale textures + simplify materials for mobile
 function optimizeGLBScene(scene: THREE.Group, lowPower: boolean) {
-  const MAX_TEX = lowPower ? 512 : 1024
+  const MAX_TEX = lowPower ? 2048 : 4096
 
   scene.traverse((child) => {
     if (!(child as THREE.Mesh).isMesh) return
@@ -191,12 +191,7 @@ function optimizeGLBScene(scene: THREE.Group, lowPower: boolean) {
         }
       })
 
-      // Strip heavy maps on very low power
-      if (lowPower) {
-        mat.normalMap = null
-        mat.aoMap = null
-        mat.needsUpdate = true
-      }
+      mat.needsUpdate = true
     })
 
     // Merge indexed geometry for fewer draw calls
@@ -455,11 +450,9 @@ function useMapDeviceProfile() {
     const nav = navigator as Navigator & { deviceMemory?: number }
     const touchDevice = navigator.maxTouchPoints > 0 || 'ontouchstart' in window
     const lowPowerMode =
-      window.matchMedia('(max-width: 1024px)').matches ||
       window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
-      touchDevice ||
-      (nav.deviceMemory ?? 4) <= 4 ||
-      (navigator.hardwareConcurrency ?? 4) <= 6
+      (nav.deviceMemory ?? 8) <= 2 ||
+      (navigator.hardwareConcurrency ?? 8) <= 2
 
     setProfile({ lowPowerMode, touchDevice })
   }, [])
@@ -517,7 +510,7 @@ export function Leon3DMap() {
         {isInViewport ? (
           <Canvas
             camera={{ position: [0, 14, 22], fov: 45 }}
-            dpr={lowPowerMode ? [1, 1.5] : [1, 2]}
+            dpr={lowPowerMode ? [1, 2] : [1, 3]}
             gl={{
               antialias: true,
               alpha: false,
