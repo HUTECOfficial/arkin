@@ -23,62 +23,193 @@ class OBJErrorBoundary extends Component<{ children: ReactNode }, { error: strin
   }
 }
 
-// León, Gto centro: 21.1236, -101.6824
-const MAP_CENTER_LAT = 21.1236
-const MAP_CENTER_LNG = -101.6824
-const MAP_ZOOM = 14
-const TILE_SIZE = 256
+// Procedural city texture — zero network requests, instant load
+const CITY_TEX_CACHE: { low?: THREE.CanvasTexture; high?: THREE.CanvasTexture } = {}
 
-function latLngToTile(lat: number, lng: number, zoom: number) {
-  const n = Math.pow(2, zoom)
-  const x = Math.floor((lng + 180) / 360 * n)
-  const latRad = lat * Math.PI / 180
-  const y = Math.floor((1 - Math.log(Math.tan(latRad) + 1 / Math.cos(latRad)) / Math.PI) / 2 * n)
-  return { x, y }
-}
+function buildProceduralCityTexture(lowPower: boolean): THREE.CanvasTexture {
+  const key = lowPower ? 'low' : 'high'
+  if (CITY_TEX_CACHE[key]) return CITY_TEX_CACHE[key]!
 
-async function buildMapTexture(tileGrid: number): Promise<THREE.CanvasTexture> {
-  const GRID = tileGrid
+  const SIZE = lowPower ? 1024 : 2048
   const canvas = document.createElement('canvas')
-  canvas.width = TILE_SIZE * GRID
-  canvas.height = TILE_SIZE * GRID
+  canvas.width = SIZE
+  canvas.height = SIZE
   const ctx = canvas.getContext('2d')!
 
-  ctx.fillStyle = '#c8d8c8'
-  ctx.fillRect(0, 0, canvas.width, canvas.height)
+  // Dark base
+  ctx.fillStyle = '#0c1424'
+  ctx.fillRect(0, 0, SIZE, SIZE)
 
-  const center = latLngToTile(MAP_CENTER_LAT, MAP_CENTER_LNG, MAP_ZOOM)
-  const offset = Math.floor(GRID / 2)
+  const rng = (seed: number) => {
+    let s = seed
+    return () => { s = (s * 16807 + 0) % 2147483647; return (s - 1) / 2147483646 }
+  }
+  const rand = rng(42)
 
-  const loads: Promise<void>[] = []
-  for (let dy = 0; dy < GRID; dy++) {
-    for (let dx = 0; dx < GRID; dx++) {
-      const tx = center.x - offset + dx
-      const ty = center.y - offset + dy
-      const url = `https://tile.openstreetmap.org/${MAP_ZOOM}/${tx}/${ty}.png`
-      loads.push(
-        new Promise<void>((resolve) => {
-          const img = new Image()
-          img.crossOrigin = 'anonymous'
-          img.onload = () => {
-            ctx.drawImage(img, dx * TILE_SIZE, dy * TILE_SIZE, TILE_SIZE, TILE_SIZE)
-            resolve()
-          }
-          img.onerror = () => resolve()
-          img.src = url
-        })
-      )
+  // City blocks between roads
+  const BLOCK = SIZE / 16
+  for (let row = 0; row < 16; row++) {
+    for (let col = 0; col < 16; col++) {
+      const x = col * BLOCK + 2
+      const y = row * BLOCK + 2
+      const w = BLOCK - 4
+      const h = BLOCK - 4
+      const v = 14 + Math.floor(rand() * 10)
+      ctx.fillStyle = `rgb(${v}, ${v + 6}, ${v + 14})`
+      ctx.fillRect(x, y, w, h)
+
+      // Sub-buildings inside each block
+      const subs = 2 + Math.floor(rand() * 3)
+      for (let s = 0; s < subs; s++) {
+        const sx = x + 4 + rand() * (w - 20)
+        const sy = y + 4 + rand() * (h - 20)
+        const sw = 8 + rand() * 16
+        const sh = 8 + rand() * 16
+        const bv = 18 + Math.floor(rand() * 14)
+        ctx.fillStyle = `rgb(${bv}, ${bv + 4}, ${bv + 10})`
+        ctx.fillRect(sx, sy, sw, sh)
+      }
     }
   }
 
-  await Promise.all(loads)
+  // Secondary streets (grid)
+  ctx.strokeStyle = '#1a2a40'
+  ctx.lineWidth = 2
+  for (let i = 1; i < 16; i++) {
+    const p = i * BLOCK
+    ctx.beginPath(); ctx.moveTo(p, 0); ctx.lineTo(p, SIZE); ctx.stroke()
+    ctx.beginPath(); ctx.moveTo(0, p); ctx.lineTo(SIZE, p); ctx.stroke()
+  }
+
+  // Main avenues (wider, brighter)
+  const avenues = [4, 8, 12].map(i => i * BLOCK)
+  ctx.strokeStyle = '#243550'
+  ctx.lineWidth = lowPower ? 4 : 6
+  for (const a of avenues) {
+    ctx.beginPath(); ctx.moveTo(a, 0); ctx.lineTo(a, SIZE); ctx.stroke()
+    ctx.beginPath(); ctx.moveTo(0, a); ctx.lineTo(SIZE, a); ctx.stroke()
+  }
+
+  // Avenue glow
+  ctx.strokeStyle = 'rgba(232, 255, 80, 0.06)'
+  ctx.lineWidth = lowPower ? 10 : 16
+  for (const a of avenues) {
+    ctx.beginPath(); ctx.moveTo(a, 0); ctx.lineTo(a, SIZE); ctx.stroke()
+    ctx.beginPath(); ctx.moveTo(0, a); ctx.lineTo(SIZE, a); ctx.stroke()
+  }
+
+  // Parks
+  const parks = [
+    { x: 1, y: 1, w: 2, h: 2 },
+    { x: 10, y: 10, w: 2, h: 2 },
+    { x: 5, y: 13, w: 2, h: 1.5 },
+    { x: 13, y: 3, w: 1.5, h: 2 },
+  ]
+  for (const p of parks) {
+    ctx.fillStyle = 'rgba(40, 100, 50, 0.5)'
+    ctx.fillRect(p.x * BLOCK + 6, p.y * BLOCK + 6, p.w * BLOCK - 12, p.h * BLOCK - 12)
+    // Tree dots
+    const trees = 3 + Math.floor(rand() * 5)
+    for (let t = 0; t < trees; t++) {
+      ctx.fillStyle = 'rgba(55, 130, 65, 0.6)'
+      const tx = p.x * BLOCK + 12 + rand() * (p.w * BLOCK - 24)
+      const ty = p.y * BLOCK + 12 + rand() * (p.h * BLOCK - 24)
+      ctx.beginPath(); ctx.arc(tx, ty, 3 + rand() * 4, 0, Math.PI * 2); ctx.fill()
+    }
+  }
+
+  // Intersection highlights
+  for (const ax of avenues) {
+    for (const ay of avenues) {
+      ctx.fillStyle = 'rgba(232, 255, 80, 0.04)'
+      ctx.beginPath(); ctx.arc(ax, ay, lowPower ? 16 : 24, 0, Math.PI * 2); ctx.fill()
+    }
+  }
+
+  // District labels
+  if (!lowPower) {
+    ctx.font = '600 11px system-ui'
+    ctx.fillStyle = 'rgba(150, 170, 200, 0.25)'
+    ctx.textAlign = 'center'
+    const labels = [
+      { t: 'CENTRO', x: 8 * BLOCK, y: 8 * BLOCK },
+      { t: 'LA GRAN JARDÍN', x: 12 * BLOCK, y: 3 * BLOCK },
+      { t: 'CAMPESTRE', x: 12 * BLOCK, y: 12 * BLOCK },
+      { t: 'EL REFUGIO', x: 3 * BLOCK, y: 13 * BLOCK },
+    ]
+    labels.forEach(l => ctx.fillText(l.t, l.x, l.y))
+  }
 
   const texture = new THREE.CanvasTexture(canvas)
-  texture.generateMipmaps = false
-  texture.minFilter = THREE.LinearFilter
+  texture.generateMipmaps = true
+  texture.minFilter = THREE.LinearMipmapLinearFilter
   texture.magFilter = THREE.LinearFilter
+  texture.anisotropy = lowPower ? 2 : 4
   texture.needsUpdate = true
+
+  CITY_TEX_CACHE[key] = texture
   return texture
+}
+
+// Runtime GLB optimization: downscale textures + simplify materials for mobile
+function optimizeGLBScene(scene: THREE.Group, lowPower: boolean) {
+  const MAX_TEX = lowPower ? 512 : 1024
+
+  scene.traverse((child) => {
+    if (!(child as THREE.Mesh).isMesh) return
+    const mesh = child as THREE.Mesh
+    mesh.castShadow = false
+    mesh.receiveShadow = false
+
+    const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material]
+    mats.forEach((m) => {
+      const mat = m as THREE.MeshStandardMaterial
+      mat.envMapIntensity = 0.5
+      mat.roughness = Math.min(mat.roughness, 0.85)
+
+      // Downscale textures that exceed MAX_TEX
+      const texProps: (keyof THREE.MeshStandardMaterial)[] = ['map', 'normalMap', 'roughnessMap', 'metalnessMap', 'aoMap']
+      texProps.forEach((prop) => {
+        const tex = (mat as any)[prop] as THREE.Texture | null
+        if (!tex?.image) return
+        const img = tex.image as HTMLImageElement | HTMLCanvasElement | ImageBitmap
+        const w = 'naturalWidth' in img ? (img as HTMLImageElement).naturalWidth : img.width
+        const h = 'naturalHeight' in img ? (img as HTMLImageElement).naturalHeight : img.height
+        if (w <= MAX_TEX && h <= MAX_TEX) return
+
+        // Downscale via offscreen canvas
+        const scale = MAX_TEX / Math.max(w, h)
+        const nw = Math.floor(w * scale)
+        const nh = Math.floor(h * scale)
+        const c = document.createElement('canvas')
+        c.width = nw; c.height = nh
+        const cx = c.getContext('2d')
+        if (cx) {
+          cx.drawImage(img as CanvasImageSource, 0, 0, nw, nh)
+          tex.image = c
+          tex.needsUpdate = true
+        }
+      })
+
+      // Strip heavy maps on very low power
+      if (lowPower) {
+        mat.normalMap = null
+        mat.aoMap = null
+        mat.needsUpdate = true
+      }
+    })
+
+    // Merge indexed geometry for fewer draw calls
+    const geo = mesh.geometry
+    if (geo && !geo.index && geo.attributes.position) {
+      const posCount = geo.attributes.position.count
+      if (posCount > 100) {
+        const indices = new Uint32Array(posCount)
+        for (let i = 0; i < posCount; i++) indices[i] = i
+        geo.setIndex(new THREE.BufferAttribute(indices, 1))
+      }
+    }
+  })
 }
 
 const BACKGROUND_BLOCKS = [
@@ -91,93 +222,26 @@ const BACKGROUND_BLOCKS = [
 ]
 
 function MapPlane({ lowPowerMode }: { lowPowerMode: boolean }) {
-  const [mapTexture, setMapTexture] = useState<THREE.CanvasTexture | null>(null)
-  const [fallback, setFallback] = useState(false)
-
-  useEffect(() => {
-    let cancelled = false
-
-    buildMapTexture(lowPowerMode ? 3 : 4)
-      .then((tex) => {
-        if (cancelled) {
-          tex.dispose()
-          return
-        }
-        setMapTexture(tex)
-      })
-      .catch(() => {
-        if (!cancelled) {
-          setFallback(true)
-        }
-      })
-
-    return () => {
-      cancelled = true
-    }
-  }, [lowPowerMode])
-
-  useEffect(() => {
-    return () => {
-      mapTexture?.dispose()
-    }
-  }, [mapTexture])
-
-  const avenuePositions = lowPowerMode ? [-4, 4] : [-4, 0, 4]
+  const cityTexture = useMemo(() => buildProceduralCityTexture(lowPowerMode), [lowPowerMode])
   const backgroundBlocks = lowPowerMode ? BACKGROUND_BLOCKS.slice(0, 8) : BACKGROUND_BLOCKS
-
-  if (!mapTexture && !fallback) {
-    return (
-      <mesh rotation={[-Math.PI / 2, 0, 0]}>
-        <planeGeometry args={[30, 30]} />
-        <meshStandardMaterial color="#2d4a2d" roughness={1} />
-      </mesh>
-    )
-  }
 
   return (
     <group>
-      {/* Plano base con textura OSM */}
+      {/* Plano base con textura procedural de ciudad */}
       <mesh rotation={[-Math.PI / 2, 0, 0]}>
         <planeGeometry args={[30, 30]} />
         <meshStandardMaterial
-          map={mapTexture ?? undefined}
-          color={fallback ? '#3a5a3a' : '#ffffff'}
-          roughness={0.95}
+          map={cityTexture}
+          roughness={0.92}
           metalness={0}
         />
       </mesh>
-
-      {/* Avenidas principales — solo 6 meshes en lugar de 22 */}
-      {avenuePositions.map((pos, i) => (
-        <mesh key={`av${i}`} rotation={[-Math.PI / 2, 0, 0]} position={[pos, 0.005, 0]}>
-          <planeGeometry args={[0.18, 30]} />
-          <meshBasicMaterial color="#ffffff" transparent opacity={0.22} />
-        </mesh>
-      ))}
-      {avenuePositions.map((pos, i) => (
-        <mesh key={`ah${i}`} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.005, pos]}>
-          <planeGeometry args={[30, 0.18]} />
-          <meshBasicMaterial color="#ffffff" transparent opacity={0.22} />
-        </mesh>
-      ))}
-
-      {/* Parques / zonas verdes */}
-      {[
-        { x: -8, z: -7, w: 4.5, d: 3.5 },
-        { x:  7, z:  6, w: 3,   d: 4   },
-        { x: -5, z:  8, w: 2.5, d: 2.5 },
-      ].map((p, i) => (
-        <mesh key={`park${i}`} rotation={[-Math.PI / 2, 0, 0]} position={[p.x, 0.004, p.z]}>
-          <planeGeometry args={[p.w, p.d]} />
-          <meshStandardMaterial color="#4a8c4a" roughness={0.95} transparent opacity={0.65} />
-        </mesh>
-      ))}
 
       {/* Bloques de manzanas (edificios genéricos de fondo) */}
       {backgroundBlocks.map((b, i) => (
         <mesh key={`block${i}`} position={[b.x, b.h / 2, b.z]}>
           <boxGeometry args={[b.w, b.h, b.d]} />
-          <meshStandardMaterial color="#b0a898" roughness={0.9} />
+          <meshStandardMaterial color="#1a2538" roughness={0.9} />
         </mesh>
       ))}
     </group>
@@ -272,6 +336,10 @@ const PROYECTOS: ProyectoData[] = [
 ]
 
 
+// Detect low-power once at module level for GLBBuilding access
+let _lowPowerGlobal = true
+function setLowPowerGlobal(v: boolean) { _lowPowerGlobal = v }
+
 function GLBBuilding({ url, position, onHover, onClick, active }: {
   url: string
   position: [number, number, number]
@@ -287,17 +355,8 @@ function GLBBuilding({ url, position, onHover, onClick, active }: {
     sceneClone.current = gltf.scene.clone(true)
     const scene = sceneClone.current
 
-    scene.traverse((child) => {
-      if ((child as THREE.Mesh).isMesh) {
-        const mesh = child as THREE.Mesh
-        mesh.castShadow = false
-        mesh.receiveShadow = false
-        if (mesh.material) {
-          const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material]
-          mats.forEach(m => { (m as THREE.MeshStandardMaterial).envMapIntensity = 0.3 })
-        }
-      }
-    })
+    // Run optimization pipeline: compress textures, simplify materials, index geometry
+    optimizeGLBScene(scene, _lowPowerGlobal)
 
     scene.updateMatrixWorld(true)
     const box = new THREE.Box3().setFromObject(scene)
@@ -342,6 +401,9 @@ function Scene({ activeIndex, onHover, onClick, lowPowerMode }: {
   onClick: (idx: number) => void
   lowPowerMode: boolean
 }) {
+  // Sync global low-power flag so GLBBuilding can access it during clone
+  useEffect(() => { setLowPowerGlobal(lowPowerMode) }, [lowPowerMode])
+
   return (
     <>
       <color attach="background" args={["#0a0f1e"]} />
@@ -455,13 +517,14 @@ export function Leon3DMap() {
         {isInViewport ? (
           <Canvas
             camera={{ position: [0, 14, 22], fov: 45 }}
-            dpr={lowPowerMode ? [1, 1.25] : [1, 1.75]}
+            dpr={lowPowerMode ? [1, 1.5] : [1, 2]}
             gl={{
-              antialias: !lowPowerMode,
+              antialias: true,
               alpha: false,
               powerPreference: lowPowerMode ? 'low-power' : 'high-performance',
+              precision: lowPowerMode ? 'mediump' : 'highp',
             }}
-            performance={{ min: lowPowerMode ? 0.5 : 0.75 }}
+            performance={{ min: lowPowerMode ? 0.6 : 0.8 }}
             frameloop="demand"
             onPointerMissed={() => setSelectedIdx(null)}
           >
