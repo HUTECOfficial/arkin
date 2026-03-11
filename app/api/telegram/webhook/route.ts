@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { after } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
 import { createClient } from '@supabase/supabase-js'
+
+export const maxDuration = 60
 
 function getAnthropic() {
   return new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY! })
@@ -146,33 +149,52 @@ export async function POST(req: NextRequest) {
   let update: any = null
   try {
     update = await req.json()
+  } catch {
+    return NextResponse.json({ ok: true })
+  }
 
-    // Handle message updates
-    const message = update.message || update.edited_message
-    if (!message) {
-      return NextResponse.json({ ok: true })
+  // Return 200 immediately so Telegram doesn't retry/timeout
+  after(async () => {
+    try {
+      await processUpdate(update)
+    } catch (error: any) {
+      console.error('Telegram webhook processing error:', error)
+      try {
+        const chatId = update?.message?.chat?.id || update?.edited_message?.chat?.id
+        if (chatId && isAdmin(update?.message?.from?.id || 0)) {
+          await sendTelegramMessage(chatId, `⚠️ <b>Error interno del bot:</b>\n<code>${String(error?.message || error).slice(0, 500)}</code>`)
+        }
+      } catch { /* ignore */ }
     }
+  })
 
-    const chatId: number = message.chat.id
-    const text: string = message.text || message.caption || ''
-    const firstName = message.from?.first_name || 'Usuario'
+  return NextResponse.json({ ok: true })
+}
 
-    // Handle voice/photo/sticker messages with no text
-    if (!text.trim()) {
-      await sendTelegramMessage(chatId, `👋 Hola <b>${firstName}</b>, por ahora solo puedo procesar mensajes de texto. Escríbeme tu consulta y con gusto te ayudo.`)
-      return NextResponse.json({ ok: true })
-    }
+async function processUpdate(update: any) {
+  const message = update.message || update.edited_message
+  if (!message) return
 
-    // Show typing indicator
-    await sendTelegramTyping(chatId)
+  const chatId: number = message.chat.id
+  const text: string = message.text || message.caption || ''
+  const firstName = message.from?.first_name || 'Usuario'
 
-    const userId: number = message.from?.id || 0
-    const admin = isAdmin(userId)
+  // Handle voice/photo/sticker messages with no text
+  if (!text.trim()) {
+    await sendTelegramMessage(chatId, `👋 Hola <b>${firstName}</b>, por ahora solo puedo procesar mensajes de texto. Escríbeme tu consulta y con gusto te ayudo.`)
+    return
+  }
+
+  // Show typing indicator
+  await sendTelegramTyping(chatId)
+
+  const userId: number = message.from?.id || 0
+  const admin = isAdmin(userId)
 
     // Handle /miid command
     if (text === '/miid') {
       await sendTelegramMessage(chatId, `🆔 Tu Telegram ID es: <b>${userId}</b>\n${admin ? '\n✅ <b>Tienes acceso ADMIN completo</b>' : '\nComparte este número con el administrador para obtener acceso.'}`)
-      return NextResponse.json({ ok: true })
+      return
     }
 
     // === NATURAL LANGUAGE ADMIN ACTIONS (execute directly, no Claude needed) ===
@@ -188,7 +210,7 @@ export async function POST(req: NextRequest) {
         const telefono = telMatch ? telMatch[1].trim() : ''
         const password = `${nombre.split(' ')[0].toLowerCase()}_arkin${new Date().getFullYear()}`
         await executeAdminAction(chatId, { accion: 'crear_asesor', nombre, email, telefono, password })
-        return NextResponse.json({ ok: true })
+        return
       }
 
       // "cambia (la propiedad) 15 a vendida/disponible/rentada/pausada"
@@ -202,7 +224,7 @@ export async function POST(req: NextRequest) {
         }
         const status = statusMap[rawStatus] || 'Disponible'
         await executeAdminAction(chatId, { accion: 'cambiar_status', id, status })
-        return NextResponse.json({ ok: true })
+        return
       }
 
       // "elimina/borra la propiedad X"
@@ -216,7 +238,7 @@ export async function POST(req: NextRequest) {
         } else {
           await sendTelegramMessage(chatId, `✅ Propiedad <b>#${id}</b> marcada como <b>Pausada</b> (ocultada del sitio)`)
         }
-        return NextResponse.json({ ok: true })
+        return
       }
 
       // === ANUNCIOS / ADS MANAGEMENT ===
@@ -225,7 +247,7 @@ export async function POST(req: NextRequest) {
       if (pausarAnuncioMatch) {
         const query = pausarAnuncioMatch[1].trim()
         await executeAdAction(chatId, 'pausado', query)
-        return NextResponse.json({ ok: true })
+        return
       }
 
       // "reactiva / reanuda el anuncio X"
@@ -233,7 +255,7 @@ export async function POST(req: NextRequest) {
       if (reanudarAnuncioMatch) {
         const query = reanudarAnuncioMatch[1].trim()
         await executeAdAction(chatId, 'activo', query)
-        return NextResponse.json({ ok: true })
+        return
       }
 
       // "suspende el anuncio X"
@@ -241,7 +263,7 @@ export async function POST(req: NextRequest) {
       if (suspenderAnuncioMatch) {
         const query = suspenderAnuncioMatch[1].trim()
         await executeAdAction(chatId, 'suspendido', query)
-        return NextResponse.json({ ok: true })
+        return
       }
 
       // "elimina el anuncio X"
@@ -249,7 +271,7 @@ export async function POST(req: NextRequest) {
       if (eliminarAnuncioMatch) {
         const query = eliminarAnuncioMatch[1].trim()
         await executeAdDelete(chatId, query)
-        return NextResponse.json({ ok: true })
+        return
       }
     }
 
@@ -272,7 +294,7 @@ export async function POST(req: NextRequest) {
           `<i>"pausa el anuncio casa personalidad"</i>\n` +
           `<i>"elimina el anuncio casa personalidad"</i>`
         )
-        return NextResponse.json({ ok: true })
+        return
       }
 
       // /panel - links al panel admin
@@ -285,7 +307,7 @@ export async function POST(req: NextRequest) {
           `🏢 <a href="https://www.arkinselect.com/panel-broker">Panel Broker →</a>\n` +
           `🗺️ <a href="https://www.arkinselect.com/desarrollos">Desarrollos →</a>`
         )
-        return NextResponse.json({ ok: true })
+        return
       }
 
       // /stats - estadísticas
@@ -314,7 +336,7 @@ export async function POST(req: NextRequest) {
           `  • Admins: ${admins}\n` +
           `  • Total: ${users.length}`
         )
-        return NextResponse.json({ ok: true })
+        return
       }
 
       // /asesores - listar asesores
@@ -327,11 +349,11 @@ export async function POST(req: NextRequest) {
           .order('nombre')
         if (!data || data.length === 0) {
           await sendTelegramMessage(chatId, 'No hay asesores registrados.')
-          return NextResponse.json({ ok: true })
+          return
         }
         const list = data.map((u: any) => `• <b>${u.nombre}</b> (${u.role}) — ${u.email} ${u.telefono || ''}`).join('\n')
         await sendTelegramMessage(chatId, `👥 <b>EQUIPO ARKIN SELECT</b>\n\n${list}`)
-        return NextResponse.json({ ok: true })
+        return
       }
 
       // /anuncios - listar y gestionar anuncios
@@ -347,7 +369,7 @@ export async function POST(req: NextRequest) {
             `📢 <b>ANUNCIOS</b>\n\nNo hay anuncios creados.\n\n` +
             `<a href="https://www.arkinselect.com/panel-admin/publicidad">Crear anuncio →</a>`
           )
-          return NextResponse.json({ ok: true })
+          return
         }
         const ubicLabels: Record<string, string> = {
           'banner-hero': 'Hero', 'entre-secciones': 'Entre secciones',
@@ -368,7 +390,7 @@ export async function POST(req: NextRequest) {
           `<i>"elimina el anuncio [nombre]"</i>\n\n` +
           `<a href="https://www.arkinselect.com/panel-admin/publicidad">Ver todos →</a>`
         )
-        return NextResponse.json({ ok: true })
+        return
       }
 
       // /todas_propiedades - todas incluyendo no disponibles
@@ -381,11 +403,11 @@ export async function POST(req: NextRequest) {
           .limit(10)
         if (!data || data.length === 0) {
           await sendTelegramMessage(chatId, 'No hay propiedades.')
-          return NextResponse.json({ ok: true })
+          return
         }
         const list = data.map((p: any) => `[${p.id}] <b>${p.titulo}</b> — ${p.precio_texto} — <i>${p.status}</i>`).join('\n')
         await sendTelegramMessage(chatId, `🏠 <b>ÚLTIMAS 10 PROPIEDADES</b>\n\n${list}\n\n<a href="https://www.arkinselect.com/panel-admin">Ver todas en panel →</a>`)
-        return NextResponse.json({ ok: true })
+        return
       }
     }
 
@@ -397,7 +419,7 @@ export async function POST(req: NextRequest) {
         `Hola <b>${firstName}</b>, soy <b>ARKIN AI</b> 🤖, tu asistente inmobiliario inteligente.\n\n` +
         `Puedo ayudarte a:\n` +
         `🔍 Buscar propiedades por zona, precio y características\n` +
-        `� Asesorarte sobre precios y zonas de León, Gto.\n` +
+        `📋 Asesorarte sobre precios y zonas de León, Gto.\n` +
         `📋 Explicar el proceso de compra o renta\n` +
         `📞 Conectarte con un asesor ARKIN\n\n` +
         `<b>Comandos disponibles:</b>\n` +
@@ -406,7 +428,7 @@ export async function POST(req: NextRequest) {
         `/asesor — Hablar con un asesor humano\n\n` +
         `¿Qué tipo de propiedad estás buscando? 🏡`
       )
-      return NextResponse.json({ ok: true })
+      return
     }
 
     // Handle /propiedades command
@@ -414,24 +436,24 @@ export async function POST(req: NextRequest) {
       const properties = await getProperties()
       if (properties.length === 0) {
         await sendTelegramMessage(chatId, 'No hay propiedades disponibles en este momento. Contacta a nuestro equipo: +52 477 475 6951')
-        return NextResponse.json({ ok: true })
+        return
       }
       const first5 = properties.slice(0, 5)
       const msgs = first5.map(formatPropertyForTelegram).join('\n\n──────────\n\n')
       await sendTelegramMessage(chatId, `📋 <b>PROPIEDADES DISPONIBLES</b>\n\n${msgs}\n\n🔍 <a href="https://www.arkinselect.com/propiedades">Ver todas →</a>`)
-      return NextResponse.json({ ok: true })
+      return
     }
 
     // Handle /contacto command
     if (text === '/contacto') {
       await sendTelegramMessage(chatId, `📞 <b>CONTACTO ARKIN SELECT</b>\n\n📱 WhatsApp: <a href="https://wa.me/5214774756951">+52 477 475 6951</a>\n📧 Email: arkinselect@gmail.com\n📍 León, Guanajuato, México\n🌐 <a href="https://www.arkinselect.com">www.arkinselect.com</a>\n\n⏰ Atención: Lunes a Sábado 9am - 7pm`)
-      return NextResponse.json({ ok: true })
+      return
     }
 
     // Handle /asesor command
     if (text === '/asesor') {
       await sendTelegramMessage(chatId, `👤 <b>HABLAR CON UN ASESOR</b>\n\nUn asesor ARKIN SELECT te atenderá personalmente.\n\n📱 <a href="https://wa.me/5214774756951?text=Hola,%20me%20interesa%20información%20sobre%20propiedades">Contactar por WhatsApp →</a>\n\nNuestros asesores están disponibles de <b>Lunes a Sábado</b>, 9am - 7pm.`)
-      return NextResponse.json({ ok: true })
+      return
     }
 
     // General AI conversation
@@ -462,7 +484,7 @@ export async function POST(req: NextRequest) {
       if (admin) {
         await sendTelegramMessage(chatId, `🔧 <b>Debug:</b> <code>${String(aiError?.message || aiError).slice(0, 400)}</code>`)
       }
-      return NextResponse.json({ ok: true })
+      return
     }
 
     // Extract mentioned property IDs
@@ -509,20 +531,6 @@ export async function POST(req: NextRequest) {
     for (const prop of mentionedProperties.slice(0, 3)) {
       await sendTelegramMessage(chatId, formatPropertyForTelegram(prop))
     }
-
-    return NextResponse.json({ ok: true })
-
-  } catch (error: any) {
-    console.error('Telegram webhook error:', error)
-    // Report error to admin chat if possible
-    try {
-      const chatId = update?.message?.chat?.id || update?.edited_message?.chat?.id
-      if (chatId && isAdmin(update?.message?.from?.id || 0)) {
-        await sendTelegramMessage(chatId, `⚠️ <b>Error interno del bot:</b>\n<code>${String(error?.message || error).slice(0, 500)}</code>`)
-      }
-    } catch { /* ignore send error */ }
-    return NextResponse.json({ ok: true }) // Always return 200 to Telegram
-  }
 }
 
 // Execute admin action parsed from Claude response
