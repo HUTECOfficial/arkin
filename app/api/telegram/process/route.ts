@@ -152,7 +152,9 @@ export async function POST(req: NextRequest) {
   const debug = {
     has_token: !!process.env.TELEGRAM_BOT_TOKEN,
     has_anthropic: !!process.env.ANTHROPIC_API_KEY,
-    has_supabase: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
+    has_supabase_url: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
+    has_supabase_service: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
+    has_stripe: !!process.env.STRIPE_SECRET_KEY,
     chat_id: update?.message?.chat?.id || null,
     text: update?.message?.text || null,
     error: null as string | null,
