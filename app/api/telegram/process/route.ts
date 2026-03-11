@@ -149,19 +149,23 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: true })
   }
 
+  const debug = {
+    has_token: !!process.env.TELEGRAM_BOT_TOKEN,
+    has_anthropic: !!process.env.ANTHROPIC_API_KEY,
+    has_supabase: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
+    chat_id: update?.message?.chat?.id || null,
+    text: update?.message?.text || null,
+    error: null as string | null,
+  }
+
   try {
     await processUpdate(update)
   } catch (error: any) {
+    debug.error = String(error?.message || error)
     console.error('Telegram process error:', error)
-    try {
-      const chatId = update?.message?.chat?.id || update?.edited_message?.chat?.id
-      if (chatId && isAdmin(update?.message?.from?.id || 0)) {
-        await sendTelegramMessage(chatId, `⚠️ <b>Error interno del bot:</b>\n<code>${String(error?.message || error).slice(0, 500)}</code>`)
-      }
-    } catch { /* ignore */ }
   }
 
-  return NextResponse.json({ ok: true })
+  return NextResponse.json(debug)
 }
 
 async function processUpdate(update: any) {
