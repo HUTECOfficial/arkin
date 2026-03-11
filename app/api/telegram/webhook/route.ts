@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { after } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
 import { createClient } from '@supabase/supabase-js'
 
@@ -153,20 +152,17 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: true })
   }
 
-  // Return 200 immediately so Telegram doesn't retry/timeout
-  after(async () => {
+  try {
+    await processUpdate(update)
+  } catch (error: any) {
+    console.error('Telegram webhook processing error:', error)
     try {
-      await processUpdate(update)
-    } catch (error: any) {
-      console.error('Telegram webhook processing error:', error)
-      try {
-        const chatId = update?.message?.chat?.id || update?.edited_message?.chat?.id
-        if (chatId && isAdmin(update?.message?.from?.id || 0)) {
-          await sendTelegramMessage(chatId, `⚠️ <b>Error interno del bot:</b>\n<code>${String(error?.message || error).slice(0, 500)}</code>`)
-        }
-      } catch { /* ignore */ }
-    }
-  })
+      const chatId = update?.message?.chat?.id || update?.edited_message?.chat?.id
+      if (chatId && isAdmin(update?.message?.from?.id || 0)) {
+        await sendTelegramMessage(chatId, `⚠️ <b>Error interno del bot:</b>\n<code>${String(error?.message || error).slice(0, 500)}</code>`)
+      }
+    } catch { /* ignore */ }
+  }
 
   return NextResponse.json({ ok: true })
 }
