@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import {
   Building2, Calendar as CalendarIcon, MessageSquare, Edit3, Save, X, Plus, Trash2,
-  ChevronLeft, ChevronRight, Clock, MapPin, DollarSign, Layers, Send, Bot, User,
+  ChevronLeft, ChevronRight, Clock, MapPin, DollarSign, Layers, Send, User,
   CheckCircle2, AlertCircle, TrendingUp, Home
 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -381,7 +381,7 @@ export function DesarrollosManager({ userRole }: { userRole: 'empresa' | 'asesor
   const [showNewEvent, setShowNewEvent] = useState(false)
   const [newEvent, setNewEvent] = useState<Partial<CalendarEvent>>({ tipo: 'visita', desarrollo: INITIAL_DESARROLLOS[0]?.nombre })
   const chatEndRef = useRef<HTMLDivElement>(null)
-  const [activeView, setActiveView] = useState<'desarrollos' | 'calendario' | 'agente'>('desarrollos')
+  const [activeView, setActiveView] = useState<'desarrollos' | 'calendario'>('desarrollos')
 
   const scrollToBottom = useCallback(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -446,7 +446,6 @@ export function DesarrollosManager({ userRole }: { userRole: 'empresa' | 'asesor
         {([
           ['desarrollos', 'Proyectos', Building2],
           ['calendario', 'Calendario', CalendarIcon],
-          ['agente', 'Agente IA', Bot],
         ] as [string, string, any][]).map(([key, label, Icon]) => (
           <button
             key={key}
