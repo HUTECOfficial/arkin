@@ -31,6 +31,7 @@ import {
   Sparkles
 } from 'lucide-react'
 import { getPlanById } from '@/data/subscription-plans'
+import { DesarrollosManager } from '@/components/desarrollos-manager'
 
 // Lista de asesores autorizados para ver solicitudes del fotógrafo
 const ASESORES_AUTORIZADOS_FOTOGRAFO = ['lizzie@arkin.mx']
@@ -706,6 +707,17 @@ export default function PanelAsesorPage() {
             </div>
           </div>
         </div>
+
+        {/* Desarrollos Manager — solo para Ana García */}
+        {user.email === 'ana@arkin.mx' && (
+          <div className="mt-8">
+            <div className="mb-6">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">Gestión de Desarrollos</h2>
+              <p className="text-gray-600 dark:text-gray-400">Administra proyectos, calendario y usa el agente IA</p>
+            </div>
+            <DesarrollosManager userRole="asesor" />
+          </div>
+        )}
       </div>
     </div>
   )

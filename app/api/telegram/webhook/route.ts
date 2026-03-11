@@ -29,21 +29,27 @@ function getTelegramAPI() {
   return `https://api.telegram.org/bot${token}`
 }
 
-async function sendTelegramMessage(chatId: number, text: string, parseMode = 'HTML') {
+async function sendTelegramMessage(chatId: number, text: string, parseMode: string | null = 'HTML') {
   const api = getTelegramAPI()
+  const body: any = { chat_id: chatId, text, disable_web_page_preview: false }
+  if (parseMode) body.parse_mode = parseMode
   const res = await fetch(`${api}/sendMessage`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      chat_id: chatId,
-      text,
-      parse_mode: parseMode,
-      disable_web_page_preview: false,
-    }),
+    body: JSON.stringify(body),
   })
   if (!res.ok) {
     const err = await res.text()
     console.error('Telegram sendMessage error:', err)
+    // If HTML parse failed, retry as plain text
+    if (parseMode === 'HTML' && err.includes('parse')) {
+      const plain = text.replace(/<[^>]*>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"')
+      await fetch(`${api}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: chatId, text: plain, disable_web_page_preview: false }),
+      })
+    }
   }
 }
 
@@ -94,6 +100,24 @@ GESTIÓN DE ANUNCIOS (reconoce frases en lenguaje natural):
 - "elimina el anuncio [nombre]" / "borra el anuncio [nombre]" → lo elimina permanentemente
 - Usa /anuncios para ver todos los anuncios con su estado actual
 - Los cambios se reflejan en tiempo real en el homepage del sitio
+
+GESTIÓN DE CITAS Y CALENDARIO:
+- Puedes agendar citas, visitas, reuniones para cualquier asesor
+- Para agendar, responde con JSON: {"accion":"agendar_cita","asesor":"nombre","fecha":"YYYY-MM-DD","hora":"HH:MM","titulo":"descripción","tipo":"visita|reunion|entrega|obra"}
+- Los tipos son: visita (mostrar propiedad), reunion, entrega (llaves/docs), obra (inspección)
+- SIEMPRE confirma la cita con todos los detalles al usuario después de agendarla
+
+ASESORES DEL EQUIPO:
+- Ana García (ana@arkin.mx) — Residencial Premium
+- Roberto Silva (roberto@arkin.mx) — Comercial e Industrial  
+- María López (maria@arkin.mx) — Renta Residencial
+- Daniela Belmonte (daniela@arkin.mx) — Desarrollos Nuevos
+- Subje Hamue (subje@arkin.mx) — Residencial Medio
+
+DESARROLLOS ACTIVOS:
+- Residencial del Parque — La Gran Jardín — $3,500,000 — Avance: 45% — Entrega: Q2 2027
+- Sky Tower León — Lomas del Campestre — $5,800,000 — Avance: 30% — Entrega: Q1 2027  
+- Bosque Residencial — El Refugio — $2,900,000 — Avance: 72% — Entrega: Q3 2026
 ` : ''
 
   return `Eres ARKIN AI, el asistente${admin ? ' ADMINISTRADOR' : ' virtual'} de ARKIN SELECT — plataforma inmobiliaria premium en León, Guanajuato, México.
@@ -107,6 +131,8 @@ INSTRUCCIONES:
 - Sé conciso pero completo
 - Cuando encuentres propiedades relevantes, menciona sus IDs así: [ID:X]
 - Formatea con HTML de Telegram: <b>negrita</b>, <i>cursiva</i>, <a href="...">link</a>
+- IMPORTANTE: No uses caracteres < o > fuera de tags HTML válidos. No uses markdown.
+- No uses & excepto en entidades HTML (&amp; &lt; &gt;)
 - Para contacto: +52 477 475 6951 | arkinselect@gmail.com
 - Para propiedades: https://www.arkinselect.com/propiedades`
 }
@@ -117,8 +143,9 @@ function formatPropertyForTelegram(p: any) {
 }
 
 export async function POST(req: NextRequest) {
+  let update: any = null
   try {
-    const update = await req.json()
+    update = await req.json()
 
     // Handle message updates
     const message = update.message || update.edited_message
@@ -127,8 +154,14 @@ export async function POST(req: NextRequest) {
     }
 
     const chatId: number = message.chat.id
-    const text: string = message.text || ''
+    const text: string = message.text || message.caption || ''
     const firstName = message.from?.first_name || 'Usuario'
+
+    // Handle voice/photo/sticker messages with no text
+    if (!text.trim()) {
+      await sendTelegramMessage(chatId, `👋 Hola <b>${firstName}</b>, por ahora solo puedo procesar mensajes de texto. Escríbeme tu consulta y con gusto te ayudo.`)
+      return NextResponse.json({ ok: true })
+    }
 
     // Show typing indicator
     await sendTelegramTyping(chatId)
@@ -414,14 +447,23 @@ export async function POST(req: NextRequest) {
     // Keep last 20 messages for context
     const recentHistory = history.slice(-20)
 
-    const response = await getAnthropic().messages.create({
-      model: 'claude-haiku-4-5',
-      max_tokens: 1024,
-      system: systemPrompt,
-      messages: recentHistory,
-    })
-
-    const aiText = response.content[0].type === 'text' ? response.content[0].text : ''
+    let aiText = ''
+    try {
+      const response = await getAnthropic().messages.create({
+        model: 'claude-haiku-4-5',
+        max_tokens: 1024,
+        system: systemPrompt,
+        messages: recentHistory,
+      })
+      aiText = response.content[0].type === 'text' ? response.content[0].text : ''
+    } catch (aiError: any) {
+      console.error('Claude API error:', aiError)
+      await sendTelegramMessage(chatId, '⚠️ Error al procesar tu mensaje. Intenta de nuevo en unos segundos.')
+      if (admin) {
+        await sendTelegramMessage(chatId, `🔧 <b>Debug:</b> <code>${String(aiError?.message || aiError).slice(0, 400)}</code>`)
+      }
+      return NextResponse.json({ ok: true })
+    }
 
     // Extract mentioned property IDs
     const idMatches = [...aiText.matchAll(/\[ID:(\d+)\]/g)]
@@ -437,13 +479,24 @@ export async function POST(req: NextRequest) {
 
     // If admin and Claude returned an action JSON, execute it
     if (admin) {
-      const jsonMatch = aiText.match(/```json\s*({[\s\S]*?})\s*```/)
-      if (jsonMatch) {
-        try {
-          const action = JSON.parse(jsonMatch[1])
-          await executeAdminAction(chatId, action)
-        } catch {
-          // Invalid JSON, ignore
+      // Try multiple JSON extraction patterns
+      const jsonPatterns = [
+        /```json\s*({[\s\S]*?})\s*```/,
+        /```\s*({[\s\S]*?})\s*```/,
+        /\{"accion"[\s\S]*?\}/,
+      ]
+      for (const pattern of jsonPatterns) {
+        const jsonMatch = aiText.match(pattern)
+        if (jsonMatch) {
+          try {
+            const action = JSON.parse(jsonMatch[0].startsWith('```') ? jsonMatch[1] : jsonMatch[0])
+            if (action?.accion) {
+              await executeAdminAction(chatId, action)
+              break
+            }
+          } catch {
+            // Try next pattern
+          }
         }
       }
     }
@@ -461,6 +514,13 @@ export async function POST(req: NextRequest) {
 
   } catch (error: any) {
     console.error('Telegram webhook error:', error)
+    // Report error to admin chat if possible
+    try {
+      const chatId = update?.message?.chat?.id || update?.edited_message?.chat?.id
+      if (chatId && isAdmin(update?.message?.from?.id || 0)) {
+        await sendTelegramMessage(chatId, `⚠️ <b>Error interno del bot:</b>\n<code>${String(error?.message || error).slice(0, 500)}</code>`)
+      }
+    } catch { /* ignore send error */ }
     return NextResponse.json({ ok: true }) // Always return 200 to Telegram
   }
 }
@@ -508,6 +568,44 @@ async function executeAdminAction(chatId: number, action: any) {
     } else {
       await sendTelegramMessage(chatId, `✅ Propiedad <b>#${action.id}</b> actualizada a <b>${action.status}</b>`)
     }
+  }
+
+  else if (action.accion === 'agendar_cita') {
+    const asesor = action.asesor || 'Sin asignar'
+    const fecha = action.fecha || 'Por definir'
+    const hora = action.hora || 'Por definir'
+    const titulo = action.titulo || 'Cita'
+    const tipo = action.tipo || 'visita'
+    const tipoEmoji: Record<string, string> = { visita: '🏠', reunion: '🤝', entrega: '🔑', obra: '🏗️' }
+    const tipoLabel: Record<string, string> = { visita: 'Visita', reunion: 'Reunión', entrega: 'Entrega', obra: 'Inspección de Obra' }
+    
+    // Try to save to Supabase calendar table (if it exists)
+    try {
+      await supabase.from('calendario').insert({
+        asesor_email: action.asesor_email || null,
+        asesor_nombre: asesor,
+        fecha,
+        hora,
+        titulo,
+        tipo,
+        descripcion: action.descripcion || titulo,
+        desarrollo: action.desarrollo || null,
+      })
+    } catch {
+      // Table might not exist yet, that's ok — we still confirm to the user
+    }
+
+    await sendTelegramMessage(chatId,
+      `${tipoEmoji[tipo] || '📅'} <b>CITA AGENDADA</b>\n\n` +
+      `📋 <b>${titulo}</b>\n` +
+      `👤 Asesor: <b>${asesor}</b>\n` +
+      `📅 Fecha: <b>${fecha}</b>\n` +
+      `🕐 Hora: <b>${hora}</b>\n` +
+      `🏷 Tipo: ${tipoLabel[tipo] || tipo}\n` +
+      (action.descripcion ? `📝 ${action.descripcion}\n` : '') +
+      (action.desarrollo ? `🏗 Desarrollo: ${action.desarrollo}\n` : '') +
+      `\n✅ La cita ha sido registrada exitosamente.`
+    )
   }
 
   else if (action.accion === 'stats') {

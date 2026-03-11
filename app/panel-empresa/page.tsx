@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
+import { DesarrollosManager } from '@/components/desarrollos-manager'
 
 const ASESORES = [
   { id:'a1', nombre:'Ana García', email:'ana@arkin.mx', telefono:'+52 477 123 4567', especialidad:'Residencial Premium', propActivas:8, propVendidas:12, leads:42, visitas:28, ofertas:9, ventas:3, cartera:'$24,500,000', comisiones:'$490,000', rating:4.9, ultimaAct:'Hace 2 horas' },
@@ -47,7 +48,7 @@ const SC: Record<string,string> = {
   'Calificado':'bg-green-100 text-green-700','Disponible':'bg-green-100 text-green-700',
   'En negociación':'bg-yellow-100 text-gray-900','Vendida':'bg-gray-100 text-gray-600',
 }
-type Tab = 'overview'|'asesores'|'propiedades'|'leads'|'actividad'
+type Tab = 'overview'|'asesores'|'propiedades'|'leads'|'actividad'|'desarrollos'
 type Asesor = typeof ASESORES[0]
 
 export default function PanelEmpresaPage() {
@@ -92,7 +93,7 @@ export default function PanelEmpresaPage() {
           </div>
         </div>
         <div className="max-w-7xl mx-auto px-4 flex overflow-x-auto border-t border-white/10">
-          {([['overview','Resumen',BarChart3],['asesores','Asesores',Users],['propiedades','Propiedades',Building2],['leads','Leads',Target],['actividad','Actividad',Activity]] as [Tab,string,any][]).map(([k,l,I])=>(
+          {([['overview','Resumen',BarChart3],['asesores','Asesores',Users],['propiedades','Propiedades',Building2],['leads','Leads',Target],['actividad','Actividad',Activity],['desarrollos','Desarrollos',TrendingUp]] as [Tab,string,any][]).map(([k,l,I])=>(
             <button key={k} onClick={()=>go(k)} className={`flex items-center gap-1.5 px-4 py-3 text-xs font-medium border-b-2 transition-colors whitespace-nowrap ${tab===k?'border-arkin-gold text-white font-bold':'border-transparent text-white/60 hover:text-white'}`}>
               <I className="h-3.5 w-3.5"/>{l}
             </button>
@@ -323,6 +324,10 @@ export default function PanelEmpresaPage() {
             ))}
           </div>
         </>}
+
+        {tab==='desarrollos'&&(
+          <DesarrollosManager userRole="empresa" />
+        )}
 
         {tab==='actividad'&&<>
           <div><h2 className="text-2xl font-bold text-gray-900">Registro de Actividad</h2><p className="text-gray-500 text-sm">Todas las acciones recientes del equipo</p></div>
