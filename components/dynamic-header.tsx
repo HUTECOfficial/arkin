@@ -23,7 +23,6 @@ import {
   Palette,
   Camera,
   Briefcase,
-  Code2,
 } from "lucide-react"
 import { WishlistCounter } from "./wishlist-button"
 import Link from "next/link"
@@ -260,12 +259,6 @@ export function DynamicHeader() {
                           <button className="w-full px-4 py-2.5 text-left text-sm text-arkin-accent hover:bg-arkin-primary/10 transition-colors flex items-center gap-2">
                             <Palette className="h-4 w-4 text-arkin-gold" />
                             <span>Ficha de Marca</span>
-                          </button>
-                        </Link>
-                        <Link href="/desarrollador" onClick={() => setIsOtrosMenuOpen(false)}>
-                          <button className="w-full px-4 py-2.5 text-left text-sm text-arkin-accent hover:bg-arkin-primary/10 transition-colors flex items-center gap-2">
-                            <Code2 className="h-4 w-4 text-blue-400" />
-                            <span>Desarrolladores</span>
                           </button>
                         </Link>
                       </div>
