@@ -56,11 +56,11 @@ export default function ConstruccionPage() {
     window.addEventListener('resize', resize)
 
     const blobs = [
-      { x: 0.2, y: 0.3, r: 0.38, vx: 0.00012, vy: 0.00008, color: 'rgba(232,255,80,0.13)' },
-      { x: 0.75, y: 0.2, r: 0.32, vx: -0.0001, vy: 0.00013, color: 'rgba(232,255,80,0.09)' },
-      { x: 0.5, y: 0.7, r: 0.42, vx: 0.00008, vy: -0.0001, color: 'rgba(255,255,255,0.06)' },
-      { x: 0.85, y: 0.65, r: 0.28, vx: -0.00013, vy: -0.00009, color: 'rgba(232,255,80,0.07)' },
-      { x: 0.1, y: 0.8, r: 0.3, vx: 0.00015, vy: 0.00006, color: 'rgba(200,255,100,0.08)' },
+      { x: 0.2, y: 0.3, r: 0.38, vx: 0.00012, vy: 0.00008, color: 'rgba(232,255,80,0.13)', colorBright: 'rgba(232,255,80,0.26)' },
+      { x: 0.75, y: 0.2, r: 0.32, vx: -0.0001, vy: 0.00013, color: 'rgba(232,255,80,0.09)', colorBright: 'rgba(232,255,80,0.18)' },
+      { x: 0.5, y: 0.7, r: 0.42, vx: 0.00008, vy: -0.0001, color: 'rgba(255,255,255,0.06)', colorBright: 'rgba(255,255,255,0.12)' },
+      { x: 0.85, y: 0.65, r: 0.28, vx: -0.00013, vy: -0.00009, color: 'rgba(232,255,80,0.07)', colorBright: 'rgba(232,255,80,0.14)' },
+      { x: 0.1, y: 0.8, r: 0.3, vx: 0.00015, vy: 0.00006, color: 'rgba(200,255,100,0.08)', colorBright: 'rgba(200,255,100,0.16)' },
     ]
 
     const draw = () => {
@@ -92,7 +92,7 @@ export default function ConstruccionPage() {
         ctx.closePath()
 
         const grad = ctx.createRadialGradient(cx - r * 0.3, cy - r * 0.3, 0, cx, cy, r)
-        grad.addColorStop(0, b.color.replace(')', ', 1.8)').replace('rgba', 'rgba').replace(/, [^,]+\)$/, `, ${parseFloat(b.color.match(/[\d.]+\)$/)?.[0] ?? '0.1') * 2})`))
+        grad.addColorStop(0, b.colorBright)
         grad.addColorStop(0.5, b.color)
         grad.addColorStop(1, 'rgba(0,0,0,0)')
         ctx.fillStyle = grad
