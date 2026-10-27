@@ -150,24 +150,50 @@ function AdBanner({ ad }: { ad: Ad }) {
   )
 }
 
-export function HomepageAdSlot({ ubicacion }: { ubicacion: string }) {
+// Se muestra cuando no hay anuncios activos, para que el espacio siempre se vea y se pueda vender
+function AdSpaceFallback() {
+  return (
+    <a
+      href="/alianza-comercial"
+      className="group flex flex-col items-start justify-between gap-6 rounded-[2.25rem] border border-dashed border-arkin-accent/25 bg-arkin-secondary/50 p-7 transition-all duration-300 hover:border-arkin-primary hover:bg-arkin-secondary/80 sm:p-10 md:flex-row md:items-center"
+    >
+      <div>
+        <div className="mb-3 inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-arkin-accent/45">
+          <Sparkles className="h-3 w-3" />
+          Espacio publicitario disponible
+        </div>
+        <h3 className="max-w-2xl text-2xl font-bold uppercase leading-none tracking-[-0.04em] text-arkin-accent sm:text-3xl">
+          Tu marca frente a quienes están por mudarse.
+        </h3>
+        <p className="mt-3 max-w-xl text-sm text-arkin-accent/60">
+          Créditos, mudanzas, interiorismo, seguros, muebles: llega a compradores y propietarios en el momento exacto de su decisión.
+        </p>
+      </div>
+      <span className="inline-flex shrink-0 items-center gap-2 rounded-full bg-arkin-accent px-6 py-4 text-sm font-bold text-white transition-colors group-hover:bg-arkin-primary group-hover:text-arkin-accent">
+        Anúnciate con ARKIN <ArrowRight className="h-4 w-4" />
+      </span>
+    </a>
+  )
+}
+
+export function HomepageAdSlot({ ubicacion, fallback = false }: { ubicacion: string; fallback?: boolean }) {
   const [ads, setAds] = useState<Ad[]>([])
+  const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
     fetch(`/api/anuncios?ubicacion=${ubicacion}`)
       .then(r => r.json())
       .then(data => setAds(data.anuncios || []))
       .catch(() => {})
+      .finally(() => setLoaded(true))
   }, [ubicacion])
 
-  if (ads.length === 0) return null
+  if (ads.length === 0 && !(fallback && loaded)) return null
 
   return (
-    <section className="py-6 sm:py-10 px-4 sm:px-6">
-      <div className="max-w-7xl mx-auto space-y-6">
-        {ads.map((ad) => (
-          <AdBanner key={ad.id} ad={ad} />
-        ))}
+    <section className="px-5 py-6 sm:px-8 sm:py-10 lg:px-12">
+      <div className="mx-auto max-w-[1344px] space-y-6">
+        {ads.length > 0 ? ads.map((ad) => <AdBanner key={ad.id} ad={ad} />) : <AdSpaceFallback />}
       </div>
     </section>
   )

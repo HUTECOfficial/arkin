@@ -65,6 +65,15 @@ export default function PropiedadesPage() {
         if (propiedad.area < filters.areaRange[0] || propiedad.area > filters.areaRange[1]) return false
       }
 
+      // Construction area filter (1000 = "1000 m² o más")
+      if (filters.constructionRange) {
+        const [min, max] = filters.constructionRange
+        if (min > 0 || max < 1000) {
+          const construccion = propiedad.areaConstruccion || 0
+          if (construccion < min || (max < 1000 && construccion > max)) return false
+        }
+      }
+
       // Status filter
       if (filters.status && propiedad.status !== filters.status) return false
 

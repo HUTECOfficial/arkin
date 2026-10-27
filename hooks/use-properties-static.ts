@@ -57,6 +57,7 @@ export function usePropertiesStatic() {
               habitaciones: newProp.habitaciones,
               banos: newProp.banos,
               area: newProp.area,
+              areaConstruccion: newProp.area_construccion || 0,
               areaTexto: newProp.area_texto,
               imagen: newProp.imagen || '',
               descripcion: newProp.descripcion || '',

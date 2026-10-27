@@ -16,6 +16,7 @@ import {
   Bed, 
   Bath, 
   Square, 
+  Building,
   DollarSign, 
   Filter,
   X,
@@ -37,6 +38,7 @@ export function PropertyFilters({ onFiltersChange, isOpen, onToggle }: PropertyF
     bedrooms: "",
     bathrooms: "",
     areaRange: [0, 1000],
+    constructionRange: [0, 1000],
     amenities: [] as string[],
     status: ""
   })
@@ -116,6 +118,7 @@ export function PropertyFilters({ onFiltersChange, isOpen, onToggle }: PropertyF
       bedrooms: "",
       bathrooms: "",
       areaRange: [0, 1000],
+      constructionRange: [0, 1000],
       amenities: [],
       status: ""
     }
@@ -320,6 +323,28 @@ export function PropertyFilters({ onFiltersChange, isOpen, onToggle }: PropertyF
               <div className="flex justify-between text-sm text-gray-600">
                 <span>{filters.areaRange[0]} m²</span>
                 <span>{filters.areaRange[1]} m²</span>
+              </div>
+            </div>
+
+            {/* Construction Range */}
+            <div className="space-y-3">
+              <Label className="text-sm font-medium text-gray-700">
+                <Building className="inline h-4 w-4 mr-1" />
+                Construcción (m²)
+              </Label>
+              <div className="px-2">
+                <Slider
+                  value={filters.constructionRange}
+                  onValueChange={(value) => handleFilterChange("constructionRange", value)}
+                  max={1000}
+                  min={0}
+                  step={25}
+                  className="w-full"
+                />
+              </div>
+              <div className="flex justify-between text-sm text-gray-600">
+                <span>{filters.constructionRange[0]} m²</span>
+                <span>{filters.constructionRange[1]}{filters.constructionRange[1] === 1000 ? "+" : ""} m²</span>
               </div>
             </div>
 
