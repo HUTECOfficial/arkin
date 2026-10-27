@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from "next"
 import "./globals.css"
 import { Footer } from "@/components/footer"
 import { DynamicHeader } from "@/components/dynamic-header"
+import { HideOnPaths } from "@/components/hide-on-paths"
 import { WishlistProvider } from "@/components/wishlist-provider"
 import { AuthProvider } from "@/contexts/auth-context"
 import { SWRProvider } from "@/components/swr-provider"
@@ -56,9 +57,13 @@ export default function RootLayout({
         <SWRProvider>
           <AuthProvider>
             <WishlistProvider>
-              <DynamicHeader />
+              <HideOnPaths paths={["/construccion"]}>
+                <DynamicHeader />
+              </HideOnPaths>
               {children}
-              <Footer />
+              <HideOnPaths paths={["/construccion"]}>
+                <Footer />
+              </HideOnPaths>
               <Toaster position="top-right" richColors />
             </WishlistProvider>
           </AuthProvider>
