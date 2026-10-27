@@ -11,7 +11,6 @@ import {
   MapPin,
   Search,
   ShieldCheck,
-  Sparkles,
 } from "lucide-react"
 import { AIAgent } from "@/components/ai-agent"
 import { HomepageAdSlot } from "@/components/homepage-ads"
@@ -53,13 +52,6 @@ export default async function HomePage() {
         </div>
 
         <div className="relative mx-auto flex min-h-[780px] max-w-[1440px] flex-col justify-end px-5 pb-12 pt-36 sm:min-h-[820px] sm:px-8 md:min-h-[92svh] md:pb-32 lg:px-12">
-          <div className="mb-7 flex items-center gap-3">
-            <span className="h-px w-10 bg-arkin-primary" />
-            <span className="text-[11px] font-bold uppercase tracking-[0.24em] text-arkin-primary sm:text-xs">
-              Curaduría inmobiliaria · León, Gto.
-            </span>
-          </div>
-
           <div className="grid items-end gap-10 lg:grid-cols-[1fr_360px]">
             <div>
               <h1 className="max-w-5xl text-[clamp(3.5rem,9vw,8.4rem)] font-bold uppercase leading-[0.82] tracking-[-0.065em]">
@@ -178,7 +170,7 @@ export default async function HomePage() {
         <div className="mx-auto grid max-w-[1344px] gap-16 lg:grid-cols-[0.86fr_1.14fr] lg:items-center">
           <div>
             <div className="mb-6 flex items-center gap-3 text-arkin-primary">
-              <Sparkles className="h-4 w-4" />
+              <span className="h-px w-8 bg-arkin-primary" />
               <span className="text-[11px] font-bold uppercase tracking-[0.22em]">El estándar ARKIN</span>
             </div>
             <h2 className="text-4xl font-bold uppercase leading-[0.92] tracking-[-0.055em] sm:text-6xl">
